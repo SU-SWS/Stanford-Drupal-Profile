@@ -222,7 +222,7 @@ function stanford_profile_tasks(&$task, $url) {
     'apply_source_formatting' => 0,
     'paste_auto_cleanup_on_paste' => 0,
     'block_formats' => 'p,address,pre,h2,h3,h4,h5,h6,div',
-    'css_setting' => 'theme',
+    'css_setting' => 'none',
     'css_path' => '',
     'css_classes' => '',
   ));
