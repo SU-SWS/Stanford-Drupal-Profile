@@ -17,6 +17,7 @@ function stanford_profile_modules() {
                'features',
                'fieldgroup',
                'filefield',
+               'imagefield',
                //'googleanalytics',
                'help',
                'insert',
