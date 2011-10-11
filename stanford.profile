@@ -176,6 +176,16 @@ function stanford_profile_tasks(&$task, $url) {
   variable_set('admin_theme', $admin_theme);
   variable_set('node_admin_theme', $admin_theme);
   
+  // Remove password from emails that get sent by the system
+  $user_mail_register_admin_created_body = "!username,\n\nA site administrator at !site has created an account for you. You may now log in to !login_uri using the following username and password:\n\nusername: !username\n\n\nYou may also log in by clicking on this link or copying and pasting it in your browser:\n\n!login_url\n\nThis is a one-time login, so it can be used only once.\n\nAfter logging in, you will be redirected to !edit_uri so you can change your password.\n\n\n--  !site team";
+  variable_set('user_mail_register_admin_created_body', $user_mail_register_admin_created_body);
+  
+  $user_mail_register_no_approval_required_body = "!username,\n\nThank you for registering at !site. You may now log in to !login_uri using the following username and password:\n\nusername: !username\n\n\nYou may also log in by clicking on this link or copying and pasting it in your browser:\n\n!login_url\n\nThis is a one-time login, so it can be used only once.\n\nAfter logging in, you will be redirected to !edit_uri so you can change your password.\n\n\n--  !site team";
+  variable_set('user_mail_register_no_approval_required_body', $user_mail_register_no_approval_required_body);
+  
+  // Remove "Powered by Drupal" block from footer
+  db_query("UPDATE {blocks} SET status = 1, region = '' WHERE bid = 3");
+
   // Create configuration for CKEditor
   $ckeditor_configuration = serialize(array (
     'default' => 1,
@@ -198,7 +208,7 @@ function stanford_profile_tasks(&$task, $url) {
         'Indent' => 1,
         'Link' => 1,
         'Unlink' => 1,
-        'Anchor' => 1,
+//        'Anchor' => 1,  //CKEditor anchor links use deprecated named anchor link syntax - jbickar
         'Image' => 1,
         'Blockquote' => 1,
         'Source' => 1,
@@ -232,7 +242,7 @@ function stanford_profile_tasks(&$task, $url) {
   db_query("INSERT INTO {wysiwyg} SET format = ('%s'), editor = 'ckeditor', settings = ('%s')", $filtered_html_id, $ckeditor_configuration);
   
   // Update the list of HTML tags allowed for the filtered HTML input format
-  $allowed_html = '<a> <em> <i> <strong> <b> <cite> <code> <ul> <ol> <li> <dl> <dt> <dd> <blockquote> <img> <br> <p>';
+  $allowed_html = '<a> <blockquote> <br> <cite> <code> <em> <embed> <h2> <h3> <h4> <h5> <h6>  <iframe> <img> <li> <ol> <p> <param> <strong> <table> <tr> <td> <ul>';
   variable_set('allowed_html_' . $filtered_html_id, $allowed_html);
  
   // Update the default timezone
