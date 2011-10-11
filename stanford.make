@@ -75,5 +75,6 @@ libraries[ckeditor][destination] = "libraries"
 
 projects[stanford][type] = "profile"
 projects[stanford][download][type] = "git"
-projects[stanford][download][url] = "git@github.com:jbickar/Stanford-Drupal-Profile.git"
+; projects[stanford][download][url] = "git@github.com:jbickar/Stanford-Drupal-Profile.git"
+projects[stanford][download][url] = "git@github.com:mistermarco/Stanford-Drupal-Profile.git"
 
