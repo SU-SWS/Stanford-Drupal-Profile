@@ -35,6 +35,7 @@ projects[] = features
 projects[] = filefield
 projects[] = globalredirect
 projects[] = google_analytics
+projects[] = imagefield
 projects[] = insert
 projects[] = jquery_ui
 projects[] = link
@@ -63,7 +64,7 @@ projects[] = rubik
 libraries[jquery_ui][download][type] = "get"
 libraries[jquery_ui][download][url] = "http://jquery-ui.googlecode.com/files/jquery.ui-1.6.zip"
 libraries[jquery_ui][directory_name] = "jquery.ui"
-libraries[jquery_ui][destination] = "modules/jquery_ui"
+libraries[jquery_ui][destination] = "libraries"
 
 libraries[ckeditor][download][type] = "get"
 libraries[ckeditor][download][url]  = "http://download.cksource.com/CKEditor/CKEditor/CKEditor%203.5.3/ckeditor_3.5.3.zip"
@@ -74,5 +75,6 @@ libraries[ckeditor][destination] = "libraries"
 
 projects[stanford][type] = "profile"
 projects[stanford][download][type] = "git"
+; projects[stanford][download][url] = "git@github.com:jbickar/Stanford-Drupal-Profile.git"
 projects[stanford][download][url] = "git@github.com:mistermarco/Stanford-Drupal-Profile.git"
 
