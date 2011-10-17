@@ -185,8 +185,7 @@ function stanford_profile_tasks(&$task, $url) {
   
   // Remove "Powered by Drupal" block from footer
   $block_module = 'system';
-  $stanford_theme = 'stanford';
-  db_query("UPDATE {blocks} SET status = %d WHERE module = '%s' AND delta = %d AND theme = '%s'", 0, $block_module, 0, $stanford_theme);
+  db_query("UPDATE {blocks} SET status = %d WHERE module = '%s' AND delta = %d", 0, $block_module, 0);
 
   // Create configuration for CKEditor
   $ckeditor_configuration = serialize(array (
