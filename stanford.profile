@@ -216,7 +216,7 @@ function stanford_profile_tasks(&$task, $url) {
         'PasteFromWord' => 1,
         'Format' => 1,
         'Table' => 1,
-        'SpellChecker' => 1,
+//        'SpellChecker' => 1,  //SpellChecker is ad-supported and has an awful interface - jbickar
       ),
       'drupal' => 
       array (
