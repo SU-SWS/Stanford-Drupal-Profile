@@ -243,7 +243,7 @@ function stanford_profile_tasks(&$task, $url) {
   db_query("INSERT INTO {wysiwyg} SET format = ('%s'), editor = 'ckeditor', settings = ('%s')", $filtered_html_id, $ckeditor_configuration);
   
   // Update the list of HTML tags allowed for the filtered HTML input format
-  $allowed_html = '<a> <blockquote> <br> <cite> <code> <em> <embed> <h2> <h3> <h4> <h5> <h6>  <iframe> <img> <li> <ol> <p> <param> <strong> <table> <tr> <td> <ul>';
+  $allowed_html = '<a> <blockquote> <br> <cite> <code> <em> <h2> <h3> <h4> <h5> <h6> <iframe> <li> <ol> <p> <strong> <ul>';
   variable_set('allowed_html_' . $filtered_html_id, $allowed_html);
  
   // Update the default timezone
