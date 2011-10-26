@@ -35,7 +35,6 @@ function stanford_profile_modules() {
                'taxonomy',
                'text',
                'token',
-               'update',
                'upload',
                'userreference',
                'views', 
@@ -184,7 +183,8 @@ function stanford_profile_tasks(&$task, $url) {
   variable_set('user_mail_register_no_approval_required_body', $user_mail_register_no_approval_required_body);
   
   // Remove "Powered by Drupal" block from footer
-  db_query("UPDATE {blocks} SET status = 1, region = '' WHERE bid = 3");
+  $block_module = 'system';
+  db_query("UPDATE {blocks} SET status = %d WHERE module = '%s' AND delta = %d", 0, $block_module, 0);
 
   // Create configuration for CKEditor
   $ckeditor_configuration = serialize(array (
@@ -215,7 +215,7 @@ function stanford_profile_tasks(&$task, $url) {
         'PasteFromWord' => 1,
         'Format' => 1,
         'Table' => 1,
-        'SpellChecker' => 1,
+//        'SpellChecker' => 1,  //SpellChecker is ad-supported and has an awful interface - jbickar
       ),
       'drupal' => 
       array (
@@ -242,7 +242,7 @@ function stanford_profile_tasks(&$task, $url) {
   db_query("INSERT INTO {wysiwyg} SET format = ('%s'), editor = 'ckeditor', settings = ('%s')", $filtered_html_id, $ckeditor_configuration);
   
   // Update the list of HTML tags allowed for the filtered HTML input format
-  $allowed_html = '<a> <blockquote> <br> <cite> <code> <em> <embed> <h2> <h3> <h4> <h5> <h6>  <iframe> <img> <li> <ol> <p> <param> <strong> <table> <tr> <td> <ul>';
+  $allowed_html = '<a> <blockquote> <br> <cite> <code> <em> <h2> <h3> <h4> <h5> <h6> <iframe> <li> <ol> <p> <strong> <ul>';
   variable_set('allowed_html_' . $filtered_html_id, $allowed_html);
  
   // Update the default timezone
@@ -262,5 +262,6 @@ function stanford_form_alter(&$form, $form_state, $form_id) {
   if ($form_id == 'install_configure') {
     // Set default for site name field.
     $form['site_information']['site_name']['#default_value'] = $_SERVER['SERVER_NAME'];
+    unset($form['server_settings']['update_status_module']);
   }
 }
