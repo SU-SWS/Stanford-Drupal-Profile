@@ -32,9 +32,11 @@ projects[] = css_injector
 projects[] = date
 projects[] = email
 projects[] = features
+projects[] = feeds
 projects[] = filefield
 projects[] = globalredirect
 projects[] = google_analytics
+projects[] = imagecache
 projects[] = imagefield
 projects[] = insert
 projects[] = jquery_ui
@@ -48,10 +50,13 @@ projects[] = semanticviews
 projects[] = token
 projects[] = vertical_tabs
 projects[] = views
+projects[] = views_slideshow
 projects[] = wysiwyg
 
 ; Stanford Modules
 
+; need URLs
+;projects[] = stanford_events_importer
 ;projects[] = webauth
 
 ; Themes

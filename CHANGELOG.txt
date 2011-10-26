@@ -1,0 +1,15 @@
+Stanford Profile x.x-x.x xxxx-xx-xx
+-----------------------------------
+
+
+Stanford Profile 6.x-1.0 2011-10-25
+-----------------------------------
+#4 by mrmarco: Updated list of modules
+by mrmarco: Added CHANGELOG.txt
+by mrmarco: Updated Author List
+by jbickar: Fixed code to disable "Powered by Drupal" block	
+by jbickar: Disabled "Powered by Drupal" block for all themes	
+by jbickar: Removed some tags from Filtered HTML format due to XSS risk	
+by jbickar: Disabled SpellChecker in CKEditor default settings	
+by jbickar: Unchecked option to check for updates automatically on install	
+by jbickar: Disabled Update Status module at install
