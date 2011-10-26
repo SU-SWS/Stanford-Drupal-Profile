@@ -1,4 +1,4 @@
-Author: Marco Wise
+Author: Marco Wise, John Bickar
 URL: http://itservices.stanford.edu
 
 A drush make and install profile for new sites on the Drupal Hosting Service at Stanford.
