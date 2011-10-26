@@ -35,7 +35,6 @@ function stanford_profile_modules() {
                'taxonomy',
                'text',
                'token',
-               'update',
                'upload',
                'userreference',
                'views', 
@@ -263,6 +262,6 @@ function stanford_form_alter(&$form, $form_state, $form_id) {
   if ($form_id == 'install_configure') {
     // Set default for site name field.
     $form['site_information']['site_name']['#default_value'] = $_SERVER['SERVER_NAME'];
-    $form['server_settings']['update_status_module']['#default_value'] = array();
+    unset($form['server_settings']['update_status_module']);
   }
 }
