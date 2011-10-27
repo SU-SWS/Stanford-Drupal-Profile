@@ -42,6 +42,7 @@ projects[] = imageapi
 projects[] = imagecache
 projects[] = imagefield
 projects[] = insert
+projects[] = job_scheduler
 projects[] = jquery_ui
 projects[] = link
 projects[] = mollom
@@ -53,6 +54,7 @@ projects[] = semanticviews
 projects[] = token
 projects[] = vertical_tabs
 projects[] = views
+; declare views_slideshow version?
 projects[] = views_slideshow
 projects[] = wysiwyg
 
