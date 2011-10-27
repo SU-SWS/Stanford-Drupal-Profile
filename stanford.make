@@ -54,8 +54,7 @@ projects[] = semanticviews
 projects[] = token
 projects[] = vertical_tabs
 projects[] = views
-; declare views_slideshow version?
-projects[] = views_slideshow
+projects[views_slideshow] = 2.3
 projects[] = wysiwyg
 
 ; Stanford Modules
