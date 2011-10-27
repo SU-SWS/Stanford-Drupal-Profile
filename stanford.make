@@ -29,16 +29,20 @@ projects[] = calendar
 projects[] = cck
 projects[] = content_access
 projects[] = css_injector
+projects[] = ctools
 projects[] = date
 projects[] = email
 projects[] = features
 projects[] = feeds
+projects[] = feeds_xpathparser
 projects[] = filefield
 projects[] = globalredirect
 projects[] = google_analytics
+projects[] = imageapi
 projects[] = imagecache
 projects[] = imagefield
 projects[] = insert
+projects[] = job_scheduler
 projects[] = jquery_ui
 projects[] = link
 projects[] = mollom
@@ -50,13 +54,15 @@ projects[] = semanticviews
 projects[] = token
 projects[] = vertical_tabs
 projects[] = views
-projects[] = views_slideshow
+projects[views_slideshow] = 2.3
 projects[] = wysiwyg
 
 ; Stanford Modules
+projects[stanford_events_importer][type] = module
+projects[stanford_events_importer][download][type] = file
+projects[stanford_events_importer][download][url] = 'https://techcommons.stanford.edu/files/stanford_events_importer-6.x-1.0-beta6.tar.gz'
 
 ; need URLs
-;projects[] = stanford_events_importer
 ;projects[] = webauth
 
 ; Themes
