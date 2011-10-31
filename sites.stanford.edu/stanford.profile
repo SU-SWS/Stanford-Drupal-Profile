@@ -208,10 +208,12 @@ function stanford_profile_tasks(&$task, $url) {
   $user_mail_register_no_approval_required_body = "!username,\n\nThank you for registering at !site. You may now log in to !login_uri using the following username and password:\n\nusername: !username\n\n\nYou may also log in by clicking on this link or copying and pasting it in your browser:\n\n!login_url\n\nThis is a one-time login, so it can be used only once.\n\nAfter logging in, you will be redirected to !edit_uri so you can change your password.\n\n\n--  !site team";
   variable_set('user_mail_register_no_approval_required_body', $user_mail_register_no_approval_required_body);
 
+
   /**
    * Theming
    */
 
+  // If the organization is a department, enable the department themes.
   if ($fields['org_type'] == 'dept') {
     variable_set('su_department_themes', 1);
   }
@@ -232,6 +234,11 @@ function stanford_profile_tasks(&$task, $url) {
       break;
     }
   }
+
+  // Remove "Powered by Drupal" block from footer
+  $block_module = 'system';
+  db_query("UPDATE {blocks} SET status = %d WHERE module = '%s' AND delta = %d", 0, $block_module, 0);
+
 
   // Enable the admin theme, and set it for content editing as well
   $admin_theme = 'rubik';
