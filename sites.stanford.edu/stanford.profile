@@ -39,7 +39,6 @@ function stanford_profile_modules() {
                    'taxonomy',
                    'text',
                    'token',
-                   'update',
                    'upload',
                    'user',
                    'userreference',
@@ -338,6 +337,9 @@ function stanford_form_alter(&$form, $form_state, $form_id) {
 //    $form['server_settings']['update_status_module']['#default_value'] = 0;
     $form['server_settings']['date_default_timezone']['#type'] = 'hidden';
     $form['server_settings']['date_default_timezone']['#default_value'] = -25200;
+
+    // Hide the automatic updates block.
+    unset($form['server_settings']['update_status_module']);
   }
 }
 
