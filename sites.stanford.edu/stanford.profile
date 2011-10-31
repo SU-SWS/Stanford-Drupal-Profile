@@ -48,12 +48,12 @@ function stanford_profile_modules() {
                    'wysiwyg',
                   );
 
-  # Enables webauth module if requested.
-  # TODO: Enable when webauth works.
-  #$fields = get_stanford_installer();
-  #if ($fields['webauth'] == 'on') {
-  #  array_push ($modules, 'webauth');
-  #}
+  // Enables webauth module if requested.
+  // TODO: Enable when webauth works.
+  //$fields = get_stanford_installer();
+  //if ($fields['webauth'] == 'on') {
+  //  array_push ($modules, 'webauth');
+  //}
 
 
   return $modules;
@@ -142,13 +142,13 @@ function stanford_profile_task_list() {
  */
 function stanford_profile_tasks(&$task, $url) {
 
-  # Change the authenticated user role from rid 3 (due to mysql server
-  #  replication and autoincrement value) to 2.
+  // Change the authenticated user role from rid 3 (due to mysql server
+  //  replication and autoincrement value) to 2.
   adjust_authuser_rid();
 
-  # Insert default user-defined node types into the database. For a complete
-  # list of available node type attributes, refer to the node type API
-  # documentation at: http://api.drupal.org/api/HEAD/function/hook_node_info.
+  // Insert default user-defined node types into the database. For a complete
+  // list of available node type attributes, refer to the node type API
+  // documentation at: http://api.drupal.org/api/HEAD/function/hook_node_info.
   $types = array(
     array(
       'type' => 'page',
@@ -179,35 +179,35 @@ function stanford_profile_tasks(&$task, $url) {
     node_type_save($type);
   }
 
-  # Default page to not be promoted and have comments disabled.
+  // Default page to not be promoted and have comments disabled.
   variable_set('node_options_page', array('status'));
   variable_set('comment_page', COMMENT_NODE_DISABLED);
 
-  # Set upload path.
-  #variable_set('file_directory_path', 'upload');
+  // Set upload path.
+  //variable_set('file_directory_path', 'upload');
   variable_set('file_downloads', 1);
 
-  # Set files temp directory to sites/default/tmp/.
+  // Set files temp directory to sites/default/tmp/.
   $fields = get_stanford_installer();
   variable_set('file_directory_temp', $fields['tmpdir']);
 
-  # Users should need admin approval by default.
+  // Users should need admin approval by default.
   variable_set('user_register', 2);
 
-  ###################################################################
-  # Theming
-  ###################################################################
+  /**
+   * Theming
+   */
 
   if ($fields['org_type'] == 'dept') {
     variable_set('su_department_themes', 1);
   }
 
-  # Don't display date and author information for page nodes by default.
+  // Don't display date and author information for page nodes by default.
   $theme_settings = variable_get('theme_settings', array());
   $theme_settings['toggle_node_info_page'] = FALSE;
   variable_set('theme_settings', $theme_settings);
 
-  # Install stanfordmodern as preferred theme.
+  // Install stanfordmodern as preferred theme.
   $themes = system_theme_data();
   $preferred_themes = array('stanfordmodern', 'garland');
   foreach ($preferred_themes as $theme) {
@@ -219,23 +219,23 @@ function stanford_profile_tasks(&$task, $url) {
     }
   }
 
-  # Enable the admin theme, and set it for content editing as well
+  // Enable the admin theme, and set it for content editing as well
   $admin_theme = 'rubik';
   db_query("UPDATE {system} SET status = 1 WHERE type = 'theme' and name = ('%s')", $admin_theme);
   variable_set('admin_theme', $admin_theme);
   variable_set('node_admin_theme', $admin_theme);
 
-  ###################################################################
-  # WYSIWYG config
-  ###################################################################
+  /**
+   * WYSIWYG config
+   */
 
-  # Retrieve the ID of the Filtered HTML format (on replicated servers we can't trust it to be 1)
+  // Retrieve the ID of the Filtered HTML format (on replicated servers we can't trust it to be 1)
   $filtered_html_id = db_result(db_query("SELECT format FROM {filter_formats} WHERE name = 'Filtered HTML'"));
 
-  # Set the default input format to the Filtered HTML version
+  // Set the default input format to the Filtered HTML version
   variable_set('filter_default_format', $filtered_html_id);
 
-  # Add CKEditor to wysiwyg
+  // Add CKEditor to wysiwyg
   $ckeditor_configuration = serialize(array (
     'default' => 1,
     'user_choose' => 0,
@@ -289,18 +289,18 @@ function stanford_profile_tasks(&$task, $url) {
 
   db_query("INSERT INTO {wysiwyg} SET format = ('%s'), editor = 'ckeditor', settings = ('%s')", $filtered_html_id, $ckeditor_configuration);
 
-  # Update the list of HTML tags allowed for the filtered HTML input format
+  // Update the list of HTML tags allowed for the filtered HTML input format
   $allowed_html = '<a> <em> <i> <strong> <b> <cite> <code> <ul> <ol> <li> <dl> <dt> <dd> <blockquote> <img> <br> <p>';
   variable_set('allowed_html_' . $filtered_html_id, $allowed_html);
 
-  ###################################################################
-  # Cleanup
-  ###################################################################
+  /**
+   * Cleanup
+   */
 
-  # These can now go away.
-#  @db_query("DROP TABLE install_settings");
+  // These can now go away.
+  // @db_query("DROP TABLE install_settings");
 
-  # Update the menu router information.
+  // Update the menu router information.
   menu_rebuild();
 }
 
@@ -314,37 +314,37 @@ function stanford_form_alter(&$form, $form_state, $form_id) {
   $fields = get_stanford_installer ();
   if ($form_id == 'install_configure') {
 
-    # General form settings.
+    // General form settings.
     $form['intro']['#value'] = st('Please fill out the following values:');
     $form['site_information']['#collapsible']  = TRUE;
     $form['admin_account']['#value']           = '';
     $form['admin_account']['markup']['#value'] = '';
     $form['admin_account']['#title']           = 'Administrator Account';
 
-    # Site settings.
+    // Site settings.
     $form['site_information']['site_name']['#default_value'] = $fields['site_name'];
     $form['site_information']['site_mail']['#default_value'] = $fields['site_mail'];
     $form['site_information']['site_mail']['#type'] = 'hidden';
 
-    # Admin account settings.
+    // Admin account settings.
     $form['admin_account']['account']['mail']['#default_value'] = $fields['site_mail'];
     $form['admin_account']['account']['name']['#default_value'] = 'admin';
     $form['admin_account']['account']['mail']['#type'] = 'hidden';
     $form['admin_account']['account']['name']['#type'] = 'hidden';
 
-    # Server settings.
-#    $form['server_settings']['#title'] = '';
+    // Server settings.
+//    $form['server_settings']['#title'] = '';
     $form['server_settings']['clean_url']['#type'] = 'hidden';
     $form['server_settings']['clean_url']['#default_value'] = 1;
-#    $form['server_settings']['update_status_module']['#type'] = 'hidden';
-#    $form['server_settings']['update_status_module']['#default_value'] = 0;
+//    $form['server_settings']['update_status_module']['#type'] = 'hidden';
+//    $form['server_settings']['update_status_module']['#default_value'] = 0;
     $form['server_settings']['date_default_timezone']['#type'] = 'hidden';
     $form['server_settings']['date_default_timezone']['#default_value'] = -25200;
   }
 }
 
-# Check the installed settings, by looking at a special table we created just
-#  for that purpose in the Drupal DB.
+// Check the installed settings, by looking at a special table we created just
+//  for that purpose in the Drupal DB.
 function get_stanford_installer () {
   $fields = array ();
   $result = db_query("SELECT * FROM install_settings");
@@ -354,9 +354,9 @@ function get_stanford_installer () {
   return $fields;
 }
 
-# Change the default rid for the authenticated user role.  Drupal expects it
-#  to be 2, and while you can change the setting in a file, bad modules
-#  apparently don't respect that setting.
+// Change the default rid for the authenticated user role.  Drupal expects it
+//  to be 2, and while you can change the setting in a file, bad modules
+//  apparently don't respect that setting.
 function adjust_authuser_rid () {
   $result = db_query("UPDATE role SET rid='1' WHERE name='anonymous user'");
   $result = db_query("UPDATE role SET rid='2' WHERE name='authenticated user'");
