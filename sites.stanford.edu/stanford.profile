@@ -330,11 +330,8 @@ function stanford_form_alter(&$form, $form_state, $form_id) {
     $form['admin_account']['account']['name']['#type'] = 'hidden';
 
     // Server settings.
-//    $form['server_settings']['#title'] = '';
     $form['server_settings']['clean_url']['#type'] = 'hidden';
     $form['server_settings']['clean_url']['#default_value'] = 1;
-//    $form['server_settings']['update_status_module']['#type'] = 'hidden';
-//    $form['server_settings']['update_status_module']['#default_value'] = 0;
     $form['server_settings']['date_default_timezone']['#type'] = 'hidden';
     $form['server_settings']['date_default_timezone']['#default_value'] = -25200;
 
