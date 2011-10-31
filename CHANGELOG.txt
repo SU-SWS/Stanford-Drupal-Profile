@@ -1,6 +1,17 @@
 Stanford Profile x.x-x.x xxxx-xx-xx
 -----------------------------------
 
+Stanford Profile 6.x-1.1 2011-10-31
+-----------------------------------
+by mrmarco: Copied over the profile from sites.stanford.edu
+by mrmarco: Incorporated the following changes from dev version of profile (most by jbickar)
+  Update ckeditor configuration
+  Remove 'Powered by Drupal' block
+  Updated security section
+  Updated comments on file system section
+  Hide automatic updates
+  Enabled the webauth enabling code
+  Updated file to be closer to Drupal Coding Standards
 
 Stanford Profile 6.x-1.0 2011-10-25
 -----------------------------------
