@@ -49,13 +49,11 @@ function stanford_profile_modules() {
                   );
 
   // Enables webauth module if requested.
-  // TODO: Enable when webauth works.
-  //$fields = get_stanford_installer();
-  //if ($fields['webauth'] == 'on') {
-  //  array_push ($modules, 'webauth');
-  //}
-
-
+  $fields = get_stanford_installer();
+  if ($fields['webauth'] == 'on') {
+    array_push($modules, 'webauth');
+  }
+  
   return $modules;
 }
 
@@ -355,8 +353,8 @@ function get_stanford_installer () {
 }
 
 // Change the default rid for the authenticated user role.  Drupal expects it
-//  to be 2, and while you can change the setting in a file, bad modules
-//  apparently don't respect that setting.
+// to be 2, and while you can change the setting in a file, bad modules
+// apparently don't respect that setting.
 function adjust_authuser_rid () {
   $result = db_query("UPDATE role SET rid='1' WHERE name='anonymous user'");
   $result = db_query("UPDATE role SET rid='2' WHERE name='authenticated user'");
