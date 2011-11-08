@@ -1,6 +1,10 @@
 Stanford Profile x.x-x.x xxxx-xx-xx
 -----------------------------------
 
+Stanford Profile 6.x-1.2 2011-11-07
+-----------------------------------
+#7 by mrmarco: WebAuth not getting enabled
+
 Stanford Profile 6.x-1.1 2011-10-31
 -----------------------------------
 by mrmarco: Copied over the profile from sites.stanford.edu
