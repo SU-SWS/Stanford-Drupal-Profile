@@ -223,9 +223,17 @@ function stanford_profile_tasks(&$task, $url) {
   $theme_settings['toggle_node_info_page'] = FALSE;
   variable_set('theme_settings', $theme_settings);
 
-  // Install stanfordmodern as preferred theme.
+  // Departments' preferred theme is Stanford Modern
+  // Groups and individuals' preferred theme is Stanford Basic
+  // Official groups can have the Stanford Modern theme enabled by ITS
+  if ($fields['org_type'] == 'dept') {
+    $preferred_themes = array('stanfordmodern', 'garland');
+  } else {
+    $preferred_themes = array('stanfordbasic', 'garland');
+  }
+
+  // Install the preferred theme
   $themes = system_theme_data();
-  $preferred_themes = array('stanfordmodern', 'garland');
   foreach ($preferred_themes as $theme) {
     if (array_key_exists($theme, $themes)) {
       system_initialize_theme_blocks($theme);
