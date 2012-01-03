@@ -23,7 +23,6 @@ function stanford_profile_modules() {
                'help',
                'insert',
                'jquery_ui',
-               'libraries',
                'link',
                'menu',
                'nodeformcols',
