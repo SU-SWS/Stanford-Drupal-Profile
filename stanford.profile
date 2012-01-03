@@ -9,7 +9,6 @@
 function stanford_profile_modules() {
   return array('auto_nodetitle',
                'color',
-               'comment',
                'content',
                'css_injector',
                'dblog',
