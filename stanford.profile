@@ -187,6 +187,12 @@ function stanford_profile_tasks(&$task, $url) {
   variable_set('date_default_timezone_name', $default_timezone_name);
   variable_set('date_default_timezone', $default_timezone_offset);
   
+  // Default upload quotas
+  $uploadsize_default = 2;
+  $usersize_default = 100;
+  variable_set('upload_uploadsize_default', $uploadsize_default);
+  variable_set('upload_usersize_default', $usersize_default);
+  
   // Create configuration for CKEditor
   $ckeditor_configuration = serialize(array (
     'default' => 1,
