@@ -130,7 +130,7 @@ function stanford_profile_tasks(&$task, $url) {
       'type' => 'page',
       'name' => st('Page'),
       'module' => 'node',
-      'description' => st("A <em>page</em>, similar in form to a <em>story</em>, is a simple method for creating and displaying information that rarely changes, such as an \"About us\" section of a website. By default, a <em>page</em> entry does not allow visitor comments and is not featured on the site's initial home page."),
+      'description' => st("A <em>page</em> is a simple method for creating and displaying information that rarely changes, such as an \"About us\" section of a website."),
       'custom' => TRUE,
       'modified' => TRUE,
       'locked' => FALSE,
@@ -144,8 +144,8 @@ function stanford_profile_tasks(&$task, $url) {
     node_type_save($type);
   }
 
-  // Default page to not be promoted and have comments disabled.
-  variable_set('node_options_page', array('status'));
+  // Default page to not be promoted, revisions enabled, and have comments disabled.
+  variable_set('node_options_page', array('status', 'revision'));
   variable_set('comment_page', COMMENT_NODE_DISABLED);
 
   // Don't display date and author information for page nodes by default.
