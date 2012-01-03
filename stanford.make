@@ -61,9 +61,9 @@ projects[wysiwyg] = 2.3
 projects[stanford_events_importer][type] = module
 projects[stanford_events_importer][download][type] = file
 projects[stanford_events_importer][download][url] = 'https://techcommons.stanford.edu/files/stanford_events_importer-6.x-1.0-beta6.tar.gz'
-
-; need URLs
-;projects[] = webauth
+projects[webauth][type] = module
+projects[webauth][download][type] = file
+projects[webauth][download][url] = 'http://drupalfeatures.stanford.edu/sites/default/files/fserver/webauth-6.x-3.0.tar.gz'
 
 ; Themes
 
