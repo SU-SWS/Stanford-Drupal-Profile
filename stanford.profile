@@ -11,6 +11,8 @@ function stanford_profile_modules() {
                'color',
                'content',
                'css_injector',
+               'date_api',
+               'date_timezone',
                'dblog',
                'email',
                'features',
@@ -175,6 +177,16 @@ function stanford_profile_tasks(&$task, $url) {
   $block_module = 'system';
   db_query("UPDATE {blocks} SET status = %d WHERE module = '%s' AND delta = %d", 0, $block_module, 0);
 
+  // Disable user-configurable timezones by default
+  $user_configurable_timezones = 0;
+  variable_set('configurable_timezones', $user_configurable_timezones);
+  
+  // Set default timezone
+  $default_timezone_name = "America/Los_Angeles";
+  $default_timezone_offset = -28800;
+  variable_set('date_default_timezone_name', $default_timezone_name);
+  variable_set('date_default_timezone', $default_timezone_offset);
+  
   // Create configuration for CKEditor
   $ckeditor_configuration = serialize(array (
     'default' => 1,
