@@ -137,17 +137,6 @@ function stanford_profile_tasks(&$task, $url) {
       'help' => '',
       'min_word_count' => '',
     ),
-    array(
-      'type' => 'story',
-      'name' => st('Story'),
-      'module' => 'node',
-      'description' => st("A <em>story</em>, similar in form to a <em>page</em>, is ideal for creating and displaying content that informs or engages website visitors. Press releases, site announcements, and informal blog-like entries may all be created with a <em>story</em> entry. By default, a <em>story</em> entry is automatically featured on the site's initial home page, and provides the ability to post comments."),
-      'custom' => TRUE,
-      'modified' => TRUE,
-      'locked' => FALSE,
-      'help' => '',
-      'min_word_count' => '',
-    ),
   );
 
   foreach ($types as $type) {
