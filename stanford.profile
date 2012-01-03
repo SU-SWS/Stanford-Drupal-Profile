@@ -193,6 +193,10 @@ function stanford_profile_tasks(&$task, $url) {
   variable_set('upload_uploadsize_default', $uploadsize_default);
   variable_set('upload_usersize_default', $usersize_default);
   
+  // Error reporting
+  $error_level = 0;
+  variable_set('error_level', $error_level);
+  
   // Create configuration for CKEditor
   $ckeditor_configuration = serialize(array (
     'default' => 1,
