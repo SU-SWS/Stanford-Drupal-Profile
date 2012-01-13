@@ -41,7 +41,7 @@ projects[google_analytics] = 1.2
 projects[insert] = 1.1
 projects[job_scheduler] = 2.0-alpha2
 ; dev version only of jquery_ui
-projects[] = jquery_ui
+; projects[] = jquery_ui
 projects[link] = 1.0
 projects[mollom] = 1.1
 ; dev version only of nodeformcols
