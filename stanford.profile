@@ -1,128 +1,20 @@
 <?php
 
-/**
- * Return an array of the modules to be enabled when this profile is installed.
- *
- * @return
- *   An array of modules to enable.
+/*
+ * Implementation of hook_install_tasks().
  */
-function stanford_profile_modules() {
-  return array('auto_nodetitle',
-               'color',
-               'content',
-               'css_injector',
-               'date_api',
-               'date_timezone',
-               'dblog',
-               'email',
-               'features',
-               'fieldgroup',
-               'filefield',
-               'imagefield',
-               'help',
-               'insert',
-               'jquery_ui',
-               'link',
-               'menu',
-               'nodeformcols',
-               'nodereference',
-               'number',
-               'optionwidgets',
-               'path',
-               'pathauto',
-               'pathologic',
-               'semanticviews',
-               'taxonomy',
-               'text',
-               'token',
-               'upload',
-               'userreference',
-               'views', 
-               'views_ui',
-               'wysiwyg',
-               );
+
+function stanford_profile_install_tasks($install_state) {
+  $tasks = array();
+  //$tasks['stanford_content_types_create'] = array();
+  $tasks['stanford_date_variables'] = array();
+  return $tasks;
 }
 
-/**
- * Return a description of the profile for the initial installation screen.
- *
- * @return
- *   An array with keys 'name' and 'description' describing this profile,
- *   and optional 'language' to override the language selection for
- *   language-specific profiles.
+/*
+ * Create content type(s).
  */
-function stanford_profile_details() {
-  return array(
-    'name' => 'Drupal at Stanford',
-    'description' => 'Select this profile to enable some basic Drupal functionality and the default theme.'
-  );
-}
-
-/**
- * Return a list of tasks that this profile supports.
- *
- * @return
- *   A keyed array of tasks the profile will perform during
- *   the final stage. The keys of the array will be used internally,
- *   while the values will be displayed to the user in the installer
- *   task list.
- */
-function stanford_profile_task_list() {
-}
-
-/**
- * Perform any final installation tasks for this profile.
- *
- * The installer goes through the profile-select -> locale-select
- * -> requirements -> database -> profile-install-batch
- * -> locale-initial-batch -> configure -> locale-remaining-batch
- * -> finished -> done tasks, in this order, if you don't implement
- * this function in your profile.
- *
- * If this function is implemented, you can have any number of
- * custom tasks to perform after 'configure', implementing a state
- * machine here to walk the user through those tasks. First time,
- * this function gets called with $task set to 'profile', and you
- * can advance to further tasks by setting $task to your tasks'
- * identifiers, used as array keys in the hook_profile_task_list()
- * above. You must avoid the reserved tasks listed in
- * install_reserved_tasks(). If you implement your custom tasks,
- * this function will get called in every HTTP request (for form
- * processing, printing your information screens and so on) until
- * you advance to the 'profile-finished' task, with which you
- * hand control back to the installer. Each custom page you
- * return needs to provide a way to continue, such as a form
- * submission or a link. You should also set custom page titles.
- *
- * You should define the list of custom tasks you implement by
- * returning an array of them in hook_profile_task_list(), as these
- * show up in the list of tasks on the installer user interface.
- *
- * Remember that the user will be able to reload the pages multiple
- * times, so you might want to use variable_set() and variable_get()
- * to remember your data and control further processing, if $task
- * is insufficient. Should a profile want to display a form here,
- * it can; the form should set '#redirect' to FALSE, and rely on
- * an action in the submit handler, such as variable_set(), to
- * detect submission and proceed to further tasks. See the configuration
- * form handling code in install_tasks() for an example.
- *
- * Important: Any temporary variables should be removed using
- * variable_del() before advancing to the 'profile-finished' phase.
- *
- * @param $task
- *   The current $task of the install system. When hook_profile_tasks()
- *   is first called, this is 'profile'.
- * @param $url
- *   Complete URL to be used for a link or form action on a custom page,
- *   if providing any, to allow the user to proceed with the installation.
- *
- * @return
- *   An optional HTML string to display to the user. Only used if you
- *   modify the $task, otherwise discarded.
- */
-function stanford_profile_tasks(&$task, $url) {
-
+function stanford_content_types_create() {
   // Insert default user-defined node types into the database. For a complete
   // list of available node type attributes, refer to the node type API
   // documentation at: http://api.drupal.org/api/HEAD/function/hook_node_info.
@@ -144,7 +36,31 @@ function stanford_profile_tasks(&$task, $url) {
     $type = (object) _node_type_set_defaults($type);
     node_type_save($type);
   }
+}
 
+/*
+ * Set date variables.
+ */
+function stanford_date_variables() {
+  // Disable user-configurable timezones by default
+  $user_configurable_timezones = 0;
+  variable_set('configurable_timezones', $user_configurable_timezones);
+  
+  // Date and timezone settings
+  $default_timezone_name = "America/Los_Angeles";
+  variable_set('date_default_timezone', $default_timezone_name);
+
+  $date_first_day = 0;
+  $date_format_long = "l, F j, Y - H:i";
+  $date_format_medium = "D, Y-m-d H:i";
+  $date_format_short = "Y-m-d H:i";
+  variable_set('date_first_day', $date_first_day);
+  variable_set('date_format_long', $date_format_long);
+  variable_set('date_format_medium', $date_format_medium);
+  variable_set('date_format_short', $date_format_short);
+}
+
+/*
   // Default page to not be promoted, revisions enabled, and have comments disabled.
   variable_set('node_options_page', array('status', 'revision'));
   variable_set('comment_page', COMMENT_NODE_DISABLED);
@@ -183,12 +99,19 @@ function stanford_profile_tasks(&$task, $url) {
   $user_configurable_timezones = 0;
   variable_set('configurable_timezones', $user_configurable_timezones);
   
-  // Set default timezone
+  // Date and timezone settings
   $default_timezone_name = "America/Los_Angeles";
-  $default_timezone_offset = -28800;
+//  $default_timezone_offset = -28800;
+  $date_first_day = 0;
+  $date_format_long = "l, F j, Y - H:i";
+  $date_format_medium = "D, Y-m-d H:i";
+  $date_format_short = "Y-m-d H:i";
   variable_set('date_default_timezone_name', $default_timezone_name);
-  variable_set('date_default_timezone', $default_timezone_offset);
-  
+//  variable_set('date_default_timezone', $default_timezone_offset);
+  variable_set('date_first_day', $date_first_day);
+  variable_set('date_format_long', $date_format_long);
+  variable_set('date_format_medium', $date_format_medium);
+  variable_set('date_format_short', $date_format_short);
   // Default upload quotas
   $uploadsize_default = 2;
   $usersize_default = 100;
@@ -263,7 +186,7 @@ function stanford_profile_tasks(&$task, $url) {
    
   // Update the menu router information.
   menu_rebuild();
-}
+
 
 /**
  * Implementation of hook_form_alter().
