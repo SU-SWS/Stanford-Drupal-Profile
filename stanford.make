@@ -83,9 +83,10 @@ projects[] = rubik
 
 ; Profile
 
-; projects[stanford][type] = "profile"
-; projects[stanford][download][type] = "git"
-; projects[stanford][download][url] = "git@github.com:mistermarco/Stanford-Drupal-Profile.git"
 projects[stanford][type] = "profile"
-projects[stanford][download][type] = "file"
-projects[stanford][download][url] = "file:///home/quickstart/Documents/Stanford-Drupal-Profile/stanford.profile"
+projects[stanford][download][type] = "git"
+projects[stanford][download][url] = "git@github.com:SU-SWS/Stanford-Drupal-Profile.git"
+projects[stanford][download][branch] = 7.x-1.0-dev
+; projects[stanford][type] = "profile"
+; projects[stanford][download][type] = "file"
+; projects[stanford][download][url] = "file:///home/quickstart/Documents/Stanford-Drupal-Profile/stanford.profile"
