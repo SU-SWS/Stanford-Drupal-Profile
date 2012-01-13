@@ -19,7 +19,6 @@ function stanford_profile_modules() {
                'fieldgroup',
                'filefield',
                'imagefield',
-               //'googleanalytics',
                'help',
                'insert',
                'jquery_ui',
