@@ -5,6 +5,24 @@
 * Perform actions to set up the site for this profile.
 */
 function stanford_install() {
-  include_once DRUPAL_ROOT . '/profiles/standard/standard.install';
-  standard_install();
+//  include_once DRUPAL_ROOT . '/profiles/standard/standard.install';
+//  standard_install();
+  
+  // Date and timezone settings
+  $user_configurable_timezones = 0;
+  variable_set('configurable_timezones', $user_configurable_timezones);
+  
+  $default_timezone_name = "America/Los_Angeles";
+  variable_set('date_default_timezone', $default_timezone_name);
+
+  $date_first_day = 0;
+  variable_set('date_first_day', $date_first_day);
+
+  $date_format_long = "l, F j, Y - H:i";
+  $date_format_medium = "D, Y-m-d H:i";
+  $date_format_short = "Y-m-d H:i";
+  variable_set('date_format_long', $date_format_long);
+  variable_set('date_format_medium', $date_format_medium);
+  variable_set('date_format_short', $date_format_short);
+
 }
