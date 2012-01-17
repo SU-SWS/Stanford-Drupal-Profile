@@ -12,7 +12,7 @@ function stanford_install() {
     array(
       'type' => 'page',
       'name' => st('Page'),
-      'base' => 'node',
+      'base' => 'node_content',
       'module' => 'node',
       'description' => st("A <em>page</em> is a simple method for creating and displaying information that rarely changes, such as an \"About us\" section of a website."),
       'modified' => 1,
@@ -24,7 +24,7 @@ function stanford_install() {
 
   foreach ($types as $type) {
     $type = (object) node_type_set_defaults($type);
-    variable_set('jbickar', node_type_save($type));
+    node_type_save($type);
   }
 
   // Date and timezone settings
