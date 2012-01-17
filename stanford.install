@@ -18,12 +18,13 @@ function stanford_install() {
       'modified' => 1,
       'locked' => FALSE,
       'help' => '',
+      'disabled' => 0,
     ),
   );
 
   foreach ($types as $type) {
     $type = (object) node_type_set_defaults($type);
-    node_type_save($type);
+    variable_set('jbickar', node_type_save($type));
   }
 
   // Date and timezone settings
