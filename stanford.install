@@ -50,8 +50,10 @@ function stanford_install() {
   variable_set('comment_page', COMMENT_NODE_DISABLED);
 
   // Set the default input format to the Filtered HTML version
-  $filtered_html_id = db_result(db_query("SELECT format FROM {filter_formats} WHERE name = 'Filtered HTML'"));
-  variable_set('filter_default_format', $filtered_html_id);
+  /* db_result() is an undefined function
+   *   $filtered_html_id = db_result(db_query("SELECT format FROM {filter_formats} WHERE name = 'Filtered HTML'"));
+   * variable_set('filter_default_format', $filtered_html_id);
+   */
 
   // Enable the admin theme, and set it for content editing as well
   $admin_theme = 'seven';
