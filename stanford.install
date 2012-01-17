@@ -7,26 +7,23 @@
 function stanford_install() {
   // Insert default user-defined node types into the database. For a complete
   // list of available node type attributes, refer to the node type API
-  // documentation at: http://api.drupal.org/api/HEAD/function/hook_node_info.
-/*  $types = array(
+  // documentation at: api.drupal.org/api/drupal/modules--node--node.api.php/function/hook_node_info/ 
+  $types = array(
     array(
       'type' => 'page',
       'name' => st('Page'),
-      'module' => 'node',
+      'base' => 'node',
       'description' => st("A <em>page</em> is a simple method for creating and displaying information that rarely changes, such as an \"About us\" section of a website."),
-      'custom' => TRUE,
-      'modified' => TRUE,
+      'modified' => 1,
       'locked' => FALSE,
       'help' => '',
-      'min_word_count' => '',
     ),
   );
 
   foreach ($types as $type) {
-    //need to update this function name
-    $type = (object) _node_type_set_defaults($type);
+    $type = (object) node_type_set_defaults($type);
     node_type_save($type);
-  }*/
+  }
 
   // Date and timezone settings
   $user_configurable_timezones = 0;
