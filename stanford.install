@@ -37,19 +37,22 @@ function stanford_install() {
   $date_first_day = 0;
   variable_set('date_first_day', $date_first_day);
 
+/*
+ * Need new implementation.
   $date_format_long = "l, F j, Y - H:i";
   $date_format_medium = "D, Y-m-d H:i";
   $date_format_short = "Y-m-d H:i";
   variable_set('date_format_long', $date_format_long);
   variable_set('date_format_medium', $date_format_medium);
   variable_set('date_format_short', $date_format_short);
-  
+*/  
   // Default page to not be promoted, revisions enabled, and have comments disabled.
   variable_set('node_options_page', array('status', 'revision'));
   variable_set('comment_page', COMMENT_NODE_DISABLED);
 
   // Set the default input format to the Filtered HTML version
   /* db_result() is an undefined function
+   * Look to standard.install for how to implement this.
    *   $filtered_html_id = db_result(db_query("SELECT format FROM {filter_formats} WHERE name = 'Filtered HTML'"));
    * variable_set('filter_default_format', $filtered_html_id);
    */
@@ -136,8 +139,9 @@ function stanford_install() {
   // Add CKEditor to wysiwyg  
   /* Argument 2 passed to db_query() must be an array, null given
    * db_query("INSERT INTO {wysiwyg} SET format = ('%s'), editor = 'ckeditor', settings = ('%s')", $filtered_html_id, $ckeditor_configuration);
-   */   
+   */
   // Update the list of HTML tags allowed for the filtered HTML input format
+  // Look to standard.install for how to implement this.
   $allowed_html = '<a> <blockquote> <br> <cite> <code> <em> <h2> <h3> <h4> <h5> <h6> <iframe> <li> <ol> <p> <strong> <ul>';
   variable_set('allowed_html_' . $filtered_html_id, $allowed_html);
 
