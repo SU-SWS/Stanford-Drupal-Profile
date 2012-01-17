@@ -10,9 +10,10 @@ function stanford_install() {
   // documentation at: api.drupal.org/api/drupal/modules--node--node.api.php/function/hook_node_info/ 
   $types = array(
     array(
-//      'type' => 'page',
+      'type' => 'page',
       'name' => st('Page'),
       'base' => 'node',
+      'module' => 'node',
       'description' => st("A <em>page</em> is a simple method for creating and displaying information that rarely changes, such as an \"About us\" section of a website."),
       'modified' => 1,
       'locked' => FALSE,
