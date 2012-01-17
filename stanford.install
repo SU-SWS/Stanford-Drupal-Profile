@@ -135,8 +135,9 @@ function stanford_install() {
   ));
 
   // Add CKEditor to wysiwyg  
-  db_query("INSERT INTO {wysiwyg} SET format = ('%s'), editor = 'ckeditor', settings = ('%s')", $filtered_html_id, $ckeditor_configuration);
-  
+  /* Argument 2 passed to db_query() must be an array, null given
+   * db_query("INSERT INTO {wysiwyg} SET format = ('%s'), editor = 'ckeditor', settings = ('%s')", $filtered_html_id, $ckeditor_configuration);
+   */   
   // Update the list of HTML tags allowed for the filtered HTML input format
   $allowed_html = '<a> <blockquote> <br> <cite> <code> <em> <h2> <h3> <h4> <h5> <h6> <iframe> <li> <ol> <p> <strong> <ul>';
   variable_set('allowed_html_' . $filtered_html_id, $allowed_html);
