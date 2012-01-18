@@ -57,11 +57,6 @@ function stanford_install() {
    * variable_set('filter_default_format', $filtered_html_id);
    */
 
-  // Enable the admin theme, and set it for content editing as well
-  $admin_theme = 'seven';
-  $node_admin_theme = 1;
-  variable_set('admin_theme', $admin_theme);
-  variable_set('node_admin_theme', $node_admin_theme);
   
   // Remove password from emails that get sent by the system
   $user_mail_register_admin_created_body = "!username,\n\nA site administrator at !site has created an account for you. You may now log in to !login_uri using the following username and password:\n\nusername: !username\n\n\nYou may also log in by clicking on this link or copying and pasting it in your browser:\n\n!login_url\n\nThis is a one-time login, so it can be used only once.\n\nAfter logging in, you will be redirected to !edit_uri so you can change your password.\n\n\n--  !site team";
@@ -145,8 +140,39 @@ function stanford_install() {
   $allowed_html = '<a> <blockquote> <br> <cite> <code> <em> <h2> <h3> <h4> <h5> <h6> <iframe> <li> <ol> <p> <strong> <ul>';
   variable_set('allowed_html_' . $filtered_html_id, $allowed_html);
 
+  // Create a default role for site administrators, with all available permissions assigned.
+  $admin_role = new stdClass();
+  $admin_role->name = 'administrator';
+  $admin_role->weight = 2;
+  user_role_save($admin_role);
+  user_role_grant_permissions($admin_role->rid, array_keys(module_invoke_all('permission')));
+  // Set this as the administrator role.
+  variable_set('user_admin_role', $admin_role->rid);
+
+  // Assign user 1 the "administrator" role.
+  db_insert('users_roles')
+    ->fields(array('uid' => 1, 'rid' => $admin_role->rid))
+    ->execute();
+
+  // Create a Home link in the main menu.
+  $item = array(
+    'link_title' => st('Home'),
+    'link_path' => '<front>',
+    'menu_name' => 'main-menu',
+  );
+  menu_link_save($item);
+
   // Update the menu router information.
   menu_rebuild();
 
-
+  // Enable the admin theme, and set it for content editing as well
+  db_update('system')
+    ->fields(array('status' => 1))
+    ->condition('type', 'theme')
+    ->condition('name', 'seven')
+    ->execute();
+  $admin_theme = 'seven';
+  $node_admin_theme = 1;
+  variable_set('admin_theme', $admin_theme);
+  variable_set('node_admin_theme', $node_admin_theme);
 }
