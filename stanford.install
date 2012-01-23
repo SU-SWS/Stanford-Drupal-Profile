@@ -94,14 +94,15 @@ function stanford_install() {
   variable_set('date_first_day', $date_first_day);
 
 /*
- * Need new implementation.
+ * Need new implementation - why?
+ */
   $date_format_long = "l, F j, Y - H:i";
   $date_format_medium = "D, Y-m-d H:i";
   $date_format_short = "Y-m-d H:i";
   variable_set('date_format_long', $date_format_long);
   variable_set('date_format_medium', $date_format_medium);
   variable_set('date_format_short', $date_format_short);
-*/  
+ 
   // Default page to not be promoted, revisions enabled, and have comments disabled.
   variable_set('node_options_page', array('status', 'revision'));
   variable_set('comment_page', COMMENT_NODE_DISABLED);
@@ -113,7 +114,8 @@ function stanford_install() {
    *
    * $filtered_html_id = db_result(db_query("SELECT format FROM {filter_formats} WHERE name = 'Filtered HTML'"));
    */
-   $filtered_html_id = db_query("SELECT format FROM {filter_formats} WHERE name = 'Filtered HTML'")->fetchField();
+   /* "table 'filter_formats' does not exist" */
+   $filtered_html_id = db_query("SELECT format FROM {filter_format} WHERE name = 'Filtered HTML'")->fetchField();
    variable_set('filter_default_format', $filtered_html_id);
   
   // Remove password from emails that get sent by the system
@@ -193,18 +195,21 @@ function stanford_install() {
   /* Argument 2 passed to db_query() must be an array, null given
    * db_query("INSERT INTO {wysiwyg} SET format = ('%s'), editor = 'ckeditor', settings = ('%s')", $filtered_html_id, $ckeditor_configuration);
    */
-   db_insert('wysiwyg')
+/*   db_insert('wysiwyg')
      ->fields(array(
        'format' => $filtered_html_id,
        'editor' => 'ckeditor',
        'settings' => $ckeditor_configuration,
      ))
      -->execute();
+*/
 
   // Update the list of HTML tags allowed for the filtered HTML input format
   // Look to standard.install for how to implement this.
-  $allowed_html = '<a> <blockquote> <br> <cite> <code> <em> <h2> <h3> <h4> <h5> <h6> <iframe> <li> <ol> <p> <strong> <ul>';
-  variable_set('allowed_html_' . $filtered_html_id, $allowed_html);
+  /* Will need to serialize this and insert it into the {filter} table
+  * $allowed_html = '<a> <blockquote> <br> <cite> <code> <em> <h2> <h3> <h4> <h5> <h6> <iframe> <li> <ol> <p> <strong> <ul>';
+  * variable_set('allowed_html_' . $filtered_html_id, $allowed_html);
+  */
 
   // Create a default role for site administrators, with all available permissions assigned.
   $admin_role = new stdClass();
