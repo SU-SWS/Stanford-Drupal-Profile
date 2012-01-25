@@ -9,9 +9,10 @@
 function stanford_profile_modules() {
   return array('auto_nodetitle',
                'color',
-               'comment',
                'content',
                'css_injector',
+               'date_api',
+               'date_timezone',
                'dblog',
                'email',
                'features',
@@ -131,18 +132,7 @@ function stanford_profile_tasks(&$task, $url) {
       'type' => 'page',
       'name' => st('Page'),
       'module' => 'node',
-      'description' => st("A <em>page</em>, similar in form to a <em>story</em>, is a simple method for creating and displaying information that rarely changes, such as an \"About us\" section of a website. By default, a <em>page</em> entry does not allow visitor comments and is not featured on the site's initial home page."),
-      'custom' => TRUE,
-      'modified' => TRUE,
-      'locked' => FALSE,
-      'help' => '',
-      'min_word_count' => '',
-    ),
-    array(
-      'type' => 'story',
-      'name' => st('Story'),
-      'module' => 'node',
-      'description' => st("A <em>story</em>, similar in form to a <em>page</em>, is ideal for creating and displaying content that informs or engages website visitors. Press releases, site announcements, and informal blog-like entries may all be created with a <em>story</em> entry. By default, a <em>story</em> entry is automatically featured on the site's initial home page, and provides the ability to post comments."),
+      'description' => st("A <em>page</em> is a simple method for creating and displaying information that rarely changes, such as an \"About us\" section of a website."),
       'custom' => TRUE,
       'modified' => TRUE,
       'locked' => FALSE,
@@ -156,8 +146,8 @@ function stanford_profile_tasks(&$task, $url) {
     node_type_save($type);
   }
 
-  // Default page to not be promoted and have comments disabled.
-  variable_set('node_options_page', array('status'));
+  // Default page to not be promoted, revisions enabled, and have comments disabled.
+  variable_set('node_options_page', array('status', 'revision'));
   variable_set('comment_page', COMMENT_NODE_DISABLED);
 
   // Don't display date and author information for page nodes by default.
@@ -182,10 +172,34 @@ function stanford_profile_tasks(&$task, $url) {
   $user_mail_register_no_approval_required_body = "!username,\n\nThank you for registering at !site. You may now log in to !login_uri using the following username and password:\n\nusername: !username\n\n\nYou may also log in by clicking on this link or copying and pasting it in your browser:\n\n!login_url\n\nThis is a one-time login, so it can be used only once.\n\nAfter logging in, you will be redirected to !edit_uri so you can change your password.\n\n\n--  !site team";
   variable_set('user_mail_register_no_approval_required_body', $user_mail_register_no_approval_required_body);
   
+  // User registration - only site administrators can create new user accounts
+  $user_register = 0;
+  variable_set('user_register', $user_register);
+  
   // Remove "Powered by Drupal" block from footer
   $block_module = 'system';
   db_query("UPDATE {blocks} SET status = %d WHERE module = '%s' AND delta = %d", 0, $block_module, 0);
 
+  // Disable user-configurable timezones by default
+  $user_configurable_timezones = 0;
+  variable_set('configurable_timezones', $user_configurable_timezones);
+  
+  // Set default timezone
+  $default_timezone_name = "America/Los_Angeles";
+  $default_timezone_offset = -28800;
+  variable_set('date_default_timezone_name', $default_timezone_name);
+  variable_set('date_default_timezone', $default_timezone_offset);
+  
+  // Default upload quotas
+  $uploadsize_default = 2;
+  $usersize_default = 100;
+  variable_set('upload_uploadsize_default', $uploadsize_default);
+  variable_set('upload_usersize_default', $usersize_default);
+  
+  // Error reporting
+  $error_level = 0;
+  variable_set('error_level', $error_level);
+  
   // Create configuration for CKEditor
   $ckeditor_configuration = serialize(array (
     'default' => 1,
