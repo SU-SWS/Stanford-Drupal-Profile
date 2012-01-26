@@ -170,8 +170,6 @@ function stanford_profile_tasks(&$task, $url) {
   variable_set('node_options_page', array('status'));
   variable_set('comment_page', COMMENT_NODE_DISABLED);
 
-
-
   /**
    * File System
    */
@@ -182,7 +180,6 @@ function stanford_profile_tasks(&$task, $url) {
   // Set files temp directory to sites/<name of site>/tmp/.
   $fields = get_stanford_installer();
   variable_set('file_directory_temp', $fields['tmpdir']);
-
 
   /**
    * Security
