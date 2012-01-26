@@ -69,9 +69,9 @@ function stanford_profile_modules() {
  */
 function stanford_profile_details() {
   return array(
-    'name'        => 'Stanford',
+    'name' => 'Stanford',
     'description' => 'Select this profile to install Stanford-specific modules.',
-    'language'    => 'en',
+    'language' => 'en',
   );
 }
 
