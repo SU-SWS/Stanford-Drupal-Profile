@@ -1,51 +1,51 @@
 <?php
 /**
-* Return an array of the modules to enable when this profile is installed.
-*
-* @return
-*  An array of modules to be enabled.
-*/
+ * Return an array of the modules to enable when this profile is installed.
+ *
+ * @return
+ *  An array of modules to be enabled.
+ */
 function stanford_profile_modules() {
-  $modules = array('auto_nodetitle',
-                   'block',
-                   'color',
-                   'comment',
-                   'content',
-                   'css_injector',
-                   'dblog',
-                   'email',
-                   'features',
-                   'fieldgroup',
-                   'filefield',
-                   'filter',
-                   //'googleanalytics',
-                   'help',
-                   'imagefield',
-                   'insert',
-                   'jquery_ui',
-                   'link',
-                   'menu',
-                   'node',
-                   'nodeformcols',
-                   'nodereference',
-                   'number',
-                   'optionwidgets',
-                   'path',
-                   'pathauto',
-                   'pathologic',
-                   'semanticviews',
-                   'su_it_services',
-                   'system',
-                   'taxonomy',
-                   'text',
-                   'token',
-                   'upload',
-                   'user',
-                   'userreference',
-                   'views',
-                   'views_ui',
-                   'wysiwyg',
-                  );
+  $modules = array(
+    'auto_nodetitle',
+    'block',
+    'color',
+    'comment',
+    'content',
+    'css_injector',
+    'dblog',
+    'email',
+    'features',
+    'fieldgroup',
+    'filefield',
+    'filter',
+    'help',
+    'imagefield',
+    'insert',
+    'jquery_ui',
+    'link',
+    'menu',
+    'node',
+    'nodeformcols',
+    'nodereference',
+    'number',
+    'optionwidgets',
+    'path',
+    'pathauto',
+    'pathologic',
+    'semanticviews',
+    'su_it_services',
+    'system',
+    'taxonomy',
+    'text',
+    'token',
+    'upload',
+    'user',
+    'userreference',
+    'views',
+    'views_ui',
+    'wysiwyg',
+  );
 
   // Enables webauth module if requested.
   $fields = get_stanford_installer();
