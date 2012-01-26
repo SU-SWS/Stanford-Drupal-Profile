@@ -60,6 +60,7 @@ function stanford_profile_details() {
   return array(
     'name' => 'Drupal at Stanford',
     'description' => 'Select this profile to enable some basic Drupal functionality and the default theme.'
+    'language' => 'en',
   );
 }
 
@@ -154,6 +155,19 @@ function stanford_profile_tasks(&$task, $url) {
   variable_set('node_options_page', array('status', 'revision'));
   variable_set('comment_page', COMMENT_NODE_DISABLED);
 
+  /**
+   * File System
+   */
+
+  // Set to public file downloads.
+  variable_set('file_downloads', 1);
+
+  // Default upload quotas
+  $uploadsize_default = 2;
+  $usersize_default = 100;
+  variable_set('upload_uploadsize_default', $uploadsize_default);
+  variable_set('upload_usersize_default', $usersize_default);
+  
   // Don't display date and author information for page nodes by default.
   $theme_settings = variable_get('theme_settings', array());
   $theme_settings['toggle_node_info_page'] = FALSE;
@@ -193,12 +207,6 @@ function stanford_profile_tasks(&$task, $url) {
   $default_timezone_offset = -28800;
   variable_set('date_default_timezone_name', $default_timezone_name);
   variable_set('date_default_timezone', $default_timezone_offset);
-  
-  // Default upload quotas
-  $uploadsize_default = 2;
-  $usersize_default = 100;
-  variable_set('upload_uploadsize_default', $uploadsize_default);
-  variable_set('upload_usersize_default', $usersize_default);
   
   // Error reporting
   $error_level = 0;
