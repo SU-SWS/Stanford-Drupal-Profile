@@ -199,18 +199,36 @@ function stanford_profile_tasks(&$task, $url) {
   variable_set('user_register', $user_register);
 
   /**
-   * Theming
+   * Display elements
    */
-
-  // If the organization is a department, enable the department themes.
-  if ($fields['org_type'] == 'dept') {
-    variable_set('su_department_themes', 1);
-  }
 
   // Don't display date and author information for page nodes by default.
   $theme_settings = variable_get('theme_settings', array());
   $theme_settings['toggle_node_info_page'] = FALSE;
   variable_set('theme_settings', $theme_settings);
+    
+  // Remove "Powered by Drupal" block from footer
+  $block_module = 'system';
+  db_query("UPDATE {blocks} SET status = %d WHERE module = '%s' AND delta = %d", 0, $block_module, 0);
+
+  // Error reporting
+  $error_level = 0;
+  variable_set('error_level', $error_level);
+  
+  /**
+   * Theming
+   */
+
+  // Enable the admin theme, and set it for content editing as well
+  $admin_theme = 'rubik';
+  db_query("UPDATE {system} SET status = 1 WHERE type = 'theme' and name = ('%s')", $admin_theme);
+  variable_set('admin_theme', $admin_theme);
+  variable_set('node_admin_theme', $admin_theme);
+  
+  // If the organization is a department, enable the department themes.
+  if ($fields['org_type'] == 'dept') {
+    variable_set('su_department_themes', 1);
+  }
 
   // Departments' preferred theme is Stanford Modern
   // Groups and individuals' preferred theme is Stanford Basic
@@ -232,20 +250,28 @@ function stanford_profile_tasks(&$task, $url) {
     }
   }
 
-  // Remove "Powered by Drupal" block from footer
-  $block_module = 'system';
-  db_query("UPDATE {blocks} SET status = %d WHERE module = '%s' AND delta = %d", 0, $block_module, 0);
-
-
   // Enable the admin theme, and set it for content editing as well
   $admin_theme = 'rubik';
   db_query("UPDATE {system} SET status = 1 WHERE type = 'theme' and name = ('%s')", $admin_theme);
   variable_set('admin_theme', $admin_theme);
   variable_set('node_admin_theme', $admin_theme);
 
+  /**
+   * Date and time settings
+   */
+
+  // Disable user-configurable timezones by default
+  $user_configurable_timezones = 0;
+  variable_set('configurable_timezones', $user_configurable_timezones);
+  
+  // Set default timezone
+  $default_timezone_name = "America/Los_Angeles";
+  $default_timezone_offset = -28800;
+  variable_set('date_default_timezone_name', $default_timezone_name);
+  variable_set('date_default_timezone', $default_timezone_offset);
 
   /**
-   * WYSIWYG config
+   * Input formats
    */
 
   // Retrieve the ID of the Filtered HTML format (on replicated servers we can't trust it to be 1)
