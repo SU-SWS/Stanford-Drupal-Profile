@@ -70,7 +70,7 @@ function stanford_profile_modules() {
 function stanford_profile_details() {
   return array(
     'name' => 'Drupal at Stanford',
-    'description' => 'Select this profile to enable some basic Drupal functionality and the default theme.'
+    'description' => 'Select this profile to enable some basic Drupal functionality and the default theme.',
     'language' => 'en',
   );
 }
