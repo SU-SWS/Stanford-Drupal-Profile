@@ -183,14 +183,26 @@ function stanford_profile_tasks(&$task, $url) {
   $user_register = 0;
   variable_set('user_register', $user_register);
   
+  /**
+   * Display elements
+   */
+
   // Don't display date and author information for page nodes by default.
   $theme_settings = variable_get('theme_settings', array());
   $theme_settings['toggle_node_info_page'] = FALSE;
   variable_set('theme_settings', $theme_settings);
     
-  // Set the default input format to the Filtered HTML version
-  $filtered_html_id = db_result(db_query("SELECT format FROM {filter_formats} WHERE name = 'Filtered HTML'"));
-  variable_set('filter_default_format', $filtered_html_id);
+  // Remove "Powered by Drupal" block from footer
+  $block_module = 'system';
+  db_query("UPDATE {blocks} SET status = %d WHERE module = '%s' AND delta = %d", 0, $block_module, 0);
+
+  // Error reporting
+  $error_level = 0;
+  variable_set('error_level', $error_level);
+  
+  /**
+   * Theming
+   */
 
   // Enable the admin theme, and set it for content editing as well
   $admin_theme = 'rubik';
@@ -198,9 +210,9 @@ function stanford_profile_tasks(&$task, $url) {
   variable_set('admin_theme', $admin_theme);
   variable_set('node_admin_theme', $admin_theme);
   
-  // Remove "Powered by Drupal" block from footer
-  $block_module = 'system';
-  db_query("UPDATE {blocks} SET status = %d WHERE module = '%s' AND delta = %d", 0, $block_module, 0);
+  /**
+   * Date and time settings
+   */
 
   // Disable user-configurable timezones by default
   $user_configurable_timezones = 0;
@@ -211,11 +223,17 @@ function stanford_profile_tasks(&$task, $url) {
   $default_timezone_offset = -28800;
   variable_set('date_default_timezone_name', $default_timezone_name);
   variable_set('date_default_timezone', $default_timezone_offset);
-  
-  // Error reporting
-  $error_level = 0;
-  variable_set('error_level', $error_level);
-  
+
+  /**
+   * Input formats
+   */
+
+  // Retrieve the ID of the Filtered HTML format (on replicated servers we can't trust it to be 1)
+  $filtered_html_id = db_result(db_query("SELECT format FROM {filter_formats} WHERE name = 'Filtered HTML'"));
+
+  // Set the default input format to the Filtered HTML version
+  variable_set('filter_default_format', $filtered_html_id);
+
   // Create configuration for CKEditor
   $ckeditor_configuration = serialize(array (
     'default' => 1,
@@ -275,9 +293,6 @@ function stanford_profile_tasks(&$task, $url) {
   $allowed_html = '<a> <blockquote> <br> <cite> <code> <em> <h2> <h3> <h4> <h5> <h6> <iframe> <li> <ol> <p> <strong> <ul>';
   variable_set('allowed_html_' . $filtered_html_id, $allowed_html);
  
-  // Update the default timezone
-  variable_set('date_default_timezone', -25200);
-   
   // Update the menu router information.
   menu_rebuild();
 }
