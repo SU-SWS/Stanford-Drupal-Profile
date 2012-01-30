@@ -166,8 +166,8 @@ function stanford_profile_tasks(&$task, $url) {
     node_type_save($type);
   }
 
-  // Default page to not be promoted and have comments disabled.
-  variable_set('node_options_page', array('status'));
+  // Default page to not be promoted, revisions enabled, and have comments disabled.
+  variable_set('node_options_page', array('status', 'revision'));
   variable_set('comment_page', COMMENT_NODE_DISABLED);
 
   /**
