@@ -177,9 +177,11 @@ function stanford_profile_tasks(&$task, $url) {
   // Set to public file downloads.
   variable_set('file_downloads', 1);
 
-  // Set files temp directory to sites/<name of site>/tmp/.
-  $fields = get_stanford_installer();
-  variable_set('file_directory_temp', $fields['tmpdir']);
+  // Default upload quotas
+  $uploadsize_default = 2;
+  $usersize_default = 100;
+  variable_set('upload_uploadsize_default', $uploadsize_default);
+  variable_set('upload_usersize_default', $usersize_default);
 
   /**
    * Security
@@ -376,5 +378,3 @@ function adjust_authuser_rid () {
   $result = db_query("UPDATE role SET rid='1' WHERE name='anonymous user'");
   $result = db_query("UPDATE role SET rid='2' WHERE name='authenticated user'");
 }
-
-?>
