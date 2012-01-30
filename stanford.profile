@@ -1,12 +1,12 @@
 <?php
-/**
+﻿/**
  * Return an array of the modules to be enabled when this profile is installed.
  *
  * @return
  *   An array of modules to enable.
  */
 function stanford_profile_modules() {
-  return array(
+  $modules = array(
     'auto_nodetitle',
     'block',
     'color',
@@ -42,10 +42,12 @@ function stanford_profile_modules() {
     'upload',
     'user',
     'userreference',
-    'views', 
+    'views',
     'views_ui',
     'wysiwyg',
   );
+  
+  return $modules;
 }
 
 /**
@@ -241,10 +243,8 @@ function stanford_profile_tasks(&$task, $url) {
     'show_toggle' => 1,
     'theme' => 'advanced',
     'language' => 'en',
-    'buttons' => 
-    array (
-      'default' => 
-      array (
+    'buttons' => array (
+      'default' => array (
         'Bold' => 1,
         'Italic' => 1,
         'JustifyLeft' => 1,
