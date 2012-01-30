@@ -263,8 +263,7 @@ function stanford_profile_tasks(&$task, $url) {
         'Format' => 1,
         'Table' => 1,
       ),
-      'drupal' => 
-      array (
+      'drupal' => array (
         'break' => 1,
       ),
     ),
