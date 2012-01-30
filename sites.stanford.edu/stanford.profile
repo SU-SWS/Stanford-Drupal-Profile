@@ -187,16 +187,16 @@ function stanford_profile_tasks(&$task, $url) {
    * Security
    */
 
-  // Users should need admin approval by default.
-  variable_set('user_register', 2);
-
   // Remove password from emails that get sent by the system
   $user_mail_register_admin_created_body = "!username,\n\nA site administrator at !site has created an account for you. You may now log in to !login_uri using the following username and password:\n\nusername: !username\n\n\nYou may also log in by clicking on this link or copying and pasting it in your browser:\n\n!login_url\n\nThis is a one-time login, so it can be used only once.\n\nAfter logging in, you will be redirected to !edit_uri so you can change your password.\n\n\n--  !site team";
   variable_set('user_mail_register_admin_created_body', $user_mail_register_admin_created_body);
   
   $user_mail_register_no_approval_required_body = "!username,\n\nThank you for registering at !site. You may now log in to !login_uri using the following username and password:\n\nusername: !username\n\n\nYou may also log in by clicking on this link or copying and pasting it in your browser:\n\n!login_url\n\nThis is a one-time login, so it can be used only once.\n\nAfter logging in, you will be redirected to !edit_uri so you can change your password.\n\n\n--  !site team";
   variable_set('user_mail_register_no_approval_required_body', $user_mail_register_no_approval_required_body);
-
+  
+  // User registration - only site administrators can create new user accounts
+  $user_register = 0;
+  variable_set('user_register', $user_register);
 
   /**
    * Theming
