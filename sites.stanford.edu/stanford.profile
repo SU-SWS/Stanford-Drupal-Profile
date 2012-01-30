@@ -1,9 +1,9 @@
 <?php
-/**
- * Return an array of the modules to enable when this profile is installed.
+﻿/**
+ * Return an array of the modules to be enabled when this profile is installed.
  *
  * @return
- *  An array of modules to be enabled.
+ *   An array of modules to enable.
  */
 function stanford_profile_modules() {
   $modules = array(
@@ -69,8 +69,8 @@ function stanford_profile_modules() {
  */
 function stanford_profile_details() {
   return array(
-    'name' => 'Stanford',
-    'description' => 'Select this profile to install Stanford-specific modules.',
+    'name' => 'Drupal at Stanford',
+    'description' => 'Select this profile to enable some basic Drupal functionality and the default theme.'
     'language' => 'en',
   );
 }
