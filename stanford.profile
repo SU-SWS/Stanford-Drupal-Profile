@@ -256,14 +256,12 @@ function stanford_profile_tasks(&$task, $url) {
         'Indent' => 1,
         'Link' => 1,
         'Unlink' => 1,
-//        'Anchor' => 1,  //CKEditor anchor links use deprecated named anchor link syntax - jbickar
         'Image' => 1,
         'Blockquote' => 1,
         'Source' => 1,
         'PasteFromWord' => 1,
         'Format' => 1,
         'Table' => 1,
-//        'SpellChecker' => 1,  //SpellChecker is ad-supported and has an awful interface - jbickar
       ),
       'drupal' => 
       array (
