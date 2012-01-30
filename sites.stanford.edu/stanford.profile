@@ -1,5 +1,5 @@
 <?php
-﻿/**
+/**
  * Return an array of the modules to be enabled when this profile is installed.
  *
  * @return
