@@ -250,12 +250,6 @@ function stanford_profile_tasks(&$task, $url) {
     }
   }
 
-  // Enable the admin theme, and set it for content editing as well
-  $admin_theme = 'rubik';
-  db_query("UPDATE {system} SET status = 1 WHERE type = 'theme' and name = ('%s')", $admin_theme);
-  variable_set('admin_theme', $admin_theme);
-  variable_set('node_admin_theme', $admin_theme);
-
   /**
    * Date and time settings
    */
