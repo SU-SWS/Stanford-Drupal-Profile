@@ -5,6 +5,7 @@
  * @return
  *   An array of modules to enable.
  */
+
 function stanford_profile_modules() {
   $modules = array(
     'auto_nodetitle',
