@@ -304,6 +304,7 @@ function stanford_form_alter(&$form, $form_state, $form_id) {
   if ($form_id == 'install_configure') {
     // Set default for site name field.
     $form['site_information']['site_name']['#default_value'] = $_SERVER['SERVER_NAME'];
+    // Hide the automatic updates block.
     unset($form['server_settings']['update_status_module']);
   }
 }
