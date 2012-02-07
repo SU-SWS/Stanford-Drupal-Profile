@@ -1,4 +1,8 @@
 <?php
+
+//Require the base include file 
+require_once('sites.stanford.edu/includes/base.inc');
+
 /**
  * Return an array of the modules to be enabled when this profile is installed.
  *
@@ -6,47 +10,6 @@
  *   An array of modules to enable.
  */
 function stanford_profile_modules() {
-  $modules = array(
-    'auto_nodetitle',
-    'block',
-    'color',
-    'content',
-    'css_injector',
-    'date_api',
-    'date_timezone',
-    'dblog',
-    'email',
-    'features',
-    'fieldgroup',
-    'filefield',
-    'filter',
-    'help',
-    'imagefield',
-    'insert',
-    'jquery_ui',
-    'link',
-    'menu',
-    'node',
-    'nodeformcols',
-    'nodereference',
-    'number',
-    'optionwidgets',
-    'path',
-    'pathauto',
-    'pathologic',
-    'semanticviews',
-    'system',
-    'taxonomy',
-    'text',
-    'token',
-    'upload',
-    'user',
-    'userreference',
-    'views',
-    'views_ui',
-    'wysiwyg',
-  );
-  
   return $modules;
 }
 
