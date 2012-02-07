@@ -169,7 +169,7 @@ function stanford_profile_tasks(&$task, $url) {
   $usersize_default = 100;
   variable_set('upload_uploadsize_default', $uploadsize_default);
   variable_set('upload_usersize_default', $usersize_default);
-  
+
   /**
    * Security
    */
@@ -184,7 +184,7 @@ function stanford_profile_tasks(&$task, $url) {
   // User registration - only site administrators can create new user accounts
   $user_register = 0;
   variable_set('user_register', $user_register);
-  
+
   /**
    * Display elements
    */
@@ -285,11 +285,11 @@ function stanford_profile_tasks(&$task, $url) {
 
   // Add CKEditor to wysiwyg  
   db_query("INSERT INTO {wysiwyg} SET format = ('%s'), editor = 'ckeditor', settings = ('%s')", $filtered_html_id, $ckeditor_configuration);
-  
+
   // Update the list of HTML tags allowed for the filtered HTML input format
   $allowed_html = '<a> <blockquote> <br> <cite> <code> <em> <h2> <h3> <h4> <h5> <h6> <iframe> <li> <ol> <p> <strong> <ul>';
   variable_set('allowed_html_' . $filtered_html_id, $allowed_html);
- 
+
   // Update the menu router information.
   menu_rebuild();
 }
