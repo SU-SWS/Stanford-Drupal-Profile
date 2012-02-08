@@ -175,6 +175,10 @@ function stanford_profile_tasks(&$task, $url) {
   // Set to public file downloads.
   variable_set('file_downloads', 1);
 
+  // Set files temp directory to sites/<name of site>/tmp/.
+  $fields = get_stanford_installer();
+  variable_set('file_directory_temp', $fields['tmpdir']);
+  
   // Default upload quotas
   $uploadsize_default = 2;
   $usersize_default = 100;
