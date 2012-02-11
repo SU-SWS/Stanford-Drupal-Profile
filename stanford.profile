@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Return an array of the modules to be enabled when this profile is installed.
  *
@@ -7,41 +6,48 @@
  *   An array of modules to enable.
  */
 function stanford_profile_modules() {
-  return array('auto_nodetitle',
-               'color',
-               'content',
-               'css_injector',
-               'date_api',
-               'date_timezone',
-               'dblog',
-               'email',
-               'features',
-               'fieldgroup',
-               'filefield',
-               'imagefield',
-               //'googleanalytics',
-               'help',
-               'insert',
-               'jquery_ui',
-               'link',
-               'menu',
-               'nodeformcols',
-               'nodereference',
-               'number',
-               'optionwidgets',
-               'path',
-               'pathauto',
-               'pathologic',
-               'semanticviews',
-               'taxonomy',
-               'text',
-               'token',
-               'upload',
-               'userreference',
-               'views', 
-               'views_ui',
-               'wysiwyg',
-               );
+  $modules = array(
+    'auto_nodetitle',
+    'block',
+    'color',
+    'content',
+    'css_injector',
+    'date_api',
+    'date_timezone',
+    'dblog',
+    'email',
+    'features',
+    'fieldgroup',
+    'filefield',
+    'filter',
+    'help',
+    'imagefield',
+    'insert',
+    'jquery_ui',
+    'link',
+    'menu',
+    'node',
+    'nodeformcols',
+    'nodereference',
+    'number',
+    'optionwidgets',
+    'path',
+    'pathauto',
+    'pathologic',
+    'semanticviews',
+    'system',
+    'taxonomy',
+    'text',
+    'token',
+    'upload',
+    'user',
+    'userreference',
+    'views',
+    'views_ui',
+    'wysiwyg',
+  );
+  
+  return $modules;
 }
 
 /**
@@ -55,7 +61,8 @@ function stanford_profile_modules() {
 function stanford_profile_details() {
   return array(
     'name' => 'Drupal at Stanford',
-    'description' => 'Select this profile to enable some basic Drupal functionality and the default theme.'
+    'description' => 'Select this profile to enable some basic Drupal functionality and the default theme.',
+    'language' => 'en',
   );
 }
 
@@ -150,21 +157,23 @@ function stanford_profile_tasks(&$task, $url) {
   variable_set('node_options_page', array('status', 'revision'));
   variable_set('comment_page', COMMENT_NODE_DISABLED);
 
-  // Don't display date and author information for page nodes by default.
-  $theme_settings = variable_get('theme_settings', array());
-  $theme_settings['toggle_node_info_page'] = FALSE;
-  variable_set('theme_settings', $theme_settings);
-    
-  // Set the default input format to the Filtered HTML version
-  $filtered_html_id = db_result(db_query("SELECT format FROM {filter_formats} WHERE name = 'Filtered HTML'"));
-  variable_set('filter_default_format', $filtered_html_id);
+  /**
+   * File System
+   */
 
-  // Enable the admin theme, and set it for content editing as well
-  $admin_theme = 'rubik';
-  db_query("UPDATE {system} SET status = 1 WHERE type = 'theme' and name = ('%s')", $admin_theme);
-  variable_set('admin_theme', $admin_theme);
-  variable_set('node_admin_theme', $admin_theme);
-  
+  // Set to public file downloads.
+  variable_set('file_downloads', 1);
+
+  // Default upload quotas
+  $uploadsize_default = 2;
+  $usersize_default = 100;
+  variable_set('upload_uploadsize_default', $uploadsize_default);
+  variable_set('upload_usersize_default', $usersize_default);
+
+  /**
+   * Security
+   */
+
   // Remove password from emails that get sent by the system
   $user_mail_register_admin_created_body = "!username,\n\nA site administrator at !site has created an account for you. You may now log in to !login_uri using the following username and password:\n\nusername: !username\n\n\nYou may also log in by clicking on this link or copying and pasting it in your browser:\n\n!login_url\n\nThis is a one-time login, so it can be used only once.\n\nAfter logging in, you will be redirected to !edit_uri so you can change your password.\n\n\n--  !site team";
   variable_set('user_mail_register_admin_created_body', $user_mail_register_admin_created_body);
@@ -175,10 +184,37 @@ function stanford_profile_tasks(&$task, $url) {
   // User registration - only site administrators can create new user accounts
   $user_register = 0;
   variable_set('user_register', $user_register);
-  
+
+  /**
+   * Display elements
+   */
+
+  // Don't display date and author information for page nodes by default.
+  $theme_settings = variable_get('theme_settings', array());
+  $theme_settings['toggle_node_info_page'] = FALSE;
+  variable_set('theme_settings', $theme_settings);
+    
   // Remove "Powered by Drupal" block from footer
   $block_module = 'system';
   db_query("UPDATE {blocks} SET status = %d WHERE module = '%s' AND delta = %d", 0, $block_module, 0);
+
+  // Error reporting
+  $error_level = 0;
+  variable_set('error_level', $error_level);
+  
+  /**
+   * Theming
+   */
+
+  // Enable the admin theme, and set it for content editing as well
+  $admin_theme = 'rubik';
+  db_query("UPDATE {system} SET status = 1 WHERE type = 'theme' and name = ('%s')", $admin_theme);
+  variable_set('admin_theme', $admin_theme);
+  variable_set('node_admin_theme', $admin_theme);
+  
+  /**
+   * Date and time settings
+   */
 
   // Disable user-configurable timezones by default
   $user_configurable_timezones = 0;
@@ -189,17 +225,17 @@ function stanford_profile_tasks(&$task, $url) {
   $default_timezone_offset = -28800;
   variable_set('date_default_timezone_name', $default_timezone_name);
   variable_set('date_default_timezone', $default_timezone_offset);
-  
-  // Default upload quotas
-  $uploadsize_default = 2;
-  $usersize_default = 100;
-  variable_set('upload_uploadsize_default', $uploadsize_default);
-  variable_set('upload_usersize_default', $usersize_default);
-  
-  // Error reporting
-  $error_level = 0;
-  variable_set('error_level', $error_level);
-  
+
+  /**
+   * Input formats
+   */
+
+  // Retrieve the ID of the Filtered HTML format (on replicated servers we can't trust it to be 1)
+  $filtered_html_id = db_result(db_query("SELECT format FROM {filter_formats} WHERE name = 'Filtered HTML'"));
+
+  // Set the default input format to the Filtered HTML version
+  variable_set('filter_default_format', $filtered_html_id);
+
   // Create configuration for CKEditor
   $ckeditor_configuration = serialize(array (
     'default' => 1,
@@ -207,10 +243,8 @@ function stanford_profile_tasks(&$task, $url) {
     'show_toggle' => 1,
     'theme' => 'advanced',
     'language' => 'en',
-    'buttons' => 
-    array (
-      'default' => 
-      array (
+    'buttons' => array (
+      'default' => array (
         'Bold' => 1,
         'Italic' => 1,
         'JustifyLeft' => 1,
@@ -222,17 +256,14 @@ function stanford_profile_tasks(&$task, $url) {
         'Indent' => 1,
         'Link' => 1,
         'Unlink' => 1,
-//        'Anchor' => 1,  //CKEditor anchor links use deprecated named anchor link syntax - jbickar
         'Image' => 1,
         'Blockquote' => 1,
         'Source' => 1,
         'PasteFromWord' => 1,
         'Format' => 1,
         'Table' => 1,
-//        'SpellChecker' => 1,  //SpellChecker is ad-supported and has an awful interface - jbickar
       ),
-      'drupal' => 
-      array (
+      'drupal' => array (
         'break' => 1,
       ),
     ),
@@ -254,14 +285,11 @@ function stanford_profile_tasks(&$task, $url) {
 
   // Add CKEditor to wysiwyg  
   db_query("INSERT INTO {wysiwyg} SET format = ('%s'), editor = 'ckeditor', settings = ('%s')", $filtered_html_id, $ckeditor_configuration);
-  
+
   // Update the list of HTML tags allowed for the filtered HTML input format
   $allowed_html = '<a> <blockquote> <br> <cite> <code> <em> <h2> <h3> <h4> <h5> <h6> <iframe> <li> <ol> <p> <strong> <ul>';
   variable_set('allowed_html_' . $filtered_html_id, $allowed_html);
- 
-  // Update the default timezone
-  variable_set('date_default_timezone', -25200);
-   
+
   // Update the menu router information.
   menu_rebuild();
 }
@@ -276,6 +304,7 @@ function stanford_form_alter(&$form, $form_state, $form_id) {
   if ($form_id == 'install_configure') {
     // Set default for site name field.
     $form['site_information']['site_name']['#default_value'] = $_SERVER['SERVER_NAME'];
+    // Hide the automatic updates block.
     unset($form['server_settings']['update_status_module']);
   }
 }
