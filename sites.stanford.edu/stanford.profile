@@ -50,7 +50,7 @@ function stanford_profile_modules() {
 
   // Enables webauth module if requested.
   $fields = get_stanford_installer();
-  if ($fields['sd_enable_webauth'] == 'on') {
+  if ($fields['sd_enable_webauth'] == 1) {
     array_push($modules, 'webauth');
   }
   
