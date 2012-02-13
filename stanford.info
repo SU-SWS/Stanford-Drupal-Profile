@@ -10,6 +10,7 @@ dependencies[] = contextual
 dependencies[] = css_injector
 ; dependencies[] = date
 ; dependencies[] = date_api
+dependencies[] = dashboard
 dependencies[] = dblog
 dependencies[] = email
 dependencies[] = features
