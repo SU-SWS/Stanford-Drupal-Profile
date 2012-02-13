@@ -46,3 +46,11 @@ projects[rubik][version] = "4.0-beta7"
 
 projects[tao][version] = "3.0-beta4"
 
+; Profile
+
+projects[stanford][type] = "profile"
+projects[stanford][download][type] = "git"
+projects[stanford][download][url] = "git@github.com:SU-SWS/Stanford-Drupal-Profile.git"
+;projects[stanford][download][branch] = 7.x-1.0-dev
+projects[stanford][download][branch] = 7.x-experimental
+
