@@ -6,44 +6,26 @@ projects[drupal][version] = "7.12"
 
 ; Modules
 projects[admin_menu][version] = "3.0-rc1"
-
 projects[auto_nodetitle][version] = "1.0"
-
 projects[ctools][version] = "1.0-rc1"
-
 projects[calendar][version] = "3.0-alpha2"
-
 projects[css_injector][version] = "1.7"
-
 projects[date][version] = "2.0-rc1"
-
 projects[email][version] = "1.0"
-
 projects[features][version] = "1.0-beta6"
-
 projects[globalredirect][version] = "1.4"
-
 projects[insert][version] = "1.1"
-
 projects[link][version] = "1.0"
-
 projects[nodeformcols][version] = "1.x-dev"
-
 projects[pathauto][version] = "1.0"
-
 projects[pathologic][version] = "1.4"
-
 projects[semanticviews][version] = "1.x-dev"
-
 projects[token][version] = "1.0-beta7"
-
 projects[views][version] = "3.0"
-
 projects[wysiwyg][version] = "2.1"
 
 ; Themes
 projects[rubik][version] = "4.0-beta7"
-
 projects[tao][version] = "3.0-beta4"
 
 ; Profile
