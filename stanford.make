@@ -16,8 +16,11 @@ core = 7.x
 api = 2
 
 ; Core project
+; Per http://drushmake.me/, "Note that makefiles included with
+; install profiles *should not* include a core project."
+  
 ; ------------
-projects[drupal][type] = core
+; projects[drupal][type] = core
 
 ; Projects
 ; --------
