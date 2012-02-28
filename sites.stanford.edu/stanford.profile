@@ -238,7 +238,7 @@ function stanford_profile_tasks(&$task, $url) {
   if ($fields['org_type'] == 'dept') {
     $preferred_themes = array('stanfordmodern', 'garland');
   } else {
-    $preferred_themes = array('stanfordbasic', 'garland');
+    $preferred_themes = array('stanford_basic', 'garland');
   }
 
   // Install the preferred theme
