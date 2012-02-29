@@ -369,6 +369,9 @@ function stanford_form_alter(&$form, $form_state, $form_id) {
     $form['admin_account']['account']['mail']['#type'] = 'hidden';
     $form['admin_account']['account']['name']['#type'] = 'hidden';
 
+    // Hide the fieldset since it'll be empty anyway
+    $form['server_settings']['#type'] = 'markup';
+
     // Server settings.
     $form['server_settings']['clean_url']['#type'] = 'hidden';
     $form['server_settings']['clean_url']['#default_value'] = 1;
