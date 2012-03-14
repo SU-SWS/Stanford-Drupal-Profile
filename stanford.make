@@ -58,12 +58,8 @@ projects[webauth][version] = "3.0"
 ; Profile
 
 projects[stanford][type] = "profile"
-; projects[stanford][download][type] = "file"
-; projects[stanford][download][url] = "file:///home/quickstart/Documents/D7/Stanford-Drupal-Profile/stanford.profile"
-; projects[stanford][download][url] = "file:///home/quickstart/Documents/D7/Stanford-Drupal-Profile/stanford.info"
-; projects[stanford][download][url] = "file:///home/quickstart/Documents/D7/Stanford-Drupal-Profile/stanford.install"
 projects[stanford][download][type] = "git"
-projects[stanford][download][url] = "git@github.com:jbickar/Stanford-Drupal-Profile.git"
+; projects[stanford][download][url] = "git@github.com:jbickar/Stanford-Drupal-Profile.git"
+projects[stanford][download][url] = "file:///home/quickstart/Documents/D7/Stanford-Drupal-Profile"
 projects[stanford][download][branch] = 7.x-1.0-dev
-;projects[stanford][download][branch] = 7.x-experimental
 

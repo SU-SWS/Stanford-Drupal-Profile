@@ -6,6 +6,70 @@
 */
 function stanford_install() {
   include_once(DRUPAL_ROOT . '/profiles/standard/standard.install');
-  echo(DRUPAL_ROOT);
   standard_install();
+}
+
+/**
+ * Implementation of hook_form_alter().
+ *
+ * Allows the profile to alter the site-configuration form. This is
+ * called through custom invocation, so $form_state is not populated.
+ */
+function stanford_form_install_configure_form_alter(&$form, $form_state) {
+
+/*  print '<pre>';
+  print_r($form);
+  print '</pre>';
+*/
+  // Pull in config file
+  include_once('config.inc');
+  
+  // Define our fields
+  $fields = get_stanford_installer();
+
+/*
+  print '<pre>';
+  print_r($fields);
+  print '</pre>';
+*/
+
+/* DEPRECATED FROM DRUPAL 6
+ *  // Only one thing in this fieldset; doesn't need to be collapsible
+ *  $form['site_information']['#collapsible'] = TRUE;
+ *  // field no longer exists
+ *  $form['intro']['#value'] = st('Please fill out the following values:');
+ *  // this is now a fieldset, so code no longer applies
+ *  $form['admin_account']['#value'] = '';
+ *  $form['admin_account']['markup']['#value'] = '';
+ *
+ */
+
+
+
+  // Site settings.
+  $form['site_information']['site_name']['#default_value'] = $fields['site_name'];
+  $form['site_information']['site_mail']['#default_value'] = $fields['site_mail'];
+  $form['site_information']['site_mail']['#type'] = 'hidden';
+
+  // Admin account settings.
+  $form['admin_account']['#title'] = 'Administrator Account';
+  $form['admin_account']['account']['mail']['#default_value'] = $fields['site_mail'];
+  $form['admin_account']['account']['mail']['#type'] = 'hidden';
+  $form['admin_account']['account']['name']['#default_value'] = 'admin';
+  $form['admin_account']['account']['name']['#type'] = 'hidden';
+
+  // Hide the fieldset since it'll be empty anyway
+  $form['server_settings']['#type'] = 'markup';
+
+  // Server settings.
+  $form['server_settings']['clean_url']['#type'] = 'hidden';
+  $form['server_settings']['clean_url']['#default_value'] = 1;
+  $form['server_settings']['date_default_timezone']['#type'] = 'hidden';
+  $form['server_settings']['date_default_timezone']['#default_value'] = 'America/Los_Angeles';
+  $form['server_settings']['site_default_country']['#type'] = 'hidden';
+  $form['server_settings']['site_default_country']['#default_value'] = 'US';
+
+  // Hide the automatic updates block.
+  unset($form['update_notifications']);
+
 }
