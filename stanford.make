@@ -32,7 +32,7 @@ projects[tao][version] = "3.0-beta4"
 
 projects[stanford][type] = "profile"
 projects[stanford][download][type] = "git"
-projects[stanford][download][url] = "git@github.com:SU-SWS/Stanford-Drupal-Profile.git"
-;projects[stanford][download][branch] = 7.x-1.0-dev
-projects[stanford][download][branch] = 7.x-experimental
+projects[stanford][download][url] = "git@github.com:jbickar/Stanford-Drupal-Profile.git"
+projects[stanford][download][branch] = 7.x-1.0-dev
+;projects[stanford][download][branch] = 7.x-experimental
 
