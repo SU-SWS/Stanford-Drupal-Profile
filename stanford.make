@@ -4,7 +4,7 @@ core = 7.x
 api = 2
 projects[drupal][version] = "7.12"
 
-; Modules
+; Contributed modules
 projects[admin_menu][version] = "3.0-rc1"
 projects[auto_nodetitle][version] = "1.0"
 projects[ctools][version] = "1.0-rc1"
@@ -24,9 +24,34 @@ projects[token][version] = "1.0-beta7"
 projects[views][version] = "3.0"
 projects[wysiwyg][version] = "2.1"
 
-; Themes
+; Contributed themes
 projects[rubik][version] = "4.0-beta7"
 projects[tao][version] = "3.0-beta4"
+
+; Custom modules, github
+projects[su_it_services][type] = "module"
+projects[su_it_services][download][type] = "git"
+projects[su_it_services][download][url] = "git@github.com:SU-SWS/SU-IT-Services.git"
+
+; Custom themes, github
+projects[stanford_framework][type] = theme
+projects[stanford_framework][version] = "6.x-1.01"
+projects[stanford_framework][download][type] = git
+projects[stanford_framework][download][url] = git@github.com:SU-SWS/stanford_framework.git
+projects[stanfordmodern][type] = theme
+projects[stanfordmodern][version] = "v.1.3.2"
+projects[stanfordmodern][download][type] = git
+projects[stanfordmodern][download][url] = git@github.com:SU-DDD/stanfordmodern.git
+projects[stanford_basic][type] = theme
+projects[stanford_basic][version] = "v.1.3.1"
+projects[stanford_basic][download][type] = git
+projects[stanford_basic][download][url] = git@github.com:SU-DDD/stanford_basic.git
+
+; Custom modules, Stanford features server
+projects[webauth][type] = "module"
+projects[webauth][download][url] = "http://drupalfeatures.stanford.edu/fserver"
+projects[webauth][version] = "3.0"
+
 
 ; Profile
 
