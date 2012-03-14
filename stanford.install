@@ -10,7 +10,7 @@ function stanford_install() {
 }
 
 /**
- * Implementation of hook_form_alter().
+ * Implementation of hook_form_FORM_ID_alter().
  *
  * Allows the profile to alter the site-configuration form. This is
  * called through custom invocation, so $form_state is not populated.
@@ -67,4 +67,14 @@ function stanford_form_install_configure_form_alter(&$form, $form_state) {
   $form['update_notifications']['#type'] = 'hidden';
   $form['update_notifications']['update_status_module']['#default_value'][0] = 0;
   $form['update_notifications']['update_status_module']['#default_value'][1] = 0;
+}
+
+function stanford_sites_hosted() {
+  $server = $_SERVER["SERVER_NAME"];
+  if (preg_match('/^sites(.*)\.stanford\.edu/', $server, $matches) > 0) {
+    return TRUE;
+  }
+  else{
+    return FALSE;
+  }
 }
