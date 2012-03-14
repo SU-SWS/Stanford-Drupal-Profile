@@ -7,6 +7,52 @@
 function stanford_install() {
   include_once(DRUPAL_ROOT . '/profiles/standard/standard.install');
   standard_install();
+
+  // Do stuff that's only needed on the Stanford Sites platform
+  if (stanford_sites_hosted()) {
+    
+    // Tasks for all sites on the service
+    stanford_adjust_authuser_rid();
+    $modules = array(
+      'su_it_services',
+      'webauth',
+    );
+    module_enable($modules);
+
+    // Tasks that require more fine-grained logic.
+    // Pull in config file
+    include_once('config.inc');
+    // Define our fields
+    $fields = get_stanford_installer();
+    
+    // If the organization is a department, enable the department themes.
+    if ($fields['org_type'] == 'dept') {
+      variable_set('su_department_themes', 1);
+    }
+
+    // Departments' preferred theme is Stanford Modern
+    // Groups and individuals' preferred theme is Stanford Basic
+    // Official groups can have the Stanford Modern theme enabled by ITS
+    if ($fields['org_type'] == 'dept') {
+      $preferred_themes = array(
+        'theme_default' => 'stanfordmodern',
+        'admin_theme' => 'seven',
+        'node_admin_theme' => 'seven',
+        'stanfordmodern', 
+        'bartik'
+      );
+      theme_enable($preferred_themes);
+    } else {
+      $preferred_themes = array(
+        'theme_default' => 'stanford_basic',
+        'admin_theme' => 'seven',
+        'node_admin_theme' => 'seven',
+        'stanford_basic', 
+        'bartik'
+      );
+      theme_enable($preferred_themes);
+    }
+  }
 }
 
 /**
@@ -77,4 +123,12 @@ function stanford_sites_hosted() {
   else{
     return FALSE;
   }
+}
+
+// Change the default rid for the authenticated user role. Drupal expects it
+// to be 2, and while you can change the setting in a file, bad modules
+// apparently don't respect that setting.
+function stanford_adjust_authuser_rid() {
+  $result = db_query("UPDATE role SET rid='1' WHERE name='anonymous user'");
+  $result = db_query("UPDATE role SET rid='2' WHERE name='authenticated user'");
 }
