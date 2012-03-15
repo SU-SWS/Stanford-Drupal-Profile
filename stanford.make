@@ -62,4 +62,3 @@ projects[stanford][download][type] = "git"
 ; projects[stanford][download][url] = "git@github.com:jbickar/Stanford-Drupal-Profile.git"
 projects[stanford][download][url] = "file:///home/quickstart/Documents/D7/Stanford-Drupal-Profile"
 projects[stanford][download][branch] = 7.x-1.0-dev
-
