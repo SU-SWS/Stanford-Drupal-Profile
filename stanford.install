@@ -5,6 +5,8 @@
 * Perform actions to set up the site for this profile.
 */
 function stanford_install() {
+  // Do all the install tasks from the standard install profile
+  // It's easier just to include this and then override the few things that we want to.
   include_once(DRUPAL_ROOT . '/profiles/standard/standard.install');
   standard_install();
 
@@ -24,7 +26,33 @@ function stanford_install() {
   $node_options_page = array('status', 'promote', 'revision');
   variable_set('node_options_page', $node_options_page);
 
+  // Defaults for the Article content type
+  variable_set('comment_anonymous_article', 0);
+  variable_set('comment_default_mode_article', 1);
+  variable_set('comment_default_per_article_article', '50');
+  variable_set('comment_form_location_article', 1);
+  variable_set('comment_article', '1');
+  variable_set('comment_preview_article', '1');
+  variable_set('comment_subject_field_article', 1);
+  variable_set('node_preview_article', '1');
+  variable_set('node_submitted_article', 0);
+  variable_set('menu_parent_article', 'main-menu:0');
+  $menu_options_article = array('main-menu');
+  variable_set('menu_options_article', $menu_options_article);
+  $node_options_article = array('status', 'promote', 'revision');
+  variable_set('node_options_article', $node_options_article);
 
+  // Revoke a few stupid default permissions
+  user_role_revoke_permissions(DRUPAL_ANONYMOUS_RID, array('access comments'));
+  user_role_revoke_permissions(DRUPAL_AUTHENTICATED_RID, array('post comments', 'skip comment approval'));
+
+  // USE hook_filter_info_alter() FOR THIS
+  $filtered_html_settings = serialize(array(
+    'allowed_html' => '<a> <blockquote> <br> <cite> <code> <em> <h2> <h3> <h4> <h5> <h6> <iframe> <li> <ol> <p> <strong> <ul>',
+    'filter_html_help' => 1,
+    'filter_html_nofollow' => 1,
+  ));
+  
   // Do stuff that's only needed on the Stanford Sites platform
   if (stanford_sites_hosted()) {
     
