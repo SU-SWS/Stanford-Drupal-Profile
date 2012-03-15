@@ -8,6 +8,23 @@ function stanford_install() {
   include_once(DRUPAL_ROOT . '/profiles/standard/standard.install');
   standard_install();
 
+  // Defaults for the Page content type
+  variable_set('comment_anonymous_page', 0);
+  variable_set('comment_default_mode_page', 1);
+  variable_set('comment_default_per_page_page', '50');
+  variable_set('comment_form_location_page', 1);
+  variable_set('comment_page', '1');
+  variable_set('comment_preview_page', '1');
+  variable_set('comment_subject_field_page', 1);
+  variable_set('node_preview_page', '1');
+  variable_set('node_submitted_page', 0);
+  variable_set('menu_parent_page', 'main-menu:0');
+  $menu_options_page = array('main-menu');
+  variable_set('menu_options_page', $menu_options_page);
+  $node_options_page = array('status', 'promote', 'revision');
+  variable_set('node_options_page', $node_options_page);
+
+
   // Do stuff that's only needed on the Stanford Sites platform
   if (stanford_sites_hosted()) {
     
@@ -125,9 +142,11 @@ function stanford_sites_hosted() {
   }
 }
 
-// Change the default rid for the authenticated user role. Drupal expects it
-// to be 2, and while you can change the setting in a file, bad modules
-// apparently don't respect that setting.
+/*
+ * Change the default rid for the authenticated user role. Drupal expects it
+ * to be 2, and while you can change the setting in a file, bad modules
+ * apparently don't respect that setting.
+ */
 function stanford_adjust_authuser_rid() {
   $result = db_query("UPDATE role SET rid='1' WHERE name='anonymous user'");
   $result = db_query("UPDATE role SET rid='2' WHERE name='authenticated user'");
