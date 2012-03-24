@@ -36,15 +36,17 @@ projects[tao][version] = "3.0-beta4"
 ; projects[su_it_services][download][url] = "git@github.com:SU-SWS/SU-IT-Services.git"
 
 ; Custom themes, github
+projects[stanfordmodern_d7][type] = theme
+projects[stanfordmodern_d7][version] = "7.x-1.0"
+projects[stanfordmodern_d7][download][type] = git
+projects[stanfordmodern_d7][download][url] = git@github.com:su-ddd/stanfordmodern_d7.git
+
+; Custom themes, github
 ; disabled until D7 versions released
 ;projects[stanford_framework][type] = theme
 ;projects[stanford_framework][version] = "6.x-1.01"
 ;projects[stanford_framework][download][type] = git
 ;projects[stanford_framework][download][url] = git@github.com:SU-SWS/stanford_framework.git
-;projects[stanfordmodern][type] = theme
-;projects[stanfordmodern][version] = "v.1.3.2"
-;projects[stanfordmodern][download][type] = git
-;projects[stanfordmodern][download][url] = git@github.com:su-ddd/stanfordmodern.git
 ;projects[stanford_basic][type] = theme
 ;projects[stanford_basic][version] = "v.1.3.1"
 ;projects[stanford_basic][download][type] = git
@@ -59,6 +61,6 @@ projects[webauth][version] = "3.0"
 
 projects[stanford][type] = "profile"
 projects[stanford][download][type] = "git"
-projects[stanford][download][url] = "git@github.com:jbickar/Stanford-Drupal-Profile.git"
-; projects[stanford][download][url] = "file:///home/quickstart/Documents/D7/Stanford-Drupal-Profile"
-projects[stanford][download][tag] = 7.x-1.0-alpha2
+; projects[stanford][download][url] = "git@github.com:jbickar/Stanford-Drupal-Profile.git"
+projects[stanford][download][url] = "file:///home/quickstart/Documents/D7/Stanford-Drupal-Profile"
+; projects[stanford][download][tag] = 7.x-1.0-alpha2
