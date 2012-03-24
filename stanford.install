@@ -168,7 +168,7 @@ function stanford_form_install_configure_form_alter(&$form, $form_state) {
 
 function stanford_sites_hosted() {
   $server = $_SERVER["SERVER_NAME"];
-  if (preg_match('/^(sites|publish)+\.stanford\.edu/', $server, $matches) > 0) {
+  if (preg_match('/^(sites|publish).*\.stanford\.edu/', $server, $matches) > 0) {
     return TRUE;
   }
   else{
