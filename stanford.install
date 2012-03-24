@@ -48,6 +48,9 @@ function stanford_install() {
   
   // User registration - only site administrators can create new user accounts
   variable_set('user_register', 0);
+  
+  // Disable user-configurable timezones by default
+  variable_set('configurable_timezones', 0);
 
   // USE hook_filter_info_alter() FOR THIS
   $filtered_html_settings = serialize(array(
