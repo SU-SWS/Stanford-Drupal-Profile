@@ -45,6 +45,9 @@ function stanford_install() {
   // Revoke a few stupid default permissions
   user_role_revoke_permissions(DRUPAL_ANONYMOUS_RID, array('access comments'));
   user_role_revoke_permissions(DRUPAL_AUTHENTICATED_RID, array('post comments', 'skip comment approval'));
+  
+  // User registration - only site administrators can create new user accounts
+  variable_set('user_register', 0);
 
   // USE hook_filter_info_alter() FOR THIS
   $filtered_html_settings = serialize(array(
