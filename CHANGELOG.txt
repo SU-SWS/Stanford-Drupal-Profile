@@ -1,0 +1,14 @@
+Stanford Profile 7.x-x.x xxxx-xx-xx
+-----------------------------------
+Stanford Profile 7.x-1.0-alpha4 2012-03-15 
+------------------------------------------
+Changes since -alpha1:
+-Disable user-configurable time zones
+-Only allow administrators to create accounts
+-Added Stanford Modern theme
+
+Stanford Profile 7.x-1.0-alpha1 2012-03-15 
+------------------------------------------
+Stable but feature-incomplete release
+Installs cleanly on local development environment
+
