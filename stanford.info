@@ -1,7 +1,7 @@
 name = Stanford Sites
 description = Select this profile to install a version of Drupal customized for the Stanford Sites platform.
 core = 7.x
-version = 7.x-1.0-alpha5
+version = 7.x-1.0-alpha6
 ; dependencies[] = auto_nodetitle
 dependencies[] = admin_menu
 dependencies[] = block
@@ -35,7 +35,7 @@ dependencies[] = pathauto
 dependencies[] = pathologic
 dependencies[] = rdf
 dependencies[] = search
-dependencies[] = semanticviews
+dependencies[] = stanford_sites_helper
 dependencies[] = taxonomy
 dependencies[] = text
 dependencies[] = token
