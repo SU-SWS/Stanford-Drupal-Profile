@@ -1,11 +1,21 @@
 Stanford Profile 7.x-x.x xxxx-xx-xx
 -----------------------------------
 
+Stanford Profile 7.x-1.0-alpha6 2012-04-05
+-----------------------------------------
+- Default modules
+- Enabled stanford_sites_helper
+- Disabled Semantic Views (fixes #16)
+- Default modules
+- Enabled stanford_sites_helper
+- Disabled Semantic Views (fixes #16)
+
+
 Stanford Profile 7.x-1.0-alpha5 2012-03-28 
 ------------------------------------------
 No functional changes
   nominal release to reflect change in github
-  repository lcoation
+  repository location
 
 Stanford Profile 7.x-1.0-alpha4 2012-03-15 
 ------------------------------------------
