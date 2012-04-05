@@ -9,7 +9,10 @@ function stanford_install() {
   // It's easier just to include this and then override the few things that we want to.
   include_once(DRUPAL_ROOT . '/profiles/standard/standard.install');
   standard_install();
-
+  
+  // Disable the Update manager module because we'll be pushing updates centrally
+  module_disable('update');
+  
   // Defaults for the Page content type
   variable_set('comment_anonymous_page', 0);
   variable_set('comment_default_mode_page', 1);
@@ -65,7 +68,7 @@ function stanford_install() {
     // Tasks for all sites on the service
     stanford_adjust_authuser_rid();
     $modules = array(
-      'su_it_services',
+      'stanford_sites_systemtools',
       'webauth',
     );
     module_enable($modules);
@@ -76,11 +79,6 @@ function stanford_install() {
     // Define our fields
     $fields = get_stanford_installer();
     
-    // If the organization is a department, enable the department themes.
-    if ($fields['org_type'] == 'dept') {
-      variable_set('su_department_themes', 1);
-    }
-
     // Departments' preferred theme is Stanford Modern
     // Groups and individuals' preferred theme is Stanford Basic
     // Official groups can have the Stanford Modern theme enabled by ITS
