@@ -11,7 +11,7 @@ function stanford_install() {
   standard_install();
   
   // Disable the Update manager module because we'll be pushing updates centrally
-  module_disable('update');
+  module_disable(array('update'));
   
   // Defaults for the Page content type
   variable_set('comment_anonymous_page', 0);
