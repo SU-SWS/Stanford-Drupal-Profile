@@ -1,6 +1,10 @@
 Stanford Profile 7.x-x.x xxxx-xx-xx
 -----------------------------------
 
+Stanford Profile 7.x-1.0-alpha7 2012-04-06
+------------------------------------------
+-Fixed implementation of module_disable().
+
 Stanford Profile 7.x-1.0-alpha6 2012-04-05
 -----------------------------------------
 - Default modules
