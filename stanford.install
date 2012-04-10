@@ -164,6 +164,13 @@ function stanford_form_install_configure_form_alter(&$form, $form_state) {
   $form['update_notifications']['update_status_module']['#default_value'][1] = 0;
 }
 
+/**
+ * Implements hook_block_info_alter().
+ */
+function stanford_block_info_alter(&$blocks, $theme, $code_blocks) {
+  $blocks['system']['powered-by']['status'] = 0;
+}
+
 function stanford_sites_hosted() {
   $server = $_SERVER["SERVER_NAME"];
   if (preg_match('/^(sites|publish).*\.stanford\.edu/', $server, $matches) > 0) {
