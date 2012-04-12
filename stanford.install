@@ -55,13 +55,6 @@ function stanford_install() {
   // Disable user-configurable timezones by default
   variable_set('configurable_timezones', 0);
 
-  // USE hook_filter_info_alter() FOR THIS
-  $filtered_html_settings = serialize(array(
-    'allowed_html' => '<a> <blockquote> <br> <cite> <code> <em> <h2> <h3> <h4> <h5> <h6> <iframe> <li> <ol> <p> <strong> <ul>',
-    'filter_html_help' => 1,
-    'filter_html_nofollow' => 1,
-  ));
-  
   // Do stuff that's only needed on the Stanford Sites platform
   if (stanford_sites_hosted()) {
     
@@ -112,28 +105,16 @@ function stanford_install() {
  */
 function stanford_form_install_configure_form_alter(&$form, $form_state) {
 
-/*  print '<pre>';
-  print_r($form);
-  print '</pre>';
-*/
+/**
+ * Not really using this code since we're doing drush-based installs,
+ * but leaving it in here in case we move back to using the UI.
+ */
+  
   // Pull in config file
   include_once('config.inc');
   
   // Define our fields
   $fields = get_stanford_installer();
-
-/* DEPRECATED FROM DRUPAL 6
- *  // Only one thing in this fieldset; doesn't need to be collapsible
- *  $form['site_information']['#collapsible'] = TRUE;
- *  // field no longer exists
- *  $form['intro']['#value'] = st('Please fill out the following values:');
- *  // this is now a fieldset, so code no longer applies
- *  $form['admin_account']['#value'] = '';
- *  $form['admin_account']['markup']['#value'] = '';
- *
- */
-
-
 
   // Site settings.
   $form['site_information']['site_name']['#default_value'] = $fields['site_name'];
