@@ -170,7 +170,7 @@ function stanford_form_install_configure_form_alter(&$form, $form_state) {
   $form['stanford_sites_tmpdir']['#type'] = 'hidden';
   $form['stanford_sites_tmpdir']['#default_value'] = '';
   
-  $form['#submit'][] = stanford_sites_install_configure_form_submit();
+  $form['#submit'][] = 'stanford_sites_install_configure_form_submit';
 }
 
 /**
