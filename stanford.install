@@ -110,9 +110,9 @@ function stanford_form_install_configure_form_alter(&$form, $form_state) {
  * but leaving it in here in case we move back to using the UI.
  */
 
-  /*print '<pre>';
+  print '<pre>';
     print_r($form);
-  print '</pre>';*/
+  print '</pre>';
 
   // Pull in config file
   include_once('config.inc');
