@@ -1,6 +1,16 @@
 Stanford Profile 7.x-x.x xxxx-xx-xx
 -----------------------------------
 
+Stanford Profile 7.x-1.0-alpha8 2012-04-13
+------------------------------------------
+Changes since -alpha7:
+  -removed "Powered by Drupal" block
+  -changed allowed tags for Filtered HTML input format
+  -added hidden fields to install_configure form for drush site-install
+    to be able to pass information from the site request form to Drupal
+  -moved several tasks into the .profile file so that they could run later in
+    the install process
+
 Stanford Profile 7.x-1.0-alpha7 2012-04-06
 ------------------------------------------
 -Fixed implementation of module_disable().
@@ -10,10 +20,6 @@ Stanford Profile 7.x-1.0-alpha6 2012-04-05
 - Default modules
 - Enabled stanford_sites_helper
 - Disabled Semantic Views (fixes #16)
-- Default modules
-- Enabled stanford_sites_helper
-- Disabled Semantic Views (fixes #16)
-
 
 Stanford Profile 7.x-1.0-alpha5 2012-03-28 
 ------------------------------------------
