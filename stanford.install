@@ -53,26 +53,39 @@ function stanford_install() {
   variable_set('configurable_timezones', 0);
 
   // Do stuff that's only needed on the Stanford Sites platform
-  if (stanford_sites_hosted()) {
+//  if (stanford_sites_hosted()) {
     
-    // Tasks for all sites on the service
+    
+    /**
+     * Tasks for all sites on the service
+     */
     stanford_adjust_authuser_rid();
-    $modules = array(
-      'stanford_sites_systemtools',
-      'webauth',
-    );
+    $modules = array('stanford_sites_systemtools');
     module_enable($modules);
 
-    // Tasks that require more fine-grained logic.
-    // Pull in config file
-    include_once('config.inc');
-    // Define our fields
-    $fields = get_stanford_installer();
+    /**
+     * Tasks that require more fine-grained logic.
+     */
+    $enable_webauth = variable_get('stanford_sites_enable_webauth');
+    if ($enable_webauth == 1) {
+      $modules = array('webauth');
+      module_enable($modules);
+    }
     
-    // Departments' preferred theme is Stanford Modern
-    // Groups and individuals' preferred theme is Stanford Basic
-    // Official groups can have the Stanford Modern theme enabled by ITS
-    if ($fields['org_type'] == 'dept') {
+    /**
+     * Set temp file directory.
+     */
+    $tmpdir = variable_get('stanford_sites_tmpdir');
+    variable_set('file_temporary_path', $tmpdir);
+
+   
+    /**
+     *  Departments' preferred theme is Stanford Modern.
+     *  Groups and individuals' preferred theme is Stanford Basic.
+     * Official groups can have the Stanford Modern theme enabled by ITS
+     */
+    $org_type = variable_get('stanford_sites_org_type');
+    if ($org_type == 'dept') {
       $preferred_themes = array(
         'theme_default' => 'stanfordmodern',
         'admin_theme' => 'seven',
@@ -91,7 +104,7 @@ function stanford_install() {
       );
       theme_enable($preferred_themes);
     }
-  }
+  //}
 }
 
 /**
