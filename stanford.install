@@ -143,6 +143,28 @@ function stanford_form_install_configure_form_alter(&$form, $form_state) {
   $form['update_notifications']['#type'] = 'hidden';
   $form['update_notifications']['update_status_module']['#default_value'][0] = 0;
   $form['update_notifications']['update_status_module']['#default_value'][1] = 0;
+  
+  /**
+   * Set org type: group or dept.
+   * Blank if a personal site.
+   * We will be setting this programatically so we do not want to present it to the user.
+   */
+  $form['stanford_sites_org_type']['#type'] = 'hidden';
+  $form['stanford_sites_org_type']['#default_value'] = '';
+  
+  /**
+   * Enable webauth module by default.
+   * We will be setting this programatically so we do not want to present it to the user.
+   */
+  $form['stanford_sites_enable_webauth']['#type'] = 'hidden';
+  $form['stanford_sites_enable_webauth']['#default_value'] = 1;
+  
+  /**
+   * Set temporary file directory.
+   * We will be setting this programatically so we do not want to present it to the user.
+   */
+  $form['stanford_sites_tmpdir']['#type'] = 'hidden';
+  $form['stanford_sites_tmpdir']['#default_value'] = '';
 }
 
 /**
