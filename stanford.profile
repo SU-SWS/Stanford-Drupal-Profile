@@ -4,13 +4,12 @@
  * Implementation of hook_install_tasks().
  */
 
-function stanford_profile_install_tasks($install_state) {
-  $tasks['stanford_sites'] = array(
-    'display_name' => st('Disable the Update Manager module'),
+function stanford_install_tasks($install_state) {
+  $tasks['stanford_sites_tasks'] = array(
+    'display_name' => st('Do configuration tasks for the Stanford Sites hosting environment'),
     'display' => FALSE,
     'type' => 'normal',
     'run' => INSTALL_TASK_RUN_IF_NOT_COMPLETED,
-    'function' => 'stanford_sites_tasks',
   );
 
   return $tasks;
