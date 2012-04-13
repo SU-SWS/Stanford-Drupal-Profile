@@ -16,9 +16,8 @@ function stanford_install_tasks($install_state) {
 }
 
 function stanford_sites_tasks() {
-    // Do stuff that's only needed on the Stanford Sites platform
-//  if (stanford_sites_hosted()) {
-    
+  // Do stuff that's only needed on the Stanford Sites platform
+  if (stanford_sites_hosted()) {
     
     /**
      * Tasks for all sites on the service
@@ -41,7 +40,6 @@ function stanford_sites_tasks() {
      */
     $tmpdir = variable_get('stanford_sites_tmpdir');
     variable_set('file_temporary_path', $tmpdir);
-
    
     /**
      *  Departments' preferred theme is Stanford Modern.
@@ -76,7 +74,7 @@ function stanford_sites_tasks() {
         }
       }
     }
-  //}
+  }
 
 }
 
@@ -109,4 +107,3 @@ function stanford_sites_hosted() {
     return FALSE;
   }
 }
-
