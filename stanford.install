@@ -110,9 +110,9 @@ function stanford_form_install_configure_form_alter(&$form, $form_state) {
  * but leaving it in here in case we move back to using the UI.
  */
 
-  print '<pre>';
-  print_r($form);
-  print '</pre>';
+  /*print '<pre>';
+    print_r($form);
+  print '</pre>';*/
 
   // Pull in config file
   include_once('config.inc');
@@ -149,6 +149,13 @@ function stanford_form_install_configure_form_alter(&$form, $form_state) {
   $form['update_notifications']['update_status_module']['#default_value'][1] = 0;
   
   /**
+   * Enable webauth module by default.
+   * We will be setting this programatically so we do not want to present it to the user.
+   */
+  $form['stanford_sites_enable_webauth']['#type'] = 'hidden';
+  $form['stanford_sites_enable_webauth']['#default_value'] = 1;
+  
+  /**
    * Set org type: group or dept.
    * Blank if a personal site.
    * We will be setting this programatically so we do not want to present it to the user.
@@ -157,18 +164,13 @@ function stanford_form_install_configure_form_alter(&$form, $form_state) {
   $form['stanford_sites_org_type']['#default_value'] = '';
   
   /**
-   * Enable webauth module by default.
-   * We will be setting this programatically so we do not want to present it to the user.
-   */
-  $form['stanford_sites_enable_webauth']['#type'] = 'hidden';
-  $form['stanford_sites_enable_webauth']['#default_value'] = 1;
-  
-  /**
    * Set temporary file directory.
    * We will be setting this programatically so we do not want to present it to the user.
    */
   $form['stanford_sites_tmpdir']['#type'] = 'hidden';
   $form['stanford_sites_tmpdir']['#default_value'] = '';
+  
+  $form['#submit'][] = stanford_sites_install_configure_form_submit();
 }
 
 /**
@@ -212,4 +214,14 @@ function stanford_sites_hosted() {
 function stanford_adjust_authuser_rid() {
   $result = db_query("UPDATE role SET rid='1' WHERE name='anonymous user'");
   $result = db_query("UPDATE role SET rid='2' WHERE name='authenticated user'");
+}
+
+/**
+ * Process the fields we added to install_configure_form.
+ */
+function stanford_sites_install_configure_form_submit($form, &$form_state) {
+  variable_set('stanford_sites_enable_webauth', $form['stanford_sites_enable_webauth']['#value']);
+  variable_set('stanford_sites_org_type', $form['stanford_sites_org_type']['#value']);
+  variable_set('stanford_sites_tmpdir', $form['stanford_sites_tmpdir']['#value']);
+ 
 }
