@@ -102,24 +102,6 @@ function stanford_install() {
  */
 function stanford_form_install_configure_form_alter(&$form, $form_state) {
 
-  // Pull in config file
-  include_once('config.inc');
-  
-  // Define our fields
-  $fields = get_stanford_installer();
-
-  // Site settings.
-  $form['site_information']['site_name']['#default_value'] = $fields['site_name'];
-  $form['site_information']['site_mail']['#default_value'] = $fields['site_mail'];
-  $form['site_information']['site_mail']['#type'] = 'hidden';
-
-  // Admin account settings.
-  $form['admin_account']['#title'] = 'Administrator Account';
-  $form['admin_account']['account']['mail']['#default_value'] = $fields['site_mail'];
-  $form['admin_account']['account']['mail']['#type'] = 'hidden';
-  $form['admin_account']['account']['name']['#default_value'] = 'admin';
-  $form['admin_account']['account']['name']['#type'] = 'hidden';
-
   // Hide the fieldset since it'll be empty anyway
   $form['server_settings']['#type'] = 'markup';
 
