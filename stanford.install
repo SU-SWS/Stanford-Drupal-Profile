@@ -169,6 +169,9 @@ function stanford_filter_info_alter(&$info) {
  */
 function stanford_sites_hosted() {
   $server = $_SERVER["SERVER_NAME"];
+  if ($server == "") {
+    $server = $SERVER["HOST"];
+  } 
   if (preg_match('/^(sites|publish).*\.stanford\.edu/', $server, $matches) > 0) {
     return TRUE;
   }
