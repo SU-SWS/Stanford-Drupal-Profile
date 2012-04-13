@@ -10,9 +10,6 @@ function stanford_install() {
   include_once(DRUPAL_ROOT . '/profiles/standard/standard.install');
   standard_install();
   
-  // Disable the Update manager module because we'll be pushing updates centrally
-  module_disable(array('update'));
-  
   // Defaults for the Page content type
   variable_set('comment_anonymous_page', 0);
   variable_set('comment_default_mode_page', 1);
@@ -105,15 +102,6 @@ function stanford_install() {
  */
 function stanford_form_install_configure_form_alter(&$form, $form_state) {
 
-/**
- * Not really using this code since we're doing drush-based installs,
- * but leaving it in here in case we move back to using the UI.
- */
-
-  print '<pre>';
-    print_r($form);
-  print '</pre>';
-
   // Pull in config file
   include_once('config.inc');
   
@@ -171,6 +159,7 @@ function stanford_form_install_configure_form_alter(&$form, $form_state) {
   $form['stanford_sites_tmpdir']['#default_value'] = '';
   
   $form['#submit'][] = 'stanford_sites_install_configure_form_submit';
+
 }
 
 /**
