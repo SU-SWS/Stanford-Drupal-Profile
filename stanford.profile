@@ -57,7 +57,7 @@ function stanford_sites_tasks() {
         'bartik'
       );
       theme_enable($preferred_themes);
-      foreach ($enable as $var => $theme) {
+      foreach ($preferred_themes as $var => $theme) {
         if (!is_numeric($var)) {
           variable_set($var, $theme);
         }
@@ -70,7 +70,7 @@ function stanford_sites_tasks() {
         'bartik'
       );
       theme_enable($preferred_themes);
-      foreach ($enable as $var => $theme) {
+      foreach ($preferred_themes as $var => $theme) {
         if (!is_numeric($var)) {
           variable_set($var, $theme);
         }
