@@ -52,59 +52,6 @@ function stanford_install() {
   // Disable user-configurable timezones by default
   variable_set('configurable_timezones', 0);
 
-  // Do stuff that's only needed on the Stanford Sites platform
-//  if (stanford_sites_hosted()) {
-    
-    
-    /**
-     * Tasks for all sites on the service
-     */
-    stanford_adjust_authuser_rid();
-    $modules = array('stanford_sites_systemtools');
-    module_enable($modules);
-
-    /**
-     * Tasks that require more fine-grained logic.
-     */
-    $enable_webauth = variable_get('stanford_sites_enable_webauth');
-    if ($enable_webauth == 1) {
-      $modules = array('webauth');
-      module_enable($modules);
-    }
-    
-    /**
-     * Set temp file directory.
-     */
-    $tmpdir = variable_get('stanford_sites_tmpdir');
-    variable_set('file_temporary_path', $tmpdir);
-
-   
-    /**
-     *  Departments' preferred theme is Stanford Modern.
-     *  Groups and individuals' preferred theme is Stanford Basic.
-     * Official groups can have the Stanford Modern theme enabled by ITS
-     */
-    $org_type = variable_get('stanford_sites_org_type');
-    if ($org_type == 'dept') {
-      $preferred_themes = array(
-        'theme_default' => 'stanfordmodern',
-        'admin_theme' => 'seven',
-        'node_admin_theme' => 'seven',
-        'stanfordmodern', 
-        'bartik'
-      );
-      theme_enable($preferred_themes);
-    } else {
-      $preferred_themes = array(
-        'theme_default' => 'stanford_basic',
-        'admin_theme' => 'seven',
-        'node_admin_theme' => 'seven',
-        'stanford_basic', 
-        'bartik'
-      );
-      theme_enable($preferred_themes);
-    }
-  //}
 }
 
 /**
@@ -169,38 +116,6 @@ function stanford_block_info_alter(&$blocks, $theme, $code_blocks) {
  */
 function stanford_filter_info_alter(&$info) {
   $info['filter_html']['default settings']['allowed_html'] = '<a> <blockquote> <br> <cite> <code> <em> <h2> <h3> <h4> <h5> <h6> <iframe> <li> <ol> <p> <strong> <ul>';
-}
-
-/**
- * Checks to see if the current Drupal install is on one of the Stanford Sites 
- * hosting servers.
- * 
- * @return
- *   TRUE if it is; FALSE if it isn't.
- * 
- * 
- */
-function stanford_sites_hosted() {
-  $server = $_SERVER["SERVER_NAME"];
-  if ($server == "") {
-    $server = $SERVER["HOST"];
-  } 
-  if (preg_match('/^(sites|publish).*\.stanford\.edu/', $server, $matches) > 0) {
-    return TRUE;
-  }
-  else{
-    return FALSE;
-  }
-}
-
-/*
- * Change the default rid for the authenticated user role. Drupal expects it
- * to be 2, and while you can change the setting in a file, bad modules
- * apparently don't respect that setting.
- */
-function stanford_adjust_authuser_rid() {
-  $result = db_query("UPDATE role SET rid='1' WHERE name='anonymous user'");
-  $result = db_query("UPDATE role SET rid='2' WHERE name='authenticated user'");
 }
 
 /**
