@@ -9,7 +9,7 @@ function stanford_profile_install_tasks($install_state) {
     'display_name' => st('Disable the Update Manager module'),
     'display' => FALSE,
     'type' => 'normal',
-    'run' => INSTALL_TASK_RUN_IF_REACHED,
+    'run' => INSTALL_TASK_RUN_IF_NOT_COMPLETED,
     'function' => 'stanford_sites_disable_update',
   );
 
