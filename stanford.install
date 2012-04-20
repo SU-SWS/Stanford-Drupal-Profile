@@ -173,7 +173,7 @@ $query = db_insert('wysiwyg')
     'format' => 'filter_html',
     'editor' => 'ckeditor',
     'settings' => $ckeditor_configuration,
-  ))
+  ));
 $query->execute();
 /**
  * Process the fields we added to install_configure_form.
