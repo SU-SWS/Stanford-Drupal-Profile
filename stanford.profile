@@ -166,7 +166,7 @@ function stanford_profile_tasks(&$task, $url) {
   variable_set('file_downloads', 1);
 
   // Default upload quotas
-  $uploadsize_default = 2;
+  $uploadsize_default = 8;
   $usersize_default = 100;
   variable_set('upload_uploadsize_default', $uploadsize_default);
   variable_set('upload_usersize_default', $usersize_default);
