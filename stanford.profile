@@ -96,9 +96,10 @@ function stanford_adjust_authuser_rid() {
  *   TRUE if it is; FALSE if it isn't.
  */
 function stanford_sites_hosted() {
-  $server = $_SERVER["SERVER_NAME"];
-  if ($server == "") {
-    $server = $SERVER["HOST"];
+  if (array_key_exists ('SERVER_NAME', $_SERVER)) {
+    $server = $_SERVER["SERVER_NAME"];
+  } else {
+    $server = $_SERVER["HOST"];
   } 
   if (preg_match('/^(sites|publish).*\.stanford\.edu/', $server, $matches) > 0) {
     return TRUE;
