@@ -28,7 +28,7 @@ projects[better_formats] = 1.2
 projects[biblio] = 1.17
 projects[calendar] = 2.4
 projects[cck] = 2.9
-projects[clone] = 1.3
+projects[node_clone] = 1.3
 projects[content_access] = 1.2
 projects[css_injector] = 1.4
 projects[ctools] = 1.8
@@ -103,6 +103,6 @@ libraries[ckeditor][directory_name] = "ckeditor"
 
 projects[stanford][type] = "profile"
 projects[stanford][download][type] = "git"
-projects[stanford][download][url] = "git@github.com:SU-SWS/Stanford-Drupal-Profile.git"
-; projects[stanford][download][url] = "file:///home/quickstart/Documents/D6/Stanford-Drupal-Profile"
+; projects[stanford][download][url] = "git@github.com:SU-SWS/Stanford-Drupal-Profile.git"
+projects[stanford][download][url] = "file:///home/quickstart/Documents/D6/Stanford-Drupal-Profile"
 projects[stanford][download][branch] = 6.x-1.x
