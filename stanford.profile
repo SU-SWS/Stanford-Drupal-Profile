@@ -248,21 +248,16 @@ function stanford_profile_tasks(&$task, $url) {
       'default' => array (
         'Bold' => 1,
         'Italic' => 1,
-        'JustifyLeft' => 1,
-        'JustifyCenter' => 1,
-        'JustifyRight' => 1,
         'BulletedList' => 1,
         'NumberedList' => 1,
         'Outdent' => 1,
         'Indent' => 1,
         'Link' => 1,
         'Unlink' => 1,
-        'Image' => 1,
         'Blockquote' => 1,
         'Source' => 1,
         'PasteFromWord' => 1,
         'Format' => 1,
-        'Table' => 1,
       ),
       'drupal' => array (
         'break' => 1,
@@ -278,7 +273,7 @@ function stanford_profile_tasks(&$task, $url) {
     'remove_linebreaks' => 1,
     'apply_source_formatting' => 0,
     'paste_auto_cleanup_on_paste' => 0,
-    'block_formats' => 'p,address,pre,h2,h3,h4,h5,h6,div',
+    'block_formats' => 'p,address,pre,h2,h3,h4,h5,h6',
     'css_setting' => 'none',
     'css_path' => '',
     'css_classes' => '',
@@ -288,7 +283,7 @@ function stanford_profile_tasks(&$task, $url) {
   db_query("INSERT INTO {wysiwyg} SET format = ('%s'), editor = 'ckeditor', settings = ('%s')", $filtered_html_id, $ckeditor_configuration);
 
   // Update the list of HTML tags allowed for the filtered HTML input format
-  $allowed_html = '<a> <blockquote> <br> <cite> <code> <em> <h2> <h3> <h4> <h5> <h6> <iframe> <li> <ol> <p> <strong> <ul>';
+  $allowed_html = '<a> <address> <blockquote> <br> <cite> <code> <em> <h2> <h3> <h4> <h5> <h6> <li> <ol> <p> <pre> <strong> <ul>';
   variable_set('allowed_html_' . $filtered_html_id, $allowed_html);
 
   // Update the menu router information.
