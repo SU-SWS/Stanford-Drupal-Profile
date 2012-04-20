@@ -168,10 +168,13 @@ $ckeditor_configuration = serialize(array(
 ));
 
 // Add CKEditor to wysiwyg
-db_query("INSERT INTO {wysiwyg} SET format = ('%s'), editor = 'ckeditor', settings = ('%s')", 'filter_html', $ckeditor_configuration);
-
-
-
+$query = db_insert('wysiwyg')
+  ->fields(array(
+    'format' => 'filter_html',
+    'editor' => 'ckeditor',
+    'settings' => $ckeditor_configuration,
+  ))
+$query->execute();
 /**
  * Process the fields we added to install_configure_form.
  */
