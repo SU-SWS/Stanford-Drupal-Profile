@@ -7,6 +7,7 @@
  */
 function stanford_profile_modules() {
   $modules = array(
+    'admin_menu',
     'auto_nodetitle',
     'block',
     'color',
