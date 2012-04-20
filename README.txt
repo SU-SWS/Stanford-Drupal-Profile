@@ -1,6 +1,6 @@
-Author: Marco Wise, John Bickar
-URL: http://itservices.stanford.edu
+Authors: Marco Wise, John Bickar
+URL: http://sites.stanford.edu
 
-A drush make and install profile for new sites on the Drupal Hosting Service at Stanford.
+A drush make and install profile for new sites on the Stanford Sites Drupal hosting service.
 
-NOTE: The installation profile at root is not the one used on sites.stanford.edu It's just for developing and testing and might change without notice. It also does not necessarily reflect how actual sites will be set up. The one on sites.stanford.edu is in a subdirectory.
+Note: The master branch is empty. Please check out the appropriate branch (6.x-1.x, 7.x-1.x) for your version of Drupal core.
