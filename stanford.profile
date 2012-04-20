@@ -71,7 +71,7 @@ function stanford_sites_tasks() {
   // Add CKEditor to wysiwyg
   $query = db_insert('wysiwyg')
     ->fields(array(
-      'format' => 'filter_html',
+      'format' => 'filtered_html',
       'editor' => 'ckeditor',
       'settings' => $ckeditor_configuration,
     ));
@@ -143,6 +143,8 @@ function stanford_sites_tasks() {
  * Change the default rid for the authenticated user role. Drupal expects it
  * to be 2, and while you can change the setting in a file, bad modules
  * apparently don't respect that setting.
+ * 
+ * @todo: change this to use db_update().
  */
 function stanford_adjust_authuser_rid() {
   $result = db_query("UPDATE role SET rid='1' WHERE name='anonymous user'");
