@@ -92,12 +92,12 @@ projects[rubik] = 3.0-beta2
 libraries[jquery_ui][download][type] = "get"
 libraries[jquery_ui][download][url] = "http://jquery-ui.googlecode.com/files/jquery.ui-1.6.zip"
 libraries[jquery_ui][directory_name] = "jquery.ui"
-libraries[jquery_ui][destination] = "libraries"
+; libraries[jquery_ui][destination] = "libraries"
 
 libraries[ckeditor][download][type] = "get"
 libraries[ckeditor][download][url]  = "http://download.cksource.com/CKEditor/CKEditor/CKEditor%203.5.3/ckeditor_3.5.3.zip"
 libraries[ckeditor][directory_name] = "ckeditor"
-libraries[ckeditor][destination] = "libraries"
+; libraries[ckeditor][destination] = "libraries"
 
 ; Profile
 
