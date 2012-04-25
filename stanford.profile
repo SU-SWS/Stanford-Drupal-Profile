@@ -304,3 +304,24 @@ function stanford_form_alter(&$form, $form_state, $form_id) {
     unset($form['server_settings']['update_status_module']);
   }
 }
+
+/**
+ * Checks to see if the current Drupal install is on one of the Stanford Sites 
+ * hosting servers.
+ * 
+ * @return
+ *   TRUE if it is; FALSE if it isn't.
+ */
+function stanford_sites_hosted() {
+  if (array_key_exists ('SERVER_NAME', $_SERVER)) {
+    $server = $_SERVER["SERVER_NAME"];
+  } else {
+    $server = $_SERVER["HOST"];
+  } 
+  if (preg_match('/^(sites|publish).*\.stanford\.edu/', $server, $matches) > 0) {
+    return TRUE;
+  }
+  else{
+    return FALSE;
+  }
+}
