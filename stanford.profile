@@ -47,7 +47,14 @@ function stanford_profile_modules() {
     'views_ui',
     'wysiwyg',
   );
-  
+  // Only do this if we're hosted on the Stanford Sites platform
+  if (stanford_sites_hosted()) {
+    // Enables webauth module if requested.
+    $fields = get_stanford_installer();
+    if ($fields['sd_enable_webauth'] == 1) {
+      array_push($modules, 'webauth');
+    }
+  }
   return $modules;
 }
 
@@ -286,6 +293,35 @@ function stanford_profile_tasks(&$task, $url) {
   $allowed_html = '<a> <address> <blockquote> <br> <cite> <code> <em> <h2> <h3> <h4> <h5> <h6> <li> <ol> <p> <pre> <strong> <ul>';
   variable_set('allowed_html_' . $filtered_html_id, $allowed_html);
 
+  // Do stuff that's only needed on the Stanford Sites platform
+  if (stanford_sites_hosted()) {
+    // Change the authenticated user role from rid 3 (due to mysql server
+    //  replication and autoincrement value) to 2.
+    stanford_adjust_authuser_rid();
+      // If the organization is a department, enable the department themes.
+    if ($fields['org_type'] == 'dept') {
+      variable_set('su_department_themes', 1);
+    }
+
+    // Departments' preferred theme is Stanford Modern
+    // Groups and individuals' preferred theme is Stanford Basic
+    // Official groups can have the Stanford Modern theme enabled by ITS
+    if ($fields['org_type'] == 'dept') {
+      $preferred_themes = array('stanfordmodern', 'garland');
+    } else {
+      $preferred_themes = array('stanford_basic', 'garland');
+    }
+
+    // Install the preferred theme
+    $themes = system_theme_data();
+    foreach ($preferred_themes as $theme) {
+      if (array_key_exists($theme, $themes)) {
+        system_initialize_theme_blocks($theme);
+        db_query("UPDATE {system} SET status = 1 WHERE type = 'theme' and name = ('%s')", $theme);
+        variable_set('theme_default', $theme);
+        break;
+      }
+  }
   // Update the menu router information.
   menu_rebuild();
 }
@@ -324,4 +360,23 @@ function stanford_sites_hosted() {
   else{
     return FALSE;
   }
+}
+
+// Check the installed settings, by looking at a special table we created just
+//  for that purpose in the Drupal DB.
+function get_stanford_installer () {
+  $fields = array ();
+  $result = db_query("SELECT * FROM install_settings");
+  while ($row = db_fetch_object($result)) {
+    $fields[$row->name] = $row->value;
+  }
+  return $fields;
+}
+
+// Change the default rid for the authenticated user role.  Drupal expects it
+// to be 2, and while you can change the setting in a file, bad modules
+// apparently don't respect that setting.
+function stanford_adjust_authuser_rid () {
+  $result = db_query("UPDATE role SET rid='1' WHERE name='anonymous user'");
+  $result = db_query("UPDATE role SET rid='2' WHERE name='authenticated user'");
 }
