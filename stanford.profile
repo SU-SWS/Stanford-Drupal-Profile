@@ -50,6 +50,7 @@ function stanford_profile_modules() {
   );
   // Only do this if we're hosted on the Stanford Sites platform
   if (stanford_sites_hosted()) {
+    array_push($modules, 'su_it_services');
     // Enables webauth module if requested.
     $fields = get_stanford_installer();
     if ($fields['sd_enable_webauth'] == 1) {
