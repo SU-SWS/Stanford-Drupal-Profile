@@ -78,14 +78,14 @@ projects[stanford_video][version] = 6.x-2.0-alpha4
 projects[stanford_events_importer][type] = module
 projects[stanford_events_importer][location] = 'http://drupalfeatures.stanford.edu/fserver'
 projects[stanford_events_importer][version] = 6.x-1.0-beta6
-projects[su_it_services][type] = module
-projects[su_it_services][download][type] = git
-projects[su_it_services][download][url] = git@github.com:SU-SWS/SU-IT-Services.git
-projects[su_it_services][download][tag] = 6.x-1.3
+; projects[su_it_services][type] = module
+; projects[su_it_services][download][type] = git
+; projects[su_it_services][download][url] = "git://github.com/SU-SWS/SU-IT-Services.git"
+; projects[su_it_services][download][tag] = 6.x-1.3
+; projects[su_it_services][download][branch] = master
 projects[webauth][type] = module
 projects[webauth][location] = 'http://drupalfeatures.stanford.edu/fserver'
 projects[webauth][version] = 3.0-beta2
-projects[su_it_services] = 1.3
 
 
 ; Themes
@@ -110,6 +110,6 @@ libraries[ckeditor][destination] = "../../sites/all/libraries"
 projects[stanford][type] = "profile"
 projects[stanford][download][type] = "git"
 ; projects[stanford][download][url] = "git@github.com:SU-SWS/Stanford-Drupal-Profile.git"
-; projects[stanford][download][url] = "git@github.com:jbickar/Stanford-Drupal-Profile.git"
+projects[stanford][download][url] = "git@github.com:jbickar/Stanford-Drupal-Profile.git"
 projects[stanford][download][url] = "file:///home/quickstart/Documents/D6/Stanford-Drupal-Profile"
-projects[stanford][download][branch] = 6.x-1.x
+; projects[stanford][download][branch] = 6.x-1.x
