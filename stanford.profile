@@ -321,6 +321,7 @@ function stanford_profile_tasks(&$task, $url) {
         variable_set('theme_default', $theme);
         break;
       }
+    }
   }
   // Update the menu router information.
   menu_rebuild();
