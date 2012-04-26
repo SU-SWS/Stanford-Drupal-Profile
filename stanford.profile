@@ -300,7 +300,10 @@ function stanford_profile_tasks(&$task, $url) {
     // Change the authenticated user role from rid 3 (due to mysql server
     //  replication and autoincrement value) to 2.
     stanford_adjust_authuser_rid();
-      // If the organization is a department, enable the department themes.
+
+    
+    $fields = get_stanford_installer();
+    // If the organization is a department, enable the department themes.
     if ($fields['org_type'] == 'dept') {
       variable_set('su_department_themes', 1);
     }
@@ -367,7 +370,7 @@ function stanford_sites_hosted() {
 
 // Check the installed settings, by looking at a special table we created just
 //  for that purpose in the Drupal DB.
-function get_stanford_installer () {
+function get_stanford_installer() {
   $fields = array ();
   $result = db_query("SELECT * FROM install_settings");
   while ($row = db_fetch_object($result)) {
@@ -379,7 +382,7 @@ function get_stanford_installer () {
 // Change the default rid for the authenticated user role.  Drupal expects it
 // to be 2, and while you can change the setting in a file, bad modules
 // apparently don't respect that setting.
-function stanford_adjust_authuser_rid () {
+function stanford_adjust_authuser_rid() {
   $result = db_query("UPDATE role SET rid='1' WHERE name='anonymous user'");
   $result = db_query("UPDATE role SET rid='2' WHERE name='authenticated user'");
 }
