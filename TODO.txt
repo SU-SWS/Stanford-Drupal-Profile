@@ -1,0 +1,3 @@
+add su_it_services module to .make file (done)
+add su_it_services module to stanford_sites_hosted() section (done)
+
