@@ -60,7 +60,6 @@ projects[pathauto] = 1.5
 projects[pathologic] = 3.4
 projects[path_redirect] = 1.0-rc2
 projects[semanticviews] = 1.1
-projects[su_it_services] = 1.3
 projects[taxonomy_manager] = 2.2
 projects[token] = 1.18
 projects[vertical_tabs] = 1.0-rc2
