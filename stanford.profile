@@ -35,6 +35,7 @@ function stanford_profile_modules() {
     'path',
     'pathauto',
     'pathologic',
+    'search',
     'semanticviews',
     'system',
     'taxonomy',
