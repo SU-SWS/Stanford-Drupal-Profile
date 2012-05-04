@@ -37,6 +37,8 @@ function stanford_profile_modules() {
     'pathologic',
     'search',
     'semanticviews',
+    'stanford_sites_helper',
+    'stanford_sites_firststeps',
     'system',
     'taxonomy',
     'text',
