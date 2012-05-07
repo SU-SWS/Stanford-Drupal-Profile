@@ -7,6 +7,7 @@
  */
 function stanford_profile_modules() {
   $modules = array(
+    'admin_menu',
     'auto_nodetitle',
     'block',
     'color',
@@ -34,7 +35,10 @@ function stanford_profile_modules() {
     'path',
     'pathauto',
     'pathologic',
+    'search',
     'semanticviews',
+    'stanford_sites_helper',
+    'stanford_sites_firststeps',
     'system',
     'taxonomy',
     'text',
@@ -46,7 +50,15 @@ function stanford_profile_modules() {
     'views_ui',
     'wysiwyg',
   );
-  
+  // Only do this if we're hosted on the Stanford Sites platform
+  if (stanford_sites_hosted()) {
+    array_push($modules, 'su_it_services');
+    // Enables webauth module if requested.
+    $fields = get_stanford_installer();
+    if ($fields['sd_enable_webauth'] == 1) {
+      array_push($modules, 'webauth');
+    }
+  }
   return $modules;
 }
 
@@ -61,7 +73,7 @@ function stanford_profile_modules() {
 function stanford_profile_details() {
   return array(
     'name' => 'Drupal at Stanford',
-    'description' => 'Select this profile to enable some basic Drupal functionality and the default theme.',
+    'description' => 'Select this profile to install a version of Drupal customized for the Stanford Sites platform.',
     'language' => 'en',
   );
 }
@@ -165,7 +177,7 @@ function stanford_profile_tasks(&$task, $url) {
   variable_set('file_downloads', 1);
 
   // Default upload quotas
-  $uploadsize_default = 2;
+  $uploadsize_default = 8;
   $usersize_default = 100;
   variable_set('upload_uploadsize_default', $uploadsize_default);
   variable_set('upload_usersize_default', $usersize_default);
@@ -247,21 +259,16 @@ function stanford_profile_tasks(&$task, $url) {
       'default' => array (
         'Bold' => 1,
         'Italic' => 1,
-        'JustifyLeft' => 1,
-        'JustifyCenter' => 1,
-        'JustifyRight' => 1,
         'BulletedList' => 1,
         'NumberedList' => 1,
         'Outdent' => 1,
         'Indent' => 1,
         'Link' => 1,
         'Unlink' => 1,
-        'Image' => 1,
         'Blockquote' => 1,
         'Source' => 1,
         'PasteFromWord' => 1,
         'Format' => 1,
-        'Table' => 1,
       ),
       'drupal' => array (
         'break' => 1,
@@ -277,7 +284,7 @@ function stanford_profile_tasks(&$task, $url) {
     'remove_linebreaks' => 1,
     'apply_source_formatting' => 0,
     'paste_auto_cleanup_on_paste' => 0,
-    'block_formats' => 'p,address,pre,h2,h3,h4,h5,h6,div',
+    'block_formats' => 'p,address,pre,h2,h3,h4,h5,h6',
     'css_setting' => 'none',
     'css_path' => '',
     'css_classes' => '',
@@ -287,9 +294,42 @@ function stanford_profile_tasks(&$task, $url) {
   db_query("INSERT INTO {wysiwyg} SET format = ('%s'), editor = 'ckeditor', settings = ('%s')", $filtered_html_id, $ckeditor_configuration);
 
   // Update the list of HTML tags allowed for the filtered HTML input format
-  $allowed_html = '<a> <blockquote> <br> <cite> <code> <em> <h2> <h3> <h4> <h5> <h6> <iframe> <li> <ol> <p> <strong> <ul>';
+  $allowed_html = '<a> <address> <blockquote> <br> <cite> <code> <em> <h2> <h3> <h4> <h5> <h6> <li> <ol> <p> <pre> <strong> <ul>';
   variable_set('allowed_html_' . $filtered_html_id, $allowed_html);
 
+  // Do stuff that's only needed on the Stanford Sites platform
+  if (stanford_sites_hosted()) {
+    // Change the authenticated user role from rid 3 (due to mysql server
+    //  replication and autoincrement value) to 2.
+    stanford_adjust_authuser_rid();
+
+    
+    $fields = get_stanford_installer();
+    // If the organization is a department, enable the department themes.
+    if ($fields['org_type'] == 'dept') {
+      variable_set('su_department_themes', 1);
+    }
+
+    // Departments' preferred theme is Stanford Modern
+    // Groups and individuals' preferred theme is Stanford Basic
+    // Official groups can have the Stanford Modern theme enabled by ITS
+    if ($fields['org_type'] == 'dept') {
+      $preferred_themes = array('stanfordmodern', 'garland');
+    } else {
+      $preferred_themes = array('stanford_basic', 'garland');
+    }
+
+    // Install the preferred theme
+    $themes = system_theme_data();
+    foreach ($preferred_themes as $theme) {
+      if (array_key_exists($theme, $themes)) {
+        system_initialize_theme_blocks($theme);
+        db_query("UPDATE {system} SET status = 1 WHERE type = 'theme' and name = ('%s')", $theme);
+        variable_set('theme_default', $theme);
+        break;
+      }
+    }
+  }
   // Update the menu router information.
   menu_rebuild();
 }
@@ -307,4 +347,44 @@ function stanford_form_alter(&$form, $form_state, $form_id) {
     // Hide the automatic updates block.
     unset($form['server_settings']['update_status_module']);
   }
+}
+
+/**
+ * Checks to see if the current Drupal install is on one of the Stanford Sites 
+ * hosting servers.
+ * 
+ * @return
+ *   TRUE if it is; FALSE if it isn't.
+ */
+function stanford_sites_hosted() {
+  if (array_key_exists ('SERVER_NAME', $_SERVER)) {
+    $server = $_SERVER["SERVER_NAME"];
+  } else {
+    $server = $_SERVER["HOST"];
+  } 
+  if (preg_match('/^(sites|publish).*\.stanford\.edu/', $server, $matches) > 0) {
+    return TRUE;
+  }
+  else{
+    return FALSE;
+  }
+}
+
+// Check the installed settings, by looking at a special table we created just
+//  for that purpose in the Drupal DB.
+function get_stanford_installer() {
+  $fields = array ();
+  $result = db_query("SELECT * FROM install_settings");
+  while ($row = db_fetch_object($result)) {
+    $fields[$row->name] = $row->value;
+  }
+  return $fields;
+}
+
+// Change the default rid for the authenticated user role.  Drupal expects it
+// to be 2, and while you can change the setting in a file, bad modules
+// apparently don't respect that setting.
+function stanford_adjust_authuser_rid() {
+  $result = db_query("UPDATE role SET rid='1' WHERE name='anonymous user'");
+  $result = db_query("UPDATE role SET rid='2' WHERE name='authenticated user'");
 }
