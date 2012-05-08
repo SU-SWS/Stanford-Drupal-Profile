@@ -54,8 +54,8 @@ function stanford_profile_modules() {
   if (stanford_sites_hosted()) {
     array_push($modules, 'su_it_services');
     // Enables webauth module if requested.
-    $fields = get_stanford_installer();
-    if ($fields['sd_enable_webauth'] == 1) {
+    $enable_webauth = variable_get('stanford_sites_enable_webauth');
+    if ($enable_webauth == 1) {
       array_push($modules, 'webauth');
     }
   }
@@ -304,16 +304,16 @@ function stanford_profile_tasks(&$task, $url) {
     stanford_adjust_authuser_rid();
 
     
-    $fields = get_stanford_installer();
     // If the organization is a department, enable the department themes.
-    if ($fields['org_type'] == 'dept') {
+    $org_type = variable_get('stanford_sites_org_type');
+    if ($org_type == 'dept') {
       variable_set('su_department_themes', 1);
     }
 
     // Departments' preferred theme is Stanford Modern
     // Groups and individuals' preferred theme is Stanford Basic
     // Official groups can have the Stanford Modern theme enabled by ITS
-    if ($fields['org_type'] == 'dept') {
+    if ($org_type == 'dept') {
       $preferred_themes = array('stanfordmodern', 'garland');
     } else {
       $preferred_themes = array('stanford_basic', 'garland');
@@ -369,17 +369,6 @@ function stanford_sites_hosted() {
   else{
     return FALSE;
   }
-}
-
-// Check the installed settings, by looking at a special table we created just
-//  for that purpose in the Drupal DB.
-function get_stanford_installer() {
-  $fields = array ();
-  $result = db_query("SELECT * FROM install_settings");
-  while ($row = db_fetch_object($result)) {
-    $fields[$row->name] = $row->value;
-  }
-  return $fields;
 }
 
 // Change the default rid for the authenticated user role.  Drupal expects it
