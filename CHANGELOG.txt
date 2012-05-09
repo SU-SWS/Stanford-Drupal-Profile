@@ -1,6 +1,13 @@
 Stanford Profile 7.x-x.x xxxx-xx-xx
 -----------------------------------
 
+Stanford Profile 7.x-1.0-alpha10 2012-05-09
+------------------------------------------
+Changes since -alpha9
+  -fixed code to check if installation is being run on Stanford Sites hosting
+    -drush sets $_SERVER['SERVER_NAME'] to "", which is why it was failing
+  -added biblio and content_access to .make file
+
 Stanford Profile 7.x-1.0-alpha9 2012-04-20
 ------------------------------------------
 Changes since -alpha8
