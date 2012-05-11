@@ -368,8 +368,8 @@ function stanford_form_alter(&$form, $form_state, $form_id) {
     $form['stanford_sites_tmpdir']['#type'] = 'hidden';
     $form['stanford_sites_tmpdir']['#default_value'] = '';
     
-    // Add our custom submit handler
-    $form['#submit'][] = 'stanford_sites_install_configure_form_submit';
+    // Add our custom submit handler, but don't clobber the original
+    $form['#submit'] = array('install_configure_form_submit', 'stanford_sites_install_configure_form_submit');
   }
 }
 
