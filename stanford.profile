@@ -410,5 +410,5 @@ function stanford_sites_install_configure_form_submit($form, &$form_state) {
   variable_set('stanford_sites_enable_webauth', $form['stanford_sites_enable_webauth']['#value']);
   variable_set('stanford_sites_org_type', $form['stanford_sites_org_type']['#value']);
   variable_set('stanford_sites_tmpdir', $form['stanford_sites_tmpdir']['#value']);
- 
 }
+
