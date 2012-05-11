@@ -346,6 +346,27 @@ function stanford_form_alter(&$form, $form_state, $form_id) {
     $form['site_information']['site_name']['#default_value'] = $_SERVER['SERVER_NAME'];
     // Hide the automatic updates block.
     unset($form['server_settings']['update_status_module']);
+    /**
+    * Enable webauth module by default.
+    * We will be setting this programatically so we do not want to present it to the user.
+    */
+    $form['stanford_sites_enable_webauth']['#type'] = 'hidden';
+    $form['stanford_sites_enable_webauth']['#default_value'] = 1;
+      
+    /**
+    * Set org type: group or dept.
+    * Blank if a personal site.
+    * We will be setting this programatically so we do not want to present it to the user.
+    */
+    $form['stanford_sites_org_type']['#type'] = 'hidden';
+    $form['stanford_sites_org_type']['#default_value'] = '';
+      
+    /**
+    * Set temporary file directory.
+    * We will be setting this programatically so we do not want to present it to the user.
+    */
+    $form['stanford_sites_tmpdir']['#type'] = 'hidden';
+    $form['stanford_sites_tmpdir']['#default_value'] = '';
   }
 }
 
