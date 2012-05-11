@@ -367,6 +367,9 @@ function stanford_form_alter(&$form, $form_state, $form_id) {
     */
     $form['stanford_sites_tmpdir']['#type'] = 'hidden';
     $form['stanford_sites_tmpdir']['#default_value'] = '';
+    
+    // Add our custom submit handler
+    $form['#submit'][] = 'stanford_sites_install_configure_form_submit';
   }
 }
 
@@ -398,4 +401,14 @@ function stanford_sites_hosted() {
 function stanford_adjust_authuser_rid() {
   $result = db_query("UPDATE role SET rid='1' WHERE name='anonymous user'");
   $result = db_query("UPDATE role SET rid='2' WHERE name='authenticated user'");
+}
+
+/**
+* Process the fields we added to install_configure_form.
+*/
+function stanford_sites_install_configure_form_submit($form, &$form_state) {
+  variable_set('stanford_sites_enable_webauth', $form['stanford_sites_enable_webauth']['#value']);
+  variable_set('stanford_sites_org_type', $form['stanford_sites_org_type']['#value']);
+  variable_set('stanford_sites_tmpdir', $form['stanford_sites_tmpdir']['#value']);
+ 
 }
