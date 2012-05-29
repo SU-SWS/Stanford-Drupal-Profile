@@ -52,10 +52,10 @@ function stanford_profile_modules() {
   );
   // Only do this if we're hosted on the Stanford Sites platform
   if (stanford_sites_hosted()) {
+    $config = stanford_sites_config();
     array_push($modules, 'su_it_services');
     // Enables webauth module if requested.
-    $enable_webauth = variable_get('stanford_sites_enable_webauth');
-    if ($enable_webauth == 1) {
+    if ($config['enable_webauth'] == 1) {
       array_push($modules, 'webauth');
     }
   }
@@ -305,15 +305,15 @@ function stanford_profile_tasks(&$task, $url) {
 
     
     // If the organization is a department, enable the department themes.
-    $org_type = variable_get('stanford_sites_org_type');
-    if ($org_type == 'dept') {
+    $config = stanford_sites_config();
+    if ($config['org_type'] == 'dept') {
       variable_set('su_department_themes', 1);
     }
 
     // Departments' preferred theme is Stanford Modern
     // Groups and individuals' preferred theme is Stanford Basic
     // Official groups can have the Stanford Modern theme enabled by ITS
-    if ($org_type == 'dept') {
+    if ($config['org_type'] == 'dept') {
       $preferred_themes = array('stanfordmodern', 'garland');
     } else {
       $preferred_themes = array('stanford_basic', 'garland');
@@ -412,3 +412,16 @@ function stanford_sites_install_configure_form_submit($form, &$form_state) {
   variable_set('stanford_sites_tmpdir', $form['stanford_sites_tmpdir']['#value']);
 }
 
+/**
+ * Load the configuration file for this site.
+ */
+function stanford_sites_config() {
+  $cwd = getcwd();
+  $fname = $cwd . '/profile.ini';
+  if (is_readable($fname)) {
+    $config = parse_ini_file($fname);
+    return $config;
+  } else {
+    return array();
+  }
+}
