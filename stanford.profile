@@ -303,13 +303,15 @@ function stanford_profile_tasks(&$task, $url) {
     //  replication and autoincrement value) to 2.
     stanford_adjust_authuser_rid();
 
-    
     // If the organization is a department, enable the department themes.
     $config = stanford_sites_config();
     if ($config['org_type'] == 'dept') {
       variable_set('su_department_themes', 1);
     }
 
+    // Set the temp file directory
+    variable_set('file_directory_temp', $config['tmpdir']);
+    
     // Departments' preferred theme is Stanford Modern
     // Groups and individuals' preferred theme is Stanford Basic
     // Official groups can have the Stanford Modern theme enabled by ITS
