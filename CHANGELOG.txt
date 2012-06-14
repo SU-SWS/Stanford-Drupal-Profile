@@ -1,6 +1,11 @@
 Stanford Profile 7.x-x.x xxxx-xx-xx
 -----------------------------------
 
+Stanford Profile 7.x-1.0-alpha11 2012-06-14
+------------------------------------------
+Changes since -alpha10
+  -Fixed bug where temp directory was not being created at install time
+
 Stanford Profile 7.x-1.0-alpha10 2012-05-09
 ------------------------------------------
 Changes since -alpha9
