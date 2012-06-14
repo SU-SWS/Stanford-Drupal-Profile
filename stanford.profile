@@ -99,8 +99,13 @@ function stanford_sites_tasks() {
     /**
      * Set temp file directory.
      */
-    $tmpdir = variable_get('stanford_sites_tmpdir');
+    $tmpdir = variable_get('stanford_sites_tmpdir', file_directory_temp());
     variable_set('file_temporary_path', $tmpdir);
+    //system_check_directory() is expecting a $form_element array
+    $element = array();
+    $element['#value'] = $tmpdir;
+    //check that the temp directory exists; create it if it does not
+    system_check_directory($element);
    
     /**
      *  Departments' preferred theme is Stanford Modern.
