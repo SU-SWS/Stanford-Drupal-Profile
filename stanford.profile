@@ -77,6 +77,30 @@ function stanford_sites_tasks() {
     ));
   $query->execute();
 
+  /**
+   * File system settings.
+   */
+  //Set public directory
+  $public_directory = 'sites/default/files';
+  variable_set('file_public_path', $public_directory);
+  //Set default scheme to public file handling
+  variable_set('file_default_scheme', 'public');
+  //system_check_directory() is expecting a $form_element array
+  $element = array();
+  $element['#value'] = $public_directory;
+  $element['#name'] = 'file_public_path';
+  //check that the public directory exists; create it if it does not
+  system_check_directory($element);
+  
+  //Set private directory
+  $private_directory = 'sites/default/files/private';
+  variable_set('file_private_path', $private_directory);
+  //system_check_directory() is expecting a $form_element array
+  $element = array();
+  $element['#value'] = $private_directory;
+  //check that the public directory exists; create it if it does not
+  system_check_directory($element);
+
   // Do stuff that's only needed on the Stanford Sites platform
   if (stanford_sites_hosted()) {
     
