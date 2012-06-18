@@ -80,6 +80,16 @@ function stanford_sites_tasks() {
   /**
    * File system settings.
    */
+
+  //Set private directory
+  $private_directory = 'sites/default/files/private';
+  variable_set('file_private_path', $private_directory);
+  //system_check_directory() is expecting a $form_element array
+  $element = array();
+  $element['#value'] = $private_directory;
+  //check that the public directory exists; create it if it does not
+  system_check_directory($element);
+
   //Set public directory
   $public_directory = 'sites/default/files';
   variable_set('file_public_path', $public_directory);
@@ -92,15 +102,6 @@ function stanford_sites_tasks() {
   //check that the public directory exists; create it if it does not
   system_check_directory($element);
   
-  //Set private directory
-  $private_directory = 'sites/default/files/private';
-  variable_set('file_private_path', $private_directory);
-  //system_check_directory() is expecting a $form_element array
-  $element = array();
-  $element['#value'] = $private_directory;
-  //check that the public directory exists; create it if it does not
-  system_check_directory($element);
-
   // Do stuff that's only needed on the Stanford Sites platform
   if (stanford_sites_hosted()) {
     
