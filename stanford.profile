@@ -28,8 +28,8 @@ function stanford_sites_tasks() {
   'default' => 1,
   'user_choose' => 0,
   'show_toggle' => 1,
-  'theme' => advanced,
-  'language' => en,
+  'theme' => 'advanced',
+  'language' => 'en',
   'buttons' => array(
     'default' => array(
       'Bold' => 1,
@@ -52,9 +52,9 @@ function stanford_sites_tasks() {
       'SelectAll' => 1,
       ),
     ),
-  'toolbar_loc' => top,
-  'toolbar_align' => left,
-  'path_loc' => bottom,
+  'toolbar_loc' => 'top',
+  'toolbar_align' => 'left',
+  'path_loc' => 'bottom',
   'resizing' => 1,
   'verify_html' => 1,
   'preformatted' => 0,
@@ -62,8 +62,8 @@ function stanford_sites_tasks() {
   'remove_linebreaks' => 1,
   'apply_source_formatting' => 1,
   'paste_auto_cleanup_on_paste' => 1,
-  'block_formats' => p,address,pre,h2,h3,h4,h5,h6,
-  'css_setting' => theme,
+  'block_formats' => 'p','address','pre','h2','h3','h4','h5','h6',
+  'css_setting' => 'theme',
   'css_path' => '',
   'css_classes' => ''
   ));
