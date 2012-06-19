@@ -173,13 +173,9 @@ function stanford_sites_tasks() {
  * Change the default rid for the authenticated user role. Drupal expects it
  * to be 2, and while you can change the setting in a file, bad modules
  * apparently don't respect that setting.
- * 
- * @todo: change this to use db_update().
+ *
  */
 function stanford_adjust_authuser_rid() {
-//  $result = db_query("UPDATE role SET rid='1' WHERE name='anonymous user'");
-//  $result = db_query("UPDATE role SET rid='2' WHERE name='authenticated user'");
-  
   $update = db_update('role')
   ->fields(array(
       'rid' => 1,
