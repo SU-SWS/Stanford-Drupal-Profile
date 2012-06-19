@@ -177,8 +177,22 @@ function stanford_sites_tasks() {
  * @todo: change this to use db_update().
  */
 function stanford_adjust_authuser_rid() {
-  $result = db_query("UPDATE role SET rid='1' WHERE name='anonymous user'");
-  $result = db_query("UPDATE role SET rid='2' WHERE name='authenticated user'");
+//  $result = db_query("UPDATE role SET rid='1' WHERE name='anonymous user'");
+//  $result = db_query("UPDATE role SET rid='2' WHERE name='authenticated user'");
+  
+  $update = db_update('role')
+  ->fields(array(
+      'rid' => 1,
+  ))
+  ->condition('name', 'anonymous user', '=')
+  ->execute();
+
+  $update = db_update('role')
+  ->fields(array(
+      'rid' => 2,
+  ))
+  ->condition('name', 'authenticated user', '=')
+  ->execute();
 }
 
 /**
