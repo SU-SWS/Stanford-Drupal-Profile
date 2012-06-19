@@ -110,7 +110,6 @@ function stanford_sites_tasks() {
      */
     module_disable(array('update'));
     module_enable(array('stanford_sites_systemtools'));
-    stanford_adjust_authuser_rid();
     
     /**
      * Tasks that require more fine-grained logic.
@@ -167,28 +166,6 @@ function stanford_sites_tasks() {
     }
   }
 
-}
-
-/*
- * Change the default rid for the authenticated user role. Drupal expects it
- * to be 2, and while you can change the setting in a file, bad modules
- * apparently don't respect that setting.
- *
- */
-function stanford_adjust_authuser_rid() {
-  $update = db_update('role')
-  ->fields(array(
-      'rid' => 1,
-  ))
-  ->condition('name', 'anonymous user', '=')
-  ->execute();
-
-  $update = db_update('role')
-  ->fields(array(
-      'rid' => 2,
-  ))
-  ->condition('name', 'authenticated user', '=')
-  ->execute();
 }
 
 /**
