@@ -348,6 +348,10 @@ function stanford_profile_tasks(&$task, $url) {
  */
 function stanford_form_alter(&$form, $form_state, $form_id) {
   if ($form_id == 'install_configure') {
+    // prevent Drupal from sending out a 'account activated email' when using drush
+    // see: http://drupal.org/node/312306
+    $result = db_query("UPDATE {users} SET status = 1 WHERE uid > 0");
+
     // Set default for site name field.
     $form['site_information']['site_name']['#default_value'] = $_SERVER['SERVER_NAME'];
     // Hide the automatic updates block.
