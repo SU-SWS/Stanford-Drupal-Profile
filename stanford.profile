@@ -196,6 +196,10 @@ function stanford_profile_tasks(&$task, $url) {
   // User registration - only site administrators can create new user accounts
   $user_register = 0;
   variable_set('user_register', $user_register);
+  
+  // Disable sending email when account is activated
+  // Needed because drush site-install does not set the URL correctly for this email
+  variable_set('user_mail_status_activated', 0);
 
   /**
    * Display elements
