@@ -77,6 +77,9 @@ function stanford_sites_tasks() {
     ));
   $query->execute();
 
+  // Set errors only to go to the log
+  variable_set('error_level', 0);
+
   /**
    * File system settings.
    */
