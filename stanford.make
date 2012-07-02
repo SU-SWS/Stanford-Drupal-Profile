@@ -1,10 +1,10 @@
 core = 7.x
 
 api = 2
-projects[drupal][version] = "7.12"
+projects[drupal][version] = "7.14"
 
 ; Contributed modules
-projects[admin_menu][version] = "3.0-rc1"
+projects[admin_menu][version] = "3.0-rc3"
 projects[admin_views][version] = "1.0-alpha1"
 projects[auto_nodetitle][version] = "1.0"
 projects[biblio][version] = "1.0-rc4"
@@ -91,5 +91,5 @@ projects[stanford][type] = "profile"
 projects[stanford][download][type] = "git"
 projects[stanford][download][url] = "git@github.com:SU-SWS/Stanford-Drupal-Profile.git"
 ; projects[stanford][download][url] = "file:///home/quickstart/Documents/D7/Stanford-Drupal-Profile"
-projects[stanford][download][tag] = 7.x-1.0-beta1
-; projects[stanford][download][branch] = 7.x-1.x
+; projects[stanford][download][tag] = 7.x-1.0-beta1
+projects[stanford][download][branch] = 7.x-1.x
