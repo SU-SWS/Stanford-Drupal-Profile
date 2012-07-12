@@ -25,6 +25,7 @@ dependencies[] = globalredirect
 dependencies[] = help
 dependencies[] = image
 dependencies[] = insert
+dependencies[] = libraries
 dependencies[] = link
 dependencies[] = list
 dependencies[] = menu
