@@ -9,6 +9,7 @@ dependencies[] = admin_menu_toolbar
 dependencies[] = admin_views
 dependencies[] = block
 dependencies[] = color
+dependencies[] = comment
 dependencies[] = contextual
 dependencies[] = css_injector
 dependencies[] = date
