@@ -1,8 +1,18 @@
 Stanford Profile 7.x-x.x xxxx-xx-xx
 -----------------------------------
 
+Stanford Profile 7.x-1.0-beta2 2012-07-12
+-----------------------------------------
+Changes since -beta1
+  -Added a number of new modules
+  -Updated contrib and Drupal core versions
+  -Updates to modules enabled at install time
+  -Set default error reporting to go to log only
+  -Removed function to adjust authenticated user role rid
+  -Set path for private file uploads
+
 Stanford Profile 7.x-1.0-beta1 2012-06-18
-------------------------------------------
+-----------------------------------------
 Changes since -alpha11
   -Added private upload directory, enabling the use of private files
   -Fixed https://github.com/SU-SWS/Stanford-Drupal-Profile/issues/28
