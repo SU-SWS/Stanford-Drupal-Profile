@@ -81,13 +81,21 @@ projects[stanford_basic][download][url] = git@github.com:su-ddd/stanford_basic.g
 projects[stanford_basic][download][branch] = "7.x-1.3"
 
 ; Custom themes, github
+projects[open_framework][type] = theme
+projects[open_framework][download][type] = git
+projects[open_framework][download][url] = git@github.com:SU-SWS/stanford_framework.git
+projects[open_framework][download][branch] = "7.x-1.x"
 projects[stanford_framework][type] = theme
 projects[stanford_framework][download][type] = git
 projects[stanford_framework][download][url] = git@github.com:SU-SWS/stanford_framework.git
-projects[stanford_framework][download][branch] = "7.x-1.3"
+projects[stanford_framework][download][branch] = "7.x-1.x"
 ; Custom modules, Stanford features server
 projects[webauth][location] = "http://drupalfeatures.stanford.edu/fserver"
 projects[webauth][version] = "3.0"
+projects[stanford_courses][location] = "http://drupalfeatures.stanford.edu/fserver"
+projects[stanford_courses][version] = "1.0-alpha5"
+projects[stanford_events_importer][location] = "http://drupalfeatures.stanford.edu/fserver"
+projects[stanford_events_importer][version] = "1.0-alpha2"
 
 ; Libraries
 ; ---------
