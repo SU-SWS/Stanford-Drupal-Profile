@@ -1,6 +1,12 @@
 Stanford Profile 7.x-x.x xxxx-xx-xx
 -----------------------------------
 
+Stanford Profile 7.x-1.0-beta3 2012-07-16
+-----------------------------------------
+Changes since -beta2:
+  -Changed method by which the profile checks for the
+    hosting environment
+
 Stanford Profile 7.x-1.0-beta2 2012-07-12
 -----------------------------------------
 Changes since -beta1
