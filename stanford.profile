@@ -180,7 +180,7 @@ function stanford_sites_tasks() {
  */
 function stanford_sites_hosted() {
   //This directory only should exist on the sites-* servers
-  $dir = "/etc/drupal-service";
+  $dir = "/etc";
   //Check if it exists and is a directory
   if(file_exists($dir) && is_dir($dir)) {
     return TRUE;
