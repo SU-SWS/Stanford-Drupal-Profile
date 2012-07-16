@@ -179,13 +179,10 @@ function stanford_sites_tasks() {
  *   TRUE if it is; FALSE if it isn't.
  */
 function stanford_sites_hosted() {
-  if (isset($_SERVER['SERVER_NAME'])) {
-    $server = $_SERVER["SERVER_NAME"];
-  } else {
-    $server = $_SERVER["HOST"];
-  }   
-
-  if (preg_match('/^(sites|publish).*\.stanford\.edu/', $server) > 0) {
+  //This directory only should exist on the sites-* servers
+  $dir = "/etc/drupal-service";
+  //Check if it exists and is a directory
+  if(file_exists($dir) && is_dir($dir)) {
     return TRUE;
   }
   else{
