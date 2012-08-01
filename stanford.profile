@@ -238,7 +238,7 @@ function stanford_profile_tasks(&$task, $url) {
   
   // Set default timezone
   $default_timezone_name = "America/Los_Angeles";
-  $default_timezone_offset = -28800;
+  $default_timezone_offset = -25200;
   variable_set('date_default_timezone_name', $default_timezone_name);
   variable_set('date_default_timezone', $default_timezone_offset);
 
