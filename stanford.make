@@ -68,7 +68,7 @@ projects[stanford_sites_helper][type] = "module"
 projects[stanford_sites_helper][download][type] = "git"
 projects[stanford_sites_helper][download][url] = "git@github.com:SU-SWS/stanford_sites_helper.git"
 ; projects[stanford_sites_helper][download][url] = "file:///home/quickstart/Documents/stanford_sites_helper"
-projects[stanford_sites_helper][download][tag] = "7.x-1.0-alpha2"
+projects[stanford_sites_helper][download][tag] = "7.x-1.0-alpha3"
 
 ; Custom themes, github
 projects[stanfordmodern][type] = theme
