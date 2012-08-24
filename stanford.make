@@ -24,6 +24,8 @@ projects[drupal][type] = core
 
 projects[admin_menu] = 3.0-alpha4
 projects[auto_nodetitle] = 1.2
+projects[backup_migrate] = 2.6
+projects[backup_migrate_files] = 1.x-dev
 projects[better_formats] = 1.2
 projects[biblio] = 1.17
 projects[calendar] = 2.4
