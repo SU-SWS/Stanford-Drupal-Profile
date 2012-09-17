@@ -1,6 +1,13 @@
 Stanford Profile 7.x-x.x xxxx-xx-xx
 -----------------------------------
 
+Stanford Profile 7.x-1.0-beta4 2012-09-17
+-----------------------------------------
+Changes since -beta3:
+  -Fixed stanford_sites_helper install error
+  -Added Stanford favicon for Seven admin theme
+  -Updated pathauto default settings
+
 Stanford Profile 7.x-1.0-beta3 2012-07-16
 -----------------------------------------
 Changes since -beta2:
