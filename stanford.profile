@@ -104,6 +104,10 @@ function stanford_sites_tasks() {
   $element['#name'] = 'file_public_path';
   //check that the public directory exists; create it if it does not
   system_check_directory($element);
+
+  //Enable the stanford_sites_helper module
+  //Do this now rather than in .info file because it's looking for the administrator role and errors out otherwise
+  module_enable(array('stanford_sites_helper'));
   
   // Do stuff that's only needed on the Stanford Sites platform
   if (stanford_sites_hosted()) {

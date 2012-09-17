@@ -38,7 +38,6 @@ dependencies[] = pathauto
 dependencies[] = pathologic
 dependencies[] = rdf
 dependencies[] = search
-dependencies[] = stanford_sites_helper
 dependencies[] = taxonomy
 dependencies[] = text
 dependencies[] = token
