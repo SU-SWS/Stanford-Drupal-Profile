@@ -109,6 +109,27 @@ function stanford_sites_tasks() {
   //Do this now rather than in .info file because it's looking for the administrator role and errors out otherwise
   module_enable(array('stanford_sites_helper'));
   
+  //Make the Seven admin theme use our favicon
+  $theme_seven_settings = array(
+    'toggle_logo' => 1,
+    'toggle_name' => 1,
+    'toggle_slogan' => 1,
+    'toggle_node_user_picture' => 1,
+    'toggle_comment_user_picture' => 1,
+    'toggle_comment_user_verification' => 1,
+    'toggle_favicon' => 1,
+    'toggle_main_menu' => 1,
+    'toggle_secondary_menu' => 1,
+    'default_logo' => 1,
+    'logo_path' => '',
+    'logo_upload' => '',
+    'default_favicon' => 0,
+    'favicon_path' => 'profiles/stanford/favicon.ico',
+    'favicon_upload' => '',
+    'favicon_mimetype' => 'image/vnd.microsoft.icon',
+  );
+  variable_set('theme_seven_settings', $theme_seven_settings);
+
   // Do stuff that's only needed on the Stanford Sites platform
   if (stanford_sites_hosted()) {
     
