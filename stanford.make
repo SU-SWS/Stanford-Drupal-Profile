@@ -74,7 +74,7 @@ projects[stanford_sites_helper][download][tag] = "7.x-1.0-beta3"
 projects[stanford_video][type] = "module"
 projects[stanford_video][download][type] = "git"
 projects[stanford_video][download][url] = "git@github.com:SU-SWS/stanford_video.git"
-projects[stanford_video][download][branch] = "7.x-1.x-dev"
+projects[stanford_video][download][tag] = "7.x-1.0-alpha1"
 
 ; Custom themes, github
 projects[stanfordmodern][type] = theme
@@ -108,6 +108,9 @@ projects[stanford_events_importer][version] = "1.0-alpha2"
 libraries[ckeditor][type] = "libraries"
 libraries[ckeditor][download][type] = "file"
 libraries[ckeditor][download][url] = "http://download.cksource.com/CKEditor/CKEditor/CKEditor%203.6.3/ckeditor_3.6.3.tar.gz"
+libraries[jwplayer][type] = "libraries"
+libraries[jwplayer][download][type] = "file"
+libraries[jwplayer][download][url] = "http://www.longtailvideo.com/jw/upload/mediaplayer.zip"
 
 ; Profile
 
