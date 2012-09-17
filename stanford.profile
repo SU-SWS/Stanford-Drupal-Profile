@@ -129,6 +129,10 @@ function stanford_sites_tasks() {
     'favicon_mimetype' => 'image/vnd.microsoft.icon',
   );
   variable_set('theme_seven_settings', $theme_seven_settings);
+  
+  //Make the default pathauto setting be [node:title]
+  $pathauto_node_pattern = '[node:title]';
+  variable_set('pathauto_node_pattern', $pathauto_node_pattern);
 
   // Do stuff that's only needed on the Stanford Sites platform
   if (stanford_sites_hosted()) {
