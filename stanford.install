@@ -84,22 +84,22 @@ function stanford_form_install_configure_form_alter(&$form, $form_state) {
    * Grab requester's SUNetID.
    * We will be setting this programatically so we do not want to present it to the user.
    */
-  $form['stanford_sites_sunetid']['#type'] = 'hidden';
-  $form['stanford_sites_sunetid']['#default_value'] = '';
+  $form['stanford_sites_requester_sunetid']['#type'] = 'hidden';
+  $form['stanford_sites_requester_sunetid']['#default_value'] = '';
 
   /**
    * Grab requester's preferred name.
    * We will be setting this programatically so we do not want to present it to the user.
    */
-  $form['stanford_sites_name']['#type'] = 'hidden';
-  $form['stanford_sites_name']['#default_value'] = '';
+  $form['stanford_sites_requester_name']['#type'] = 'hidden';
+  $form['stanford_sites_requester_name']['#default_value'] = '';
 
   /**
    * Grab requester's preferred email.
    * We will be setting this programatically so we do not want to present it to the user.
    */
-  $form['stanford_sites_email']['#type'] = 'hidden';
-  $form['stanford_sites_email']['#default_value'] = '';
+  $form['stanford_sites_requester_email']['#type'] = 'hidden';
+  $form['stanford_sites_requester_email']['#default_value'] = '';
 
   /**
    * Set org type: group or dept.
@@ -140,7 +140,7 @@ function stanford_filter_info_alter(&$info) {
 function stanford_sites_install_configure_form_submit($form, &$form_state) {
   variable_set('stanford_sites_org_type', $form['stanford_sites_org_type']['#value']);
   variable_set('stanford_sites_tmpdir', $form['stanford_sites_tmpdir']['#value']);
-  variable_set('stanford_sites_sunetid', $form['stanford_sites_sunetid']['#value']);
-  variable_set('stanford_sites_name', $form['stanford_sites_name']['#value']);
-  variable_set('stanford_sites_email', $form['stanford_sites_email']['#value']); 
+  variable_set('stanford_sites_requester_sunetid', $form['stanford_sites_requester_sunetid']['#value']);
+  variable_set('stanford_sites_requester_name', $form['stanford_sites_requester_name']['#value']);
+  variable_set('stanford_sites_requester_email', $form['stanford_sites_requester_email']['#value']); 
 }
