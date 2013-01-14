@@ -241,7 +241,7 @@ function stanford_sites_add_webauth_user($sunet, $name = '', $email = '') {
 
   $name = trim($name);
   if (empty($name)) {
-    $name = $sunet;
+    $name = $sunet . '@stanford.edu';
   }
 
   $email = strtolower(trim($email));
