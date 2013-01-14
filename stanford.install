@@ -81,13 +81,6 @@ function stanford_form_install_configure_form_alter(&$form, $form_state) {
   $form['update_notifications']['update_status_module']['#default_value'][1] = 0;
   
   /**
-   * Enable webauth module by default.
-   * We will be setting this programatically so we do not want to present it to the user.
-   */
-  $form['stanford_sites_enable_webauth']['#type'] = 'hidden';
-  $form['stanford_sites_enable_webauth']['#default_value'] = 1;
-  
-  /**
    * Set org type: group or dept.
    * Blank if a personal site.
    * We will be setting this programatically so we do not want to present it to the user.
