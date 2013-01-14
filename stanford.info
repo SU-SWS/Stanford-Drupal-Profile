@@ -43,5 +43,6 @@ dependencies[] = text
 dependencies[] = token
 dependencies[] = views 
 dependencies[] = views_ui
+dependencies[] = webauth
 dependencies[] = wysiwyg
 files[] = stanford.profile
