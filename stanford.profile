@@ -265,6 +265,10 @@ function stanford_sites_add_webauth_user($sunet, $name = '', $email = '') {
     $account = user_save($account);
 
     user_set_authmaps($account, array('authname_webauth' => $sunet . '@stanford.edu'));
+
+    // hide Local Drupal user login block. User 1 can still login from /user
+    variable_set(webauth_allow_local, 0);
+
     watchdog('Stanford Profile','Created user: %user', array('%user' => $name));    
   }
   else {
