@@ -270,3 +270,4 @@ function stanford_sites_add_webauth_user($sunet, $name = '', $email = '') {
   else {
     watchdog('Stanford Profile','Could not create duplicate user: %user', array('%user' => $name)); 
   }
+}
