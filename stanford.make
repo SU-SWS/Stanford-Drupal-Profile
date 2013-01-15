@@ -71,10 +71,6 @@ projects[stanford_sites_helper][download][type] = "git"
 projects[stanford_sites_helper][download][url] = "git@github.com:SU-SWS/stanford_sites_helper.git"
 ; projects[stanford_sites_helper][download][url] = "file:///home/quickstart/Documents/stanford_sites_helper"
 projects[stanford_sites_helper][download][tag] = "7.x-1.0-beta3"
-projects[stanford_video][type] = "module"
-projects[stanford_video][download][type] = "git"
-projects[stanford_video][download][url] = "git@github.com:SU-SWS/stanford_video.git"
-projects[stanford_video][download][branch] = "7.x-1.x-dev"
 
 ; Custom themes, github
 projects[stanfordmodern][type] = theme
