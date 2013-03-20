@@ -18,12 +18,16 @@ api = 2
 ; Core project
 ; ------------
 projects[drupal][type] = core
+projects[drupal][version] = 6.25
 
 ; Projects
 ; --------
 
 projects[admin_menu] = 3.0-alpha4
+projects[advanced_help] = 1.2
 projects[auto_nodetitle] = 1.2
+projects[backup_migrate] = 2.6
+projects[backup_migrate_files] = 1.x-dev
 projects[better_formats] = 1.2
 projects[biblio] = 1.17
 projects[calendar] = 2.4
@@ -56,9 +60,10 @@ projects[mollom] = 1.16
 projects[nodeformcols] = 1.6
 projects[nodewords] = 1.13
 projects[nodewords_nodetype] = 1.8
-projects[pathauto] = 1.5
+projects[pathauto] = 1.6
 projects[pathologic] = 3.4
 projects[path_redirect] = 1.0-rc2
+projects[print] = 1.14
 projects[semanticviews] = 1.1
 projects[taxonomy_manager] = 2.2
 projects[token] = 1.18
@@ -66,29 +71,29 @@ projects[vertical_tabs] = 1.0-rc2
 projects[views] = 2.16
 projects[views_bulk_operations] = 1.13
 projects[views_slideshow] = 2.3
+projects[webform] = 2.9
 projects[wysiwyg] = 2.4
 
 ; Stanford Modules
 projects[stanford_courses][type] = module
 projects[stanford_courses][location] = 'http://drupalfeatures.stanford.edu/fserver'
-projects[stanford_courses][version] = 6.x-1.0-beta2
+projects[stanford_courses][version] = 6.x-1.0-beta4
 projects[stanford_video][type] = module
 projects[stanford_video][location] = 'http://drupalfeatures.stanford.edu/fserver'
 projects[stanford_video][version] = 6.x-2.0-alpha4
 projects[stanford_events_importer][type] = module
 projects[stanford_events_importer][location] = 'http://drupalfeatures.stanford.edu/fserver'
-projects[stanford_events_importer][version] = 6.x-1.0-beta6
+projects[stanford_events_importer][version] = 6.x-1.0-rc2
 projects[stanford_sites_helper][type] = module
-projects[stanford_sites_helper][download][type] = git
-projects[stanford_sites_helper][download][url] = "git://github.com/SU-SWS/stanford_sites_helper.git"
-projects[stanford_sites_helper][download][branch] = 6.x-1.x
+projects[stanford_sites_helper][location] = "http://drupalfeatures.stanford.edu/fserver"
+projects[stanford_sites_helper][version] = 6.x-1.0-beta1
 projects[su_it_services][type] = module
 projects[su_it_services][download][type] = git
 projects[su_it_services][download][url] = "git://github.com/SU-SWS/SU-IT-Services.git"
-projects[su_it_services][download][tag] = 6.x-1.3
+projects[su_it_services][download][tag] = 6.x-1.5
 projects[webauth][type] = module
 projects[webauth][location] = 'http://drupalfeatures.stanford.edu/fserver'
-projects[webauth][version] = 3.0-beta2
+projects[webauth][version] = 3.2
 
 
 ; Themes
@@ -98,13 +103,18 @@ projects[rubik] = 3.0-beta2
 
 ; Libraries
 
+libraries[jquery_cycle][download][type] = "get"
+libraries[jquery_cycle][download][url] = "http://malsup.github.com/jquery.cycle.all.js"
+libraries[jquery_cycle][directory_name] = "jquery.cycle"
+libraries[jquery_cycle][destination] = "../../sites/all/libraries"
+
 libraries[jquery_ui][download][type] = "get"
 libraries[jquery_ui][download][url] = "http://jquery-ui.googlecode.com/files/jquery.ui-1.6.zip"
 libraries[jquery_ui][directory_name] = "jquery.ui"
 libraries[jquery_ui][destination] = "../../sites/all/libraries"
 
 libraries[ckeditor][download][type] = "get"
-libraries[ckeditor][download][url]  = "http://download.cksource.com/CKEditor/CKEditor/CKEditor%203.5.3/ckeditor_3.5.3.zip"
+libraries[ckeditor][download][url]  = "http://download.cksource.com/CKEditor/CKEditor/CKEditor%203.3.1/ckeditor_3.3.1.zip"
 libraries[ckeditor][directory_name] = "ckeditor"
 libraries[ckeditor][destination] = "../../sites/all/libraries"
 
@@ -115,4 +125,4 @@ projects[stanford][download][type] = "git"
 projects[stanford][download][url] = "git://github.com/SU-SWS/Stanford-Drupal-Profile.git"
 ; projects[stanford][download][url] = "git://github.com/jbickar/Stanford-Drupal-Profile.git"
 ; projects[stanford][download][url] = "file:///home/quickstart/Documents/Stanford-Drupal-Profile"
-projects[stanford][download][branch] = 6.x-1.x-drush
+projects[stanford][download][tag] = 6.x-1.x-installed
