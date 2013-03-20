@@ -13,6 +13,7 @@ projects[backup_migrate_files][version] = "1.x-dev"
 projects[biblio][version] = "1.0-rc4"
 projects[block_class][version] = "1.2-beta1"
 projects[block_titlelink][version] = "1.3"
+projects[bundle_copy][version] = "1.1"
 projects[calendar][version] = "3.4"
 projects[content_access][version] = "1.2-beta1"
 projects[context][version] = "3.0-beta3"
@@ -49,6 +50,7 @@ projects[redirect][version] = "1.0-beta4"
 projects[relation][version] = "1.0-rc2"
 projects[rules][version] = "2.1"
 projects[services][version] = "3.1"
+projects[strongarm][version] = "2.0"
 projects[taxonomy_manager][version] = "1.0-beta3"
 projects[token][version] = "1.1"
 projects[views][version] = "3.3"
@@ -57,26 +59,25 @@ projects[views_slideshow][version] = "3.0"
 projects[wysiwyg][version] = "2.1"
 
 ; Contributed themes
-projects[rubik][version] = "4.0-beta7"
+projects[cube][version] = "1.1"
+projects[rubik][version] = "4.0-beta8"
 projects[tao][version] = "3.0-beta4"
 
 ; Custom modules, github
 projects[stanford_sites_systemtools][type] = "module"
 projects[stanford_sites_systemtools][download][type] = "git"
 projects[stanford_sites_systemtools][download][url] = "git@github.com:SU-SWS/SU-IT-Services.git"
-; projects[stanford_sites_systemtools][download][url] = "file:///home/quickstart/Documents/stanford_sites_systemtools"
 projects[stanford_sites_systemtools][download][tag] = "7.x-1.0-beta2"
 projects[stanford_sites_helper][type] = "module"
 projects[stanford_sites_helper][download][type] = "git"
 projects[stanford_sites_helper][download][url] = "git@github.com:SU-SWS/stanford_sites_helper.git"
-; projects[stanford_sites_helper][download][url] = "file:///home/quickstart/Documents/stanford_sites_helper"
-projects[stanford_sites_helper][download][tag] = "7.x-1.0-beta3"
+projects[stanford_sites_helper][download][tag] = "7.x-1.0-beta4"
 
 ; Custom themes, github
 projects[stanfordmodern][type] = theme
 projects[stanfordmodern][download][type] = git
 projects[stanfordmodern][download][url] = git@github.com:su-ddd/stanfordmodern.git
-projects[stanfordmodern][download][branch] = "7.x-1.31"
+projects[stanfordmodern][download][tag] = "7.x-1.31"
 projects[stanford_basic][type] = theme
 projects[stanford_basic][download][type] = git
 projects[stanford_basic][download][url] = git@github.com:su-ddd/stanford_basic.git
@@ -91,25 +92,30 @@ projects[stanford_framework][type] = theme
 projects[stanford_framework][download][type] = git
 projects[stanford_framework][download][url] = git@github.com:SU-SWS/stanford_framework.git
 projects[stanford_framework][download][branch] = "7.x-1.x"
+
 ; Custom modules, Stanford features server
 projects[webauth][location] = "http://drupalfeatures.stanford.edu/fserver"
-projects[webauth][version] = "3.0"
+projects[webauth][version] = "3.1"
 projects[stanford_courses][location] = "http://drupalfeatures.stanford.edu/fserver"
-projects[stanford_courses][version] = "1.0-alpha5"
+projects[stanford_courses][version] = "1.0-alpha6"
 projects[stanford_events_importer][location] = "http://drupalfeatures.stanford.edu/fserver"
 projects[stanford_events_importer][version] = "1.0-alpha2"
 
 ; Libraries
 ; ---------
-libraries[ckeditor][type] = "libraries"
-libraries[ckeditor][download][type] = "file"
-libraries[ckeditor][download][url] = "http://download.cksource.com/CKEditor/CKEditor/CKEditor%203.6.3/ckeditor_3.6.3.tar.gz"
+libraries[jquery_cycle][download][type] = "get"
+libraries[jquery_cycle][download][url] = "http://malsup.github.com/jquery.cycle.all.js"
+libraries[jquery_cycle][directory_name] = "jquery.cycle"
+libraries[jquery_cycle][destination] = "../../sites/all/libraries"
+
+libraries[ckeditor][download][type] = "get"
+libraries[ckeditor][download][url] = "http://download.cksource.com/CKEditor/CKEditor/CKEditor%203.3.1/ckeditor_3.3.1.zip"
+libraries[ckeditor][directory_name] = "ckeditor"
+libraries[ckeditor][destination] = "../../sites/all/libraries"
 
 ; Profile
 
 projects[stanford][type] = "profile"
 projects[stanford][download][type] = "git"
 projects[stanford][download][url] = "git@github.com:SU-SWS/Stanford-Drupal-Profile.git"
-; projects[stanford][download][url] = "file:///home/quickstart/Documents/D7/Stanford-Drupal-Profile"
-; projects[stanford][download][tag] = 7.x-1.0-beta1
-projects[stanford][download][branch] = 7.x-1.x
+projects[stanford][download][branch] = 7.x-1.x-installed
