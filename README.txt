@@ -1,6 +1,10 @@
 Authors: Marco Wise, John Bickar
 URL: http://sites.stanford.edu
 
-A drush make and install profile for new sites on the Stanford Sites Drupal hosting service.
+A drush make and Drupal install profile for websites on the Drupal Hosting Service at Stanford ("Stanford Sites").
 
-NOTE: The installation profile at root is not the one used on sites.stanford.edu It's just for developing and testing and might change without notice. It also does not necessarily reflect how actual sites will be set up. The one on sites.stanford.edu is in a subdirectory.
+This branch, 6.x-1.x-installed, tracks what is installed on sites.stanford.edu. Check out the latest tag on this branch to match what is currently installed on sites.stanford.edu.
+
+Leading-edge development occurs on the -dev branch for each Drupal core version (6.x-1.x-dev, 7.x-1.x-dev). Those branches may or may not reflect what is installed on sites.stanford.edu.
+
+If drush make fails because you do not have access to some of the github repositories referenced in the .make file, run drush make with the --force-complete flag.
