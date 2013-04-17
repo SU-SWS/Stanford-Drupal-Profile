@@ -109,12 +109,12 @@ projects[rubik] = 3.0-beta2
 projects[stanford_basic][type] = theme
 projects[stanford_basic][download][type] = git
 projects[stanford_basic][download][url] = "git@github.com:su-ddd/stanford_basic.git"
-projects[stanford_basic][download][tag] = v.1.3.1
+projects[stanford_basic][download][tag] = 6.x-1.4
 
 projects[stanfordmodern][type] = theme
 projects[stanfordmodern][download][type] = git
 projects[stanfordmodern][download][url] = "git@github.com:su-ddd/stanfordmodern.git"
-projects[stanfordmodern][download][tag] = v.1.3.1
+projects[stanfordmodern][download][tag] = 6.x-1.42
 
 ; Libraries
 
@@ -138,4 +138,4 @@ libraries[ckeditor][destination] = "../../sites/all/libraries"
 projects[stanford][type] = "profile"
 projects[stanford][download][type] = "git"
 projects[stanford][download][url] = "git://github.com/SU-SWS/Stanford-Drupal-Profile.git"
-projects[stanford][download][tag] = 6.x-1.x-20120728
+projects[stanford][download][tag] = 6.x-1.x-20130409
