@@ -1,7 +1,7 @@
 core = 7.x
 
 api = 2
-projects[drupal][version] = "7.14"
+projects[drupal][version] = "7.19"
 
 ; Contributed modules
 projects[admin_menu][version] = "3.0-rc3"
@@ -124,4 +124,4 @@ libraries[ckeditor][destination] = "../../sites/all/libraries"
 projects[stanford][type] = "profile"
 projects[stanford][download][type] = "git"
 projects[stanford][download][url] = "git@github.com:SU-SWS/Stanford-Drupal-Profile.git"
-projects[stanford][download][tag] = 7.x-1.x-20130409
+projects[stanford][download][tag] = 7.x-1.x-20130508
