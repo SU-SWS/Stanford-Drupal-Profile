@@ -144,7 +144,7 @@ libraries[jquery_cycle][directory_name] = "jquery.cycle"
 libraries[jquery_cycle][destination] = "../../sites/all/libraries"
 
 libraries[jw_player][download][type] = "get"
-libraries[jw_player][download][url] = "http://www.longtailvideo.com/jw/upload/mediaplayer-5.10-licensed.zip"
+libraries[jw_player][download][url] = "http://www.longtailvideo.com/jw/upload/mediaplayer-5.10.zip"
 libraries[jw_player][directory_name] = "jw_player"
 libraries[jw_player][destination] = "../../sites/all/libraries"
 
