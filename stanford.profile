@@ -171,17 +171,19 @@ function stanford_sites_tasks() {
     system_check_directory($element);
    
     /**
-     *  Departments' preferred theme is Stanford Modern.
-     *  Groups and individuals' preferred theme is Stanford Basic.
-     * Official groups can have the Stanford Modern theme enabled by ITS
+     *  Departments' preferred theme is Stanford Wilbur.
+     *  Groups' and individuals' preferred theme is Open Framework.
+     *  Official groups can have the Stanford Wilbur theme enabled by ITS.
      */
     $org_type = variable_get('stanford_sites_org_type');
     if ($org_type == 'dept') {
       $preferred_themes = array(
-        'theme_default' => 'stanfordmodern',
+        'theme_default' => 'stanford_wilbur',
         'admin_theme' => 'seven',
         'node_admin_theme' => 'seven',
-        'bartik'
+        'bartik',
+        'open_framework',
+        'stanford_framework',
       );
       theme_enable($preferred_themes);
       foreach ($preferred_themes as $var => $theme) {
@@ -191,7 +193,7 @@ function stanford_sites_tasks() {
       }
     } else {
       $preferred_themes = array(
-        'theme_default' => 'stanford_basic',
+        'theme_default' => 'open_framework',
         'admin_theme' => 'seven',
         'node_admin_theme' => 'seven',
         'bartik'
