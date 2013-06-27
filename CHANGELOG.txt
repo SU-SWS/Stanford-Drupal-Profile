@@ -1,6 +1,15 @@
 Stanford Profile 7.x-x.x xxxx-xx-xx
 -----------------------------------
 
+Stanford Profile 7.x-1.1-beta2 2013-06-27
+-----------------------------------------
+Changes since 1.1-beta1:
+  -Enabling additional modules at install time
+  -Disable poormanscron functionality
+  -Additional modules and libraries
+  -Updated various module, theme, and library versions
+  -Changed default themes for individuals, groups, and departments
+
 Stanford Profile 7.x-1.1-beta1 2013-01-15
 -----------------------------------------
 Changes since 1.0-beta4:
