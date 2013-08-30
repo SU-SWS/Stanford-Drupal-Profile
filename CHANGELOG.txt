@@ -1,6 +1,24 @@
 Stanford Profile 7.x-x.x xxxx-xx-xx
 -----------------------------------
 
+Stanford Profile 7.x-1.1-beta2 2013-06-27
+-----------------------------------------
+Changes since 1.1-beta1:
+  -Enabling additional modules at install time
+  -Disable poormanscron functionality
+  -Additional modules and libraries
+  -Updated various module, theme, and library versions
+  -Changed default themes for individuals, groups, and departments
+
+Stanford Profile 7.x-1.1-beta1 2013-01-15
+-----------------------------------------
+Changes since 1.0-beta4:
+  -removed WebAuth option from install_configure_form
+  -enable Webauth Module for Drupal (WMD) by default
+  -add requester's preferred name, preferred email, and SUNetID to install_configure_form
+  -create WMD user at install time, and assign "SUNet User" and "administrator" roles to that user
+  -hide local Drupal login block by default
+  
 Stanford Profile 7.x-1.0-beta4 2012-09-17
 -----------------------------------------
 Changes since -beta3:

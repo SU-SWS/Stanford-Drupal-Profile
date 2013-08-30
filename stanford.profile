@@ -105,9 +105,9 @@ function stanford_sites_tasks() {
   //check that the public directory exists; create it if it does not
   system_check_directory($element);
 
-  //Enable the stanford_sites_helper module
+  //Enable the stanford_sites_helper module and the webauth module
   //Do this now rather than in .info file because it's looking for the administrator role and errors out otherwise
-  module_enable(array('stanford_sites_helper'));
+  module_enable(array('stanford_sites_helper', 'webauth'));
   
   //Make the Seven admin theme use our favicon
   $theme_seven_settings = array(
@@ -133,6 +133,13 @@ function stanford_sites_tasks() {
   //Make the default pathauto setting be [node:title]
   $pathauto_node_pattern = '[node:title]';
   variable_set('pathauto_node_pattern', $pathauto_node_pattern);
+
+
+  stanford_sites_add_webauth_user(
+    variable_get('stanford_sites_requester_sunetid'),
+    variable_get('stanford_sites_requester_name'),
+    variable_get('stanford_sites_requester_email')
+  );
 
   // Do stuff that's only needed on the Stanford Sites platform
   if (stanford_sites_hosted()) {
@@ -164,17 +171,19 @@ function stanford_sites_tasks() {
     system_check_directory($element);
    
     /**
-     *  Departments' preferred theme is Stanford Modern.
-     *  Groups and individuals' preferred theme is Stanford Basic.
-     * Official groups can have the Stanford Modern theme enabled by ITS
+     *  Departments' preferred theme is Stanford Wilbur.
+     *  Groups' and individuals' preferred theme is Open Framework.
+     *  Official groups can have the Stanford Wilbur theme enabled by ITS.
      */
     $org_type = variable_get('stanford_sites_org_type');
     if ($org_type == 'dept') {
       $preferred_themes = array(
-        'theme_default' => 'stanfordmodern',
+        'theme_default' => 'stanford_wilbur',
         'admin_theme' => 'seven',
         'node_admin_theme' => 'seven',
-        'bartik'
+        'bartik',
+        'open_framework',
+        'stanford_framework',
       );
       theme_enable($preferred_themes);
       foreach ($preferred_themes as $var => $theme) {
@@ -184,7 +193,7 @@ function stanford_sites_tasks() {
       }
     } else {
       $preferred_themes = array(
-        'theme_default' => 'stanford_basic',
+        'theme_default' => 'open_framework',
         'admin_theme' => 'seven',
         'node_admin_theme' => 'seven',
         'bartik'
@@ -216,5 +225,55 @@ function stanford_sites_hosted() {
   }
   else{
     return FALSE;
+  }
+}
+
+
+/**
+ * Add a WebAuth user 
+ * 
+ */
+function stanford_sites_add_webauth_user($sunet, $name = '', $email = '') {
+  $sunet = strtolower(trim($sunet));
+
+  if (empty($sunet)) {
+    watchdog('Stanford Profile','Could not create user. No SUNetID available.');
+    return;
+  }
+
+  $name = trim($name);
+  if (empty($name)) {
+    $name = $sunet . '@stanford.edu';
+  }
+
+  $email = strtolower(trim($email));
+  if (empty($email)) {
+    $email = $sunet . '@stanford.edu';
+  }
+
+  if (!user_load_by_name($name)) {
+    $account = new stdClass;
+    $account->is_new = TRUE;
+    $account->name = $name;
+    $account->pass = user_password();
+    $account->mail = $email;
+    $account->init = $sunet . '@stanford.edu';
+    $account->status = TRUE;
+
+    $sunet_role = user_role_load_by_name('SUNet User');
+    $admin_role = user_role_load_by_name('administrator');
+    $account->roles = array(DRUPAL_AUTHENTICATED_RID => TRUE, $sunet_role->rid => TRUE, $admin_role->rid => TRUE);
+    $account->timezone = variable_get('date_default_timezone', '');
+    $account = user_save($account);
+
+    user_set_authmaps($account, array('authname_webauth' => $sunet . '@stanford.edu'));
+
+    // hide Local Drupal user login block. User 1 can still login from /user
+    variable_set(webauth_allow_local, 0);
+
+    watchdog('Stanford Profile','Created user: %user', array('%user' => $name));    
+  }
+  else {
+    watchdog('Stanford Profile','Could not create duplicate user: %user', array('%user' => $name)); 
   }
 }
