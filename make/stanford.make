@@ -80,3 +80,44 @@ projects[workbench_moderation][version] = "1.3"
 projects[wysiwyg][version] = "2.2"
 projects[wysiwyg_filter][version] = "1.6-rc2"
 
+; Contributed themes
+projects[cube][version] = "1.3"
+projects[rubik][version] = "4.0-beta8"
+projects[tao][version] = "3.0-beta4"
+
+; Custom modules, github
+projects[stanford_sites_systemtools][type] = "module"
+projects[stanford_sites_systemtools][download][type] = "git"
+projects[stanford_sites_systemtools][download][url] = "git@github.com:SU-SWS/SU-IT-Services.git"
+projects[stanford_sites_systemtools][download][tag] = "7.x-1.1-beta1"
+projects[stanford_sites_helper][type] = "module"
+projects[stanford_sites_helper][download][type] = "git"
+projects[stanford_sites_helper][download][url] = "git@github.com:SU-SWS/stanford_sites_helper.git"
+projects[stanford_sites_helper][download][tag] = "7.x-1.0-beta5"
+
+; Custom themes, github
+projects[stanfordmodern][type] = theme
+projects[stanfordmodern][download][type] = git
+projects[stanfordmodern][download][url] = git@github.com:su-ddd/stanfordmodern.git
+projects[stanfordmodern][download][tag] = "7.x-1.42"
+projects[stanford_basic][type] = theme
+projects[stanford_basic][download][type] = git
+projects[stanford_basic][download][url] = git@github.com:su-ddd/stanford_basic.git
+projects[stanford_basic][download][tag] = "7.x-1.4"
+projects[open_framework][type] = theme
+projects[open_framework][download][type] = git
+projects[open_framework][download][url] = git@github.com:SU-SWS/open_framework.git
+projects[open_framework][download][tag] = "7.x-2.04"
+projects[stanford_framework][type] = theme
+projects[stanford_framework][download][type] = git
+projects[stanford_framework][download][url] = git@github.com:SU-SWS/stanford_framework.git
+projects[stanford_framework][download][tag] = "7.x-2.0"
+projects[stanford_jordan][type] = theme
+projects[stanford_jordan][download][type] = git
+projects[stanford_jordan][download][url] = git@github.com:SU-SWS/stanford_jordan.git
+projects[stanford_jordan][download][tag] = "7.x-2.0"
+projects[stanford_wilbur][type] = theme
+projects[stanford_wilbur][download][type] = git
+projects[stanford_wilbur][download][url] = git@github.com:SU-SWS/stanford_wilbur.git
+projects[stanford_wilbur][download][tag] = "7.x-2.0"
+
