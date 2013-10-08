@@ -95,7 +95,7 @@ projects[stanford_sites_helper][download][type] = "git"
 projects[stanford_sites_helper][download][url] = "git@github.com:SU-SWS/stanford_sites_helper.git"
 projects[stanford_sites_helper][download][tag] = "7.x-1.0-beta5"
 projects[stanford_events_importer][type] = module
-projects[stanford_eventS_importer][download][type] = "git"
+projects[stanford_events_importer][download][type] = "git"
 projects[stanford_events_importer][download][url] = "git@github.com:SU-SWS/stanford_events_importer.git"
 projects[stanford_events_importer][download][tag] = "7.x-1.0-alpha2"
 
