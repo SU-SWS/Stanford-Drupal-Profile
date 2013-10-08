@@ -94,6 +94,10 @@ projects[stanford_sites_helper][type] = "module"
 projects[stanford_sites_helper][download][type] = "git"
 projects[stanford_sites_helper][download][url] = "git@github.com:SU-SWS/stanford_sites_helper.git"
 projects[stanford_sites_helper][download][tag] = "7.x-1.0-beta5"
+projects[stanford_events_importer][type] = module
+projects[stanford_eventS_importer][download][type] = "git"
+projects[stanford_events_importer][download][url] = "git@github.com:SU-SWS/stanford_events_importer.git"
+projects[stanford_events_importer][download][tag] = "7.x-1.0-alpha2"
 
 ; Custom themes, github
 projects[stanfordmodern][type] = theme
@@ -128,9 +132,6 @@ projects[webauth][version] = "3.1"
 projects[stanford_courses][type] = module
 projects[stanford_courses][location] = "http://drupalfeatures.stanford.edu/fserver"
 projects[stanford_courses][version] = "1.0-alpha6"
-; projects[stanford_events_importer][type] = module
-; projects[stanford_events_importer][location] = "http://drupalfeatures.stanford.edu/fserver"
-; projects[stanford_events_importer][version] = "1.0-alpha2"
 projects[stanford_video][type] = module
 projects[stanford_video][location] = "http://drupalfeatures.stanford.edu/fserver"
 projects[stanford_video][version] = "1.0-beta1"
