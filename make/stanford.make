@@ -121,3 +121,20 @@ projects[stanford_wilbur][download][type] = git
 projects[stanford_wilbur][download][url] = git@github.com:SU-SWS/stanford_wilbur.git
 projects[stanford_wilbur][download][tag] = "7.x-2.0"
 
+; Custom modules, Stanford features server
+projects[webauth][type] = module
+projects[webauth][location] = "http://drupalfeatures.stanford.edu/fserver"
+projects[webauth][version] = "3.1"
+projects[stanford_courses][type] = module
+projects[stanford_courses][location] = "http://drupalfeatures.stanford.edu/fserver"
+projects[stanford_courses][version] = "1.0-alpha6"
+projects[stanford_events_importer][type] = module
+projects[stanford_events_importer][location] = "http://drupalfeatures.stanford.edu/fserver"
+projects[stanford_events_importer][version] = "1.0-alpha2"
+projects[stanford_video][type] = module
+projects[stanford_video][location] = "http://drupalfeatures.stanford.edu/fserver"
+projects[stanford_video][version] = "1.0-beta1"
+projects[stanford_wysiwyg][type] = module
+projects[stanford_wysiwyg][location] = "http://drupalfeatures.stanford.edu/fserver"
+projects[stanford_wysiwyg][version] = "1.0-alpha7"
+
