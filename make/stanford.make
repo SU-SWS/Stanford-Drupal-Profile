@@ -121,20 +121,27 @@ projects[stanford_wilbur][download][type] = git
 projects[stanford_wilbur][download][url] = git@github.com:SU-SWS/stanford_wilbur.git
 projects[stanford_wilbur][download][tag] = "7.x-2.0"
 
-; Custom modules, Stanford features server
-projects[webauth][type] = module
-projects[webauth][location] = "http://drupalfeatures.stanford.edu/fserver"
-projects[webauth][version] = "3.1"
-projects[stanford_courses][type] = module
-projects[stanford_courses][location] = "http://drupalfeatures.stanford.edu/fserver"
-projects[stanford_courses][version] = "1.0-alpha6"
-projects[stanford_events_importer][type] = module
-projects[stanford_events_importer][location] = "http://drupalfeatures.stanford.edu/fserver"
-projects[stanford_events_importer][version] = "1.0-alpha2"
-projects[stanford_video][type] = module
-projects[stanford_video][location] = "http://drupalfeatures.stanford.edu/fserver"
-projects[stanford_video][version] = "1.0-beta1"
-projects[stanford_wysiwyg][type] = module
-projects[stanford_wysiwyg][location] = "http://drupalfeatures.stanford.edu/fserver"
-projects[stanford_wysiwyg][version] = "1.0-alpha7"
+; Libraries
+; ---------
+libraries[ckeditor][download][type] = "get"
+libraries[ckeditor][download][url] = "http://download.cksource.com/CKEditor/CKEditor/CKEditor%203.6.6.1/ckeditor_3.6.6.1.zip"
+libraries[ckeditor][directory_name] = "ckeditor"
+libraries[ckeditor][destination] = "../../sites/all/libraries"
 
+libraries[jquery_cycle][download][type] = "get"
+libraries[jquery_cycle][download][url] = "http://malsup.github.com/jquery.cycle.all.js"
+libraries[jquery_cycle][directory_name] = "jquery.cycle"
+libraries[jquery_cycle][destination] = "../../sites/all/libraries"
+
+libraries[jw_player][download][type] = "get"
+libraries[jw_player][download][url] = "http://www.longtailvideo.com/jw/upload/mediaplayer-5.10.zip"
+libraries[jw_player][directory_name] = "jwplayer"
+libraries[jw_player][destination] = "../../sites/all/libraries"
+
+; Profile
+
+projects[stanford][type] = "profile"
+projects[stanford][download][type] = "git"
+; projects[stanford][download][url] = "git@github.com:SU-SWS/Stanford-Drupal-Profile.git"
+projects[stanford][download][url] = "file:///Users/jbickar/Documents/working/Stanford-Drupal-Profile"
+projects[stanford][download][branch] = 7.x-1.x-drushmake
