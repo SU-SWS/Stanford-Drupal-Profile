@@ -1,6 +1,12 @@
 Stanford Profile 7.x-x.x xxxx-xx-xx
 -----------------------------------
 
+Stanford Profile 7.x-1.1-beta3 2013-09-03
+-----------------------------------------
+Changes since 1.1-beta2:
+  -Set OpenLayers module to use externally hosted JS library
+  -Updated .make file to match module versions on Stanford Sites as of August 2013
+
 Stanford Profile 7.x-1.1-beta2 2013-06-27
 -----------------------------------------
 Changes since 1.1-beta1:
