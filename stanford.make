@@ -33,10 +33,10 @@ projects[diff][version] = "3.2"
 projects[ds][version] = "2.2"
 projects[email][version] = "1.2"
 projects[entity][version] = "1.1"
-projects[entityreference][version] = "1.0-rc3"
+projects[entityreference][version] = "1.0"
 projects[features][version] = "1.0"
 projects[feeds][version] = "2.0-alpha7"
-projects[feeds_tamper][version] = "1.0-beta3"
+projects[feeds_tamper][version] = "1.0-beta5"
 projects[feeds_xpathparser][version] = "1.0-beta3"
 projects[field_collection][version] = "1.0-beta4"
 projects[field_group][version] = "1.1"
@@ -59,7 +59,7 @@ projects[node_clone][version] = "1.0-rc1"
 projects[nodeformcols][version] = "1.x-dev"
 projects[openlayers][version] = "2.0-beta7"
 projects[pathauto][version] = "1.2"
-projects[pathologic][version] = "2.2"
+projects[pathologic][version] = "2.11"
 projects[proj4js][version] = "1.2"
 projects[redirect][version] = "1.0-beta4"
 projects[relation][version] = "1.0-rc3"
@@ -86,14 +86,22 @@ projects[rubik][version] = "4.0-beta8"
 projects[tao][version] = "3.0-beta4"
 
 ; Custom modules, github
-projects[stanford_sites_systemtools][type] = "module"
+projects[stanford_events_importer][type] = module
+projects[stanford_events_importer][download][type] = "git"
+projects[stanford_events_importer][download][url] = "git@github.com:SU-SWS/stanford_events_importer.git"
+projects[stanford_events_importer][download][tag] = "7.x-1.0-alpha2"
+projects[stanford_wysiwyg][type] = moduleprojects[stanford_sites_systemtools][type] = "module"
 projects[stanford_sites_systemtools][download][type] = "git"
 projects[stanford_sites_systemtools][download][url] = "git@github.com:SU-SWS/SU-IT-Services.git"
 projects[stanford_sites_systemtools][download][tag] = "7.x-1.1-beta1"
 projects[stanford_sites_helper][type] = "module"
 projects[stanford_sites_helper][download][type] = "git"
 projects[stanford_sites_helper][download][url] = "git@github.com:SU-SWS/stanford_sites_helper.git"
-projects[stanford_sites_helper][download][tag] = "7.x-1.0-beta5"
+projects[stanford_sites_helper][download][tag] = "7.x-1.0-beta8
+projects[stanford_wysiwyg][type] = module
+projects[stanford_wysiwyg][download][type] = git
+projects[stanford_wysiwyg][download][url] = git@github.com:SU-SWS/stanford_wysiwyg.git
+projects[stanford_wysiwyg][download][tag] = "1.0-alpha8""
 
 ; Custom themes, github
 projects[stanfordmodern][type] = theme
@@ -126,12 +134,8 @@ projects[webauth][location] = "http://drupalfeatures.stanford.edu/fserver"
 projects[webauth][version] = "3.1"
 projects[stanford_courses][location] = "http://drupalfeatures.stanford.edu/fserver"
 projects[stanford_courses][version] = "1.0-alpha6"
-projects[stanford_events_importer][location] = "http://drupalfeatures.stanford.edu/fserver"
-projects[stanford_events_importer][version] = "1.0-alpha2"
 projects[stanford_video][location] = "http://drupalfeatures.stanford.edu/fserver"
 projects[stanford_video][version] = "1.0-beta1"
-projects[stanford_wysiwyg][location] = "http://drupalfeatures.stanford.edu/fserver"
-projects[stanford_wysiwyg][version] = "1.0-alpha7"
 
 ; Libraries
 ; ---------
@@ -155,4 +159,4 @@ libraries[jw_player][destination] = "../../sites/all/libraries"
 projects[stanford][type] = "profile"
 projects[stanford][download][type] = "git"
 projects[stanford][download][url] = "git@github.com:SU-SWS/Stanford-Drupal-Profile.git"
-projects[stanford][download][tag] = 7.x-1.x-20130807
+projects[stanford][download][tag] = 7.x-1.x-20131020
