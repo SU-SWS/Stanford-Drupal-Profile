@@ -97,11 +97,11 @@ projects[stanford_sites_systemtools][download][tag] = "7.x-1.1-beta1"
 projects[stanford_sites_helper][type] = module
 projects[stanford_sites_helper][download][type] = "git"
 projects[stanford_sites_helper][download][url] = "git@github.com:SU-SWS/stanford_sites_helper.git"
-projects[stanford_sites_helper][download][tag] = "7.x-1.0-beta8
+projects[stanford_sites_helper][download][tag] = "7.x-1.0-beta8"
 projects[stanford_wysiwyg][type] = module
 projects[stanford_wysiwyg][download][type] = git
 projects[stanford_wysiwyg][download][url] = git@github.com:SU-SWS/stanford_wysiwyg.git
-projects[stanford_wysiwyg][download][tag] = "7.x-1.0-alpha8""
+projects[stanford_wysiwyg][download][tag] = "7.x-1.0-alpha8"
 
 ; Custom themes, github
 projects[stanfordmodern][type] = theme
