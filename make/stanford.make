@@ -101,7 +101,7 @@ projects[stanford_events_importer][download][tag] = "7.x-1.0-alpha2"
 projects[stanford_wysiwyg][type] = module
 projects[stanford_wysiwyg][download][type] = git
 projects[stanford_wysiwyg][download][url] = git@github.com:SU-SWS/stanford_wysiwyg.git
-projects[stanford_wysiwyg][download][tag] = "1.0-alpha8"
+projects[stanford_wysiwyg][download][tag] = "7.x-1.0-alpha8"
 
 ; Custom themes, github
 projects[stanfordmodern][type] = theme
