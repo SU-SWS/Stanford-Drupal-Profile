@@ -90,18 +90,18 @@ projects[stanford_events_importer][type] = module
 projects[stanford_events_importer][download][type] = "git"
 projects[stanford_events_importer][download][url] = "git@github.com:SU-SWS/stanford_events_importer.git"
 projects[stanford_events_importer][download][tag] = "7.x-1.0-alpha2"
-projects[stanford_wysiwyg][type] = moduleprojects[stanford_sites_systemtools][type] = "module"
+projects[stanford_sites_systemtools][type] = module
 projects[stanford_sites_systemtools][download][type] = "git"
 projects[stanford_sites_systemtools][download][url] = "git@github.com:SU-SWS/SU-IT-Services.git"
 projects[stanford_sites_systemtools][download][tag] = "7.x-1.1-beta1"
-projects[stanford_sites_helper][type] = "module"
+projects[stanford_sites_helper][type] = module
 projects[stanford_sites_helper][download][type] = "git"
 projects[stanford_sites_helper][download][url] = "git@github.com:SU-SWS/stanford_sites_helper.git"
 projects[stanford_sites_helper][download][tag] = "7.x-1.0-beta8
 projects[stanford_wysiwyg][type] = module
 projects[stanford_wysiwyg][download][type] = git
 projects[stanford_wysiwyg][download][url] = git@github.com:SU-SWS/stanford_wysiwyg.git
-projects[stanford_wysiwyg][download][tag] = "1.0-alpha8""
+projects[stanford_wysiwyg][download][tag] = "7.x-1.0-alpha8""
 
 ; Custom themes, github
 projects[stanfordmodern][type] = theme
@@ -159,4 +159,5 @@ libraries[jw_player][destination] = "../../sites/all/libraries"
 projects[stanford][type] = "profile"
 projects[stanford][download][type] = "git"
 projects[stanford][download][url] = "git@github.com:SU-SWS/Stanford-Drupal-Profile.git"
-projects[stanford][download][tag] = 7.x-1.x-20131020
+; projects[stanford][download][tag] = 7.x-1.x-20131020
+projects[stanford][download][branch] = 7.x-1.x-installed
