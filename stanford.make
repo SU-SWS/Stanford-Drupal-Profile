@@ -18,7 +18,7 @@ api = 2
 ; Core project
 ; ------------
 projects[drupal][type] = core
-projects[drupal][version] = 6.28
+projects[drupal][version] = 6.29
 
 ; Projects
 ; --------
@@ -38,6 +38,7 @@ projects[css_injector] = 1.4
 projects[ctools] = 1.10
 projects[custom_breadcrumbs] = 2.0-rc1
 projects[date] = 2.9
+projects[diff] = 2.3
 projects[email] = 1.4
 projects[features] = 1.2
 projects[feeds] = 1.0-beta12
@@ -54,9 +55,10 @@ projects[imagefield] = 3.10
 projects[insert] = 1.2
 projects[job_scheduler] = 1.0-beta3
 projects[jquery_ui] = 1.5
+projects[js_injector] = 1.1
 projects[libraries] = 1.0
 projects[link] = 2.9
-projects[mollom] = 1.16
+projects[mollom] = 2.6
 projects[nodeformcols] = 1.6
 projects[nodewords] = 1.14
 projects[nodewords_nodetype] = 1.8
@@ -65,13 +67,14 @@ projects[pathologic] = 3.4
 projects[path_redirect] = 1.0-rc2
 projects[print] = 1.18
 projects[semanticviews] = 1.1
-projects[taxonomy_manager] = 2.2
-projects[token] = 1.18
+projects[taxonomy_manager] = 2.3
+projects[token] = 1.19
+projects[transliteration] = 3.1
 projects[vertical_tabs] = 1.0-rc2
 projects[views] = 2.16
 projects[views_bulk_operations] = 1.13
 projects[views_slideshow] = 2.4
-projects[webform] = 3.18
+projects[webform] = 3.19
 projects[wysiwyg] = 2.4
 
 ; Stanford Modules
