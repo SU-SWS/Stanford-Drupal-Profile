@@ -140,5 +140,5 @@ libraries[ckeditor][destination] = "../../sites/all/libraries"
 
 projects[stanford][type] = "profile"
 projects[stanford][download][type] = "git"
-projects[stanford][download][url] = "file:///Users/jbickar/Documents/working/Stanford-Drupal-Profile"
+projects[stanford][download][url] = "git@github.com:SI-SWS/Stanford-Drupal-Profile.git"
 projects[stanford][download][branch] = 6.x-1.x-installed
