@@ -33,6 +33,7 @@ projects[biblio] = 1.18
 projects[calendar] = 2.4
 projects[cck] = 2.9
 projects[node_clone] = 1.3
+projects[computed_field] = 1.0
 projects[content_access] = 1.2
 projects[css_injector] = 1.4
 projects[ctools] = 1.10
