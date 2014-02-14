@@ -1,7 +1,7 @@
 core = 7.x
 
 api = 2
-projects[drupal][version] = "7.24"
+projects[drupal][version] = "7.25"
 
 ; Contributed modules
 projects[admin_menu][version] = "3.0-rc4"
@@ -138,11 +138,11 @@ projects[stanford_wilbur][download][url] = git@github.com:SU-SWS/stanford_wilbur
 projects[stanford_wilbur][download][tag] = "7.x-2.0"
 
 ; Custom modules, Stanford features server
-projects[webauth][location] = "http://drupalfeatures.stanford.edu/fserver"
+projects[webauth][location] = "https://drupalfeatures.stanford.edu/fserver"
 projects[webauth][version] = "3.1"
-projects[stanford_courses][location] = "http://drupalfeatures.stanford.edu/fserver"
+projects[stanford_courses][location] = "https://drupalfeatures.stanford.edu/fserver"
 projects[stanford_courses][version] = "1.0-alpha6"
-projects[stanford_video][location] = "http://drupalfeatures.stanford.edu/fserver"
+projects[stanford_video][location] = "https://drupalfeatures.stanford.edu/fserver"
 projects[stanford_video][version] = "1.0-beta1"
 
 ; Libraries
