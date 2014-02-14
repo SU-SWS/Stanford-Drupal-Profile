@@ -173,6 +173,7 @@ function stanford_sites_tasks() {
       'bartik',
       'open_framework',
       'stanford_framework',
+      'stanford_jordan',
     );
     theme_enable($preferred_themes);
     foreach ($preferred_themes as $var => $theme) {
