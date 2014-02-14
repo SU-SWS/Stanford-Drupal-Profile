@@ -94,6 +94,10 @@ projects[rubik][version] = "4.0-beta8"
 projects[tao][version] = "3.0-beta4"
 
 ; Custom modules, github
+projects[stanford_courses][type] = module
+projects[stanford_courses][download][type] = "git"
+projects[stanford_courses][download][url] = "git@github.com:SU-SWS/stanford_courses.git"
+projects[stanford_courses][download][tag] = "7.x-1.0-alpha6"
 projects[stanford_events_importer][type] = module
 projects[stanford_events_importer][download][type] = "git"
 projects[stanford_events_importer][download][url] = "git@github.com:SU-SWS/stanford_events_importer.git"
@@ -106,10 +110,18 @@ projects[stanford_sites_helper][type] = module
 projects[stanford_sites_helper][download][type] = "git"
 projects[stanford_sites_helper][download][url] = "git@github.com:SU-SWS/stanford_sites_helper.git"
 projects[stanford_sites_helper][download][tag] = "7.x-1.0-beta8"
+projects[stanford_video][type] = module
+projects[stanford_video][download][type] = "git"
+projects[stanford_video][download][url] = "git@github.com:SU-SWS/stanford_video.git"
+projects[stanford_video][download][tag] = "7.x-1.0-beta1"
 projects[stanford_wysiwyg][type] = module
 projects[stanford_wysiwyg][download][type] = git
 projects[stanford_wysiwyg][download][url] = git@github.com:SU-SWS/stanford_wysiwyg.git
 projects[stanford_wysiwyg][download][tag] = "7.x-1.0-alpha8"
+projects[webauth][type] = module
+projects[webauth][download][type] = "git"
+projects[webauth][download][url] = "git@github.com:Stanford/WMD.git"
+projects[webauth][download][tag] = "7.x-3.1"
 
 ; Custom themes, github
 projects[stanfordmodern][type] = theme
@@ -137,13 +149,6 @@ projects[stanford_wilbur][download][type] = git
 projects[stanford_wilbur][download][url] = git@github.com:SU-SWS/stanford_wilbur.git
 projects[stanford_wilbur][download][tag] = "7.x-2.0"
 
-; Custom modules, Stanford features server
-projects[webauth][location] = "https://drupalfeatures.stanford.edu/fserver"
-projects[webauth][version] = "3.1"
-projects[stanford_courses][location] = "https://drupalfeatures.stanford.edu/fserver"
-projects[stanford_courses][version] = "1.0-alpha6"
-projects[stanford_video][location] = "https://drupalfeatures.stanford.edu/fserver"
-projects[stanford_video][version] = "1.0-beta1"
 
 ; Libraries
 ; ---------
