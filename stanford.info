@@ -8,7 +8,6 @@ dependencies[] = admin_menu
 dependencies[] = admin_menu_toolbar
 dependencies[] = admin_views
 dependencies[] = block
-dependencies[] = clone
 dependencies[] = color
 dependencies[] = comment
 dependencies[] = contextual
