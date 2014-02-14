@@ -56,11 +56,10 @@ function stanford_install() {
   
   // Disable poormanscron functionality, as we are running cron externally
   variable_set('cron_safe_threshold', 0);
-  
+
   // Set OpenLayers library to use external https CDN
   variable_set('openlayers_source_external', 'https://cdnjs.cloudflare.com/ajax/libs/openlayers/2.12/OpenLayers.js');
   variable_set('openlayers_source_type', 'external');
-
 }
 
 /**
