@@ -1,6 +1,14 @@
 Stanford Profile 7.x-x.x xxxx-xx-xx
 -----------------------------------
 
+Stanford Profile 7.x-1.1-beta4 2014-03-11
+-----------------------------------------
+  -Moved make file into subdir
+  -Changing modules from fserver to githubs
+  -Fixing DL url
+  -Updated Module Versions
+  -Enable Jordan by default
+
 Stanford Profile 7.x-1.1-beta3 2013-09-03
 -----------------------------------------
 Changes since 1.1-beta2:
@@ -24,7 +32,7 @@ Changes since 1.0-beta4:
   -add requester's preferred name, preferred email, and SUNetID to install_configure_form
   -create WMD user at install time, and assign "SUNet User" and "administrator" roles to that user
   -hide local Drupal login block by default
-  
+
 Stanford Profile 7.x-1.0-beta4 2012-09-17
 -----------------------------------------
 Changes since -beta3:
@@ -95,20 +103,20 @@ Stanford Profile 7.x-1.0-alpha6 2012-04-05
 - Enabled stanford_sites_helper
 - Disabled Semantic Views (fixes #16)
 
-Stanford Profile 7.x-1.0-alpha5 2012-03-28 
+Stanford Profile 7.x-1.0-alpha5 2012-03-28
 ------------------------------------------
 No functional changes
   nominal release to reflect change in github
   repository location
 
-Stanford Profile 7.x-1.0-alpha4 2012-03-15 
+Stanford Profile 7.x-1.0-alpha4 2012-03-15
 ------------------------------------------
 Changes since -alpha1:
 -Disable user-configurable time zones
 -Only allow administrators to create accounts
 -Added Stanford Modern theme
 
-Stanford Profile 7.x-1.0-alpha1 2012-03-15 
+Stanford Profile 7.x-1.0-alpha1 2012-03-15
 ------------------------------------------
 Stable but feature-incomplete release
 Installs cleanly on local development environment
