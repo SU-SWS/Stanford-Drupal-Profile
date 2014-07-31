@@ -230,5 +230,5 @@ libraries[jw_player][destination] = "../../sites/all/libraries"
 projects[stanford][type] = "profile"
 projects[stanford][download][type] = "git"
 projects[stanford][download][url] = "git@github.com:SU-SWS/Stanford-Drupal-Profile.git"
-projects[stanford][download][tag] = 7.x-1.x-20131024
+projects[stanford][download][tag] = 7.x-1.x-20140724
 ; projects[stanford][download][branch] = 7.x-1.x-installed
