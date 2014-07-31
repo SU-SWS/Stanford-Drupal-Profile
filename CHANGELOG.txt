@@ -1,6 +1,12 @@
 Stanford Profile x.x-x.x xxxx-xx-xx
 -----------------------------------
 
+Stanford Profile 6.x-1.5 2014-07-31
+-----------------------------------
+by jbickar:
+  Enable admin_menu_toolbar at install
+  Set timezone offset to -25200
+
 Stanford Profile 6.x-1.4 2012-02-28
 -----------------------------------
 by jbickar:
