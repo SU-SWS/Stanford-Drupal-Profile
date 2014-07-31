@@ -18,7 +18,7 @@ api = 2
 ; Core project
 ; ------------
 projects[drupal][type] = core
-projects[drupal][version] = 6.29
+projects[drupal][version] = 6.32
 
 ; Projects
 ; --------
@@ -37,7 +37,7 @@ projects[computed_field] = 1.0
 projects[content_access] = 1.2
 projects[cnr] = 4.1
 projects[css_injector] = 1.4
-projects[ctools] = 1.10
+projects[ctools] = 1.11
 projects[custom_breadcrumbs] = 2.0-rc1
 projects[date] = 2.9
 projects[diff] = 2.3
@@ -46,7 +46,7 @@ projects[features] = 1.2
 projects[feeds] = 1.0-beta12
 projects[feeds_tamper] = 1.0-beta4
 projects[feeds_xpathparser] = 1.12
-projects[filefield] = 3.10
+projects[filefield] = 3.12
 projects[filefield_paths] = 1.4
 projects[globalredirect] = 1.5
 projects[google_analytics] = 3.3
@@ -60,6 +60,7 @@ projects[jquery_ui] = 1.5
 projects[js_injector] = 1.1
 projects[libraries] = 1.0
 projects[link] = 2.9
+projects[menu_block] = 2.4
 projects[mollom] = 2.6
 projects[nodeformcols] = 1.6
 projects[nodewords] = 1.14
@@ -68,7 +69,7 @@ projects[node_clone] = 1.3
 projects[pathauto] = 1.6
 projects[pathologic] = 3.4
 projects[path_redirect] = 1.0-rc2
-projects[print] = 1.18
+projects[print] = 1.19
 projects[rules] = 1.5
 projects[semanticviews] = 1.1
 projects[site_verify] = 1.0
@@ -80,7 +81,7 @@ projects[vertical_tabs] = 1.0-rc2
 projects[views] = 2.16
 projects[views_bulk_operations] = 1.13
 projects[views_slideshow] = 2.4
-projects[webform] = 3.19
+projects[webform] = 3.20
 projects[wysiwyg] = 2.4
 projects[wysiwyg_filter] = 1.5
 
@@ -88,11 +89,11 @@ projects[wysiwyg_filter] = 1.5
 projects[stanford_courses][type] = module
 projects[stanford_courses][download][type] = git
 projects[stanford_courses][download][url] = 'git://github.com/SU-SWS/stanford_courses.git'
-projects[stanford_courses][download][tag] = 6.x-1.0-beta8
+projects[stanford_courses][download][tag] = 6.x-1.0-beta9
 projects[stanford_video][type] = module
 projects[stanford_video][download][type] = git
 projects[stanford_video][download][url] = 'git://github.com/SU-SWS/stanford_video.git'
-projects[stanford_video][download][tag] = 6.x-2.0-alpha4
+projects[stanford_video][download][tag] = 6.x-2.0-alpha5
 projects[stanford_events_importer][type] = module
 projects[stanford_events_importer][download][type] = git
 projects[stanford_events_importer][download][url] = 'git://github.com/SU-SWS/stanford_events_importer.git'
@@ -100,7 +101,7 @@ projects[stanford_events_importer][download][tag] = 6.x-1.0-rc2
 projects[stanford_sites_helper][type] = module
 projects[stanford_sites_helper][download][type] = git
 projects[stanford_sites_helper][download][url] = 'git://github.com/SU-SWS/stanford_sites_helper.git'
-projects[stanford_sites_helper][download][tag] = 6.x-1.0-beta1
+projects[stanford_sites_helper][download][tag] = 6.x-1.0-beta2
 projects[su_it_services][type] = module
 projects[su_it_services][download][type] = git
 projects[su_it_services][download][url] = "git://github.com/SU-SWS/SU-IT-Services.git"
@@ -108,7 +109,7 @@ projects[su_it_services][download][tag] = 6.x-1.5
 projects[webauth][type] = module
 projects[webauth][download][type] = git
 projects[webauth][download][url] = "git://github.com/Stanford/WMD.git"
-projects[webauth][download][tag] = 6.x-3.3
+projects[webauth][download][tag] = 6.x-3.4
 
 
 ; Themes
