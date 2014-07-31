@@ -1,7 +1,7 @@
 name = Stanford Sites
 description = Select this profile to install a version of Drupal customized for the Stanford Sites platform.
 core = 7.x
-version = 7.x-1.1-beta4
+version = 7.x-1.x-dev
 dependencies[] = advanced_help
 dependencies[] = auto_nodetitle
 dependencies[] = admin_menu
