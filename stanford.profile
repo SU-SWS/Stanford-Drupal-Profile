@@ -141,77 +141,66 @@ function stanford_sites_tasks() {
     variable_get('stanford_sites_requester_email')
   );
 
-  // Do stuff that's only needed on the Stanford Sites platform
-  if (stanford_sites_hosted()) {
     
-    /**
-     * Tasks for all sites on the service
-     */
-    module_disable(array('update'));
-    module_enable(array('stanford_sites_systemtools'));
-    
-    /**
-     * Tasks that require more fine-grained logic.
-     */
-    $enable_webauth = variable_get('stanford_sites_enable_webauth');
-    if ($enable_webauth == 1) {
-      $modules = array('webauth');
-      module_enable($modules);
-    }
-    
-    /**
-     * Set temp file directory.
-     */
-    $tmpdir = variable_get('stanford_sites_tmpdir', file_directory_temp());
-    variable_set('file_temporary_path', $tmpdir);
-    //system_check_directory() is expecting a $form_element array
-    $element = array();
-    $element['#value'] = $tmpdir;
-    //check that the temp directory exists; create it if it does not
-    system_check_directory($element);
-   
-    /**
-     *  Departments' preferred theme is Stanford Wilbur.
-     *  Groups' and individuals' preferred theme is Open Framework.
-     *  Official groups can have the Stanford Wilbur theme enabled by ITS.
-     */
-    $org_type = variable_get('stanford_sites_org_type');
-    if ($org_type == 'dept') {
-      $preferred_themes = array(
-        'theme_default' => 'stanford_wilbur',
-        'admin_theme' => 'seven',
-        'node_admin_theme' => 'seven',
-        'bartik',
-        'open_framework',
-        'stanford_framework',
-      );
-      theme_enable($preferred_themes);
-      foreach ($preferred_themes as $var => $theme) {
-        if (!is_numeric($var)) {
-          variable_set($var, $theme);
-        }
+  /**
+   * Tasks for all sites on the service
+   */
+  module_disable(array('update'));
+  module_enable(array('stanford_sites_systemtools'));
+
+  /**
+   * Set temp file directory.
+   */
+  $tmpdir = variable_get('stanford_sites_tmpdir', file_directory_temp());
+  variable_set('file_temporary_path', $tmpdir);
+  //system_check_directory() is expecting a $form_element array
+  $element = array();
+  $element['#value'] = $tmpdir;
+  //check that the temp directory exists; create it if it does not
+  system_check_directory($element);
+
+  /**
+   *  Departments' preferred theme is Stanford Wilbur.
+   *  Groups' and individuals' preferred theme is Open Framework.
+   *  Official groups can have the Stanford Wilbur theme enabled by ITS.
+   */
+  $org_type = variable_get('stanford_sites_org_type');
+  if ($org_type == 'dept') {
+    $preferred_themes = array(
+      'theme_default' => 'stanford_wilbur',
+      'admin_theme' => 'seven',
+      'node_admin_theme' => 'seven',
+      'bartik',
+      'open_framework',
+      'stanford_framework',
+      'stanford_jordan',
+    );
+    theme_enable($preferred_themes);
+    foreach ($preferred_themes as $var => $theme) {
+      if (!is_numeric($var)) {
+        variable_set($var, $theme);
       }
-    } else {
-      $preferred_themes = array(
-        'theme_default' => 'open_framework',
-        'admin_theme' => 'seven',
-        'node_admin_theme' => 'seven',
-        'bartik'
-      );
-      theme_enable($preferred_themes);
-      foreach ($preferred_themes as $var => $theme) {
-        if (!is_numeric($var)) {
-          variable_set($var, $theme);
-        }
+    }
+  } else {
+    $preferred_themes = array(
+      'theme_default' => 'open_framework',
+      'admin_theme' => 'seven',
+      'node_admin_theme' => 'seven',
+      'bartik'
+    );
+    theme_enable($preferred_themes);
+    foreach ($preferred_themes as $var => $theme) {
+      if (!is_numeric($var)) {
+        variable_set($var, $theme);
       }
     }
   }
-
 }
 
 /**
  * Checks to see if the current Drupal install is on one of the Stanford Sites 
- * hosting servers.
+ * hosting servers. Note: no longer using this, but keeping the code because arriving
+ * at a reliable test took some work.
  * 
  * @return
  *   TRUE if it is; FALSE if it isn't.
