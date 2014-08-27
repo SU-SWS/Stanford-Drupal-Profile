@@ -169,8 +169,7 @@ function stanford_sites_tasks() {
     $preferred_themes = array(
       'theme_default' => 'stanford_wilbur',
       'admin_theme' => 'seven',
-      'node_admin_theme' => 'seven',
-      'bartik',
+      'node_admin_theme' => 1,
       'open_framework',
       'stanford_framework',
       'stanford_jordan',
@@ -183,10 +182,10 @@ function stanford_sites_tasks() {
     }
   } else {
     $preferred_themes = array(
-      'theme_default' => 'open_framework',
+      'theme_default' => 'stanford_light',
       'admin_theme' => 'seven',
-      'node_admin_theme' => 'seven',
-      'bartik'
+      'node_admin_theme' => 1,
+      'open_framework'
     );
     theme_enable($preferred_themes);
     foreach ($preferred_themes as $var => $theme) {
