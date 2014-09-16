@@ -15,35 +15,11 @@ dependencies[] = filter
 
 ; Jumpstart Dependencies.
 dependencies[] = entity
-dependencies[] = bean
-dependencies[] = bean_admin_ui
-dependencies[] = file_entity
-dependencies[] = block_class
-dependencies[] = context_accordion
-dependencies[] = context_respect
-dependencies[] = context_ui
-dependencies[] = ctools
-dependencies[] = features
-dependencies[] = diff
-dependencies[] = metatag
-dependencies[] = menu_block
-dependencies[] = webauth_extras
-dependencies[] = wysiwyg
-dependencies[] = context_http_header
-dependencies[] = context_useragent
-dependencies[] = uuid
 
-dependencies[] = stanford_bean_types
-dependencies[] = stanford_bean_types_permissions
-dependencies[] = stanford_image
-dependencies[] = stanford_image_styles
-dependencies[] = stanford_metatag_nobots
-dependencies[] = stanford_page
-dependencies[] = stanford_jumpstart
-dependencies[] = stanford_jumpstart_plus
-dependencies[] = stanford_jumpstart_roles
-dependencies[] = stanford_date_timepicker
-dependencies[] = stanford_manage_content
+; Stanford Features
+dependencies[] = stanford_landing_page
+dependencies[] = stanford_jumpstart_home
+
 
 ; Do not enable these modules during installation. Disables all
 ; parent dependency declarations
