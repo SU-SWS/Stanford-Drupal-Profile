@@ -162,6 +162,10 @@ class JumpstartSitesPlus extends JumpstartSites {
     drush_log('JS+ - Starting install settings', 'status');
     $site_name  = variable_get('site_name', "Stanford Jumpstart Plus");
 
+    // Set the home page
+    $home = drupal_lookup_path('source', 'home');
+    variable_set('site_frontpage', $home);
+
     drush_log('JS+ - Finished install settings', 'ok');
   }
 
