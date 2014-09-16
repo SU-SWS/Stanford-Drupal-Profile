@@ -25,7 +25,6 @@ dependencies[] = stanford_jumpstart_home
 ; parent dependency declarations
 prohibit[] = stanford_wysiwyg
 prohibit[] = toolbar
-prohibit[] = stanford_jumpstart_shortcuts
 prohibit[] = stanford_jumpstart_wysiwyg
 prohibit[] = stanford_jumpstart_layouts
 
