@@ -124,8 +124,8 @@ class JumpstartSitesPlus extends JumpstartSites {
     $importer->add_restricted_vocabularies($restrict);
     $importer->import_vocabulary_trees();
 
-    // JSV ONLY CONTENT
-    $filters = array('sites_products' => array('41'));  // 37 is term id for JS+
+    // JS+ ONLY CONTENT
+    $filters = array('sites_products' => array('41'));  // 41 is term id for JS+
     $view_importer = new SitesContentImporterViews();
     $view_importer->set_endpoint($endpoint);
     $view_importer->set_resource('content');
@@ -176,7 +176,7 @@ class JumpstartSitesPlus extends JumpstartSites {
   // ---------------------------------------------------------------------------
 
   /**
-   * Installs and configures the menu for JSV
+   * Installs and configures the menu for JS+
    * @param  [type] $install_state [description]
    */
   public function install_menu_items(&$install_state) {
