@@ -166,6 +166,9 @@ class JumpstartSitesPlus extends JumpstartSites {
     $home = drupal_lookup_path('source', 'home');
     variable_set('site_frontpage', $home);
 
+    // Set the default theme
+    variable_set('theme_default', 'stanford_framework');
+
     drush_log('JS+ - Finished install settings', 'ok');
   }
 
