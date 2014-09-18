@@ -26,6 +26,7 @@ class JumpstartSitesPlus extends JumpstartSites {
     // Remove some tasks...
     unset($parent_tasks['JumpstartSites_stanford_sites_jumpstart_import_content']);
     unset($parent_tasks['JumpstartSites_stanford_sites_jumpstart_install_install_menu_items']);
+    unset($parent_tasks['JumpstartSites_stanford_sites_jumpstart_install_jumpstart_specific']);
 
     $tasks = array();
 
@@ -42,6 +43,22 @@ class JumpstartSitesPlus extends JumpstartSites {
       'display' => TRUE,
       'type' => 'normal',
       'function' => 'install_menu_items',
+      'run' => INSTALL_TASK_RUN_IF_NOT_COMPLETED,
+    );
+
+    $tasks['jsplus_install_block_classes'] = array(
+      'display_name' => st('JS+ Install Block Classes.'),
+      'display' => TRUE,
+      'type' => 'normal',
+      'function' => 'install_block_classes',
+      'run' => INSTALL_TASK_RUN_IF_NOT_COMPLETED,
+    );
+
+    $tasks['jsplus_install_redirects'] = array(
+      'display_name' => st('JS+ Install Redirects.'),
+      'display' => TRUE,
+      'type' => 'normal',
+      'function' => 'install_redirects',
       'run' => INSTALL_TASK_RUN_IF_NOT_COMPLETED,
     );
 
@@ -164,6 +181,145 @@ class JumpstartSitesPlus extends JumpstartSites {
   // ---------------------------------------------------------------------------
 
   /**
+   * Install block classes
+   * Insert the module, delta, and class name into the {block_class} table
+   */
+  public function install_block_classes(&$install_state) {
+    // Block clases.
+    $fields = array('module', 'delta', 'css_class');
+    $values = array(
+      array("bean","jumpstart-home-page-about","well"),
+      array("bean","homepage-about-block", 'well'),
+      array("bean","jumpstart-home-page-information-",'well'),
+      array("bean","homepage-banner-image","block-no-bottom-margin"),
+      array("bean","jumpstart-affiliated-programs","well"),
+      array("bean","jumpstart-contact-us-postcard","well"),
+      array("bean","jumpstart-degree-programs-info-f","well"),
+      array("bean","jumpstart-featured-course","well"),
+      array("bean","jumpstart-featured-event","well"),
+      array("bean","jumpstart-featured-event-block","well"),
+      array("bean","jumpstart-footer-contact-block","span2"),
+      array("bean","jumpstart-footer-social-media--0","span2"),
+      array("bean","jumpstart-footer-social-media-co","span4"),
+      array("bean","jumpstart-graduate-student-sideb","well"),
+      array("bean","jumpstart-home-page-academics","well"),
+      array("bean","jumpstart-info-for-current-gra-0","span4 well"),
+      array("bean","jumpstart-info-for-current-gra-1","span4 well"),
+      array("bean","jumpstart-info-for-current-gradu","span4 well"),
+      array("bean","jumpstart-info-for-current-und-0","span4 well"),
+      array("bean","jumpstart-info-for-current-und-1","span4 well"),
+      array("bean","jumpstart-info-for-current-under","span4 well"),
+      array("bean","jumpstart-info-for-prospective-0","span4 well"),
+      array("bean","jumpstart-info-for-prospective-1","span4 well"),
+      array("bean","jumpstart-info-for-prospective-g","span4 well"),
+      array("bean","jumpstart-twitter-block","well"),
+      array("bean","jumpstart-why-i-teach","well"),
+      array("bean","jumpstart-why-i-teach-block","well"),
+      array("bean","optional-footer-block","span4"),
+      array("bean","social-media","span4"),
+      array("ds_extras","contact","well"),
+      array("ds_extras","office_hours","well"),
+      array("menu","menu-admin-shortcuts-add-feature","shortcuts-features"),
+      array("menu","menu-admin-shortcuts-get-help","shortcuts-help"),
+      array("menu","menu-admin-shortcuts-home","shortcuts-home"),
+      array("menu","menu-admin-shortcuts-logout-link","shortcuts-logout"),
+      array("menu","menu-admin-shortcuts-ready-to-la","shortcuts-launch"),
+      array("menu","menu-admin-shortcuts-site-action","shortcuts-actions shortcuts-dropdown"),
+      array("menu","menu-footer-news-events-menu","span2"),
+      array("menu","menu-footer-people-menu","span2"),
+      array("menu","menu-footer-academics-menu","span2"),
+      array("menu","menu-footer-about-menu","span2"),
+      array("stanford_jumpstart_layouts","jumpstart-launch","shortcuts-launch-block"),
+      array("views","-exp-publications-page","well"),
+      array("views","f73ff55b085ea49217d347de6630cd5a","well"),
+      array("views","jumpstart_current_user-block","shortcuts-user"),
+      array("views","publications_common-block_4","well"),
+      array("views","stanford_news-block","well"),
+      array("views","stanford_events_views-block","well"),
+      array("views","-exp-stanford_person_staff-page","well"),
+      array("views","-exp-stanford_news-page_1","well"),
+      array("views","-exp-courses-search_page","well"),
+      array("views","442e92af913370af5bffd333a036ceaa","well"),
+      array("views","b38da907588eed2d09c10bdb381e5aaf","well"),
+      array("views","4066d038591af2b511f66557e5ac41e8","well"),
+      array("views","2d9147be40cd77d32915a554bf315858","well"),
+      array("views","85c57f65aa0dee37d8aa5a5031e564bc","well"),
+      array("views","5c84bdc5ea8289bceed723799d38940f","well"),
+    );
+
+    // Key all the values.
+    $insert = db_insert('block_class')->fields($fields);
+    foreach ($values as $k => $value) {
+      $db_values = array_combine($fields, $value);
+      $insert->values($db_values);
+    }
+    $insert->execute();
+
+    drush_log('JSA - Finished installing block classes.', 'ok');
+
+  }
+
+  // ---------------------------------------------------------------------------
+
+  /**
+   * Create redirects
+   * Unlike block classes, we can do this in a programmatic way.
+   */
+  public function install_redirects(&$install_state) {
+    // Create redirects.
+    $redirects = array(
+      'news' => 'news/recent-news',
+      'events' => 'events/upcoming-events',
+      'about' => 'about/about-us',
+    );
+
+    foreach ($redirects as $source => $dest) {
+      $redirect = new stdClass();
+      $source_path = drupal_lookup_path('source', $source);
+
+      if ($source_path == FALSE || $source_path == "<front>" || $source_path == "home") {
+        $source_path = $source;
+      }
+
+      if (drupal_lookup_path('source', $dest)) {
+        $dest = drupal_lookup_path('source', $dest);
+      }
+
+      // Check to see if redirect exists first.
+      $found = redirect_load_by_source($source_path);
+      if (!empty($found)) {
+        // Redirect exists.
+        continue;
+      }
+
+      module_invoke(
+        'redirect',
+        'object_prepare',
+        $redirect,
+        array(
+          'source' => $source_path,
+          'source_options' => array(),
+          'redirect' => $dest,
+          'redirect_options' => array(),
+          'language' => LANGUAGE_NONE,
+        )
+      );
+
+      if ($source_path !== $dest) {
+        module_invoke('redirect', 'save', $redirect);
+      }
+
+    }
+
+    drush_log('JS+ - Finished installing redirects.', 'ok');
+
+
+
+  }
+
+  // ---------------------------------------------------------------------------
+
+  /**
    * Base configuraiton for jumpstart sites :O
    * Set variables, enable themes, adjust blocks, and set pathologic
    * @param  [array] $install_state [the current installation state]
@@ -184,7 +340,6 @@ class JumpstartSitesPlus extends JumpstartSites {
 
     // Set menu position default setting to 'mark the rule's parent menu item as being "active".'
     variable_set('menu_position_active_link_display', 'parent');
-
     drush_log('JS+ - Finished install settings', 'ok');
   }
 
@@ -325,124 +480,6 @@ class JumpstartSitesPlus extends JumpstartSites {
 
     drush_log('JS+ - Finished updating menu wieghts', 'ok');
 
-    // Block clases.
-    $fields = array('module', 'delta', 'css_class');
-    $values = array(
-      array("bean","jumpstart-home-page-about","well"),
-      array("bean","homepage-about-block", 'well'),
-      array("bean","jumpstart-home-page-information-",'well'),
-      array("bean","homepage-banner-image","block-no-bottom-margin"),
-      array("bean","jumpstart-affiliated-programs","well"),
-      array("bean","jumpstart-contact-us-postcard","well"),
-      array("bean","jumpstart-degree-programs-info-f","well"),
-      array("bean","jumpstart-featured-course","well"),
-      array("bean","jumpstart-featured-event","well"),
-      array("bean","jumpstart-featured-event-block","well"),
-      array("bean","jumpstart-footer-contact-block","span2"),
-      array("bean","jumpstart-footer-social-media--0","span2"),
-      array("bean","jumpstart-footer-social-media-co","span4"),
-      array("bean","jumpstart-graduate-student-sideb","well"),
-      array("bean","jumpstart-home-page-academics","well"),
-      array("bean","jumpstart-info-for-current-gra-0","span4 well"),
-      array("bean","jumpstart-info-for-current-gra-1","span4 well"),
-      array("bean","jumpstart-info-for-current-gradu","span4 well"),
-      array("bean","jumpstart-info-for-current-und-0","span4 well"),
-      array("bean","jumpstart-info-for-current-und-1","span4 well"),
-      array("bean","jumpstart-info-for-current-under","span4 well"),
-      array("bean","jumpstart-info-for-prospective-0","span4 well"),
-      array("bean","jumpstart-info-for-prospective-1","span4 well"),
-      array("bean","jumpstart-info-for-prospective-g","span4 well"),
-      array("bean","jumpstart-twitter-block","well"),
-      array("bean","jumpstart-why-i-teach","well"),
-      array("bean","jumpstart-why-i-teach-block","well"),
-      array("bean","optional-footer-block","span4"),
-      array("bean","social-media","span4"),
-      array("ds_extras","contact","well"),
-      array("ds_extras","office_hours","well"),
-      array("menu","menu-admin-shortcuts-add-feature","shortcuts-features"),
-      array("menu","menu-admin-shortcuts-get-help","shortcuts-help"),
-      array("menu","menu-admin-shortcuts-home","shortcuts-home"),
-      array("menu","menu-admin-shortcuts-logout-link","shortcuts-logout"),
-      array("menu","menu-admin-shortcuts-ready-to-la","shortcuts-launch"),
-      array("menu","menu-admin-shortcuts-site-action","shortcuts-actions shortcuts-dropdown"),
-      array("menu","menu-footer-news-events-menu","span2"),
-      array("menu","menu-footer-people-menu","span2"),
-      array("menu","menu-footer-academics-menu","span2"),
-      array("menu","menu-footer-about-menu","span2"),
-      array("stanford_jumpstart_layouts","jumpstart-launch","shortcuts-launch-block"),
-      array("views","-exp-publications-page","well"),
-      array("views","f73ff55b085ea49217d347de6630cd5a","well"),
-      array("views","jumpstart_current_user-block","shortcuts-user"),
-      array("views","publications_common-block_4","well"),
-      array("views","stanford_news-block","well"),
-      array("views","stanford_events_views-block","well"),
-      array("views","-exp-stanford_person_staff-page","well"),
-      array("views","-exp-stanford_news-page_1","well"),
-      array("views","-exp-courses-search_page","well"),
-      array("views","442e92af913370af5bffd333a036ceaa","well"),
-      array("views","b38da907588eed2d09c10bdb381e5aaf","well"),
-      array("views","4066d038591af2b511f66557e5ac41e8","well"),
-      array("views","2d9147be40cd77d32915a554bf315858","well"),
-      array("views","85c57f65aa0dee37d8aa5a5031e564bc","well"),
-      array("views","5c84bdc5ea8289bceed723799d38940f","well"),
-    );
-
-    // Key all the values.
-    $insert = db_insert('block_class')->fields($fields);
-    foreach ($values as $k => $value) {
-      $db_values = array_combine($fields, $value);
-      $insert->values($db_values);
-    }
-    $insert->execute();
-
-    drush_log('JSA - Finished installing block classes.', 'ok');
-
-    // Create redirects.
-    $redirects = array(
-      'news' => 'news/recent-news',
-      'events' => 'events/upcoming-events',
-      'about' => 'about/about-us',
-    );
-
-    foreach ($redirects as $source => $dest) {
-      $redirect = new stdClass();
-      $source_path = drupal_lookup_path('source', $source);
-
-      if ($source_path == FALSE || $source_path == "<front>" || $source_path == "home") {
-        $source_path = $source;
-      }
-
-      if (drupal_lookup_path('source', $dest)) {
-        $dest = drupal_lookup_path('source', $dest);
-      }
-
-      // Check to see if redirect exists first.
-      $found = redirect_load_by_source($source_path);
-      if (!empty($found)) {
-        // Redirect exists.
-        continue;
-      }
-
-      module_invoke(
-        'redirect',
-        'object_prepare',
-        $redirect,
-        array(
-          'source' => $source_path,
-          'source_options' => array(),
-          'redirect' => $dest,
-          'redirect_options' => array(),
-          'language' => LANGUAGE_NONE,
-        )
-      );
-
-      if ($source_path !== $dest) {
-        module_invoke('redirect', 'save', $redirect);
-      }
-
-    }
-
-    drush_log('JS+ - Finished installing redirects.', 'ok');
   }
 
 
