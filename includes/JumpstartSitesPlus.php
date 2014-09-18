@@ -149,6 +149,7 @@ class JumpstartSitesPlus extends JumpstartSites {
       '68d11514-1a52-4716-94b4-3ef0110e75b2', // Jumpstart Lead Text With Body
       '8c4ed672-debf-45a5-8dfc-ef42794b975b', // Jumpstart Homepage Tall Banner
       'b7a04511-fcdb-49c4-a0c0-d4340cb35746', // Announcements
+      '8dc5934a-ee22-4c48-a125-d78ce3293ffa', // Jumpstart Affiliated Programs
     );
 
     $importer = new SitesContentImporter();
