@@ -179,6 +179,12 @@ class JumpstartSitesPlus extends JumpstartSites {
     // Set the default theme
     variable_set('theme_default', 'stanford_framework');
 
+    $page_not_found = drupal_lookup_path('source', '404');
+    variable_set('site_404', $page_not_found);
+
+    // Set menu position default setting to 'mark the rule's parent menu item as being "active".'
+    variable_set('menu_position_active_link_display', 'parent');
+
     drush_log('JS+ - Finished install settings', 'ok');
   }
 
