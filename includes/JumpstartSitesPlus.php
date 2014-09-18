@@ -185,6 +185,7 @@ class JumpstartSitesPlus extends JumpstartSites {
    * Insert the module, delta, and class name into the {block_class} table
    */
   public function install_block_classes(&$install_state) {
+    drush_log('JS+ - Starting to install block classes.', 'status');
     // Block clases.
     $fields = array('module', 'delta', 'css_class');
     $values = array(
@@ -255,7 +256,7 @@ class JumpstartSitesPlus extends JumpstartSites {
     }
     $insert->execute();
 
-    drush_log('JSA - Finished installing block classes.', 'ok');
+    drush_log('JS+ - Finished installing block classes.', 'ok');
 
   }
 
@@ -266,6 +267,7 @@ class JumpstartSitesPlus extends JumpstartSites {
    * Unlike block classes, we can do this in a programmatic way.
    */
   public function install_redirects(&$install_state) {
+    drush_log('JS+ - Starting to install redirects', 'status');
     // Create redirects.
     $redirects = array(
       'news' => 'news/recent-news',
@@ -354,7 +356,7 @@ class JumpstartSitesPlus extends JumpstartSites {
    * @param  [type] $install_state [description]
    */
   public function install_menu_items(&$install_state) {
-    drush_log('JS+ - starting create menu items', 'ok');
+    drush_log('JS+ - Starting to create menu items', 'status');
     $items = array();
 
     // Rebuild the menu cache before starting this.
