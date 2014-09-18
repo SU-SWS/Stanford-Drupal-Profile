@@ -248,19 +248,26 @@ class JumpstartSitesPlus extends JumpstartSites {
       'menu_name' => 'main-menu',
       'weight' => -6,
     );
+    // Programs
+    $items['programs'] = array(
+      'link_path' => drupal_get_normal_path('programs'),
+      'link_title' => 'Programs',
+      'menu_name' => 'main-menu',
+      'weight' => -5,
+    );
     // About
     $items['about'] = array(
       'link_path' => drupal_get_normal_path('about'),
       'link_title' => 'About',
       'menu_name' => 'main-menu',
-      'weight' => -5,
+      'weight' => -4,
     );
     // About / About Us
     $items['about/about-us'] = array(
       'link_path' => drupal_get_normal_path('about/about-us'),
       'link_title' => 'Contact',
       'menu_name' => 'main-menu',
-      'weight' => -7,
+      'weight' => -8,
       'parent' => 'about', // must be saved prior to contact item.
     );
     // About / Contact
@@ -268,7 +275,7 @@ class JumpstartSitesPlus extends JumpstartSites {
       'link_path' => drupal_get_normal_path('about/contact'),
       'link_title' => 'Contact',
       'menu_name' => 'main-menu',
-      'weight' => -8,
+      'weight' => -7,
       'parent' => 'about', // must be saved prior to contact item.
     );
 
