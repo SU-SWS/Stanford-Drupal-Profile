@@ -51,6 +51,7 @@ dependencies[] = stanford_landing_page
 dependencies[] = stanford_jumpstart_home
 
 ; JS+ Dependencies
+dependencies[] = stanford_jumpstart_plus
 dependencies[] = stanford_news
 dependencies[] = stanford_news_views
 dependencies[] = stanford_events_importer
