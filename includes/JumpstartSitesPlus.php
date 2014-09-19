@@ -531,7 +531,7 @@ class JumpstartSitesPlus extends JumpstartSites {
     variable_set('stanford_jumpstart_home_active', $default);
     variable_set('context_status', $context_status);
 
-    drush_log('JSV - Finished Configuring Home Page Layouts', 'ok');
+    drush_log('JS+ - Finished Configuring Home Page Layouts', 'ok');
 
   }
 
