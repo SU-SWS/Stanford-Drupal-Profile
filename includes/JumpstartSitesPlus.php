@@ -47,6 +47,14 @@ class JumpstartSitesPlus extends JumpstartSites {
       'run' => INSTALL_TASK_RUN_IF_NOT_COMPLETED,
     );
 
+    $tasks['jsplus_menu_rules'] = array(
+      'display_name' => st('Set Menu Position Rules'),
+      'display' => FALSE,
+      'type' => 'normal',
+      'function' => 'menu_rules',
+      'run' => INSTALL_TASK_RUN_IF_NOT_COMPLETED,
+    );
+
     $tasks['jsplus_install_block_classes'] = array(
       'display_name' => st('JS+ Install Block Classes.'),
       'display' => TRUE,
@@ -119,6 +127,75 @@ class JumpstartSitesPlus extends JumpstartSites {
   // ---------------------------------------------------------------------------
 
   /**
+   * Insert the menu position rules.
+   * @param  [type] $install_state [description]
+   * @return [type]                [description]
+   */
+  public function menu_rules(&$install_state) {
+    drush_log('JSA - Starting menu rules');
+
+    // Define the rules.
+    $rules = array();
+    $rules[] = array(
+      'link_title' => 'About',
+      'admin_title' => 'About by path',
+      'conditions' => array(
+        'pages' => array(
+          'pages' => 'about/*',
+        ),
+      ),
+    );
+    $rules[] = array(
+      'link_title' => 'News',
+      'admin_title' => 'News by content type',
+      'conditions' => array(
+        'content_type' => array(
+          'content_type' => array(
+            'stanford_news_item' => 'stanford_news_item',
+          ),
+        ),
+      ),
+    );
+    $rules[] = array(
+      'link_title' => 'News',
+      'admin_title' => 'News by path',
+      'conditions' => array(
+        'pages' => array(
+          'pages' => 'news/*',
+        ),
+      ),
+    );
+    $rules[] = array(
+      'link_title' => 'Events',
+      'admin_title' => 'Events by content type',
+      'conditions' => array(
+        'content_type' => array(
+          'content_type' => array(
+            'stanford_event' => 'stanford_event',
+          ),
+        ),
+      ),
+    );
+    $rules[] = array(
+      'link_title' => 'Events',
+      'admin_title' => 'Events by path',
+      'conditions' => array(
+        'pages' => array(
+          'pages' => 'events/*',
+        ),
+      ),
+    );
+
+    foreach ($rules as $mp_rule) {
+      $this->insert_menu_rule($mp_rule);
+    }
+
+    drush_log('JSA - Finished menu rules');
+  }
+
+  // ---------------------------------------------------------------------------
+
+  /**
    * Import content from the content server.
    * @param  [type] $install_state [description]
    * @return [type]                [description]
@@ -149,6 +226,31 @@ class JumpstartSitesPlus extends JumpstartSites {
     $importer->set_endpoint($endpoint);
     $importer->add_restricted_vocabularies($restrict);
     $importer->import_vocabulary_trees();
+
+    // NODES
+    // Import types
+    $content_types = array(
+      'stanford_event',
+      'stanford_event_importer',
+      'article',
+      'stanford_person',
+      'stanford_publication',
+      'stanford_news_item',
+      'stanford_course',
+    );
+
+    // Restrictions
+    // These entities we do not want even if they appear in the feed.
+    $restrict = array(
+      '2efac412-06d7-42b4-bf75-74067879836c',   // Recent News Page
+      '6d48181f-7387-40e8-81ba-199de7ede938',   // Courses Page.
+    );
+
+    $importer = new SitesContentImporter();
+    $importer->set_endpoint($endpoint);
+    $importer->add_import_content_type($content_types);
+    $importer->add_uuid_restrictions($restrict);
+    $importer->importer_content_nodes_recent_by_type();
 
     // JS+ ONLY CONTENT
     $filters = array('sites_products' => array('41'));  // 41 is term id for JS+
@@ -208,10 +310,12 @@ class JumpstartSitesPlus extends JumpstartSites {
       array("bean","jumpstart-featured-course","well"),
       array("bean","jumpstart-featured-event","well"),
       array("bean","jumpstart-featured-event-block","well"),
-      array("bean","jumpstart-footer-contact-block","span2"),
-      array("bean","jumpstart-footer-social-media--0","span2"),
-      array("bean","jumpstart-footer-social-media-co","span4"),
+      array("bean","jumpstart-footer-contact-block","span3"),
+      array("bean","jumpstart-footer-social-media--0","span3"),
+      array("bean","jumpstart-footer-social-media-co","span3"),
       array("bean","jumpstart-graduate-student-sideb","well"),
+      array("bean","jumpstart-homepage-announcements","well"),
+      array("bean","jumpstart-homepage-testimonial-b","span6"),
       array("bean","jumpstart-home-page-academics","well"),
       array("bean","jumpstart-info-for-current-gra-0","span4 well"),
       array("bean","jumpstart-info-for-current-gra-1","span4 well"),
@@ -222,10 +326,13 @@ class JumpstartSitesPlus extends JumpstartSites {
       array("bean","jumpstart-info-for-prospective-0","span4 well"),
       array("bean","jumpstart-info-for-prospective-1","span4 well"),
       array("bean","jumpstart-info-for-prospective-g","span4 well"),
+      array("bean","jumpstart-info-text-block","span6"),
+      array("bean","jumpstart-lead-text-with-body","span6"),
+      array("bean","jumpstart-postcard-with-video","span6"),
       array("bean","jumpstart-twitter-block","well"),
       array("bean","jumpstart-why-i-teach","well"),
       array("bean","jumpstart-why-i-teach-block","well"),
-      array("bean","optional-footer-block","span4"),
+      array("bean","optional-footer-block","span3"),
       array("bean","social-media","span4"),
       array("ds_extras","contact","well"),
       array("ds_extras","office_hours","well"),
@@ -239,6 +346,7 @@ class JumpstartSitesPlus extends JumpstartSites {
       array("menu","menu-footer-people-menu","span2"),
       array("menu","menu-footer-academics-menu","span2"),
       array("menu","menu-footer-about-menu","span2"),
+      array("menu","menu-related-links","span3"),
       array("stanford_jumpstart_layouts","jumpstart-launch","shortcuts-launch-block"),
       array("views","-exp-publications-page","well"),
       array("views","f73ff55b085ea49217d347de6630cd5a","well"),
@@ -407,6 +515,16 @@ class JumpstartSitesPlus extends JumpstartSites {
       'router_path' => 'events/upcoming-events',
       'customized' => 1,
     );
+    // Events / Past
+    $items['events/past-events'] = array(
+      'link_path' => 'events/past-events',
+      'link_title' => 'Past Events',
+      'menu_name' => 'main-menu',
+      'weight' => -9,
+      'parent' => 'events',
+      'router_path' => drupal_get_normal_path('events/past-events'),
+      'customized' => 1,
+    );
     // Research
     $items['research'] = array(
       'link_path' => drupal_get_normal_path('research'),
@@ -451,8 +569,8 @@ class JumpstartSitesPlus extends JumpstartSites {
       'weight' => -7,
       'parent' => 'about', // must be saved prior to contact item.
     );
-
-
+    // put the Views in the DB
+    $this->save_all_default_views_to_db();
     // Loop through each of the items and save them.
     foreach ($items as $k => $v) {
 
@@ -469,7 +587,8 @@ class JumpstartSitesPlus extends JumpstartSites {
       $items[$k] = $v;
 
     }
-
+    // Back to code!
+    $this->remove_all_default_views_from_db();
     drush_log('JS+ - Finished create menu items', 'ok');
 
 
