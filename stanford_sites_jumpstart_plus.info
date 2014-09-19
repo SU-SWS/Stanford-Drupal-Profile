@@ -23,6 +23,8 @@ dependencies[] = stanford_news
 dependencies[] = stanford_news_views
 dependencies[] = stanford_events_importer
 dependencies[] = stanford_events_views
+dependencies[] = stanford_jsplus_layouts
+dependencies[] = stanford_jsplus_permissions
 
 ; Do not enable these modules during installation. Disables all
 ; parent dependency declarations

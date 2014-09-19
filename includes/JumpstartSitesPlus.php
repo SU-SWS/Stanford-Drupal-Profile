@@ -429,7 +429,7 @@ class JumpstartSitesPlus extends JumpstartSites {
     // About / About Us
     $items['about/about-us'] = array(
       'link_path' => drupal_get_normal_path('about/about-us'),
-      'link_title' => 'Contact',
+      'link_title' => 'About Us',
       'menu_name' => 'main-menu',
       'weight' => -8,
       'parent' => 'about', // must be saved prior to contact item.
