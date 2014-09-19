@@ -305,8 +305,9 @@ class JumpstartSitesPlus extends JumpstartSites {
       array("bean","jumpstart-footer-social-media--0","span3"),
       array("bean","jumpstart-footer-social-media-co","span3"),
       array("bean","jumpstart-graduate-student-sideb","well"),
-      array("bean","jumpstart-home-page-academics","well"),
+      array("bean","jumpstart-homepage-announcements","well"),
       array("bean","jumpstart-homepage-testimonial-b","span6"),
+      array("bean","jumpstart-home-page-academics","well"),
       array("bean","jumpstart-info-for-current-gra-0","span4 well"),
       array("bean","jumpstart-info-for-current-gra-1","span4 well"),
       array("bean","jumpstart-info-for-current-gradu","span4 well"),
@@ -512,7 +513,7 @@ class JumpstartSitesPlus extends JumpstartSites {
       'menu_name' => 'main-menu',
       'weight' => -9,
       'parent' => 'events',
-      'router_path' => 'events/past-events',
+      'router_path' => drupal_get_normal_path('events/past-events'),
       'customized' => 1,
     );
     // Research
@@ -559,8 +560,8 @@ class JumpstartSitesPlus extends JumpstartSites {
       'weight' => -7,
       'parent' => 'about', // must be saved prior to contact item.
     );
-
-
+    // put the Views in the DB
+    $this->save_all_default_views_to_db();
     // Loop through each of the items and save them.
     foreach ($items as $k => $v) {
 
@@ -577,7 +578,8 @@ class JumpstartSitesPlus extends JumpstartSites {
       $items[$k] = $v;
 
     }
-
+    // Back to code!
+    $this->remove_all_default_views_from_db();
     drush_log('JS+ - Finished create menu items', 'ok');
 
 
