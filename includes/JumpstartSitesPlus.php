@@ -46,6 +46,14 @@ class JumpstartSitesPlus extends JumpstartSites {
       'run' => INSTALL_TASK_RUN_IF_NOT_COMPLETED,
     );
 
+    $tasks['jsplus_menu_rules'] = array(
+      'display_name' => st('Set Menu Position Rules'),
+      'display' => FALSE,
+      'type' => 'normal',
+      'function' => 'menu_rules',
+      'run' => INSTALL_TASK_RUN_IF_NOT_COMPLETED,
+    );
+
     $tasks['jsplus_install_block_classes'] = array(
       'display_name' => st('JS+ Install Block Classes.'),
       'display' => TRUE,
@@ -106,6 +114,75 @@ class JumpstartSitesPlus extends JumpstartSites {
 
   // TASKS
   // ///////////////////////////////////////////////////////////////////////////
+
+  // ---------------------------------------------------------------------------
+
+  /**
+   * Insert the menu position rules.
+   * @param  [type] $install_state [description]
+   * @return [type]                [description]
+   */
+  public function menu_rules(&$install_state) {
+    drush_log('JSA - Starting menu rules');
+
+    // Define the rules.
+    $rules = array();
+    $rules[] = array(
+      'link_title' => 'About',
+      'admin_title' => 'About by path',
+      'conditions' => array(
+        'pages' => array(
+          'pages' => 'about/*',
+        ),
+      ),
+    );
+    $rules[] = array(
+      'link_title' => 'News',
+      'admin_title' => 'News by content type',
+      'conditions' => array(
+        'content_type' => array(
+          'content_type' => array(
+            'stanford_news_item' => 'stanford_news_item',
+          ),
+        ),
+      ),
+    );
+    $rules[] = array(
+      'link_title' => 'News',
+      'admin_title' => 'News by path',
+      'conditions' => array(
+        'pages' => array(
+          'pages' => 'news/*',
+        ),
+      ),
+    );
+    $rules[] = array(
+      'link_title' => 'Events',
+      'admin_title' => 'Events by content type',
+      'conditions' => array(
+        'content_type' => array(
+          'content_type' => array(
+            'stanford_event' => 'stanford_event',
+          ),
+        ),
+      ),
+    );
+    $rules[] = array(
+      'link_title' => 'Events',
+      'admin_title' => 'Events by path',
+      'conditions' => array(
+        'pages' => array(
+          'pages' => 'events/*',
+        ),
+      ),
+    );
+
+    foreach ($rules as $mp_rule) {
+      $this->insert_menu_rule($mp_rule);
+    }
+
+    drush_log('JSA - Finished menu rules');
+  }
 
   // ---------------------------------------------------------------------------
 
