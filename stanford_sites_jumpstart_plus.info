@@ -24,13 +24,13 @@ dependencies[] = stanford_news_views
 dependencies[] = stanford_events_importer
 dependencies[] = stanford_events_views
 
-
 ; Do not enable these modules during installation. Disables all
 ; parent dependency declarations
 prohibit[] = stanford_wysiwyg
 prohibit[] = toolbar
 prohibit[] = stanford_jumpstart_wysiwyg
 prohibit[] = stanford_jumpstart_layouts
+prohibit[] = stanford_jumpstart_site_actions
 
 ; Includes and Profile Classes.
 files[] = includes/JumpstartSitesPlus.php
