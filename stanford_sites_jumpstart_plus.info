@@ -32,6 +32,7 @@ prohibit[] = stanford_wysiwyg
 prohibit[] = toolbar
 prohibit[] = stanford_jumpstart_wysiwyg
 prohibit[] = stanford_jumpstart_layouts
+prohibit[] = stanford_jumpstart_site_actions
 
 ; Includes and Profile Classes.
 files[] = includes/JumpstartSitesPlus.php
