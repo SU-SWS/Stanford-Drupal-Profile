@@ -141,6 +141,31 @@ class JumpstartSitesPlus extends JumpstartSites {
     $importer->add_restricted_vocabularies($restrict);
     $importer->import_vocabulary_trees();
 
+    // NODES
+    // Import types
+    $content_types = array(
+      'stanford_event',
+      'stanford_event_importer',
+      'article',
+      'stanford_person',
+      'stanford_publication',
+      'stanford_news_item',
+      'stanford_course',
+    );
+
+    // Restrictions
+    // These entities we do not want even if they appear in the feed.
+    $restrict = array(
+      '2efac412-06d7-42b4-bf75-74067879836c',   // Recent News Page
+      '6d48181f-7387-40e8-81ba-199de7ede938',   // Courses Page.
+    );
+
+    $importer = new SitesContentImporter();
+    $importer->set_endpoint($endpoint);
+    $importer->add_import_content_type($content_types);
+    $importer->add_uuid_restrictions($restrict);
+    $importer->importer_content_nodes_recent_by_type();
+
     // JS+ ONLY CONTENT
     $filters = array('sites_products' => array('41'));  // 41 is term id for JS+
     $view_importer = new SitesContentImporterViews();
