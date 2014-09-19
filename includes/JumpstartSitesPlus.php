@@ -500,7 +500,7 @@ class JumpstartSitesPlus extends JumpstartSites {
    */
   public function configure_homepage_layouts($install_state) {
 
-    drush_log('JSV - Configuring Home Page Layouts', 'ok');
+    drush_log('JS+ - Configuring Home Page Layouts', 'ok');
 
     $default = 'stanford_jumpstart_home_palm_news_events';
     $context_status = variable_get('context_status', array());
