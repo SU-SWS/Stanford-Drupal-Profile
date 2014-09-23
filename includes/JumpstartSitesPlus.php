@@ -570,7 +570,7 @@ class JumpstartSitesPlus extends JumpstartSites {
       'parent' => 'about', // must be saved prior to contact item.
     );
     // put the Views in the DB
-    $this->save_all_default_views_to_db();
+    $this->save_all_default_views_to_db($install_state);
     // Loop through each of the items and save them.
     foreach ($items as $k => $v) {
 
@@ -588,7 +588,7 @@ class JumpstartSitesPlus extends JumpstartSites {
 
     }
     // Back to code!
-    $this->remove_all_default_views_from_db();
+    $this->remove_all_default_views_from_db($install_state);
     drush_log('JS+ - Finished create menu items', 'ok');
 
 
