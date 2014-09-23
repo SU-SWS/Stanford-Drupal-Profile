@@ -18,7 +18,7 @@ api = 2
 ; Core project
 ; ------------
 projects[drupal][type] = core
-projects[drupal][version] = 6.32
+projects[drupal][version] = 6.33
 
 ; Projects
 ; --------
@@ -39,30 +39,30 @@ projects[cnr] = 4.1
 projects[css_injector] = 1.4
 projects[ctools] = 1.11
 projects[custom_breadcrumbs] = 2.0-rc1
-projects[date] = 2.9
+projects[date] = 2.10
 projects[diff] = 2.3
 projects[email] = 1.4
 projects[features] = 1.2
-projects[feeds] = 1.0-beta12
-projects[feeds_tamper] = 1.0-beta4
+projects[feeds] = 1.0-beta13
+projects[feeds_tamper] = 1.0
 projects[feeds_xpathparser] = 1.12
-projects[filefield] = 3.12
+projects[filefield] = 3.13
 projects[filefield_paths] = 1.4
 projects[globalredirect] = 1.5
 projects[google_analytics] = 3.3
 projects[imageapi] = 1.10
 projects[imagecache] = 2.0-rc1
 projects[imagecache_actions] = 1.8
-projects[imagefield] = 3.10
+projects[imagefield] = 3.11
 projects[insert] = 1.2
 projects[job_scheduler] = 1.0-beta3
 projects[jquery_ui] = 1.5
 projects[js_injector] = 1.1
 projects[libraries] = 1.0
-projects[link] = 2.9
+projects[link] = 2.11
 projects[menu_block] = 2.4
 projects[mollom] = 2.6
-projects[nodeformcols] = 1.6
+projects[nodeformcols] = 1.7
 projects[nodewords] = 1.14
 projects[nodewords_nodetype] = 1.8
 projects[node_clone] = 1.3
@@ -115,17 +115,17 @@ projects[webauth][download][tag] = 6.x-3.4
 ; Themes
 
 projects[tao] = 3.3
-projects[rubik] = 3.0-beta3
+projects[rubik] = 3.0-beta5
 
 projects[stanford_basic][type] = theme
 projects[stanford_basic][download][type] = git
 projects[stanford_basic][download][url] = "git@github.com:su-ddd/stanford_basic.git"
-projects[stanford_basic][download][tag] = 6.x-1.4
+projects[stanford_basic][download][tag] = 6.x-1.4-beta2
 
 projects[stanfordmodern][type] = theme
 projects[stanfordmodern][download][type] = git
 projects[stanfordmodern][download][url] = "git@github.com:su-ddd/stanfordmodern.git"
-projects[stanfordmodern][download][tag] = 6.x-1.42
+projects[stanfordmodern][download][tag] = 6.x-1.5-beta2
 
 ; Libraries
 
