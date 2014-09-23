@@ -152,7 +152,7 @@ projects[stanford_sites_helper][download][tag] = "7.x-1.2"
 projects[stanford_slides][type] = module
 projects[stanford_slides][download][type] = "git"
 projects[stanford_slides][download][url] = "git@github.com:SU-SWS/stanford_slides.git"
-projects[stanford_slides][download][tag] = "7.x-3.0-alpha4"
+projects[stanford_slides][download][tag] = "7.x-3.0-alpha3"
 projects[stanford_video][type] = module
 projects[stanford_video][download][type] = "git"
 projects[stanford_video][download][url] = "git@github.com:SU-SWS/stanford_video.git"
@@ -174,27 +174,27 @@ projects[webauth_extras][download][tag] = "7.x-1.0-alpha2"
 projects[stanfordmodern][type] = theme
 projects[stanfordmodern][download][type] = git
 projects[stanfordmodern][download][url] = git@github.com:su-ddd/stanfordmodern.git
-projects[stanfordmodern][download][tag] = "7.x-1.42"
+projects[stanfordmodern][download][tag] = "7.x-1.6"
 projects[stanford_basic][type] = theme
 projects[stanford_basic][download][type] = git
 projects[stanford_basic][download][url] = git@github.com:su-ddd/stanford_basic.git
-projects[stanford_basic][download][tag] = "7.x-1.4"
+projects[stanford_basic][download][tag] = "7.x-1.5"
 projects[open_framework][type] = theme
 projects[open_framework][download][type] = git
 projects[open_framework][download][url] = git@github.com:SU-SWS/open_framework.git
-projects[open_framework][download][tag] = "7.x-2.06"
+projects[open_framework][download][tag] = "7.x-2.1"
 projects[stanford_framework][type] = theme
 projects[stanford_framework][download][type] = git
 projects[stanford_framework][download][url] = git@github.com:SU-SWS/stanford_framework.git
-projects[stanford_framework][download][tag] = "7.x-2.03"
+projects[stanford_framework][download][tag] = "7.x-2.2"
 projects[stanford_jordan][type] = theme
 projects[stanford_jordan][download][type] = git
 projects[stanford_jordan][download][url] = git@github.com:SU-SWS/stanford_jordan.git
-projects[stanford_jordan][download][tag] = "7.x-2.0"
+projects[stanford_jordan][download][tag] = "7.x-2.1"
 projects[stanford_light][type] = theme
 projects[stanford_light][download][type] = git
 projects[stanford_light][download][url] = git@github.com:SU-SWS/stanford_light.git
-projects[stanford_light][download][tag] = "7.x-1.0-beta"
+projects[stanford_light][download][tag] = "7.x-1.1"
 projects[stanford_seven][type] = theme
 projects[stanford_seven][download][type] = git
 projects[stanford_seven][download][url] = git@github.com:SU-SWS/stanford_seven.git
@@ -202,7 +202,7 @@ projects[stanford_seven][download][tag] = "7.x-1.1"
 projects[stanford_wilbur][type] = theme
 projects[stanford_wilbur][download][type] = git
 projects[stanford_wilbur][download][url] = git@github.com:SU-SWS/stanford_wilbur.git
-projects[stanford_wilbur][download][tag] = "7.x-2.01"
+projects[stanford_wilbur][download][tag] = "7.x-2.1"
 
 
 ; Libraries
@@ -214,7 +214,7 @@ libraries[ckeditor][destination] = "../../sites/all/libraries"
 
 libraries[icalcreator][download][type] = "git"
 libraries[icalcreator][download][url] = "https://github.com/iCalcreator/iCalcreator.git"
-libraries[icalcreator][download][commit] = "579ee62eb0c1855668611be8bc3c61f5856e38e7"
+libraries[icalcreator][download][commit] = "e3dbec2cb3bb91a8bde989e467567ae8831a4026"
 libraries[icalcreator][directory_name] = "iCalcreator"
 libraries[icalcreator][destination] = "../../sites/all/libraries"
 
@@ -222,6 +222,12 @@ libraries[jquery_cycle][download][type] = "get"
 libraries[jquery_cycle][download][url] = "http://malsup.github.com/jquery.cycle.all.js"
 libraries[jquery_cycle][directory_name] = "jquery.cycle"
 libraries[jquery_cycle][destination] = "../../sites/all/libraries"
+
+libraries[jqueryuitimepicker][download][type] = "get"
+libraries[jqueryuitimepicker][download][url] = "https://github.com/trentrichardson/jQuery-Timepicker-Addon/archive/master.zip"
+libraries[jqueryuitimepicker][directory_name] = "jquery-ui-timepicker"
+libraries[jqueryuitimepicker][download][subtree] = "jQuery-Timepicker-Addon-master/src/"
+libraries[jqueryuitimepicker][destination] = "../../sites/all/libraries"
 
 libraries[jw_player][download][type] = "get"
 libraries[jw_player][download][url] = "http://www.longtailvideo.com/jw/upload/mediaplayer-5.10.zip"
