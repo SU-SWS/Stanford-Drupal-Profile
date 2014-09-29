@@ -219,6 +219,8 @@ class JumpstartSitesPlus extends JumpstartSites {
     $restrict = array(
       'tags',              // tags vocabulary
       'sites_products',    // products vocabulary
+      'news_categories',   // News categories.
+      'stanford_event_categories', // stanford_event_categories
     );
 
     // Vocabularies.
