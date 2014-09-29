@@ -275,7 +275,6 @@ class JumpstartSitesPlus extends JumpstartSites {
       '008d2300-a00d-4de9-bdce-39f7bc9f312d', // Jumpstart Homepage Mission Block 2
       '7c1bdc2c-cd07-4404-8403-8bdbe7ebc9bb', // Jumpstart Homepage Testimonial Block
       '68d11514-1a52-4716-94b4-3ef0110e75b2', // Jumpstart Lead Text With Body
-      '8c4ed672-debf-45a5-8dfc-ef42794b975b', // Jumpstart Homepage Tall Banner
       'b7a04511-fcdb-49c4-a0c0-d4340cb35746', // Announcements
       '8dc5934a-ee22-4c48-a125-d78ce3293ffa', // Jumpstart Affiliated Programs
     );
@@ -487,6 +486,16 @@ class JumpstartSitesPlus extends JumpstartSites {
       'link_title' => 'News',
       'menu_name' => 'main-menu',
       'weight' => -9,
+    );
+    // News / Subscribe
+    $items['news/subscribe'] = array(
+      'link_path' => drupal_get_normal_path('news/subscribe'),
+      'link_title' => 'Subscribe',
+      'menu_name' => 'main-menu',
+      'weight' => -10,
+      'router_path' => 'news/subscribe',
+      'parent' => 'news',
+      'customized' => 1,
     );
     // News / Recent News
     $items['news/recent-news'] = array(
