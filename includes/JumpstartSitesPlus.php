@@ -273,12 +273,11 @@ class JumpstartSitesPlus extends JumpstartSites {
       '864a97ac-ecd9-43b8-94be-da553c1e0426', // Jumpstart Footer Contact Block
       '67045bcc-06fc-4db8-9ef4-dd0ebb4e6d72', // Jumpstart Footer Optional Block
       'd643d114-c4bc-47b0-b0df-dbf1dc673a1a', // Jumpstart Info Text Block
-      'f00c9906-971f-4d9d-b75c-23db1499318c', // Jumpstart Homepage Mission Block 2 (this should be 1, I think)
+      'f00c9906-971f-4d9d-b75c-23db1499318c', // Jumpstart Homepage Mission Block
       '008d2300-a00d-4de9-bdce-39f7bc9f312d', // Jumpstart Homepage Mission Block 2
       '7c1bdc2c-cd07-4404-8403-8bdbe7ebc9bb', // Jumpstart Homepage Testimonial Block
       '68d11514-1a52-4716-94b4-3ef0110e75b2', // Jumpstart Lead Text With Body
       'b7a04511-fcdb-49c4-a0c0-d4340cb35746', // Announcements
-      '8dc5934a-ee22-4c48-a125-d78ce3293ffa', // Jumpstart Affiliated Programs
     );
 
     $importer = new SitesContentImporter();
@@ -304,7 +303,6 @@ class JumpstartSitesPlus extends JumpstartSites {
       array("bean","jumpstart-home-page-about","well"),
       array("bean","homepage-about-block", 'well'),
       array("bean","jumpstart-home-page-information-",'well'),
-      array("bean","homepage-banner-image","block-no-bottom-margin"),
       array("bean","jumpstart-affiliated-programs","well"),
       array("bean","jumpstart-contact-us-postcard","well"),
       array("bean","jumpstart-degree-programs-info-f","well"),
@@ -316,7 +314,6 @@ class JumpstartSitesPlus extends JumpstartSites {
       array("bean","jumpstart-footer-social-media-co","span3"),
       array("bean","jumpstart-graduate-student-sideb","well"),
       array("bean","jumpstart-homepage-announcements","well"),
-      array("bean","jumpstart-homepage-testimonial-b","span6"),
       array("bean","jumpstart-home-page-academics","well"),
       array("bean","jumpstart-info-for-current-gra-0","span4 well"),
       array("bean","jumpstart-info-for-current-gra-1","span4 well"),
@@ -327,9 +324,27 @@ class JumpstartSitesPlus extends JumpstartSites {
       array("bean","jumpstart-info-for-prospective-0","span4 well"),
       array("bean","jumpstart-info-for-prospective-1","span4 well"),
       array("bean","jumpstart-info-for-prospective-g","span4 well"),
-      array("bean","jumpstart-info-text-block","span6"),
+      
+      // All layouts
       array("bean","jumpstart-lead-text-with-body","span6"),
+      
+      // Lomita
       array("bean","jumpstart-postcard-with-video","span6"),
+
+      // Mayfield
+      array("bean","jumpstart-homepage-testimonial-b","span6"),
+
+      // Palm
+      array("bean","jumpstart-homepage-tall-banner","span6"),
+
+      // Panama
+      array("bean","homepage-banner-image","block-no-bottom-margin span8"),
+
+      // Serra
+      array("bean","jumpstart-info-text-block","span3"),
+      array("bean","jumpstart-homepage-mission-block","mission-block"),
+      array("bean","jumpstart-homepage-mission-blo-0","mission-block"),
+
       array("bean","jumpstart-twitter-block","well"),
       array("bean","jumpstart-why-i-teach","well"),
       array("bean","jumpstart-why-i-teach-block","well"),
