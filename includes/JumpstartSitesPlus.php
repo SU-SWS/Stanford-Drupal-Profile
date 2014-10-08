@@ -335,7 +335,7 @@ class JumpstartSitesPlus extends JumpstartSites {
       array("bean","jumpstart-homepage-testimonial-b","span6"),
 
       // Palm
-      array("bean","jumpstart-homepage-tall-banner","span6"),
+      array("bean","jumpstart-homepage-tall-banner","span12"),
 
       // Panama
       array("bean","homepage-banner-image","block-no-bottom-margin span8"),
