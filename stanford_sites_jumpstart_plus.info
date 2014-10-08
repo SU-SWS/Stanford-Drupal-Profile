@@ -12,6 +12,7 @@ base = stanford_sites_jumpstart
 ; Some core dependencies.
 dependencies[] = node
 dependencies[] = filter
+dependencies[] = better_formats
 
 ; Stanford Features
 dependencies[] = stanford_landing_page
@@ -31,11 +32,13 @@ dependencies[] = stanford_jsplus_permissions
 ; parent dependency declarations
 prohibit[] = stanford_wysiwyg
 prohibit[] = toolbar
-prohibit[] = stanford_jumpstart_wysiwyg
 prohibit[] = stanford_jumpstart_layouts
 prohibit[] = stanford_jumpstart_site_actions
+prohibit[] = stanford_jumpstart_permissions
 
 ; Includes and Profile Classes.
 files[] = includes/JumpstartSitesPlus.php
 files[] = stanford_sites_jumpstart_plus.install
 files[] = stanford_sites_jumpstart_plus.profile
+
+
