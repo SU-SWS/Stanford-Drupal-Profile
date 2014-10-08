@@ -297,6 +297,20 @@ class JumpstartSitesPlus extends JumpstartSites {
    */
   public function install_block_classes(&$install_state) {
     drush_log('JS+ - Starting to install block classes.', 'status');
+
+    // Install contextual block class for Panama layout
+    $cbc_layouts = array();
+    $cbc_layouts['stanford_jumpstart_home_lomita']['bean-jumpstart-lead-text-with-body'][] = 'span6';
+    $cbc_layouts['stanford_jumpstart_home_mayfield']['bean-jumpstart-lead-text-with-body'][] = 'span6';
+    $cbc_layouts['stanford_jumpstart_home_mayfield_news_events']['bean-jumpstart-lead-text-with-body'][] = 'span6';
+    $cbc_layouts['stanford_jumpstart_home_palm']['bean-jumpstart-lead-text-with-body'][] = 'span6';
+    $cbc_layouts['stanford_jumpstart_home_palm_news_events']['bean-jumpstart-lead-text-with-body'][] = 'span6';
+    $cbc_layouts['stanford_jumpstart_home_panama']['bean-jumpstart-lead-text-with-body'][] = 'span4';
+    $cbc_layouts['stanford_jumpstart_home_panama_news_events']['bean-jumpstart-lead-text-with-body'][] = 'span4';
+    $cbc_layouts['stanford_jumpstart_home_serra']['bean-jumpstart-lead-text-with-body'][] = 'span6';
+    $cbc_layouts['stanford_jumpstart_home_serra_news_events']['bean-jumpstart-lead-text-with-body'][] = 'span6';
+    variable_set('contextual_block_class', $cbc_layouts);
+
     // Block clases.
     $fields = array('module', 'delta', 'css_class');
     $values = array(
@@ -324,9 +338,6 @@ class JumpstartSitesPlus extends JumpstartSites {
       array("bean","jumpstart-info-for-prospective-0","span4 well"),
       array("bean","jumpstart-info-for-prospective-1","span4 well"),
       array("bean","jumpstart-info-for-prospective-g","span4 well"),
-      
-      // All layouts
-      array("bean","jumpstart-lead-text-with-body","span6"),
       
       // Lomita
       array("bean","jumpstart-postcard-with-video","span6"),
