@@ -234,11 +234,7 @@ class JumpstartSitesPlus extends JumpstartSites {
     $content_types = array(
       'stanford_event',
       'stanford_event_importer',
-      'article',
-      'stanford_person',
-      'stanford_publication',
       'stanford_news_item',
-      'stanford_course',
     );
 
     // Restrictions
