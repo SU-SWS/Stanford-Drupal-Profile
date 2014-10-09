@@ -338,7 +338,7 @@ class JumpstartSitesPlus extends JumpstartSites {
       array("bean","jumpstart-info-for-prospective-0","span4 well"),
       array("bean","jumpstart-info-for-prospective-1","span4 well"),
       array("bean","jumpstart-info-for-prospective-g","span4 well"),
-      
+
       // Lomita
       array("bean","jumpstart-postcard-with-video","span6"),
 
@@ -685,6 +685,7 @@ class JumpstartSitesPlus extends JumpstartSites {
 
     // Save settings
     variable_set('stanford_jumpstart_home_active', $default);
+    variable_set('stanford_jumpstart_home_active_body_class', 'stanford-jumpstart-home-palm');
     variable_set('context_status', $context_status);
 
     drush_log('JS+ - Finished Configuring Home Page Layouts', 'ok');
