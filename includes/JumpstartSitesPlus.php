@@ -209,7 +209,7 @@ class JumpstartSitesPlus extends JumpstartSites {
 
      // Now that the library exists lets add our own custom processors.
     require_once "ImporterFieldProcessorCustomFieldSDestinationPublish.php";
-    require_once "ImporterFieldProcessorCustomBody.php";
+    // require_once "ImporterFieldProcessorCustomBody.php";
 
     // Where we getting the stuff man?
     $endpoint = (!empty($vars['fetch_endpoint'])) ? $vars['fetch_endpoint'] : 'https://sites.stanford.edu/jsa-content/jsainstall';
