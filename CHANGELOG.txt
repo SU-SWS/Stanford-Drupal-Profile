@@ -1,6 +1,13 @@
 Stanford Profile 7.x-x.x xxxx-xx-xx
 -----------------------------------
 
+Stanford Profile 7.x-1.2 2014-10-23
+-----------------------------------
+Changes since 7.x-1.1:
+By jbickar:
+  - Place search form in search_box region in stanford_light
+  - Set Pathauto to reduce paths to numbers and letters
+
 Stanford Profile 7.x-1.1 2014-08-28
 -----------------------------------
 By jbickar:
