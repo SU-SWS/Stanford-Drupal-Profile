@@ -132,7 +132,7 @@ class JumpstartSitesPlus extends JumpstartSites {
    * @return [type]                [description]
    */
   public function menu_rules(&$install_state) {
-    drush_log('JSA - Starting menu rules');
+    drush_log('JS+ - Starting menu rules');
 
     // Define the rules.
     $rules = array();
@@ -190,7 +190,7 @@ class JumpstartSitesPlus extends JumpstartSites {
       $this->insert_menu_rule($mp_rule);
     }
 
-    drush_log('JSA - Finished menu rules');
+    drush_log('JS+ - Finished menu rules');
   }
 
   // ---------------------------------------------------------------------------
@@ -550,12 +550,12 @@ class JumpstartSitesPlus extends JumpstartSites {
     );
     // Events / Past
     $items['events/past-events'] = array(
-      'link_path' => 'events/past-events',
+      'link_path' => drupal_get_normal_path('events/past-events'),
       'link_title' => 'Past Events',
       'menu_name' => 'main-menu',
       'weight' => -9,
       'parent' => 'events',
-      'router_path' => drupal_get_normal_path('events/past-events'),
+      'router_path' => 'events/past-events',
       'customized' => 1,
     );
     // Research
