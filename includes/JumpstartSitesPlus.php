@@ -550,12 +550,12 @@ class JumpstartSitesPlus extends JumpstartSites {
     );
     // Events / Past
     $items['events/past-events'] = array(
-      'link_path' => 'events/past-events',
+      'link_path' => drupal_get_normal_path('events/past-events'),
       'link_title' => 'Past Events',
       'menu_name' => 'main-menu',
       'weight' => -9,
       'parent' => 'events',
-      'router_path' => drupal_get_normal_path('events/past-events'),
+      'router_path' => 'events/past-events',
       'customized' => 1,
     );
     // Research
