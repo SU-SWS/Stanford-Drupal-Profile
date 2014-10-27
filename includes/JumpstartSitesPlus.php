@@ -511,23 +511,23 @@ class JumpstartSitesPlus extends JumpstartSites {
       'menu_name' => 'main-menu',
       'weight' => -9,
     );
-    // News / Subscribe
-    $items['news/subscribe'] = array(
-      'link_path' => drupal_get_normal_path('news/subscribe'),
-      'link_title' => 'Subscribe',
-      'menu_name' => 'main-menu',
-      'weight' => -10,
-      'router_path' => 'news/subscribe',
-      'parent' => 'news',
-      'customized' => 1,
-    );
     // News / Recent News
     $items['news/recent-news'] = array(
       'link_path' => 'news/recent-news',
       'link_title' => 'Recent News',
       'menu_name' => 'main-menu',
-      'weight' => -9,
+      'weight' => -10,
       'router_path' => 'news/recent-news',
+      'parent' => 'news',
+      'customized' => 1,
+    );
+    // News / Subscribe
+    $items['news/subscribe'] = array(
+      'link_path' => drupal_get_normal_path('news/subscribe'),
+      'link_title' => 'Subscribe',
+      'menu_name' => 'main-menu',
+      'weight' => -9,
+      'router_path' => 'news/subscribe',
       'parent' => 'news',
       'customized' => 1,
     );
