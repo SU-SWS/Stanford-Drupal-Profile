@@ -85,7 +85,7 @@ function stanford_sites_tasks() {
    */
   $enable_s3fs = variable_get('enable_s3fs', 0);
   if($enable_s3fs == 1) {
-    module_enable(array('s3fs'));
+    module_enable(array('s3fs', 'aws_migrate'));
   }
   else{
     //Set private directory
