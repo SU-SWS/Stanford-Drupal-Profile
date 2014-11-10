@@ -83,32 +83,37 @@ function stanford_sites_tasks() {
   /**
    * File system settings.
    */
+  $enable_s3fs = variable_get('enable_s3fs', 0);
+  if($enable_s3fs == 1) {
+    module_enable(array('s3fs'));
+  }
+  else{
+    //Set private directory
+    $private_directory = 'sites/default/files/private';
+    variable_set('file_private_path', $private_directory);
+    //system_check_directory() is expecting a $form_element array
+    $element = array();
+    $element['#value'] = $private_directory;
+    //check that the public directory exists; create it if it does not
+    system_check_directory($element);
 
-  //Set private directory
-  $private_directory = 'sites/default/files/private';
-  variable_set('file_private_path', $private_directory);
-  //system_check_directory() is expecting a $form_element array
-  $element = array();
-  $element['#value'] = $private_directory;
-  //check that the public directory exists; create it if it does not
-  system_check_directory($element);
-
-  //Set public directory
-  $public_directory = 'sites/default/files';
-  variable_set('file_public_path', $public_directory);
-  //Set default scheme to public file handling
-  variable_set('file_default_scheme', 'public');
-  //system_check_directory() is expecting a $form_element array
-  $element = array();
-  $element['#value'] = $public_directory;
-  $element['#name'] = 'file_public_path';
-  //check that the public directory exists; create it if it does not
-  system_check_directory($element);
+    //Set public directory
+    $public_directory = 'sites/default/files';
+    variable_set('file_public_path', $public_directory);
+    //Set default scheme to public file handling
+    variable_set('file_default_scheme', 'public');
+    //system_check_directory() is expecting a $form_element array
+    $element = array();
+    $element['#value'] = $public_directory;
+    $element['#name'] = 'file_public_path';
+    //check that the public directory exists; create it if it does not
+    system_check_directory($element);
+  }
 
   //Enable the stanford_sites_helper module and the webauth module
   //Do this now rather than in .info file because it's looking for the administrator role and errors out otherwise
   module_enable(array('stanford_sites_helper', 'webauth'));
-  
+
   //Make the Seven admin theme use our favicon
   $theme_seven_settings = array(
     'toggle_logo' => 1,
@@ -129,7 +134,7 @@ function stanford_sites_tasks() {
     'favicon_mimetype' => 'image/vnd.microsoft.icon',
   );
   variable_set('theme_seven_settings', $theme_seven_settings);
-  
+
   //Make the default pathauto setting be [node:title]
   $pathauto_node_pattern = '[node:title]';
   variable_set('pathauto_node_pattern', $pathauto_node_pattern);
@@ -141,7 +146,7 @@ function stanford_sites_tasks() {
     variable_get('stanford_sites_requester_email')
   );
 
-    
+
   /**
    * Tasks for all sites on the service
    */
@@ -197,10 +202,10 @@ function stanford_sites_tasks() {
 }
 
 /**
- * Checks to see if the current Drupal install is on one of the Stanford Sites 
+ * Checks to see if the current Drupal install is on one of the Stanford Sites
  * hosting servers. Note: no longer using this, but keeping the code because arriving
  * at a reliable test took some work.
- * 
+ *
  * @return
  *   TRUE if it is; FALSE if it isn't.
  */
@@ -218,8 +223,8 @@ function stanford_sites_hosted() {
 
 
 /**
- * Add a WebAuth user 
- * 
+ * Add a WebAuth user
+ *
  */
 function stanford_sites_add_webauth_user($sunet, $name = '', $email = '') {
   $sunet = strtolower(trim($sunet));
@@ -259,9 +264,9 @@ function stanford_sites_add_webauth_user($sunet, $name = '', $email = '') {
     // hide Local Drupal user login block. User 1 can still login from /user
     variable_set(webauth_allow_local, 0);
 
-    watchdog('Stanford Profile','Created user: %user', array('%user' => $name));    
+    watchdog('Stanford Profile','Created user: %user', array('%user' => $name));
   }
   else {
-    watchdog('Stanford Profile','Could not create duplicate user: %user', array('%user' => $name)); 
+    watchdog('Stanford Profile','Could not create duplicate user: %user', array('%user' => $name));
   }
 }
