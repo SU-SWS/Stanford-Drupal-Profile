@@ -86,6 +86,12 @@ function stanford_sites_tasks() {
   $enable_s3fs = variable_get('enable_s3fs', 0);
   if($enable_s3fs == 1) {
     module_enable(array('s3fs', 'aws_migrate'));
+    // run drush s3fs-refresh-cache (or equivalent function)?
+    // From s3fs_update_7000().
+    //$config = _s3fs_get_config();
+    //if (!empty($config['bucket']) && !empty($config['region'])) {
+    //  _s3fs_refresh_cache($config);
+    //}
   }
   else{
     //Set private directory
