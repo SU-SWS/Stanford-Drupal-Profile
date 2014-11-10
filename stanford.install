@@ -148,6 +148,24 @@ function stanford_form_install_configure_form_alter(&$form, $form_state) {
   $form['update_notifications']['update_status_module']['#default_value'][1] = 0;
 
   /**
+   * S3 file system settings.
+   */
+
+  $form['stanford_s3fs']['#type'] = 'fieldset';
+  $form['stanford_s3fs']['#title'] = t('S3 File System Settings');
+  $form['stanford_s3fs']['#collapsible'] = TRUE;
+  $form['stanford_s3fs']['#collapsed'] = FALSE;
+
+  $form['stanford_s3fs']['enable_s3fs']['#type'] = 'checkbox';
+  $form['stanford_s3fs']['enable_s3fs']['#title'] = t('Replace local file system with S3FS');
+  $form['stanford_s3fs']['awssdk2_secret_key']['#type'] = 'textfield';
+  $form['stanford_s3fs']['awssdk2_secret_key']['#title'] = t('AWS Access Key');
+  $form['stanford_s3fs']['awssdk2_secret_key']['#type'] = 'textfield';
+  $form['stanford_s3fs']['awssdk2_secret_key']['#title'] = t('AWS Secret Key');
+  $form['stanford_s3fs']['s3fs_bucket']['#type'] = 'textfield';
+  $form['stanford_s3fs']['s3fs_bucket']['#title'] = t('S3 Bucket Name');
+
+  /**
    * Grab requester's SUNetID.
    * We will be setting this programatically so we do not want to present it to the user.
    */
@@ -205,6 +223,10 @@ function stanford_filter_info_alter(&$info) {
  * Process the fields we added to install_configure_form.
  */
 function stanford_sites_install_configure_form_submit($form, &$form_state) {
+  variable_set('enable_s3fs', $form['stanford_s3fs']['enable_s3fs']['#value']);
+  variable_set('s3fs_awssdk2_access_key', $form['stanford_s3fs']['awssdk2_access_key']['#value']);
+  variable_set('s3fs_awssdk2_secret_key', $form['stanford_s3fs']['awssdk2_secret_key']['#value']);
+  variable_set('s3fs_bucket', $form['stanford_s3fs']['s3fs_bucket']['#value']);
   variable_set('stanford_sites_org_type', $form['stanford_sites_org_type']['#value']);
   variable_set('stanford_sites_tmpdir', $form['stanford_sites_tmpdir']['#value']);
   variable_set('stanford_sites_requester_sunetid', $form['stanford_sites_requester_sunetid']['#value']);
