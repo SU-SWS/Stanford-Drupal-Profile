@@ -158,8 +158,8 @@ function stanford_form_install_configure_form_alter(&$form, $form_state) {
 
   $form['stanford_s3fs']['enable_s3fs']['#type'] = 'checkbox';
   $form['stanford_s3fs']['enable_s3fs']['#title'] = t('Replace local file system with S3FS');
-  $form['stanford_s3fs']['awssdk2_secret_key']['#type'] = 'textfield';
-  $form['stanford_s3fs']['awssdk2_secret_key']['#title'] = t('AWS Access Key');
+  $form['stanford_s3fs']['awssdk2_access_key']['#type'] = 'textfield';
+  $form['stanford_s3fs']['awssdk2_access_key']['#title'] = t('AWS Access Key');
   $form['stanford_s3fs']['awssdk2_secret_key']['#type'] = 'textfield';
   $form['stanford_s3fs']['awssdk2_secret_key']['#title'] = t('AWS Secret Key');
   $form['stanford_s3fs']['s3fs_bucket']['#type'] = 'textfield';
