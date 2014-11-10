@@ -86,6 +86,10 @@ function stanford_sites_tasks() {
   $enable_s3fs = variable_get('enable_s3fs', 0);
   if($enable_s3fs == 1) {
     module_enable(array('s3fs', 'aws_migrate'));
+    variable_set('s3fs_use_s3_for_public', 1);
+    // not sure on this one yet
+    // variable_set('s3fs_use_s3_for_private', 1);
+
     // run drush s3fs-refresh-cache (or equivalent function)?
     // From s3fs_update_7000().
     //$config = _s3fs_get_config();

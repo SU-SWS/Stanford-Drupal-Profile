@@ -164,6 +164,9 @@ function stanford_form_install_configure_form_alter(&$form, $form_state) {
   $form['stanford_s3fs']['awssdk2_secret_key']['#title'] = t('AWS Secret Key');
   $form['stanford_s3fs']['s3fs_bucket']['#type'] = 'textfield';
   $form['stanford_s3fs']['s3fs_bucket']['#title'] = t('S3 Bucket Name');
+  $form['stanford_s3fs']['s3fs_bucket_region']['#type'] = 'textfield';
+  $form['stanford_s3fs']['s3fs_bucket_region']['#title'] = t('S3 Bucket Region');
+  $form['stanford_s3fs']['s3fs_bucket_region']['#default_value'] = 'us-west-2';
 
   /**
    * Grab requester's SUNetID.
@@ -226,8 +229,7 @@ function stanford_sites_install_configure_form_submit($form, &$form_state) {
   variable_set('enable_s3fs', $form['stanford_s3fs']['enable_s3fs']['#value']);
   variable_set('s3fs_awssdk2_access_key', $form['stanford_s3fs']['awssdk2_access_key']['#value']);
   variable_set('s3fs_awssdk2_secret_key', $form['stanford_s3fs']['awssdk2_secret_key']['#value']);
-  // @todo don't hardcode this
-  variable_set('s3fs_region', 'us-west-2');
+  variable_set('s3fs_region', $form['stanford_s3fs']['s3fs_bucket_region']['#value']);
   variable_set('s3fs_bucket', $form['stanford_s3fs']['s3fs_bucket']['#value']);
   variable_set('stanford_sites_org_type', $form['stanford_sites_org_type']['#value']);
   variable_set('stanford_sites_tmpdir', $form['stanford_sites_tmpdir']['#value']);
