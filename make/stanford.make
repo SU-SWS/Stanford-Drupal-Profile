@@ -263,4 +263,4 @@ projects[stanford][type] = "profile"
 projects[stanford][download][type] = "git"
 projects[stanford][download][url] = "git@github.com:SU-SWS/Stanford-Drupal-Profile.git"
 ; projects[stanford][download][tag] = 7.x-1.x-20140907
-projects[stanford][download][branch] = 7.x-1.x-dev
+projects[stanford][download][branch] = 7.x-1.x-s3fs
