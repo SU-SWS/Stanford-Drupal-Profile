@@ -100,6 +100,10 @@ projects[context_list][version] = "1.x-dev"
 projects[context_list][download][type] = "git"
 projects[context_list][download][url] = "http://git.drupal.org/project/context_list.git"
 projects[context_list][download][revision] = "6d81d058c0fa2aa38f5c86f129b822146991a0fb"
+projects[s3fs][version] = "2.x-dev"
+projects[s3fs][download][type] = "git"
+projects[s3fs][download][url] = "http://git.drupal.org/project/s3fs.git"
+projects[s3fs][download][revision] = "79a9bead888a6cb31970c6f308f12067b785d6e1"
 
 ; Contributed themes
 projects[cube][version] = "1.4"
@@ -107,6 +111,10 @@ projects[rubik][version] = "4.1"
 projects[tao][version] = "3.1"
 
 ; Custom modules, github
+projects[aws_migrate][type] = module
+projects[aws_migrate][download][type] = "git"
+projects[aws_migrate][download][url] = "git@github.com:SU-SWS/aws_migrate.git"
+projects[aws_migrate][download][branch] = "7.x-1.x-dev"
 projects[erus][type] = module
 projects[erus][download][type] = "git"
 projects[erus][download][url] = "git@github.com:SU-SWS/erus.git"
@@ -217,6 +225,11 @@ projects[stanford_wilbur][download][tag] = "7.x-2.1"
 
 ; Libraries
 ; ---------
+libraries[awssdk2][download][type] = "get"
+libraries[awssdk2][download][url] = "https://github.com/aws/aws-sdk-php/releases/download/2.6.3/aws.zip"
+libraries[awssdk2][directory_name] = "awssdk2"
+libraries[awssdk2][destination] = "../../sites/all/libraries"
+
 libraries[ckeditor][download][type] = "get"
 libraries[ckeditor][download][url] = "http://download.cksource.com/CKEditor/CKEditor/CKEditor%203.6.6.1/ckeditor_3.6.6.1.zip"
 libraries[ckeditor][directory_name] = "ckeditor"
