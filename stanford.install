@@ -160,13 +160,17 @@ function stanford_form_install_configure_form_alter(&$form, $form_state) {
   $form['stanford_s3fs']['enable_s3fs']['#title'] = t('Replace local file system with S3FS');
   $form['stanford_s3fs']['awssdk2_access_key']['#type'] = 'textfield';
   $form['stanford_s3fs']['awssdk2_access_key']['#title'] = t('AWS Access Key');
+  $form['stanford_s3fs']['awssdk2_access_key']['#states']['visible'] = array(':input[name="enable_s3fs"]' => array('checked' => TRUE));
   $form['stanford_s3fs']['awssdk2_secret_key']['#type'] = 'textfield';
   $form['stanford_s3fs']['awssdk2_secret_key']['#title'] = t('AWS Secret Key');
+  $form['stanford_s3fs']['awssdk2_secret_key']['#states']['visible'] = array(':input[name="enable_s3fs"]' => array('checked' => TRUE));
   $form['stanford_s3fs']['s3fs_bucket']['#type'] = 'textfield';
   $form['stanford_s3fs']['s3fs_bucket']['#title'] = t('S3 Bucket Name');
+  $form['stanford_s3fs']['s3fs_bucket']['#states']['visible'] = array(':input[name="enable_s3fs"]' => array('checked' => TRUE));
   $form['stanford_s3fs']['s3fs_bucket_region']['#type'] = 'textfield';
   $form['stanford_s3fs']['s3fs_bucket_region']['#title'] = t('S3 Bucket Region');
   $form['stanford_s3fs']['s3fs_bucket_region']['#default_value'] = 'us-west-2';
+  $form['stanford_s3fs']['s3fs_bucket_region']['#states']['visible'] = array(':input[name="enable_s3fs"]' => array('checked' => TRUE));
 
   /**
    * Grab requester's SUNetID.
