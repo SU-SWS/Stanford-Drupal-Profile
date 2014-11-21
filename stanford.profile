@@ -113,7 +113,7 @@ function stanford_sites_tasks() {
   // 0 = WMD, 1 = SimpleSAML
   $auth_method = variable_get('stanford_sites_auth_method', 0);
   if($auth_method == 1) {
-    module_enable(array('simplesamlphp_auth'));
+    module_enable(array('simplesamlphp_auth', 'stanford_ssp'));
     // do some other stuff?
   }
   else {
