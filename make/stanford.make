@@ -111,10 +111,6 @@ projects[rubik][version] = "4.1"
 projects[tao][version] = "3.1"
 
 ; Custom modules, github
-projects[aws_migrate][type] = module
-projects[aws_migrate][download][type] = "git"
-projects[aws_migrate][download][url] = "git@github.com:SU-SWS/aws_migrate.git"
-projects[aws_migrate][download][branch] = "7.x-1.x-dev"
 projects[erus][type] = module
 projects[erus][download][type] = "git"
 projects[erus][download][url] = "git@github.com:SU-SWS/erus.git"
