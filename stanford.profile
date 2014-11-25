@@ -109,7 +109,7 @@ function stanford_sites_tasks() {
   //Do this now rather than in .info file because it's looking for the administrator role and errors out otherwise
   module_enable(array('stanford_sites_helper'));
 
-  // Enable our chosen authentication scheme
+  // Enable our chosen authentication scheme.
   // 0 = WMD, 1 = SimpleSAML
   $auth_method = variable_get('stanford_sites_auth_method', 0);
   if($auth_method == 1) {
