@@ -1,6 +1,13 @@
 Stanford Profile 7.x-x.x xxxx-xx-xx
 -----------------------------------
 
+Stanford Profile 7.x-1.3 2014-11-27
+-----------------------------------
+Changes since 7.x-1.2:
+By jbickar:
+  - Updating .make file to pull -dev versions of contrib via git commit hash
+  - updating module versions in .make file
+
 Stanford Profile 7.x-1.2 2014-10-23
 -----------------------------------
 Changes since 7.x-1.1:
