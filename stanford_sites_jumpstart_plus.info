@@ -2,7 +2,7 @@ name = "Stanford Sites Jumpstart Plus"
 distribution_name = "Stanford Jumpstart Plus"
 description = "Select this profile to install the Stanford Sites Jumpstart Plus product."
 core = 7.x
-version = 7.x-4.3
+version = 7.x-5.x
 project = stanford_sites_jumpstart_plus
 project status url = https://github.com/SU-SWS/stanford_sites_jumpstart_plus
 

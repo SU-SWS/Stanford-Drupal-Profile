@@ -1,5 +1,5 @@
 #[Stanford Sites Jumpstart Plus](https://github.com/SU-SWS/stanford_sites_jumpstart)
-##### Version: 7.x-4.3
+##### Version: 7.x-5.x
 
 Maintainers: [jbickar](https://github.com/jbickar), [sherakama](https://github.com/sherakama)
 
