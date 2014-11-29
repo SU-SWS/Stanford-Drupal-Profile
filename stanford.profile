@@ -23,7 +23,7 @@ function stanford_sites_tasks() {
    * Configure CKEditor and WYSIWYG.
    */
 
-  // Create configuration for CKEditor
+  // Create configuration for CKEditor.
   $ckeditor_configuration = serialize(array(
   'default' => 1,
   'user_choose' => 0,
@@ -77,39 +77,54 @@ function stanford_sites_tasks() {
     ));
   $query->execute();
 
-  // Set errors only to go to the log
+  // Set errors only to go to the log.
   variable_set('error_level', 0);
 
   /**
    * File system settings.
    */
+  $enable_s3fs = variable_get('enable_s3fs', 0);
+  if ($enable_s3fs == 1) {
+    module_enable(array('s3fs'));
+    variable_set('s3fs_use_s3_for_public', 1);
+    // not sure on this one yet
+    // variable_set('s3fs_use_s3_for_private', 1);
 
-  //Set private directory
-  $private_directory = 'sites/default/files/private';
-  variable_set('file_private_path', $private_directory);
-  //system_check_directory() is expecting a $form_element array
-  $element = array();
-  $element['#value'] = $private_directory;
-  //check that the public directory exists; create it if it does not
-  system_check_directory($element);
+    // run drush s3fs-refresh-cache (or equivalent function)?
+    // From s3fs_update_7000().
+    //$config = _s3fs_get_config();
+    //if (!empty($config['bucket']) && !empty($config['region'])) {
+    //  _s3fs_refresh_cache($config);
+    //}
+  }
+  else {
+    // Set private directory.
+    $private_directory = 'sites/default/files/private';
+    variable_set('file_private_path', $private_directory);
+    // system_check_directory() is expecting a $form_element array.
+    $element = array();
+    $element['#value'] = $private_directory;
+    // Check that the public directory exists; create it if it does not.
+    system_check_directory($element);
 
-  //Set public directory
-  $public_directory = 'sites/default/files';
-  variable_set('file_public_path', $public_directory);
-  //Set default scheme to public file handling
-  variable_set('file_default_scheme', 'public');
-  //system_check_directory() is expecting a $form_element array
-  $element = array();
-  $element['#value'] = $public_directory;
-  $element['#name'] = 'file_public_path';
-  //check that the public directory exists; create it if it does not
-  system_check_directory($element);
+    // Set public directory.
+    $public_directory = 'sites/default/files';
+    variable_set('file_public_path', $public_directory);
+    // Set default scheme to public file handling.
+    variable_set('file_default_scheme', 'public');
+    // system_check_directory() is expecting a $form_element array.
+    $element = array();
+    $element['#value'] = $public_directory;
+    $element['#name'] = 'file_public_path';
+    // Check that the public directory exists; create it if it does not.
+    system_check_directory($element);
+  }
 
-  //Enable the stanford_sites_helper module and the webauth module
-  //Do this now rather than in .info file because it's looking for the administrator role and errors out otherwise
+  // Enable the stanford_sites_helper module and the webauth module.
+  // Do this now rather than in .info file because it's looking for the administrator role and errors out otherwise.
   module_enable(array('stanford_sites_helper', 'webauth'));
-  
-  //Make the Seven admin theme use our favicon
+
+  // Make the Seven admin theme use our favicon.
   $theme_seven_settings = array(
     'toggle_logo' => 1,
     'toggle_name' => 1,
@@ -129,8 +144,8 @@ function stanford_sites_tasks() {
     'favicon_mimetype' => 'image/vnd.microsoft.icon',
   );
   variable_set('theme_seven_settings', $theme_seven_settings);
-  
-  //Make the default pathauto setting be [node:title]
+
+  // Make the default pathauto setting be [node:title].
   $pathauto_node_pattern = '[node:title]';
   variable_set('pathauto_node_pattern', $pathauto_node_pattern);
 
@@ -141,7 +156,7 @@ function stanford_sites_tasks() {
     variable_get('stanford_sites_requester_email')
   );
 
-    
+
   /**
    * Tasks for all sites on the service
    */
@@ -153,10 +168,10 @@ function stanford_sites_tasks() {
    */
   $tmpdir = variable_get('stanford_sites_tmpdir', file_directory_temp());
   variable_set('file_temporary_path', $tmpdir);
-  //system_check_directory() is expecting a $form_element array
+  // system_check_directory() is expecting a $form_element array
   $element = array();
   $element['#value'] = $tmpdir;
-  //check that the temp directory exists; create it if it does not
+  // Check that the temp directory exists; create it if it does not.
   system_check_directory($element);
 
   /**
@@ -197,17 +212,17 @@ function stanford_sites_tasks() {
 }
 
 /**
- * Checks to see if the current Drupal install is on one of the Stanford Sites 
+ * Checks to see if the current Drupal install is on one of the Stanford Sites
  * hosting servers. Note: no longer using this, but keeping the code because arriving
  * at a reliable test took some work.
- * 
+ *
  * @return
  *   TRUE if it is; FALSE if it isn't.
  */
 function stanford_sites_hosted() {
-  //This directory only should exist on the sites-* servers
+  // This directory only should exist on the sites-* servers.
   $dir = "/etc/drupal-service";
-  //Check if it exists and is a directory
+  // Check if it exists and is a directory.
   if(file_exists($dir) && is_dir($dir)) {
     return TRUE;
   }
@@ -218,14 +233,14 @@ function stanford_sites_hosted() {
 
 
 /**
- * Add a WebAuth user 
- * 
+ * Add a WebAuth user
+ *
  */
 function stanford_sites_add_webauth_user($sunet, $name = '', $email = '') {
   $sunet = strtolower(trim($sunet));
 
   if (empty($sunet)) {
-    watchdog('Stanford Profile','Could not create user. No SUNetID available.');
+    watchdog('Stanford Profile', 'Could not create user. No SUNetID available.');
     return;
   }
 
@@ -259,9 +274,9 @@ function stanford_sites_add_webauth_user($sunet, $name = '', $email = '') {
     // hide Local Drupal user login block. User 1 can still login from /user
     variable_set(webauth_allow_local, 0);
 
-    watchdog('Stanford Profile','Created user: %user', array('%user' => $name));    
+    watchdog('Stanford Profile', 'Created user: %user', array('%user' => $name));
   }
   else {
-    watchdog('Stanford Profile','Could not create duplicate user: %user', array('%user' => $name)); 
+    watchdog('Stanford Profile', 'Could not create duplicate user: %user', array('%user' => $name));
   }
 }

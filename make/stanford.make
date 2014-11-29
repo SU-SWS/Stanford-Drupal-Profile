@@ -109,6 +109,10 @@ projects[css_injector][type] = module
 projects[css_injector][download][type] = "git"
 projects[css_injector][download][url] = "http://git.drupal.org/project/css_injector.git"
 projects[css_injector][download][revision] = "41bee7e4421ecfc52a6b673eef6fcde875282a2b"
+projects[s3fs][version] = "2.x-dev"
+projects[s3fs][download][type] = "git"
+projects[s3fs][download][url] = "http://git.drupal.org/project/s3fs.git"
+projects[s3fs][download][revision] = "79a9bead888a6cb31970c6f308f12067b785d6e1"
 
 ; Contributed themes
 projects[cube][version] = "1.4"
@@ -226,6 +230,11 @@ projects[stanford_wilbur][download][tag] = "7.x-2.1"
 
 ; Libraries
 ; ---------
+libraries[awssdk2][download][type] = "get"
+libraries[awssdk2][download][url] = "https://github.com/aws/aws-sdk-php/releases/download/2.6.3/aws.zip"
+libraries[awssdk2][directory_name] = "awssdk2"
+libraries[awssdk2][destination] = "../../sites/all/libraries"
+
 libraries[ckeditor][download][type] = "get"
 libraries[ckeditor][download][url] = "http://download.cksource.com/CKEditor/CKEditor/CKEditor%203.6.6.1/ckeditor_3.6.6.1.zip"
 libraries[ckeditor][directory_name] = "ckeditor"
