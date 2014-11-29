@@ -50,6 +50,5 @@ dependencies[] = token
 dependencies[] = transliteration
 dependencies[] = views
 dependencies[] = views_ui
-dependencies[] = webauth
 dependencies[] = wysiwyg
 files[] = stanford.profile

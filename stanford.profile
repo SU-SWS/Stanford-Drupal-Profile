@@ -120,11 +120,21 @@ function stanford_sites_tasks() {
     system_check_directory($element);
   }
 
-  // Enable the stanford_sites_helper module and the webauth module.
-  // Do this now rather than in .info file because it's looking for the administrator role and errors out otherwise.
-  module_enable(array('stanford_sites_helper', 'webauth'));
+  //Enable the stanford_sites_helper module and the webauth module
+  //Do this now rather than in .info file because it's looking for the administrator role and errors out otherwise
+  module_enable(array('stanford_sites_helper'));
 
-  // Make the Seven admin theme use our favicon.
+  // Enable our chosen authentication scheme.
+  // 0 = WMD, 1 = SimpleSAML
+  $auth_method = variable_get('stanford_sites_auth_method', 0);
+  if($auth_method == 1) {
+    module_enable(array('simplesamlphp_auth', 'stanford_ssp'));
+    // do some other stuff?
+  }
+  else {
+    module_enable(array('webauth'));
+  }
+  //Make the Seven admin theme use our favicon
   $theme_seven_settings = array(
     'toggle_logo' => 1,
     'toggle_name' => 1,
@@ -145,7 +155,7 @@ function stanford_sites_tasks() {
   );
   variable_set('theme_seven_settings', $theme_seven_settings);
 
-  // Make the default pathauto setting be [node:title].
+  //Make the default pathauto setting be [node:title]
   $pathauto_node_pattern = '[node:title]';
   variable_set('pathauto_node_pattern', $pathauto_node_pattern);
 
