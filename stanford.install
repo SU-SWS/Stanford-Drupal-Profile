@@ -9,7 +9,7 @@ function stanford_install() {
   // It's easier just to include this and then override the few things that we want to.
   include_once(DRUPAL_ROOT . '/profiles/standard/standard.install');
   standard_install();
-  
+
   // Defaults for the Page content type
   variable_set('comment_anonymous_page', 0);
   variable_set('comment_default_mode_page', 1);
@@ -45,21 +45,24 @@ function stanford_install() {
   // Revoke a few stupid default permissions
   user_role_revoke_permissions(DRUPAL_ANONYMOUS_RID, array('access comments'));
   user_role_revoke_permissions(DRUPAL_AUTHENTICATED_RID, array('post comments', 'skip comment approval'));
-  
+
   // User registration - only site administrators can create new user accounts
   variable_set('user_register', 0);
-  
+
   // Disable user-configurable timezones by default
   variable_set('configurable_timezones', 0);
   // Set the first day of the week to Sunday
   variable_set('date_first_day', 0);
-  
+
   // Disable poormanscron functionality, as we are running cron externally
   variable_set('cron_safe_threshold', 0);
 
   // Set OpenLayers library to use external https CDN
   variable_set('openlayers_source_external', 'https://cdnjs.cloudflare.com/ajax/libs/openlayers/2.12/OpenLayers.js');
   variable_set('openlayers_source_type', 'external');
+
+  // Set Pathauto to reduce paths to numbers and letters
+  variable_set('pathauto_reduce_ascii', 1);
 
   $blocks = array(
     array(
@@ -85,7 +88,7 @@ function stanford_install() {
     array(
       'module' => 'search',
       'delta' => 'form',
-      'theme' => 'stanford_wilbur',
+      'theme' => 'stanford_jordan',
       'status' => 1,
       'weight' => -1,
       'region' => 'search_box',
@@ -95,7 +98,17 @@ function stanford_install() {
     array(
       'module' => 'search',
       'delta' => 'form',
-      'theme' => 'stanford_jordan',
+      'theme' => 'stanford_light',
+      'status' => 1,
+      'weight' => -1,
+      'region' => 'search_box',
+      'pages' => '',
+      'cache' => -1,
+    ),
+    array(
+      'module' => 'search',
+      'delta' => 'form',
+      'theme' => 'stanford_wilbur',
       'status' => 1,
       'weight' => -1,
       'region' => 'search_box',
@@ -133,7 +146,7 @@ function stanford_form_install_configure_form_alter(&$form, $form_state) {
   $form['update_notifications']['#type'] = 'hidden';
   $form['update_notifications']['update_status_module']['#default_value'][0] = 0;
   $form['update_notifications']['update_status_module']['#default_value'][1] = 0;
-  
+
   /**
    * Grab requester's SUNetID.
    * We will be setting this programatically so we do not want to present it to the user.
@@ -162,14 +175,14 @@ function stanford_form_install_configure_form_alter(&$form, $form_state) {
    */
   $form['stanford_sites_org_type']['#type'] = 'hidden';
   $form['stanford_sites_org_type']['#default_value'] = '';
-  
+
   /**
    * Set temporary file directory.
    * We will be setting this programatically so we do not want to present it to the user.
    */
   $form['stanford_sites_tmpdir']['#type'] = 'hidden';
   $form['stanford_sites_tmpdir']['#default_value'] = '';
-  
+
   $form['#submit'][] = 'stanford_sites_install_configure_form_submit';
 
 }
@@ -196,5 +209,5 @@ function stanford_sites_install_configure_form_submit($form, &$form_state) {
   variable_set('stanford_sites_tmpdir', $form['stanford_sites_tmpdir']['#value']);
   variable_set('stanford_sites_requester_sunetid', $form['stanford_sites_requester_sunetid']['#value']);
   variable_set('stanford_sites_requester_name', $form['stanford_sites_requester_name']['#value']);
-  variable_set('stanford_sites_requester_email', $form['stanford_sites_requester_email']['#value']); 
+  variable_set('stanford_sites_requester_email', $form['stanford_sites_requester_email']['#value']);
 }
