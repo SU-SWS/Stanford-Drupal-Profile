@@ -1,6 +1,8 @@
 Authors: Marco Wise, John Bickar
 URL: http://sites.stanford.edu
 
+*NOTE* The Drupal 6 branches of this repository receive maintenance updates only. Please check the latest 7.x branch for new development.
+
 A drush make and Drupal install profile for new sites on the Drupal Hosting Service at Stanford ("Stanford Sites").
 
 Leading-edge development occurs on this branch, 6.x-1.x-dev. This branch may or may not reflect what is installed on sites.stanford.edu.
