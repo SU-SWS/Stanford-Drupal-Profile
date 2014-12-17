@@ -18,7 +18,7 @@ api = 2
 ; Core project
 ; ------------
 projects[drupal][type] = core
-projects[drupal][version] = 6.33
+projects[drupal][version] = 6.34
 
 ; Projects
 ; --------
@@ -26,7 +26,7 @@ projects[drupal][version] = 6.33
 projects[admin_menu] = 3.0-alpha4
 projects[advanced_help] = 1.2
 projects[auto_nodetitle] = 1.2
-projects[backup_migrate] = 2.6
+projects[backup_migrate] = 2.8
 projects[backup_migrate_files] = 1.x-dev
 projects[better_formats] = 1.2
 projects[block_titlelink] = 1.7
@@ -47,12 +47,12 @@ projects[feeds] = 1.0-beta13
 projects[feeds_tamper] = 1.0
 projects[feeds_xpathparser] = 1.12
 projects[filefield] = 3.13
-projects[filefield_paths] = 1.4
+projects[filefield_paths] = 1.5
 projects[globalredirect] = 1.5
-projects[google_analytics] = 3.3
+projects[google_analytics] = 3.6
 projects[imageapi] = 1.10
 projects[imagecache] = 2.0-rc1
-projects[imagecache_actions] = 1.8
+projects[imagecache_actions] = 1.9
 projects[imagefield] = 3.11
 projects[insert] = 1.2
 projects[job_scheduler] = 1.0-beta3
@@ -61,7 +61,7 @@ projects[js_injector] = 1.1
 projects[libraries] = 1.0
 projects[link] = 2.11
 projects[menu_block] = 2.4
-projects[mollom] = 2.6
+projects[mollom] = 2.11
 projects[nodeformcols] = 1.7
 projects[nodewords] = 1.14
 projects[nodewords_nodetype] = 1.8
@@ -79,9 +79,9 @@ projects[token] = 1.19
 projects[transliteration] = 3.1
 projects[vertical_tabs] = 1.0-rc2
 projects[views] = 2.16
-projects[views_bulk_operations] = 1.13
+projects[views_bulk_operations] = 1.16
 projects[views_slideshow] = 2.4
-projects[webform] = 3.20
+projects[webform] = 3.21
 projects[wysiwyg] = 2.4
 projects[wysiwyg_filter] = 1.5
 
@@ -120,12 +120,12 @@ projects[rubik] = 3.0-beta5
 projects[stanford_basic][type] = theme
 projects[stanford_basic][download][type] = git
 projects[stanford_basic][download][url] = "git@github.com:su-ddd/stanford_basic.git"
-projects[stanford_basic][download][tag] = 6.x-1.4-beta2
+projects[stanford_basic][download][tag] = 6.x-1.5
 
 projects[stanfordmodern][type] = theme
 projects[stanfordmodern][download][type] = git
 projects[stanfordmodern][download][url] = "git@github.com:su-ddd/stanfordmodern.git"
-projects[stanfordmodern][download][tag] = 6.x-1.5-beta2
+projects[stanfordmodern][download][tag] = 6.x-1.6
 
 ; Libraries
 
