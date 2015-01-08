@@ -126,8 +126,8 @@ function stanford_sites_tasks() {
 
   // Enable our chosen authentication scheme.
   // 0 = WMD, 1 = SimpleSAML
-  $auth_method = variable_get('stanford_sites_auth_method', 0);
-  if($auth_method == 1) {
+  $auth_method = variable_get('stanford_sites_auth_method', 'webauth');
+  if($auth_method == 'simplesamlphp') {
     module_enable(array('simplesamlphp_auth', 'stanford_ssp'));
     // do some other stuff?
   }

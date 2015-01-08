@@ -16,7 +16,7 @@ drush si stanford --account-mail="sunetid@stanford.edu" --site-mail="sunetid@sta
 Additional flags for "drush si":
 
 To use SimpleSAMLphp instead of webauth:
-install_configure_form.stanford_authentication=1
+install_configure_form.stanford_authentication=simplesamlphp
 
 To use Amazon S3 as the file system instead of local file system:
-install_configure_form.enable_s3fs=1 install_configure_form.awssdk2_access_key="INSERT_KEY_HERE" install_configure_form.awssdk2_secret_key="INSERT_SECRET_KEY_HERE" install_configure_form.s3fs_bucket="BUCKET_NAME_HERE"  install_configure_form.s3fs_bucket_region="us-west-2" 
+install_configure_form.enable_s3fs=1 install_configure_form.awssdk2_access_key="INSERT_KEY_HERE" install_configure_form.awssdk2_secret_key="INSERT_SECRET_KEY_HERE" install_configure_form.s3fs_bucket="BUCKET_NAME_HERE"  install_configure_form.s3fs_bucket_region="us-west-2"
