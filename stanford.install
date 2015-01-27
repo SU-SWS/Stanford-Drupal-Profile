@@ -148,12 +148,12 @@ function stanford_form_install_configure_form_alter(&$form, $form_state) {
   $form['update_notifications']['update_status_module']['#default_value'][1] = 0;
 
   // How do we sign in to Drupal?
-  $auth_options = array(0 => t('WebAuth'), 1 => t('SimpleSAMLphp'));
+  $auth_options = array('webauth' => t('WebAuth'), 'simplesamlphp' => t('SimpleSAMLphp'));
   $form['stanford_authentication']['#type'] = 'radios';
   $form['stanford_authentication']['#title'] = t('Authentication Method');
   $form['stanford_authentication']['#description'] = t("Choose your authentication method. If you are not sure, leave this as the default.");
   $form['stanford_authentication']['#options'] = $auth_options;
-  $form['stanford_authentication']['#default_value'] = 0;
+  $form['stanford_authentication']['#default_value'] = 'webauth';
   /**
    * S3 file system settings.
    */
