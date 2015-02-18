@@ -386,6 +386,7 @@ class JumpstartSitesPlus extends JumpstartSites {
       array("views","2d9147be40cd77d32915a554bf315858","well"),
       array("views","85c57f65aa0dee37d8aa5a5031e564bc","well"),
       array("views","5c84bdc5ea8289bceed723799d38940f","well"),
+      array("views","ad215e0528148b386833fa3db1f3b7dc","well"),
     );
 
     // Key all the values.
