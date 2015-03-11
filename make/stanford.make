@@ -263,7 +263,7 @@ libraries[jqueryuitimepicker][download][subtree] = "jQuery-Timepicker-Addon-mast
 libraries[jqueryuitimepicker][destination] = "../../sites/all/libraries"
 
 libraries[jw_player][download][type] = "get"
-libraries[jw_player][download][url] = "http://www.longtailvideo.com/jw/upload/mediaplayer-5.10.zip"
+libraries[jw_player][download][url] = "https://github.com/SU-SWS/stanford_sites_libraries/blob/jwplayer5/jwplayer.zip?raw=true"
 libraries[jw_player][directory_name] = "jwplayer"
 libraries[jw_player][destination] = "../../sites/all/libraries"
 
