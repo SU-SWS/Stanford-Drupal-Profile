@@ -79,7 +79,7 @@ projects[taxonomy_manager][version] = "1.0"
 projects[token][version] = "1.6"
 projects[transliteration][version] = "3.2"
 projects[uuid][version] = "1.0-alpha6"
-projects[views][version] = "3.8"
+projects[views][version] = "3.10"
 projects[views_bulk_operations][version] = "3.2"
 projects[views_data_export][version] = "3.0-beta8"
 projects[views_datasource][version] = "1.0-alpha2"
@@ -273,15 +273,15 @@ libraries[jqueryuitimepicker][directory_name] = "jquery-ui-timepicker"
 libraries[jqueryuitimepicker][download][subtree] = "jQuery-Timepicker-Addon-master/src/"
 libraries[jqueryuitimepicker][destination] = "libraries"
 
-libraries[proj4js][download][type] = "get"
-libraries[proj4js][download][url] = http://download.osgeo.org/proj4js/proj4js-1.1.0.zip
-libraries[proj4js][directory_name] = proj4js
-libraries[proj4js][destination] = "libraries"
-
 libraries[jw_player][download][type] = "get"
 libraries[jw_player][download][url] = "https://github.com/SU-SWS/stanford_sites_libraries/blob/jwplayer5/jwplayer.zip?raw=true"
 libraries[jw_player][directory_name] = "jwplayer"
 libraries[jw_player][destination] = "libraries"
+
+libraries[proj4js][download][type] = "get"
+libraries[proj4js][download][url] = http://download.osgeo.org/proj4js/proj4js-1.1.0.zip
+libraries[proj4js][directory_name] = proj4js
+libraries[proj4js][destination] = "libraries"
 
 ; Profile
 
