@@ -122,28 +122,6 @@ projects[social_share][download][type] = "git"
 projects[social_share][download][url] = "http://git.drupal.org/project/social-share.git"
 projects[social_share][download][tag] = "7.x-2.1"
 
-; Contributed modules, -dev versions specified by git commit
-projects[context_http_headers][type] = module
-projects[context_http_headers][download][type] = "git"
-projects[context_http_headers][download][url] = "http://git.drupal.org/project/context_http_headers.git"
-projects[context_http_headers][download][revision] = "cb07de891efbbc2c5aaffe0d6f3648822a9a4dfd"
-projects[context_list][version] = "1.x-dev"
-projects[context_list][download][type] = "git"
-projects[context_list][download][url] = "http://git.drupal.org/project/context_list.git"
-projects[context_list][download][revision] = "6d81d058c0fa2aa38f5c86f129b822146991a0fb"
-projects[context_respect][version] = "1.x-dev"
-projects[context_respect][download][type] = "git"
-projects[context_respect][download][url] = "http://git.drupal.org/project/context_respect.git"
-projects[context_respect][download][revision] = "834519f6a95a356425aabc4216c08e2688859174"
-projects[context_useragent][version] = "1.x-dev"
-projects[context_useragent][download][type] = "git"
-projects[context_useragent][download][url] = "http://git.drupal.org/project/context_useragent.git"
-projects[context_useragent][download][revision] = "8949c6d4ee7a462b49e1b08dfd7dc60f1fa7e8e8"
-projects[css_injector][type] = module
-projects[css_injector][download][type] = "git"
-projects[css_injector][download][url] = "http://git.drupal.org/project/css_injector.git"
-projects[css_injector][download][revision] = "41bee7e4421ecfc52a6b673eef6fcde875282a2b"
-
 ; Contributed themes
 projects[cube][version] = "1.4"
 projects[rubik][version] = "4.2"
@@ -213,7 +191,7 @@ projects[stanford_sites_helper][download][tag] = "7.x-1.4"
 projects[stanford_slides][type] = module
 projects[stanford_slides][download][type] = "git"
 projects[stanford_slides][download][url] = "git@github.com:SU-SWS/stanford_slides.git"
-projects[stanford_slides][download][tag] = "7.x-3.0-alpha4"
+projects[stanford_slides][download][tag] = "7.x-3.0-alpha3"
 projects[stanford_video][type] = module
 projects[stanford_video][download][type] = "git"
 projects[stanford_video][download][url] = "git@github.com:SU-SWS/stanford_video.git"
