@@ -87,8 +87,7 @@ function stanford_sites_tasks() {
   if ($enable_s3fs == 1) {
     module_enable(array('s3fs'));
     variable_set('s3fs_use_s3_for_public', 1);
-    // not sure on this one yet
-    // variable_set('s3fs_use_s3_for_private', 1);
+    variable_set('s3fs_use_s3_for_private', 1);
 
     // run drush s3fs-refresh-cache (or equivalent function)?
     // From s3fs_update_7000().
@@ -125,7 +124,7 @@ function stanford_sites_tasks() {
   module_enable(array('stanford_sites_helper'));
 
   // Enable our chosen authentication scheme.
-  // 0 = WMD, 1 = SimpleSAML
+  // 'webauth' = WMD, 'simplesamlphp' = SimpleSAML
   $auth_method = variable_get('stanford_sites_auth_method', 'webauth');
   if($auth_method == 'simplesamlphp') {
     module_enable(array('simplesamlphp_auth', 'stanford_ssp'));
@@ -133,6 +132,13 @@ function stanford_sites_tasks() {
   }
   else {
     module_enable(array('webauth'));
+    if(stanford_sites_hosted()) {
+      stanford_sites_add_webauth_user(
+        variable_get('stanford_sites_requester_sunetid'),
+        variable_get('stanford_sites_requester_name'),
+        variable_get('stanford_sites_requester_email')
+      );
+    }
   }
   //Make the Seven admin theme use our favicon
   $theme_seven_settings = array(
@@ -158,14 +164,6 @@ function stanford_sites_tasks() {
   //Make the default pathauto setting be [node:title]
   $pathauto_node_pattern = '[node:title]';
   variable_set('pathauto_node_pattern', $pathauto_node_pattern);
-
-
-  stanford_sites_add_webauth_user(
-    variable_get('stanford_sites_requester_sunetid'),
-    variable_get('stanford_sites_requester_name'),
-    variable_get('stanford_sites_requester_email')
-  );
-
 
   /**
    * Tasks for all sites on the service
@@ -223,8 +221,8 @@ function stanford_sites_tasks() {
 
 /**
  * Checks to see if the current Drupal install is on one of the Stanford Sites
- * hosting servers. Note: no longer using this, but keeping the code because arriving
- * at a reliable test took some work.
+ * hosting servers. Note: Arriving at a reliable test for this took some work;
+ * do not remove this function.
  *
  * @return
  *   TRUE if it is; FALSE if it isn't.
