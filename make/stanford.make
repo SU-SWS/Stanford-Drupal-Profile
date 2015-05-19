@@ -138,12 +138,8 @@ projects[relation][subdir] = "contrib"
 projects[relation][version] = "1.0-rc7"
 projects[rules][subdir] = "contrib"
 projects[rules][version] = "2.8"
-projects[s3fs][subdir] = "contrib"
-projects[s3fs][version] = "2.0"
 projects[services][subdir] = "contrib"
 projects[services][version] = "3.11"
-projects[simplesamlphp_auth][subdir] = "contrib"
-projects[simplesamlphp_auth][version] = "2.0-alpha2"
 projects[site_verify][subdir] = "contrib"
 projects[site_verify][version] = "1.1"
 projects[smart_trim][subdir] = "contrib"
@@ -307,11 +303,6 @@ projects[stanford_slides][type] = "module"
 projects[stanford_slides][download][type] = "git"
 projects[stanford_slides][download][url] = "git@github.com:SU-SWS/stanford_slides.git"
 projects[stanford_slides][download][tag] = "7.x-3.0-alpha3"
-projects[stanford_ssp][subdir] = "stanford"
-projects[stanford_ssp][type] = "module"
-projects[stanford_ssp][download][type] = "git"
-projects[stanford_ssp][download][url] = "git@github.com:SU-SWS/stanford_ssp.git"
-projects[stanford_ssp][download][branch] = "7.x-1.x"
 projects[stanford_video][subdir] = "stanford"
 projects[stanford_video][type] = "module"
 projects[stanford_video][download][type] = "git"
@@ -334,26 +325,10 @@ projects[webauth_extras][download][url] = "git@github.com:Stanford/webauth_extra
 projects[webauth_extras][download][tag] = "7.x-1.0-alpha2"
 
 ; Custom themes, github
-projects[stanfordmodern][type] = "theme"
-projects[stanfordmodern][download][type] = "git"
-projects[stanfordmodern][download][url] = "git@github.com:su-ddd/stanfordmodern.git"
-projects[stanfordmodern][download][tag] = "7.x-1.6"
-projects[stanford_basic][type] = theme
-projects[stanford_basic][download][type] = "git"
-projects[stanford_basic][download][url] = "git@github.com:su-ddd/stanford_basic.git"
-projects[stanford_basic][download][tag] = "7.x-1.5"
 projects[open_framework][type] = theme
 projects[open_framework][download][type] = "git"
 projects[open_framework][download][url] = "git@github.com:SU-SWS/open_framework.git"
 projects[open_framework][download][tag] = "7.x-2.3"
-projects[stanford_framework][type] = "theme"
-projects[stanford_framework][download][type] = "git"
-projects[stanford_framework][download][url] = "git@github.com:SU-SWS/stanford_framework.git"
-projects[stanford_framework][download][tag] = "7.x-3.0"
-projects[stanford_jordan][type] = theme
-projects[stanford_jordan][download][type] = "git"
-projects[stanford_jordan][download][url] = "git@github.com:SU-SWS/stanford_jordan.git"
-projects[stanford_jordan][download][tag] = "7.x-2.1"
 projects[stanford_light][type] = theme
 projects[stanford_light][download][type] = "git"
 projects[stanford_light][download][url] = "git@github.com:SU-SWS/stanford_light.git"
@@ -362,19 +337,9 @@ projects[stanford_seven][type] = theme
 projects[stanford_seven][download][type] = "git"
 projects[stanford_seven][download][url] = "git@github.com:SU-SWS/stanford_seven.git"
 projects[stanford_seven][download][tag] = "7.x-1.1"
-projects[stanford_wilbur][type] = theme
-projects[stanford_wilbur][download][type] = "git"
-projects[stanford_wilbur][download][url] = git@github.com:SU-SWS/stanford_wilbur.git
-projects[stanford_wilbur][download][tag] = "7.x-2.1"
-
 
 ; Libraries
 ; ---------
-libraries[awssdk2][download][type] = "get"
-libraries[awssdk2][download][url] = "https://github.com/aws/aws-sdk-php/releases/download/2.6.3/aws.zip"
-libraries[awssdk2][directory_name] = "awssdk2"
-libraries[awssdk2][destination] = "libraries"
-
 libraries[ckeditor][download][type] = "get"
 libraries[ckeditor][download][url] = "http://download.cksource.com/CKEditor/CKEditor/CKEditor%203.6.6.1/ckeditor_3.6.6.1.zip"
 libraries[ckeditor][directory_name] = "ckeditor"
