@@ -6,6 +6,9 @@ projects[drupal][version] = "7.37"
 ; Libraries
 includes[] = "libraries.make"
 
+; Patches
+includes[] = "patches.make"
+
 ; Contributed modules
 projects[admin_menu][subdir] = "contrib"
 projects[admin_menu][version] = "3.0-rc5"
