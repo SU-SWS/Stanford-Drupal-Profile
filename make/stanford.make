@@ -3,6 +3,9 @@ core = 7.x
 api = 2
 projects[drupal][version] = "7.37"
 
+; Libraries
+includes[] = "libraries.make"
+
 ; Contributed modules
 projects[admin_menu][subdir] = "contrib"
 projects[admin_menu][version] = "3.0-rc5"
@@ -337,45 +340,6 @@ projects[stanford_seven][type] = theme
 projects[stanford_seven][download][type] = "git"
 projects[stanford_seven][download][url] = "git@github.com:SU-SWS/stanford_seven.git"
 projects[stanford_seven][download][tag] = "7.x-1.1"
-
-; Libraries
-; ---------
-libraries[ckeditor][download][type] = "get"
-libraries[ckeditor][download][url] = "http://download.cksource.com/CKEditor/CKEditor/CKEditor%203.6.6.1/ckeditor_3.6.6.1.zip"
-libraries[ckeditor][directory_name] = "ckeditor"
-libraries[ckeditor][destination] = "libraries"
-
-libraries[colorbox][download][type] = "get"
-libraries[colorbox][download][url] = "https://github.com/jackmoore/colorbox/archive/1.5.14.zip"
-libraries[colorbox][directory_name] = "colorbox"
-libraries[colorbox][destination] = "libraries"
-
-libraries[icalcreator][download][type] = "git"
-libraries[icalcreator][download][url] = "https://github.com/iCalcreator/iCalcreator.git"
-libraries[icalcreator][download][commit] = "e3dbec2cb3bb91a8bde989e467567ae8831a4026"
-libraries[icalcreator][directory_name] = "iCalcreator"
-libraries[icalcreator][destination] = "libraries"
-
-libraries[jquery_cycle][download][type] = "get"
-libraries[jquery_cycle][download][url] = "http://malsup.github.com/jquery.cycle.all.js"
-libraries[jquery_cycle][directory_name] = "jquery.cycle"
-libraries[jquery_cycle][destination] = "libraries"
-
-libraries[jqueryuitimepicker][download][type] = "get"
-libraries[jqueryuitimepicker][download][url] = "https://github.com/trentrichardson/jQuery-Timepicker-Addon/archive/master.zip"
-libraries[jqueryuitimepicker][directory_name] = "jquery-ui-timepicker"
-libraries[jqueryuitimepicker][download][subtree] = "jQuery-Timepicker-Addon-master/src/"
-libraries[jqueryuitimepicker][destination] = "libraries"
-
-libraries[jw_player][download][type] = "get"
-libraries[jw_player][download][url] = "https://github.com/SU-SWS/stanford_sites_libraries/blob/jwplayer5/jwplayer.zip?raw=true"
-libraries[jw_player][directory_name] = "jwplayer"
-libraries[jw_player][destination] = "libraries"
-
-libraries[proj4js][download][type] = "get"
-libraries[proj4js][download][url] = http://download.osgeo.org/proj4js/proj4js-1.1.0.zip
-libraries[proj4js][directory_name] = proj4js
-libraries[proj4js][destination] = "libraries"
 
 ; Profile
 
