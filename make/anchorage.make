@@ -15,7 +15,7 @@ projects[stanford_ssp][subdir] = "stanford"
 projects[stanford_ssp][type] = "module"
 projects[stanford_ssp][download][type] = "git"
 projects[stanford_ssp][download][url] = "git@github.com:SU-SWS/stanford_ssp.git"
-projects[stanford_ssp][download][branch] = "7.x-1.x"
+projects[stanford_ssp][download][tag] = "7.x-1.0-alpha1"
 
 ; Libraries
 ; ---------
