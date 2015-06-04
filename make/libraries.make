@@ -31,6 +31,12 @@ libraries[jqueryuitimepicker][directory_name] = "jquery-ui-timepicker"
 libraries[jqueryuitimepicker][download][subtree] = "jQuery-Timepicker-Addon-master/src/"
 libraries[jqueryuitimepicker][destination] = "libraries"
 
+; See https://www.drupal.org/node/2049849.
+libraries[feeds_jsonpath_parser][download][type] = "get"
+libraries[feeds_jsonpath_parser][download][url] = "https://jsonpath.googlecode.com/svn/trunk/src/php/jsonpath.php"
+libraries[feeds_jsonpath_parser][destination] = "modules/contrib"
+libraries[feeds_jsonpath_parser][install_path] = "sites/all"
+
 libraries[jw_player][download][type] = "get"
 libraries[jw_player][download][url] = "https://github.com/SU-SWS/stanford_sites_libraries/blob/jwplayer5/jwplayer.zip?raw=true"
 libraries[jw_player][directory_name] = "jwplayer"
