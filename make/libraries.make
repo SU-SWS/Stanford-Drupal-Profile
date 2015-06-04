@@ -33,7 +33,7 @@ libraries[jqueryuitimepicker][destination] = "libraries"
 
 ; See https://www.drupal.org/node/2049849.
 libraries[feeds_jsonpath_parser][download][type] = "get"
-libraries[feeds_jsonpath_parser][download][url] = "https://jsonpath.googlecode.com/svn/trunk/src/php/jsonpath.php"
+libraries[feeds_jsonpath_parser][download][url] = "http://jsonpath.googlecode.com/files/jsonpath-0.8.1.php"
 libraries[feeds_jsonpath_parser][destination] = "modules/contrib"
 libraries[feeds_jsonpath_parser][install_path] = "sites/all"
 
