@@ -3,6 +3,7 @@ core = 7.x
 api = 2
 
 includes[] = "stanford.make"
+includes[] = "dept.make"
 
 ; Contributed modules
 projects[s3fs][subdir] = "contrib"
