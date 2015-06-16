@@ -2,7 +2,10 @@ core = 7.x
 
 api = 2
 
-includes[] = "dept.make"
+includes[stanford_profile] = "stanford.make"
+includes[stanford_libraries] = "libraries.make"
+includes[stanford_patches] = "patches.make"
+includes[stanford_themes] = stanford-themes.make
 
 ; Contributed modules
 projects[s3fs][subdir] = "contrib"
