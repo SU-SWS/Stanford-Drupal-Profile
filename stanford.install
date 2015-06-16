@@ -58,7 +58,7 @@ function stanford_install() {
   variable_set('cron_safe_threshold', 0);
 
   // Set OpenLayers library to use external https CDN
-  variable_set('openlayers_source_external', 'https://cdnjs.cloudflare.com/ajax/libs/openlayers/2.12/OpenLayers.js');
+  variable_set('openlayers_source_external', 'https://cdnjs.cloudflare.com/ajax/libs/openlayers/2.13.1/OpenLayers.js');
   variable_set('openlayers_source_type', 'external');
 
   // Set Pathauto to reduce paths to numbers and letters
