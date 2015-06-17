@@ -168,7 +168,7 @@ function stanford_sites_tasks() {
   /**
    * Tasks for all sites on the service
    */
-  module_disable(array('update', 'comment'));
+  module_disable(array('update','comment'));
   module_enable(array('stanford_sites_systemtools'));
 
   /**
