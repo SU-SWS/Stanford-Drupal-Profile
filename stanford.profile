@@ -133,6 +133,7 @@ function stanford_sites_tasks() {
   else {
     module_enable(array('webauth'));
     if(stanford_sites_hosted()) {
+      module_enable(array('stanford_afs_quota'));
       stanford_sites_add_webauth_user(
         variable_get('stanford_sites_requester_sunetid'),
         variable_get('stanford_sites_requester_name'),
