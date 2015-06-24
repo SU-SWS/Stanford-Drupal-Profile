@@ -121,7 +121,7 @@ function stanford_sites_tasks() {
 
   //Enable the stanford_sites_helper module and the webauth module
   //Do this now rather than in .info file because it's looking for the administrator role and errors out otherwise
-  module_enable(array('stanford_sites_helper','stanford_afs_quota'));
+  module_enable(array('stanford_sites_helper'));
 
   // Enable our chosen authentication scheme.
   // 'webauth' = WMD, 'simplesamlphp' = SimpleSAML
