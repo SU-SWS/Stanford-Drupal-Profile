@@ -1,0 +1,28 @@
+<?php
+/**
+ * @file
+ * Install, update and uninstall functions for the minimal installation profile.
+ */
+
+/**
+ * Implements hook_install().
+ */
+function itasks_install() {
+  // Nothing to see here.
+}
+
+/**
+ * Implements hook_install_finished().
+ */
+function itasks_install_finished() {
+  // Flush all caches.
+  drupal_flush_all_caches();
+}
+
+/**
+ * Implements hook_requirements().
+ */
+function itasks_requirements($phase) {
+  $requirements = array();
+  return $requirements;
+}

@@ -1,0 +1,39 @@
+name = Install Tasks
+description = Build on a bundle of tasks.
+version = 7.x-1.0-alpha1
+core = 7.x
+
+; These should go in the registry but they don't show up for install :(
+files[] = includes/AbstractTask.php
+files[] = includes/TaskEngine.php
+files[] = includes/TaskInterface.php
+
+; ITasks Config
+taskdir = sites/all/libraries/tasks
+
+; Install Tasks                          Install in the order they appear below.
+; ------------------------------------------------------------------------------
+task[install][] = Stanford\Jumpstart\Jumpstart\Install\SiteName.php
+
+; Update Tasks
+; ------------------------------------------------------------------------------
+task[update][7100] = Stanford\Jumpstart\Jumpstart\Update\SiteName.php
+
+; Dependencies
+; ------------------------------------------------------------------------------
+dependencies[] = block
+dependencies[] = contextual
+dependencies[] = help
+dependencies[] = image
+dependencies[] = list
+dependencies[] = menu
+dependencies[] = number
+dependencies[] = options
+dependencies[] = path
+dependencies[] = taxonomy
+dependencies[] = search
+dependencies[] = shortcut
+dependencies[] = toolbar
+dependencies[] = field_ui
+dependencies[] = file
+dependencies[] = rdf
