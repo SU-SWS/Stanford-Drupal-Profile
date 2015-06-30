@@ -42,6 +42,11 @@ libraries[jw_player][download][url] = "https://github.com/SU-SWS/stanford_sites_
 libraries[jw_player][directory_name] = "jwplayer"
 libraries[jw_player][destination] = "libraries"
 
+libraries[dompdf][download][type] = "get"
+libraries[dompdf][download][url] = https://github.com/dompdf/dompdf/releases/download/v0.6.1/dompdf-0.6.1.zip
+libraries[dompdf][directory_name] = dompdf
+libraries[dompdf][destination] = "libraries"
+
 libraries[proj4js][download][type] = "get"
 libraries[proj4js][download][url] = http://download.osgeo.org/proj4js/proj4js-1.1.0.zip
 libraries[proj4js][directory_name] = proj4js

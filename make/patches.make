@@ -7,10 +7,6 @@ projects[context_useragent][patch][] = "https://drupal.org/files/issues/context_
 ; https://www.drupal.org/node/2471911 Form validation fails with "the directory is not writable" when public file system is remote
 projects[css_injector][patch][] = "https://www.drupal.org/files/issues/css_injector-remove_drupal_realpath-2471911-2.patch"
 
-; https://www.drupal.org/node/2332181 | Add update hook for date_views variables
-; Patch commited to 2.9-beta2
-projects[date][patch][] = https://www.drupal.org/files/issues/date-date_views_update_hook-2332181-8.patch
-
 ; https://drupal.org/node/927566 & https://drupal.org/node/860974 | Menu Links will not import/revert
 projects[features][patch][] = "https://drupal.org/files/issues/features-parent_identifier-927566-79.patch"
 
