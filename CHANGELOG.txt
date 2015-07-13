@@ -1,6 +1,18 @@
 Stanford Profile 7.x-x.x xxxx-xx-xx
 -----------------------------------
 
+Stanford Profile 7.x-2.0 2015-07-13
+-----------------------------------
+Changes since 7.x-1.3:
+By jbickar:
+  - Reorganization of modules into sites/all/modules/contrib and sites/all/modules/stanford
+  - Reorganization of .make files to separate functionality (modules, themes, libraries, patches)
+  - Support for SimpleSAML PHP authentication module
+  - Support for Amazon S3 file system module
+  - Update version of OpenLayers library from external CDN
+  - Enable stanford_afs_quota module if installed on Stanford Sites
+  - Many, many contrib and stanford module updates
+
 Stanford Profile 7.x-1.3 2014-11-27
 -----------------------------------
 Changes since 7.x-1.2:
