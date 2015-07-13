@@ -9,15 +9,15 @@ files[] = includes/TaskEngine.php
 files[] = includes/TaskInterface.php
 
 ; ITasks Config
-taskdir = sites/all/libraries/tasks
+taskdir = sites/all/tasks
 
 ; Install Tasks                          Install in the order they appear below.
 ; ------------------------------------------------------------------------------
-task[install][] = Stanford\Jumpstart\Jumpstart\Install\SiteName.php
+task[install][] = Stanford\Jumpstart\Install\SiteName.php
 
 ; Update Tasks
 ; ------------------------------------------------------------------------------
-task[update][7100] = Stanford\Jumpstart\Jumpstart\Update\SiteName.php
+task[update][7100][] = Stanford\Jumpstart\Update\SiteName.php
 
 ; Dependencies
 ; ------------------------------------------------------------------------------

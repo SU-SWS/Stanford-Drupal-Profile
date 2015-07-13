@@ -10,6 +10,7 @@
 function itasks_include_includes() {
   include_once dirname(__FILE__) . "/includes/TaskInterface.php";
   include_once dirname(__FILE__) . "/includes/AbstractTask.php";
+  include_once dirname(__FILE__) . "/includes/AbstractInstallTask.php";
   include_once dirname(__FILE__) . "/includes/TaskEngine.php";
 }
 
@@ -32,8 +33,8 @@ function itasks_install_tasks(&$install_state) {
   $profile_name = $install_state['parameters']['profile'];
   $info_file = drupal_get_path('profile', $profile_name) . "/" . $profile_name . ".info";
   $install_state['profile_info'] = drupal_parse_info_file($info_file);
-  $engine = new TaskEngine($install_state['profile_info']);
-
+  $engine = new TaskEngine($install_state['profile_info'], $install_state);
+  return $engine->getInstallTaskArray();
 }
 
 /**
@@ -55,4 +56,11 @@ function itasks_install_profile_modules(&$install_state) {
  */
 function itasks_verify_requirements(&$install_state) {
 
+}
+
+/**
+ * @param $install_state
+ */
+function itask_run_install_task(&$install_state) {
+  echo "Ran thing";
 }
