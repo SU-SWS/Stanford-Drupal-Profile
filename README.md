@@ -1,5 +1,5 @@
 #[Stanford Drupal Profile](https://github.com/SU-SWS/Stanford-Drupal-Profile)
-##### Version: 7.x-2.x-dev
+##### Version: 7.x-2.0
 Maintainers: [Marco Wise](https://github.com/mistermarco), [John Bickar](https://github.com/jbickar), [Shea McKinney](https://github.com/sherakama)
 
 URL: [http://sites.stanford.edu](http://sites.stanford.edu)
@@ -8,12 +8,12 @@ A drush make and Drupal install profile for new sites on the Drupal Hosting Serv
 
 Leading-edge development occurs on this branch, 7.x-2.x. This branch may or may not reflect what is installed on sites.stanford.edu.
 
-The -installed branches (6.x-1.x-installed, 7.x-1.x-installed) track what is installed on sites.stanford.edu. Check out the latest tag on one of those branches to match what is currently installed on sites.stanford.edu.
+The -installed branches (6.x-1.x-installed, 7.x-1.x-installed, 7.x-2.x-installed) track what is installed on sites.stanford.edu. Check out the latest tag on one of those branches to match what is currently installed on sites.stanford.edu.
 
 ## Drush Make
 
 * Run `drush make make/group.make` to create a group or personal site.
-* Run `drush make make/group.make` to create a department site (includes Stanford-specific themes; `drush make` will fail if you do not have access to the private theme repositories).
+* Run `drush make make/dept.make` to create a department site (includes Stanford-specific themes; `drush make` will fail if you do not have access to the private theme repositories).
 * Run `drush make make/anchorage.make` to create a department site for the Anchorage hosting environment (includes Stanford-specific themes; `drush make` will fail if you do not have access to the private theme repositories).
 
 ## Drupal Site Installation
