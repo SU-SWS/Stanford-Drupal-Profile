@@ -6,25 +6,53 @@
 
 abstract class AbstractInstallTask extends AbstractTask {
 
-  protected $displayName = "";
+  protected $displayName;
   protected $display = TRUE;
   protected $installType = "normal";
   protected $installRun = INSTALL_TASK_RUN_IF_NOT_COMPLETED;
   protected $installFunction = "itask_run_install_task";
+  protected $machineName;
+
+  /**
+   * Allows for the altering of installation tasks prior to install.
+   *
+   * @param array $tasks
+   *   An array of installation task objects.
+   *
+   */
+  public function installTaskAlter(&$tasks) {
+    // You can modify other installation tasks here.
+  }
 
   /**
    * @return string
    */
   public function getMachineName() {
-    return "machine_name";
+    if (!empty($this->machineName)) {
+      return $this->machineName;
+    }
+    return drupal_clean_css_identifier(get_class($this));
   }
 
+  /**
+   * [setMachineName description]
+   * @param [type] $name [description]
+   */
+  public function setMachineName($name) {
+    $this->machineName == $name;
+  }
 
   /**
    * @return string
    */
   public function getDisplayName() {
-    return $this->displayName;
+    if (!empty($this->displayName)) {
+      return $this->displayName;
+    }
+
+    $className = get_class($this);
+    $xp = explode("\\", $className);
+    return array_pop($xp);
   }
 
   /**

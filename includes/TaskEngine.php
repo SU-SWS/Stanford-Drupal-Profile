@@ -24,9 +24,9 @@ class TaskEngine {
    * Profile information.
    * @param [type] $info [description]
    */
-  public function __construct($info, $install_state) {
+  public function __construct($info, &$install_state) {
 
-    $this->installState = $install_state;
+    $this->installState = &$install_state;
     $install_state['test'] = "test";
 
     // Set the path to the include folder if provided.
@@ -58,7 +58,7 @@ class TaskEngine {
    * @param [type] $task [description]
    */
   public function addTask($type, $task) {
-    $this->tasks[$type][] = $task;
+    $this->tasks[$type][$task->getMachineName()] = $task;
   }
 
   /**
@@ -101,7 +101,7 @@ class TaskEngine {
         'function' => $task->getInstallFunction(),
       );
 
-      $this->installState['itasks']['install'][$task->getMachineName()] = array("one" => "two");
+      $this->installState['itasks']['install'][$task->getMachineName()] = $task;
     }
 
     return $taskArray;

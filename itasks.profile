@@ -27,6 +27,9 @@ function itasks_form_install_configure_form_alter(&$form, $form_state) {
 
 /**
  * Implements hook_install_tasks().
+ *
+ * Load up all the installation tasks defined in the .info file of this profile
+ * and add them to the task array.
  */
 function itasks_install_tasks(&$install_state) {
   itasks_include_includes();
@@ -39,10 +42,50 @@ function itasks_install_tasks(&$install_state) {
 
 /**
  * Implements hook_install_tasks_alter().
+ *
+ * Allow each installation task a chance to alter the task array. Also, take
+ * over the original verify_requirements function so that we can add additional
+ * dependencies to the veryify check before executing it.
  */
 function itasks_install_tasks_alter(&$tasks, &$install_state) {
+  itasks_include_includes();
+  $engine = new TaskEngine($install_state['profile_info'], $install_state);
+  $iTasks = $engine->getTasks("install");
 
+  // Allow each tasks to alter the tasks array.
+  if (is_array($iTasks)) {
+    foreach ($iTasks as $task) {
+      $task->installTaskAlter($tasks);
+    }
+  }
+
+  // Take over the verify function so that we can add the tasks dependencies
+  // before executing it.
+  $tasks["install_verify_requirements"]["function"] = "itasks_install_verify_requirements";
 }
+
+/**
+ * Override original verify function to add in task dependencies.
+ *
+ * Override the install_verify_requirements function to allow us to add in
+ * dependencies from the the installation tasks before executing the check.
+ *
+ * @param $install_state
+ */
+function itasks_install_verify_requirements(&$install_state) {
+  itasks_include_includes();
+  $engine = new TaskEngine($install_state['profile_info'], $install_state);
+  $iTasks = $engine->getTasks("install");
+  foreach ($iTasks as $task) {
+    $dependencies = $task->requirements();
+    $install_state['profile_info']['dependencies'] = array_merge($install_state['profile_info']['dependencies'], $dependencies);
+  }
+
+  // Remove the duplicates and run the original install_verify_requirements.
+  $install_state['profile_info']['dependencies'] = array_unique($install_state['profile_info']['dependencies']);
+  install_verify_requirements($install_state);
+}
+
 
 /**
  * Implements hook_install_profile_modules().
@@ -52,15 +95,17 @@ function itasks_install_profile_modules(&$install_state) {
 }
 
 /**
- * Implements hook_verify_requirements().
- */
-function itasks_verify_requirements(&$install_state) {
-
-}
-
-/**
+ * The task execution function.
+ *
+ * Drupal needs a function name that it can call for each task and this is it.
+ * The name of the task is provided in the install_state array so load it up
+ * and execute it.
+ *
  * @param $install_state
  */
 function itask_run_install_task(&$install_state) {
-  echo "Ran thing";
+  itasks_include_includes();
+  $engine = new TaskEngine($install_state['profile_info'], $install_state);
+  $tasks = $engine->getTasks("install");
+  $tasks[$install_state['active_task']]->execute();
 }

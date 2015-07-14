@@ -1,10 +1,11 @@
 name = Install Tasks
 description = Build on a bundle of tasks.
-version = 7.x-1.0-alpha1
+version = 7.x-1.0-dev
 core = 7.x
 
 ; These should go in the registry but they don't show up for install :(
 files[] = includes/AbstractTask.php
+files[] = includes/AbstractInstallTask.php
 files[] = includes/TaskEngine.php
 files[] = includes/TaskInterface.php
 

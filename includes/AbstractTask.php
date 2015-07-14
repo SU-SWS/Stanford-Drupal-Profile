@@ -34,16 +34,6 @@ abstract class AbstractTask implements TaskInterface {
   }
 
   /**
-   * Just return true.
-   *
-   * @return bool
-   *   True.
-   */
-  public function verify() {
-    return TRUE;
-  }
-
-  /**
    * Return an array of requirements for install time.
    *
    * @return array
@@ -51,17 +41,6 @@ abstract class AbstractTask implements TaskInterface {
    */
   public function requirements() {
     return array();
-  }
-
-  /**
-   * Allows for the altering of installation tasks prior to install.
-   *
-   * @param array $tasks
-   *   An array of installation task objects.
-   *
-   */
-  public function installTaskAlter(&$tasks) {
-    // You can modify other installation tasks here.
   }
 
 }
