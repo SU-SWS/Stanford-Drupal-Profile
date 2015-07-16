@@ -12,8 +12,16 @@ projects[s3fs][subdir] = "contrib"
 projects[s3fs][version] = "2.0"
 projects[simplesamlphp_auth][subdir] = "contrib"
 projects[simplesamlphp_auth][version] = "2.0-alpha2"
+projects[smtp][subdir] = "contrib"
+projects[smtp][version] = "1.2"
 
 ; Custom modules, github
+projects[anchorage_helper][subdir] = "stanford"
+projects[anchorage_helper][type] = "module"
+projects[anchorage_helper][download][type] = "git"
+projects[anchorage_helper][download][url] = "git@github.com:SU-SWS/anchorage_helper.git"
+projects[anchorage_helper][download][tag] = "7.x-1.0-alpha1"
+
 projects[stanford_ssp][subdir] = "stanford"
 projects[stanford_ssp][type] = "module"
 projects[stanford_ssp][download][type] = "git"
