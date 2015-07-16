@@ -26,6 +26,7 @@ class TaskEngine {
    */
   public function __construct($info, &$install_state) {
 
+
     $this->installState = &$install_state;
     $install_state['test'] = "test";
 
@@ -36,6 +37,10 @@ class TaskEngine {
 
     // Define where to look for the task classes.
     $include = $this->getTaskDirAbsolute();
+    $autoloader = $include . "autoloader.php";
+
+    // Include the PHP autoloader.
+    include_once $autoloader;
 
     // Loop through each of the tasks and load it up.
     if (isset($info['task']['install'])) {

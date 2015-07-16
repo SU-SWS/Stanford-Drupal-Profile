@@ -14,6 +14,8 @@ taskdir = sites/all/tasks
 
 ; Install Tasks                          Install in the order they appear below.
 ; ------------------------------------------------------------------------------
+
+; STANDARD INSTALL
 task[install][] = Drupal\Standard\Install\FilteredHTMLFormat.php
 task[install][] = Drupal\Standard\Install\FullHTMLFormat.php
 task[install][] = Drupal\Standard\Install\BasicPageContentType.php
@@ -27,6 +29,24 @@ task[install][] = Drupal\Standard\Install\ArticleTagsField.php
 task[install][] = Drupal\Standard\Install\ArticleImageFieldInstance.php
 task[install][] = Drupal\Standard\Install\StandardBlocks.php
 task[install][] = Drupal\Standard\Install\StandardMenu.php
+
+; STANFORD INSTALL
+task[install][] = Stanford\DrupalProfile\Install\ContentTypeArticleSettings.php
+task[install][] = Stanford\DrupalProfile\Install\ContentTypePageSettings.php
+task[install][] = Stanford\DrupalProfile\Install\DateTimeSettings.php
+task[install][] = Stanford\DrupalProfile\Install\UserPermissions.php
+task[install][] = Stanford\DrupalProfile\Install\SearchBlock.php
+task[install][] = Stanford\DrupalProfile\Install\GeneralSettings.php
+task[install][] = Stanford\DrupalProfile\Install\WYSIWYGSettings.php
+task[install][] = Stanford\DrupalProfile\Install\FileSettings.php
+task[install][] = Stanford\DrupalProfile\Install\Authentication.php
+
+task[install][] = Stanford\DrupalProfile\Install\StanfordSites\DisableModules.php
+task[install][] = Stanford\DrupalProfile\Install\StanfordSites\EnableModules.php
+task[install][] = Stanford\DrupalProfile\Install\StanfordSites\ThemeSettings.php
+task[install][] = Stanford\DrupalProfile\Install\StanfordSites\TMPDir.php
+
+; Jumpstart Install
 task[install][] = Stanford\Jumpstart\Install\SiteName.php
 
 ; Update Tasks
@@ -35,19 +55,51 @@ task[update][7100][] = Stanford\Jumpstart\Update\SiteName.php
 
 ; Dependencies
 ; ------------------------------------------------------------------------------
+dependencies[] = advanced_help
+dependencies[] = auto_nodetitle
+dependencies[] = admin_menu
+dependencies[] = admin_menu_toolbar
+dependencies[] = admin_views
 dependencies[] = block
+dependencies[] = color
+dependencies[] = comment
 dependencies[] = contextual
+dependencies[] = css_injector
+dependencies[] = date
+dependencies[] = date_api
+dependencies[] = dashboard
+dependencies[] = dblog
+dependencies[] = email
+dependencies[] = features
+dependencies[] = field
+dependencies[] = field_ui
+dependencies[] = file
+dependencies[] = image
+dependencies[] = globalredirect
 dependencies[] = help
 dependencies[] = image
+dependencies[] = insert
+dependencies[] = libraries
+dependencies[] = link
 dependencies[] = list
 dependencies[] = menu
+dependencies[] = module_filter
+dependencies[] = nodeformcols
 dependencies[] = number
 dependencies[] = options
 dependencies[] = path
-dependencies[] = taxonomy
-dependencies[] = search
-dependencies[] = shortcut
-dependencies[] = toolbar
-dependencies[] = field_ui
-dependencies[] = file
+dependencies[] = pathauto
+dependencies[] = pathologic
+dependencies[] = redirect
 dependencies[] = rdf
+dependencies[] = search
+dependencies[] = stanford_wysiwyg
+dependencies[] = strongarm
+dependencies[] = taxonomy
+dependencies[] = taxonomy_manager
+dependencies[] = text
+dependencies[] = token
+dependencies[] = transliteration
+dependencies[] = views
+dependencies[] = views_ui
+dependencies[] = wysiwyg
