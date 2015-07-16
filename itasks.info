@@ -14,6 +14,19 @@ taskdir = sites/all/tasks
 
 ; Install Tasks                          Install in the order they appear below.
 ; ------------------------------------------------------------------------------
+task[install][] = Drupal\Standard\Install\FilteredHTMLFormat.php
+task[install][] = Drupal\Standard\Install\FullHTMLFormat.php
+task[install][] = Drupal\Standard\Install\BasicPageContentType.php
+task[install][] = Drupal\Standard\Install\ArticleContentType.php
+task[install][] = Drupal\Standard\Install\GeneralConfig.php
+task[install][] = Drupal\Standard\Install\UserConfig.php
+task[install][] = Drupal\Standard\Install\AdministratorRole.php
+task[install][] = Drupal\Standard\Install\TagsTaxonomy.php
+task[install][] = Drupal\Standard\Install\ImageFieldBase.php
+task[install][] = Drupal\Standard\Install\ArticleTagsField.php
+task[install][] = Drupal\Standard\Install\ArticleImageFieldInstance.php
+task[install][] = Drupal\Standard\Install\StandardBlocks.php
+task[install][] = Drupal\Standard\Install\StandardMenu.php
 task[install][] = Stanford\Jumpstart\Install\SiteName.php
 
 ; Update Tasks
