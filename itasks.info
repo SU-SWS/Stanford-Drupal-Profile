@@ -39,7 +39,7 @@ task[install][] = Stanford\DrupalProfile\Install\SearchBlock.php
 task[install][] = Stanford\DrupalProfile\Install\GeneralSettings.php
 task[install][] = Stanford\DrupalProfile\Install\WYSIWYGSettings.php
 task[install][] = Stanford\DrupalProfile\Install\FileSettings.php
-task[install][] = Stanford\DrupalProfile\Install\Authentication.php
+; task[install][] = Stanford\DrupalProfile\Install\PrivateFileSettings.php
 
 task[install][] = Stanford\DrupalProfile\Install\StanfordSites\DisableModules.php
 task[install][] = Stanford\DrupalProfile\Install\StanfordSites\EnableModules.php
@@ -47,7 +47,16 @@ task[install][] = Stanford\DrupalProfile\Install\StanfordSites\ThemeSettings.php
 task[install][] = Stanford\DrupalProfile\Install\StanfordSites\TMPDir.php
 
 ; Jumpstart Install
+task[install][] = Stanford\Jumpstart\Install\Authentication.php
+; task[install][] = Stanford\Jumpstart\Install\PrivateFileDelete.php
+task[install][] = Stanford\Jumpstart\Install\Content\Importer\LoadImporterLibrary.php
+task[install][] = Stanford\Jumpstart\Install\Content\ImportVocabularies.php
+task[install][] = Stanford\Jumpstart\Install\Content\ImportJSVNodes.php
+task[install][] = Stanford\Jumpstart\Install\Content\ImportJSVBeans.php
 task[install][] = Stanford\Jumpstart\Install\SiteName.php
+
+; Needs to be last for raisons.
+task[install][] = Stanford\DrupalProfile\Install\PrivateFileSettings.php
 
 ; Update Tasks
 ; ------------------------------------------------------------------------------
@@ -93,7 +102,6 @@ dependencies[] = pathologic
 dependencies[] = redirect
 dependencies[] = rdf
 dependencies[] = search
-dependencies[] = stanford_wysiwyg
 dependencies[] = strongarm
 dependencies[] = taxonomy
 dependencies[] = taxonomy_manager
@@ -103,3 +111,43 @@ dependencies[] = transliteration
 dependencies[] = views
 dependencies[] = views_ui
 dependencies[] = wysiwyg
+
+dependencies[] = entity
+dependencies[] = bean
+dependencies[] = bean_admin_ui
+dependencies[] = file_entity
+dependencies[] = block_class
+dependencies[] = context_accordion
+dependencies[] = context_respect
+dependencies[] = context_ui
+dependencies[] = ctools
+dependencies[] = features
+dependencies[] = diff
+dependencies[] = metatag
+dependencies[] = menu_block
+dependencies[] = webauth_extras
+dependencies[] = wysiwyg
+dependencies[] = context_http_header
+dependencies[] = context_useragent
+dependencies[] = uuid
+dependencies[] = better_formats
+
+dependencies[] = stanford_bean_types
+dependencies[] = stanford_bean_types_permissions
+dependencies[] = stanford_image
+dependencies[] = stanford_image_styles
+dependencies[] = stanford_metatag_nobots
+dependencies[] = stanford_page
+dependencies[] = stanford_landing_page
+dependencies[] = stanford_landing_page_node_convert
+dependencies[] = stanford_jumpstart
+dependencies[] = stanford_jumpstart_home
+dependencies[] = stanford_jumpstart_login
+dependencies[] = stanford_jumpstart_shortcuts
+dependencies[] = stanford_jumpstart_site_actions
+dependencies[] = stanford_jumpstart_wysiwyg
+dependencies[] = stanford_jumpstart_layouts
+dependencies[] = stanford_jumpstart_roles
+dependencies[] = stanford_jumpstart_permissions
+dependencies[] = stanford_date_timepicker
+dependencies[] = stanford_manage_content

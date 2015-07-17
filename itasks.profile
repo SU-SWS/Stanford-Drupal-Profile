@@ -107,5 +107,19 @@ function itask_run_install_task(&$install_state) {
   itasks_include_includes();
   $engine = new TaskEngine($install_state['profile_info'], $install_state);
   $tasks = $engine->getTasks("install");
+
+  if (function_exists('drush_log')) {
+    $time = microtime(TRUE);
+    drush_log("Executing: " . $install_state['active_task'], 'ok');
+  }
+
+  // Call the bloody thing.
   $tasks[$install_state['active_task']]->execute();
+
+  if (function_exists("drush_log")) {
+    $now = microtime(TRUE);
+    $diff = round($now - $time, 3);
+    drush_log("Finished executing in: " . $diff . " seconds", "ok");
+  }
+
 }
