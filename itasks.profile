@@ -20,10 +20,43 @@ function itasks_include_includes() {
  * Allows the profile to alter the site configuration form.
  */
 function itasks_form_install_configure_form_alter(&$form, $form_state) {
+
+  $engine = new TaskEngine($form_state['build_info']['args'][0]['profile_info'], $form_state['build_info']['args'][0]);
+
   // Pre-populate the site name with the server name.
   $form['site_information']['site_name']['#default_value'] = $_SERVER['SERVER_NAME'];
+  $form = $engine->getTaskOptionsForm($form, $form_state);
+
+  $form["#validate"][] = "itasks_form_install_configure_form_alter_validate";
+  $form["#submit"][] = "itasks_form_install_configure_form_alter_submit";
+
 }
 
+/**
+ * [itasks_form_install_configure_form_alter_validate description]
+ * @param  [type] $form        [description]
+ * @param  [type] &$form_state [description]
+ * @return [type]              [description]
+ */
+function itasks_form_install_configure_form_alter_validate($form, &$form_state) {
+  if (empty($form_state['values']['itasks']['tasks'])) {
+    return;
+  }
+  // Do something here.....
+}
+
+/**
+ * [itasks_form_install_configure_form_alter_submit description]
+ * @param  [type] $form        [description]
+ * @param  [type] &$form_state [description]
+ * @return [type]              [description]
+ */
+function itasks_form_install_configure_form_alter_submit($form, &$form_state) {
+  if (empty($form_state['values']['itasks']['tasks'])) {
+    return;
+  }
+  $form_state['build_info']['args'][0]['install_task_list'] = $form_state['values']['itasks']['tasks'];
+}
 
 /**
  * Implements hook_install_tasks().

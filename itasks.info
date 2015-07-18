@@ -31,6 +31,7 @@ task[install][] = Drupal\Standard\Install\StandardBlocks.php
 task[install][] = Drupal\Standard\Install\StandardMenu.php
 
 ; STANFORD INSTALL
+; task[install][] = Stanford\DrupalProfile\Install\Authentication.php
 task[install][] = Stanford\DrupalProfile\Install\ContentTypeArticleSettings.php
 task[install][] = Stanford\DrupalProfile\Install\ContentTypePageSettings.php
 task[install][] = Stanford\DrupalProfile\Install\DateTimeSettings.php
@@ -39,22 +40,19 @@ task[install][] = Stanford\DrupalProfile\Install\SearchBlock.php
 task[install][] = Stanford\DrupalProfile\Install\GeneralSettings.php
 task[install][] = Stanford\DrupalProfile\Install\WYSIWYGSettings.php
 task[install][] = Stanford\DrupalProfile\Install\FileSettings.php
-; task[install][] = Stanford\DrupalProfile\Install\PrivateFileSettings.php
-
 task[install][] = Stanford\DrupalProfile\Install\StanfordSites\DisableModules.php
 task[install][] = Stanford\DrupalProfile\Install\StanfordSites\EnableModules.php
 task[install][] = Stanford\DrupalProfile\Install\StanfordSites\ThemeSettings.php
 task[install][] = Stanford\DrupalProfile\Install\StanfordSites\TMPDir.php
 
 ; JUMPSTART INSTALL
-task[install][] = Stanford\Jumpstart\Install\Authentication.php
+; task[install][] = Stanford\Jumpstart\Install\Authentication.php
 task[install][] = Stanford\Jumpstart\Install\themeSettings.php
 task[install][] = Stanford\Jumpstart\Install\RevertAllFeatures.php
 task[install][] = Stanford\Jumpstart\Install\Content\Importer\LoadImporterLibrary.php
 task[install][] = Stanford\Jumpstart\Install\Content\ImportVocabularies.php
 task[install][] = Stanford\Jumpstart\Install\Content\ImportJSVNodes.php
 task[install][] = Stanford\Jumpstart\Install\Content\ImportJSVBeans.php
-task[install][] = Stanford\Jumpstart\Install\Authentication.php
 task[install][] = Stanford\Jumpstart\Install\GeneralSettings.php
 task[install][] = Stanford\Jumpstart\Install\PathologicSettings.php
 task[install][] = Stanford\Jumpstart\Install\User\UserSettings.php
@@ -126,7 +124,6 @@ dependencies[] = transliteration
 dependencies[] = views
 dependencies[] = views_ui
 dependencies[] = wysiwyg
-
 dependencies[] = entity
 dependencies[] = bean
 dependencies[] = bean_admin_ui
@@ -140,7 +137,6 @@ dependencies[] = features
 dependencies[] = diff
 dependencies[] = metatag
 dependencies[] = menu_block
-dependencies[] = webauth_extras
 dependencies[] = wysiwyg
 dependencies[] = context_http_header
 dependencies[] = context_useragent

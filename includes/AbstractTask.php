@@ -9,14 +9,11 @@ abstract class AbstractTask implements TaskInterface {
   // Variables
   // ---------------------------------------------------------------------------
 
-  var $complete;
 
   // Constructor
   // ---------------------------------------------------------------------------
 
-  public function __construct() {
-
-  }
+  public function __construct() {}
 
   // Methods
   // ---------------------------------------------------------------------------

@@ -1,13 +1,14 @@
 <?php
 /**
  * @file
- *
  * A shared, namespaced, and other stuff things and stuff.
  */
-
+/**
+ *
+ */
 class TaskEngine {
 
-  // Install state
+  // Install state.
   protected $installState;
 
   // Stores tasks.
@@ -22,13 +23,13 @@ class TaskEngine {
 
   /**
    * Profile information.
-   * @param [type] $info [description]
+   *
+   * @param [type] $info
+   *   [description]
    */
   public function __construct($info, &$install_state) {
 
-
     $this->installState = &$install_state;
-    $install_state['test'] = "test";
 
     // Set the path to the include folder if provided.
     if (isset($info['taskdir'])) {
@@ -59,8 +60,11 @@ class TaskEngine {
 
   /**
    * Adds a task to the task array.
-   * @param [type] $type [description]
-   * @param [type] $task [description]
+   *
+   * @param [type] $type
+   *   [description]
+   * @param [type] $task
+   *   [description]
    */
   public function addTask($type, $task) {
     $this->tasks[$type][$task->getMachineName()] = $task;
@@ -137,34 +141,76 @@ class TaskEngine {
    * @return string
    */
   protected function normalizePath($path) {
-    $parts = array();// Array to build a new path from the good parts
-    $path = str_replace('\\', '/', $path);// Replace backslashes with forwardslashes
-    $path = preg_replace('/\/+/', '/', $path);// Combine multiple slashes into a single slash
-    $segments = explode('/', $path);// Collect path segments
-    $test = '';// Initialize testing variable
-    foreach($segments as $segment) {
-      if($segment != '.') {
-         $test = array_pop($parts);
-         if(is_null($test)) {
-           $parts[] = $segment;
-         } else if($segment == '..') {
+    $parts = array();
+    // Array to build a new path from the good parts.
+    $path = str_replace('\\', '/', $path);
+    // Replace backslashes with forwardslashes.
+    $path = preg_replace('/\/+/', '/', $path);
+    // Combine multiple slashes into a single slash.
+    $segments = explode('/', $path);
+    // Collect path segments.
+    $test = '';
+    // Initialize testing variable.
+    foreach ($segments as $segment) {
+      if ($segment != '.') {
+        $test = array_pop($parts);
+        if (is_null($test)) {
+          $parts[] = $segment;
+        }
+        elseif ($segment == '..') {
 
-           if($test == '..') {
-             $parts[] = $test;
-           }
+          if ($test == '..') {
+            $parts[] = $test;
+          }
 
-           if($test == '..' || $test == '') {
-             $parts[] = $segment;
-           }
-         }
-      else {
-        $parts[] = $test;
-        $parts[] = $segment;
+          if ($test == '..' || $test == '') {
+            $parts[] = $segment;
+          }
+        }
+        else {
+          $parts[] = $test;
+          $parts[] = $segment;
         }
       }
     }
 
     return implode('/', $parts);
+  }
+
+  // FORMS AND UI
+  // ---------------------------------------------------------------------------
+
+  /**
+   * [getTaskOptionsForm description].
+   *
+   * @return [type] [description]
+   */
+  public function getTaskOptionsForm($form = array(), &$form_state) {
+    $tasks = $this->getTasks('install');
+
+    $form['itasks'] = array(
+      "#type" => "fieldset",
+      "#title" => t("Task Options"),
+      "#description" => t("Choose which tasks you would like enabled."),
+      "#collapsible" => TRUE,
+      "#collapsed" => FALSE,
+      "#tree" => TRUE,
+    );
+
+    $options = array();
+    foreach ($tasks as $machine => $task) {
+      $options[$machine] = $task->getDescription();
+    }
+
+    $form['itasks']['tasks'] = array(
+      "#type" => "checkboxes",
+      "#options" => $options,
+      "#title" => t("Installation tasks"),
+      "#description" => t("Check off all the installation tasks you would like to perform"),
+      "#default_value" => isset($form_state['values']['itasks']['tasks']) ? $form_state['values']['itasks']['tasks'] : array(),
+    );
+
+    return $form;
   }
 
 }

@@ -12,6 +12,7 @@ abstract class AbstractInstallTask extends AbstractTask {
   protected $installRun = INSTALL_TASK_RUN_IF_NOT_COMPLETED;
   protected $installFunction = "itask_run_install_task";
   protected $machineName;
+  protected $description;
 
   /**
    * Allows for the altering of installation tasks prior to install.
@@ -81,6 +82,26 @@ abstract class AbstractInstallTask extends AbstractTask {
    */
   public function getInstallFunction() {
     return $this->installFunction;
+  }
+
+  /**
+   * [setDescription description]
+   * @param [type] $desc [description]
+   */
+  public function setDescription($desc) {
+    $this->description = $desc;
+  }
+
+  /**
+   * [getDescription description]
+   * @return [type] [description]
+   */
+  public function getDescription() {
+    if (!is_null($this->description)) {
+      return $this->description;
+    }
+
+    return $this->getMachineName() . ": Missing description";
   }
 
 }
