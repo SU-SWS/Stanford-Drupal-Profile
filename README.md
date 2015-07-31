@@ -6,9 +6,9 @@ URL: [http://sites.stanford.edu](http://sites.stanford.edu)
 
 A drush make and Drupal install profile for new sites on the Drupal Hosting Service at Stanford ("Stanford Sites").
 
-Leading-edge development occurs on this branch, 7.x-2.x. This branch may or may not reflect what is installed on sites.stanford.edu.
+This branch, 7.x-2.x-installed, tracks what is installed on sites.stanford.edu. Check out the latest tag on this branch to match what is currently installed on sites.stanford.edu.
 
-The -installed branches (6.x-1.x-installed, 7.x-1.x-installed, 7.x-2.x-installed) track what is installed on sites.stanford.edu. Check out the latest tag on one of those branches to match what is currently installed on sites.stanford.edu.
+Leading-edge development occurs on the -dev branch for each Drupal core version (6.x-1.x-dev, 7.x-2.x). Those branches may or may not reflect what is installed on sites.stanford.edu.
 
 ## Drush Make
 
