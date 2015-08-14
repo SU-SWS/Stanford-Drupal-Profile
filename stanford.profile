@@ -88,7 +88,7 @@ function stanford_sites_tasks() {
     module_enable(array('s3fs'));
     variable_set('file_default_scheme', 's3');
     variable_set('s3fs_use_https', 1);
-    variable_set('drush vset s3fs_cache_control_header', 'max-age=1209600');
+    variable_set('s3fs_cache_control_header', 'max-age=1209600');
     variable_set('s3fs_use_s3_for_public', 1);
     variable_set('s3fs_use_s3_for_private', 1);
 
