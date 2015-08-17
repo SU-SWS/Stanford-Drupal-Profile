@@ -83,22 +83,6 @@ function stanford_sites_tasks() {
   /**
    * File system settings.
    */
-  $enable_s3fs = variable_get('enable_s3fs', 0);
-  if ($enable_s3fs == 1) {
-    module_enable(array('s3fs'));
-    variable_set('file_default_scheme', 's3');
-    variable_set('s3fs_use_https', 1);
-    variable_set('s3fs_cache_control_header', 'max-age=1209600');
-    variable_set('s3fs_use_s3_for_public', 1);
-    variable_set('s3fs_use_s3_for_private', 1);
-
-    // run drush s3fs-refresh-cache (or equivalent function)?
-    // From s3fs_update_7000().
-    //$config = _s3fs_get_config();
-    //if (!empty($config['bucket']) && !empty($config['region'])) {
-    //  _s3fs_refresh_cache($config);
-    //}
-  }
   // Set private directory.
   $private_directory = 'sites/default/files/private';
   variable_set('file_private_path', $private_directory);
@@ -119,6 +103,24 @@ function stanford_sites_tasks() {
   $element['#name'] = 'file_public_path';
   // Check that the public directory exists; create it if it does not.
   system_check_directory($element);
+
+  // S3 config.
+  $enable_s3fs = variable_get('enable_s3fs', 0);
+  if ($enable_s3fs == 1) {
+    module_enable(array('s3fs'));
+    variable_set('file_default_scheme', 's3');
+    variable_set('s3fs_use_https', 1);
+    variable_set('s3fs_cache_control_header', 'max-age=1209600');
+    variable_set('s3fs_use_s3_for_public', 1);
+    variable_set('s3fs_use_s3_for_private', 1);
+
+    // run drush s3fs-refresh-cache (or equivalent function)?
+    // From s3fs_update_7000().
+    //$config = _s3fs_get_config();
+    //if (!empty($config['bucket']) && !empty($config['region'])) {
+    //  _s3fs_refresh_cache($config);
+    //}
+  }
 
   //Enable the stanford_sites_helper module
   //Do this now rather than in .info file because it's looking for the administrator role and errors out otherwise
