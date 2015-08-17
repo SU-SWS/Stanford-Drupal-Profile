@@ -108,7 +108,8 @@ function stanford_sites_tasks() {
   $enable_s3fs = variable_get('enable_s3fs', 0);
   if ($enable_s3fs == 1) {
     module_enable(array('s3fs'));
-    variable_set('file_default_scheme', 's3');
+    // Leave file_default_scheme as "public", as we are configuring s3fs to take over the public file system, below.
+    // variable_set('file_default_scheme', 's3');
     variable_set('s3fs_use_https', 1);
     variable_set('s3fs_cache_control_header', 'max-age=1209600');
     variable_set('s3fs_use_s3_for_public', 1);
