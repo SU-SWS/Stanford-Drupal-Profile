@@ -1,6 +1,14 @@
 Stanford Profile 7.x-x.x xxxx-xx-xx
 -----------------------------------
 
+Stanford Profile 7.x-2.1 2015-08-18
+-----------------------------------
+Changes since 7.x-2.0:
+By jbickar:
+  - Updates to s3fs configuration during install time for Amazon hosting
+By sherakama and jbickar:
+  - Various module updates in .make files
+
 Stanford Profile 7.x-2.0 2015-07-13
 -----------------------------------
 Changes since 7.x-1.3:
