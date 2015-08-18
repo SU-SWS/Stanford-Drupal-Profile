@@ -1,7 +1,7 @@
 name = Stanford Sites
 description = Select this profile to install a version of Drupal customized for the Stanford Sites platform.
 core = 7.x
-version = 7.x-2.0-dev+5
+version = 7.x-2.1
 project status url = https://github.com/SU-SWS/Stanford-Drupal-Profile
 dependencies[] = advanced_help
 dependencies[] = auto_nodetitle
