@@ -20,7 +20,7 @@ projects[anchorage_helper][subdir] = "stanford"
 projects[anchorage_helper][type] = "module"
 projects[anchorage_helper][download][type] = "git"
 projects[anchorage_helper][download][url] = "git@github.com:SU-SWS/anchorage_helper.git"
-projects[anchorage_helper][download][tag] = "7.x-1.0-alpha3"
+projects[anchorage_helper][download][tag] = "7.x-1.0-alpha4"
 
 projects[stanford_ssp][subdir] = "stanford"
 projects[stanford_ssp][type] = "module"
