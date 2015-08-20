@@ -7,6 +7,9 @@ projects[context_useragent][patch][] = "https://drupal.org/files/issues/context_
 ; https://www.drupal.org/node/2471911 Form validation fails with "the directory is not writable" when public file system is remote
 projects[css_injector][patch][] = "https://www.drupal.org/files/issues/css_injector-remove_drupal_realpath-2471911-2.patch"
 
+; https://www.drupal.org/node/2375235 Calendar block Next/Prev navigation broken
+projects[date][patch][] = "https://www.drupal.org/files/issues/calendar_pager_broken-2375235-35.patch"
+
 ; https://drupal.org/node/927566 & https://drupal.org/node/860974 | Menu Links will not import/revert
 projects[features][patch][] = "https://drupal.org/files/issues/features-parent_identifier-927566-79.patch"
 
