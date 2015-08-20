@@ -1,7 +1,7 @@
 core = 7.x
 
 api = 2
-projects[drupal][version] = "7.38"
+projects[drupal][version] = "7.39"
 
 ; Contributed modules
 projects[admin_menu][subdir] = "contrib"
@@ -47,7 +47,7 @@ projects[context_list_active][version] = "1.0"
 projects[context_respect][subdir] = "contrib"
 projects[context_respect][version] = "1.3"
 projects[ctools][subdir] = "contrib"
-projects[ctools][version] = "1.7"
+projects[ctools][version] = "1.9"
 projects[custom_breadcrumbs][subdir] = "contrib"
 projects[custom_breadcrumbs][version] = "1.0-alpha1"
 projects[date][subdir] = "contrib"
