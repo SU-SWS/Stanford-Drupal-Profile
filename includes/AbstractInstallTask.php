@@ -4,7 +4,7 @@
  * Abstract Task Class
  */
 
-abstract class AbstractInstallTask extends AbstractTask {
+abstract class AbstractInstallTask extends AbstractTask implements InstallTaskInterface {
 
   protected $displayName;
   protected $display = TRUE;

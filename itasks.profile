@@ -8,7 +8,7 @@
  * Include the files necessary to do the install tasks.
  */
 function itasks_include_includes() {
-  include_once dirname(__FILE__) . "/includes/TaskInterface.php";
+  include_once dirname(__FILE__) . "/includes/InstallTaskInterface.php";
   include_once dirname(__FILE__) . "/includes/AbstractTask.php";
   include_once dirname(__FILE__) . "/includes/AbstractInstallTask.php";
   include_once dirname(__FILE__) . "/includes/TaskEngine.php";
@@ -109,6 +109,7 @@ function itasks_install_verify_requirements(&$install_state) {
   itasks_include_includes();
   $engine = new TaskEngine($install_state['profile_info'], $install_state);
   $iTasks = $engine->getTasks("install");
+
   foreach ($iTasks as $task) {
     $dependencies = $task->requirements();
     $install_state['profile_info']['dependencies'] = array_merge($install_state['profile_info']['dependencies'], $dependencies);
@@ -157,4 +158,53 @@ function itask_run_install_task(&$install_state) {
 
 }
 
+/**
+ * *****************************************************************************
+ * ** UPDATE HOOKS HACKS
+ * *****************************************************************************
+ */
+
+/**
+ * Implements hook_form_alter().
+ */
+function itasks_form_update_script_selection_form_alter(&$form, &$form_state) {
+
+  // Get the update tasks information from the profile .info file.
+  $profile = variable_get("install_profile", dirname(__FILE__));
+  $file = preg_replace('/profile$/', "info", __FILE__);
+  $info = drupal_parse_info_file($file);
+  $taskdir = $info['taskdir'];
+  $updates = $info['task']['update'];
+
+  // Require the abstract class for update tasks.
+  require_once dirname(__FILE__) . "/includes/AbstractUpdateTask.php";
+  // Require the autoloader for update tasks.
+  require_once DRUPAL_ROOT . "/" . $taskdir . "/autoloader.php";
+
+  // @todo: Filter out already been done ones by schema version.
+
+  foreach ($updates as $n => $file_path) {
+    $class = "\\" . preg_replace('/\.php$/', "", $file_path);
+    $utask = new $class();
+    $description = $utask->getDescription();
+    $form["start"]["#title"] = t("Pending updates");
+
+    // Key for install form...
+    if (!isset($form['start'][$profile])) {
+      $form['start'][$profile]["#type"] = "hidden";
+      $form['start'][$profile]["#value"] = $n;
+    }
+
+    // A nice display to the end user.
+    if (!isset($form['start'][$profile . "_updates"])) {
+      $form['start'][$profile . "_updates"]["#theme"] = "item_list";
+      $form['start'][$profile . "_updates"]["#items"] = array();
+      $form['start'][$profile . "_updates"]["#title"] = $profile . " profile";
+    }
+
+    $form['start'][$profile . "_updates"]["#items"][$n] = $n . " - " . $description;
+
+  }
+
+}
 

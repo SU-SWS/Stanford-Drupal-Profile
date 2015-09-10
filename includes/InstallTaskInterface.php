@@ -4,7 +4,7 @@
  * Task Interface
  */
 
-interface TaskInterface {
+interface InstallTaskInterface {
 
   /**
    * Do the task.

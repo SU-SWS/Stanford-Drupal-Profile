@@ -6,8 +6,9 @@ core = 7.x
 ; These should go in the registry but they don't show up for install :(
 files[] = includes/AbstractTask.php
 files[] = includes/AbstractInstallTask.php
+files[] = includes/AbstractUpdateTask.php
 files[] = includes/TaskEngine.php
-files[] = includes/TaskInterface.php
+files[] = includes/InstallTaskInterface.php
 
 ; ITasks Config
 taskdir = sites/all/tasks
@@ -71,7 +72,7 @@ task[install][] = Stanford\DrupalProfile\Install\PrivateFileSettings.php
 
 ; Update Tasks
 ; ------------------------------------------------------------------------------
-; task[update][7100][] = Stanford\Jumpstart\Update\SiteName.php
+task[update][7100] = Stanford\Jumpstart\Update\SiteName.php
 
 
 ; Dependencies

@@ -4,7 +4,7 @@
  * Abstract Task Class
  */
 
-abstract class AbstractTask implements TaskInterface {
+abstract class AbstractTask {
 
   // Variables
   // ---------------------------------------------------------------------------
