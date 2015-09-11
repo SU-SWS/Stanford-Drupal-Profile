@@ -12,6 +12,7 @@ projects[s3fs][subdir] = "contrib"
 projects[s3fs][version] = "2.0"
 projects[simplesamlphp_auth][subdir] = "contrib"
 projects[simplesamlphp_auth][version] = "2.0-alpha2"
+projects[simplesamlphp_auth][patch][] = "https://www.drupal.org/files/simplesamlphp_auth-fixnewdrupalusers-1824194-6.patch"
 projects[smtp][subdir] = "contrib"
 projects[smtp][version] = "1.2"
 
