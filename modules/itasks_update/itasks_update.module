@@ -1,0 +1,17 @@
+<?php
+/**
+ * @file
+ * File description
+ *
+ * Long description
+ */
+
+/**
+ * Implements hook_help().
+ */
+function itasks_update_help($path, $arg) {
+  switch ($path) {
+    case 'itasks_update':
+      return '<p>' . t('Please see README.md for more information.') . '</p>';
+  }
+}

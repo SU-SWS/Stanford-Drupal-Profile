@@ -72,8 +72,16 @@ task[install][] = Stanford\DrupalProfile\Install\PrivateFileSettings.php
 
 ; Update Tasks
 ; ------------------------------------------------------------------------------
-task[update][7100] = Stanford\Jumpstart\Update\SiteName.php
 
+; Drupal 7's method of getting update hooks is not condusive to allowing for
+; the update tasks to be listed here. Drupal 7 finds update hooks by reading
+; .install files and parsing out the functions from their raw definition rather
+; than by some sort of list or registry. Drupal 7 also does not allow for easy
+; altering of update hooks. So instead of patching core we are going to provide
+; an alternate method of running updates using itasks_updates.
+dependencies[] = itasks_updates
+
+task[update][7100] = Stanford\Jumpstart\Update\SiteName.php
 
 ; Dependencies
 ; ------------------------------------------------------------------------------
