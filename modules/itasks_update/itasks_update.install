@@ -7,20 +7,21 @@
  * Implements hook_install().
  */
 function itasks_update_install() {
-  // Populate the default {node_access} record.
-  /*
-   *db_insert('node_access')
-   *  ->fields(array(
-   *    'nid' => 0,
-   *    'gid' => 0,
-   *    'realm' => 'all',
-   *    'grant_view' => 1,
-   *    'grant_update' => 0,
-   *    'grant_delete' => 0,
-   *  ))
-   *  ->execute();
-   */
-  /* Your code here */
+  // Get the install profile name.
+  $profile = variable_get("install_profile", "itasks");
+
+  // Parse the info file for updates.
+  $info = drupal_parse_info_file(drupal_get_path("profile", $profile) . "/" . $profile . ".info");
+  $update_tasks = isset($info['task']['update']) ? $info['task']['update'] : FALSE;
+
+  if (empty($update_tasks)) {
+    return;
+  }
+
+  // Set the install schema to the last update in the .info file.
+  $last = array_pop(array_keys($update_tasks));
+  drupal_set_installed_schema_version($profile, $last);
+
 }
 
 /**

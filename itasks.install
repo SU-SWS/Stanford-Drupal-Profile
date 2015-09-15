@@ -29,6 +29,7 @@ function itasks_install_finished() {
 
   // Flush all caches.
   drupal_flush_all_caches();
+
 }
 
 /**

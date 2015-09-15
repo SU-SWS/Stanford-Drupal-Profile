@@ -6,6 +6,16 @@
  * Long description
  */
 
+// Protect against drush vs ui running of this.
+if (!function_exists("drush_log")) {
+  /**
+   * drush_log to drupal_set_message function.
+   */
+  function drush_log($message, $status = "status") {
+    drupal_set_message($message, $status);
+  }
+}
+
 /**
  * Implements hook_help().
  */
@@ -16,7 +26,6 @@ function itasks_update_help($path, $arg) {
   }
 }
 
-
 /**
  * Actuall runs the updates from itasks...
  *
@@ -24,16 +33,6 @@ function itasks_update_help($path, $arg) {
  *   Could be FALSE. Could be TRUE for success.
  */
 function itasks_update_do_updates($is_cli = TRUE) {
-
-  // Protect against drush vs ui running of this.
-  if (!function_exists("drush_log")) {
-    /**
-     * drush_log to drupal_set_message function.
-     */
-    function drush_log($message, $status = "status") {
-      drupal_set_message($message, $status);
-    }
-  }
 
   // Need this for later:
   require_once DRUPAL_ROOT . "/includes/install.inc";
@@ -96,7 +95,18 @@ function itasks_update_do_updates($is_cli = TRUE) {
     $status = itasks_update_do_updates_batch($not_yet_run);
   }
   else {
-    $status = itasks_update_do_updates_cli($not_yet_run);
+    // Prompt the user.
+    $options = array("yes" => t("Yes"));
+    $prompt = t("There are " . count($not_yet_run) . " pending updates. Would you like to continue?");
+    $choice = drush_choice($options, $prompt);
+
+    if ($choice == "yes") {
+      $status = itasks_update_do_updates_cli($not_yet_run);
+    }
+    else {
+      drush_log("Aborting updates.", "status");
+    }
+
   }
 
   return $status;
@@ -123,41 +133,34 @@ function itasks_update_do_updates_batch($tasks = array()) {
  * @return [type]        [description]
  */
 function itasks_update_do_updates_cli($tasks = array()) {
+
+  // No tasks just return false.
   if (!is_array($tasks) || empty($tasks)) {
     return FALSE;
   }
 
+  // The profile we are updating.
+  $profile = variable_get("install_profile", "itasks");
+
+  // Loop through the tasks and load up the class and run execute.
   foreach ($tasks as $schema_version => $task) {
-    $class_name = itasks_update_get_class_name_from_task_file_path($task);
-    $update = new $class_name();
+    $class_name = $task;
     try {
       drush_log("Starting update " . $schema_version, "status");
+      $update = new $class_name();
       $update->execute();
       drush_log("Finished update " . $schema_version, "status");
     }
     catch (Exception $e) {
+      // Something went wrong. Alert and quit.
       drush_log("Update " . $schema_version . " failed with message: " . $e->message(), "error");
       return FALSE;
     }
 
-    // Get the install profile name and set the schema version on success.
-    $profile = variable_get("install_profile", "itasks");
+    // Set the schema version on success.
     drupal_set_installed_schema_version($profile, $schema_version);
 
   }
 
 
-}
-
-/**
- * [itasks_update_get_class_name_from_task_file_path description]
- * @param  [type] $task_path [description]
- * @return [type]            [description]
- */
-function itasks_update_get_class_name_from_task_file_path($task_path) {
-  $parts = explode(".", $task_path);
-  array_pop($parts);
-  $path_without_extension = implode(".", $parts);
-  $class = "\\" . $path_without_extension;
-  return $class;
 }

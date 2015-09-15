@@ -17,57 +17,57 @@ taskdir = sites/all/tasks
 ; ------------------------------------------------------------------------------
 
 ; STANDARD INSTALL
-task[install][] = Drupal\Standard\Install\FilteredHTMLFormat.php
-task[install][] = Drupal\Standard\Install\FullHTMLFormat.php
-task[install][] = Drupal\Standard\Install\BasicPageContentType.php
-task[install][] = Drupal\Standard\Install\ArticleContentType.php
-task[install][] = Drupal\Standard\Install\GeneralConfig.php
-task[install][] = Drupal\Standard\Install\UserConfig.php
-task[install][] = Drupal\Standard\Install\AdministratorRole.php
-task[install][] = Drupal\Standard\Install\TagsTaxonomy.php
-task[install][] = Drupal\Standard\Install\ImageFieldBase.php
-task[install][] = Drupal\Standard\Install\ArticleTagsField.php
-task[install][] = Drupal\Standard\Install\ArticleImageFieldInstance.php
-task[install][] = Drupal\Standard\Install\StandardBlocks.php
-task[install][] = Drupal\Standard\Install\StandardMenu.php
+task[install][] = Drupal\Standard\Install\FilteredHTMLFormat
+task[install][] = Drupal\Standard\Install\FullHTMLFormat
+task[install][] = Drupal\Standard\Install\BasicPageContentType
+task[install][] = Drupal\Standard\Install\ArticleContentType
+task[install][] = Drupal\Standard\Install\GeneralConfig
+task[install][] = Drupal\Standard\Install\UserConfig
+task[install][] = Drupal\Standard\Install\AdministratorRole
+task[install][] = Drupal\Standard\Install\TagsTaxonomy
+task[install][] = Drupal\Standard\Install\ImageFieldBase
+task[install][] = Drupal\Standard\Install\ArticleTagsField
+task[install][] = Drupal\Standard\Install\ArticleImageFieldInstance
+task[install][] = Drupal\Standard\Install\StandardBlocks
+task[install][] = Drupal\Standard\Install\StandardMenu
 
 ; STANFORD INSTALL
-; task[install][] = Stanford\DrupalProfile\Install\Authentication.php
-task[install][] = Stanford\DrupalProfile\Install\ContentTypeArticleSettings.php
-task[install][] = Stanford\DrupalProfile\Install\ContentTypePageSettings.php
-task[install][] = Stanford\DrupalProfile\Install\DateTimeSettings.php
-task[install][] = Stanford\DrupalProfile\Install\UserPermissions.php
-task[install][] = Stanford\DrupalProfile\Install\SearchBlock.php
-task[install][] = Stanford\DrupalProfile\Install\GeneralSettings.php
-task[install][] = Stanford\DrupalProfile\Install\WYSIWYGSettings.php
-task[install][] = Stanford\DrupalProfile\Install\FileSettings.php
-task[install][] = Stanford\DrupalProfile\Install\StanfordSites\DisableModules.php
-task[install][] = Stanford\DrupalProfile\Install\StanfordSites\EnableModules.php
-task[install][] = Stanford\DrupalProfile\Install\StanfordSites\ThemeSettings.php
-task[install][] = Stanford\DrupalProfile\Install\StanfordSites\TMPDir.php
+; task[install][] = Stanford\DrupalProfile\Install\Authentication
+task[install][] = Stanford\DrupalProfile\Install\ContentTypeArticleSettings
+task[install][] = Stanford\DrupalProfile\Install\ContentTypePageSettings
+task[install][] = Stanford\DrupalProfile\Install\DateTimeSettings
+task[install][] = Stanford\DrupalProfile\Install\UserPermissions
+task[install][] = Stanford\DrupalProfile\Install\SearchBlock
+task[install][] = Stanford\DrupalProfile\Install\GeneralSettings
+task[install][] = Stanford\DrupalProfile\Install\WYSIWYGSettings
+task[install][] = Stanford\DrupalProfile\Install\FileSettings
+task[install][] = Stanford\DrupalProfile\Install\StanfordSites\DisableModules
+task[install][] = Stanford\DrupalProfile\Install\StanfordSites\EnableModules
+task[install][] = Stanford\DrupalProfile\Install\StanfordSites\ThemeSettings
+task[install][] = Stanford\DrupalProfile\Install\StanfordSites\TMPDir
 
 ; JUMPSTART INSTALL
-; task[install][] = Stanford\Jumpstart\Install\Authentication.php
-task[install][] = Stanford\Jumpstart\Install\themeSettings.php
-task[install][] = Stanford\Jumpstart\Install\RevertAllFeatures.php
-task[install][] = Stanford\Jumpstart\Install\Content\Importer\LoadImporterLibrary.php
-task[install][] = Stanford\Jumpstart\Install\Content\ImportVocabularies.php
-task[install][] = Stanford\Jumpstart\Install\Content\ImportJSVNodes.php
-task[install][] = Stanford\Jumpstart\Install\Content\ImportJSVBeans.php
-task[install][] = Stanford\Jumpstart\Install\GeneralSettings.php
-task[install][] = Stanford\Jumpstart\Install\PathologicSettings.php
-task[install][] = Stanford\Jumpstart\Install\User\UserSettings.php
-task[install][] = Stanford\Jumpstart\Install\User\SunetUser.php
-task[install][] = Stanford\Jumpstart\Install\User\HowardUser.php
-task[install][] = Stanford\Jumpstart\Install\User\LindseyUser.php
-task[install][] = Stanford\Jumpstart\Install\Menu\MenuSettings.php
-task[install][] = Stanford\Jumpstart\Install\Block\BlockSettings.php
-task[install][] = Stanford\Jumpstart\Install\Block\RelatedLinksBlock.php
-task[install][] = Stanford\Jumpstart\Install\JumpstartSettings.php
-task[install][] = Stanford\Jumpstart\Install\JumpstartHomeStatic.php
+; task[install][] = Stanford\Jumpstart\Install\Authentication
+task[install][] = Stanford\Jumpstart\Install\themeSettings
+task[install][] = Stanford\Jumpstart\Install\RevertAllFeatures
+task[install][] = Stanford\Jumpstart\Install\Content\Importer\LoadImporterLibrary
+task[install][] = Stanford\Jumpstart\Install\Content\ImportVocabularies
+task[install][] = Stanford\Jumpstart\Install\Content\ImportJSVNodes
+task[install][] = Stanford\Jumpstart\Install\Content\ImportJSVBeans
+task[install][] = Stanford\Jumpstart\Install\GeneralSettings
+task[install][] = Stanford\Jumpstart\Install\PathologicSettings
+task[install][] = Stanford\Jumpstart\Install\User\UserSettings
+task[install][] = Stanford\Jumpstart\Install\User\SunetUser
+task[install][] = Stanford\Jumpstart\Install\User\HowardUser
+task[install][] = Stanford\Jumpstart\Install\User\LindseyUser
+task[install][] = Stanford\Jumpstart\Install\Menu\MenuSettings
+task[install][] = Stanford\Jumpstart\Install\Block\BlockSettings
+task[install][] = Stanford\Jumpstart\Install\Block\RelatedLinksBlock
+task[install][] = Stanford\Jumpstart\Install\JumpstartSettings
+task[install][] = Stanford\Jumpstart\Install\JumpstartHomeStatic
 
 ; Needs to be last because of raisons.
-task[install][] = Stanford\DrupalProfile\Install\PrivateFileSettings.php
+task[install][] = Stanford\DrupalProfile\Install\PrivateFileSettings
 
 
 ; Update Tasks
@@ -79,17 +79,18 @@ task[install][] = Stanford\DrupalProfile\Install\PrivateFileSettings.php
 ; than by some sort of list or registry. Drupal 7 also does not allow for easy
 ; altering of update hooks. So instead of patching core we are going to provide
 ; an alternate method of running updates using itasks_updates.
-dependencies[] = itasks_updates
 
-task[update][7100] = Stanford\Jumpstart\Update\SiteName.php
-task[update][7101] = Stanford\Jumpstart\Update\SiteName.php
-task[update][7102] = Stanford\Jumpstart\Update\SiteName.php
-task[update][7103] = Stanford\Jumpstart\Update\SiteName.php
-task[update][7104] = Stanford\Jumpstart\Update\SiteName.php
-task[update][7106] = Stanford\Jumpstart\Update\SiteName.php
-task[update][7108] = Stanford\Jumpstart\Update\SiteName.php
-task[update][7110] = Stanford\Jumpstart\Update\SiteName.php
-task[update][7111] = Stanford\Jumpstart\Update\SiteName.php
+dependencies[] = itasks_update
+
+task[update][7100] = Stanford\Jumpstart\Update\SiteName
+task[update][7101] = Stanford\Jumpstart\Update\SiteName
+task[update][7102] = Stanford\Jumpstart\Update\SiteName
+task[update][7103] = Stanford\Jumpstart\Update\SiteName
+task[update][7104] = Stanford\Jumpstart\Update\SiteName
+task[update][7106] = Stanford\Jumpstart\Update\SiteName
+task[update][7108] = Stanford\Jumpstart\Update\SiteName
+task[update][7110] = Stanford\Jumpstart\Update\SiteName
+task[update][7111] = Stanford\Jumpstart\Update\SiteName
 
 
 ; Dependencies

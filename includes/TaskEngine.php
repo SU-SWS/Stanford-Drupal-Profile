@@ -46,8 +46,9 @@ class TaskEngine {
     // Loop through each of the tasks and load it up.
     if (isset($info['task']['install'])) {
       foreach ($info['task']['install'] as $key => $task) {
-        include_once $this->normalizePath($include . $task);
-        $className = "\\" . explode(".", $task)[0];
+        // include_once $this->normalizePath($include . $task);
+        // $className = "\\" . explode(".", $task)[0];
+        $className = "\\" . $task;
         $taskObject = new $className();
         $this->addTask("install", $taskObject);
       }
