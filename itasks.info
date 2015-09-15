@@ -82,6 +82,15 @@ task[install][] = Stanford\DrupalProfile\Install\PrivateFileSettings.php
 dependencies[] = itasks_updates
 
 task[update][7100] = Stanford\Jumpstart\Update\SiteName.php
+task[update][7101] = Stanford\Jumpstart\Update\SiteName.php
+task[update][7102] = Stanford\Jumpstart\Update\SiteName.php
+task[update][7103] = Stanford\Jumpstart\Update\SiteName.php
+task[update][7104] = Stanford\Jumpstart\Update\SiteName.php
+task[update][7106] = Stanford\Jumpstart\Update\SiteName.php
+task[update][7108] = Stanford\Jumpstart\Update\SiteName.php
+task[update][7110] = Stanford\Jumpstart\Update\SiteName.php
+task[update][7111] = Stanford\Jumpstart\Update\SiteName.php
+
 
 ; Dependencies
 ; ------------------------------------------------------------------------------

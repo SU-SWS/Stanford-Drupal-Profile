@@ -15,3 +15,149 @@ function itasks_update_help($path, $arg) {
       return '<p>' . t('Please see README.md for more information.') . '</p>';
   }
 }
+
+
+/**
+ * Actuall runs the updates from itasks...
+ *
+ * @return bool
+ *   Could be FALSE. Could be TRUE for success.
+ */
+function itasks_update_do_updates($is_cli = TRUE) {
+
+  // Protect against drush vs ui running of this.
+  if (!function_exists("drush_log")) {
+    /**
+     * drush_log to drupal_set_message function.
+     */
+    function drush_log($message, $status = "status") {
+      drupal_set_message($message, $status);
+    }
+  }
+
+  // Need this for later:
+  require_once DRUPAL_ROOT . "/includes/install.inc";
+
+  // Get the install profile name.
+  $profile = variable_get("install_profile", "itasks");
+
+  // Parse the info file for updates.
+  $info = drupal_parse_info_file(drupal_get_path("profile", $profile) . "/" . $profile . ".info");
+  $update_tasks = isset($info['task']['update']) ? $info['task']['update'] : FALSE;
+  $taskdir = $info["taskdir"];
+
+  // If the task directory is not available or is not a directory at all then
+  // we must stop our adventure here as we won't be able to continue.
+  if (empty($taskdir) || !is_dir(DRUPAL_ROOT . "/" . $taskdir)) {
+    drush_log("Update task directory not defined. Please add taskdir to " . $profile . ".info", "error");
+    return FALSE;
+  }
+
+  // Get the autoloader file.
+  require_once DRUPAL_ROOT . "/" . $taskdir . "/autoloader.php";
+
+  // If no update tasks defined then present a message and go home for the day.
+  if (!$update_tasks) {
+    drush_log("No update tasks defined in " . $profile, 'warning');
+    return TRUE;
+  }
+
+  // Trim out the fat. Ie: the schema tasks that have already been run.
+  $current_version = drupal_get_installed_schema_version($profile);
+
+  // Sort em.
+  ksort($update_tasks);
+  $keys = array_keys($update_tasks);
+  $last = array_pop($keys);
+
+  // Fill em.
+  $filled = array_fill(0, $last, 0);
+  $full_array = $update_tasks + $filled;
+
+  // Sort them again.
+  ksort($full_array);
+
+  // Slice em.
+  $not_yet_run = array_slice($full_array, $current_version + 1, count($full_array), TRUE);
+
+  // Remove any more zeros...
+  $not_yet_run = array_diff($not_yet_run, array(0));
+
+  // Nothing to run. We are done.
+  if (empty($not_yet_run)) {
+    drush_log("No updates available for " . $profile . ". Schema version: " . $current_version, "status");
+    return TRUE;
+  }
+
+  $status = FALSE;
+
+  // Loop through the tasks and run the update.
+  if (!$is_cli) {
+    $status = itasks_update_do_updates_batch($not_yet_run);
+  }
+  else {
+    $status = itasks_update_do_updates_cli($not_yet_run);
+  }
+
+  return $status;
+}
+
+/**
+ * [itasks_update_do_updates_batch description]
+ * @param  array  $tasks [description]
+ * @return [type]        [description]
+ */
+function itasks_update_do_updates_batch($tasks = array()) {
+
+  if (!is_array($tasks) || empty($tasks)) {
+    return FALSE;
+  }
+
+  // Create batches.
+
+}
+
+/**
+ * [itasks_update_do_updates_cli description]
+ * @param  array  $tasks [description]
+ * @return [type]        [description]
+ */
+function itasks_update_do_updates_cli($tasks = array()) {
+  if (!is_array($tasks) || empty($tasks)) {
+    return FALSE;
+  }
+
+  foreach ($tasks as $schema_version => $task) {
+    $class_name = itasks_update_get_class_name_from_task_file_path($task);
+    $update = new $class_name();
+    try {
+      drush_log("Starting update " . $schema_version, "status");
+      $update->execute();
+      drush_log("Finished update " . $schema_version, "status");
+    }
+    catch (Exception $e) {
+      drush_log("Update " . $schema_version . " failed with message: " . $e->message(), "error");
+      return FALSE;
+    }
+
+    // Get the install profile name and set the schema version on success.
+    $profile = variable_get("install_profile", "itasks");
+    drupal_set_installed_schema_version($profile, $schema_version);
+
+  }
+
+
+}
+
+/**
+ * [itasks_update_get_class_name_from_task_file_path description]
+ * @param  [type] $task_path [description]
+ * @return [type]            [description]
+ */
+function itasks_update_get_class_name_from_task_file_path($task_path) {
+  $parts = explode(".", $task_path);
+  array_pop($parts);
+  $path_without_extension = implode(".", $parts);
+  $class = "\\" . $path_without_extension;
+  return $class;
+}
