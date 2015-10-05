@@ -12,7 +12,7 @@ The -installed branches (6.x-1.x-installed, 7.x-1.x-installed, 7.x-2.x-installed
 
 ## Drush Make
 
-* Run `drush make make/group.make` to create a group or personal site.
+* Run `drush make make/group.make` to create a group or personal site (includes the Stanford Basic theme; `drush make` will fail if you do not have access to that private theme repository. You may want to use the `--force-complete` flag).
 * Run `drush make make/dept.make` to create a department site (includes Stanford-specific themes; `drush make` will fail if you do not have access to the private theme repositories).
 * Run `drush make make/anchorage.make` to create a department site for the Anchorage hosting environment (includes Stanford-specific themes; `drush make` will fail if you do not have access to the private theme repositories).
 
