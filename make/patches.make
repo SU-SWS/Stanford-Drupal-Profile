@@ -13,6 +13,9 @@ projects[css_injector][patch][] = "https://www.drupal.org/files/issues/css_injec
 ; https://www.drupal.org/node/2375235 Calendar block Next/Prev navigation broken
 projects[date][patch][] = "https://www.drupal.org/files/issues/calendar_pager_broken-2375235-35.patch"
 
+; https://www.drupal.org/node/2221307 | Patch allows for field groups to be rendered in ds custom block regions
+projects[ds][patch][] = "https://www.drupal.org/files/issues/ds_extras_field_group_not_rendered-2221307-18.patch"
+
 ; https://drupal.org/node/927566 & https://drupal.org/node/860974 | Menu Links will not import/revert
 projects[features][patch][] = "https://drupal.org/files/issues/features-parent_identifier-927566-79.patch"
 
