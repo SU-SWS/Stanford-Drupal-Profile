@@ -1,14 +1,8 @@
-name = Install Tasks
-description = Build on a bundle of tasks.
-version = 7.x-1.0-dev
+name = Jumpstart
+description = Jumpstart Distro
+version = 7.x-5.0
 core = 7.x
-
-; These should go in the registry but they don't show up for install :(
-files[] = includes/AbstractTask.php
-files[] = includes/AbstractInstallTask.php
-files[] = includes/AbstractUpdateTask.php
-files[] = includes/TaskEngine.php
-files[] = includes/InstallTaskInterface.php
+files[] = jumpstart.install
 
 ; ITasks Config
 taskdir = sites/all/tasks

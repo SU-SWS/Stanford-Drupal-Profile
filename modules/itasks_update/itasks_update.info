@@ -7,4 +7,4 @@ project = itasks_update
 ; dependencies[] = block
 ; stylesheets[all][] = css/stanford_module.css
 ; scripts[] = js/stanford_module.js
-files[] = itasks_update.install
+; files[] = itasks_update.install
