@@ -17,6 +17,8 @@ class TaskEngine {
   // Tasks path.
   protected $taskDir = "sites/all/tasks";
 
+  // Conditional tasks.
+  protected $extraTasks = "none";
 
   // Constructor
   // ---------------------------------------------------------------------------
@@ -41,17 +43,43 @@ class TaskEngine {
     $autoloader = $include . "autoloader.php";
 
     // Include the PHP autoloader.
-    include_once $autoloader;
+    require_once $autoloader;
 
     // Loop through each of the tasks and load it up.
-    if (isset($info['task']['install'])) {
-      foreach ($info['task']['install'] as $key => $task) {
-        // include_once $this->normalizePath($include . $task);
-        // $className = "\\" . explode(".", $task)[0];
-        $className = "\\" . $task;
-        $taskObject = new $className();
-        $this->addTask("install", $taskObject);
+    if (isset($info['task'])) {
+      foreach ($info['task'] as $key => $tasks) {
+        foreach ($tasks as $index => $task) {
+
+          // For the straight up install/upgrade tasks.
+          if (!is_array($task)) {
+            $className = "\\" . $task;
+            $taskObject = new $className();
+            $this->addTask($key, $taskObject);
+          }
+
+          // For the task groups. e.g: sites, anchorage, local...
+          // Check for the classname in this one because we might not have all
+          // of the tasks available.
+          if (is_array($task)) {
+            foreach ($task as $subIndex => $subTask) {
+              $className = "\\" . $subTask;
+              if (class_exists($className)) {
+                $taskObject = new $className();
+                $this->addTask($key, $taskObject);
+              }
+              // @todo: How to log if something is missing?
+            }
+          }
+
+        }
       }
+    }
+
+    // Allow for an extra group of installation tasks.
+    $extras = "none";
+    if (isset($install_state["forms"]["install_configure_form"]["itasks_extra_tasks"])) {
+      $extras = $install_state["forms"]["install_configure_form"]["itasks_extra_tasks"];
+      $this->setExtraTasksName($extras);
     }
 
   }
@@ -101,6 +129,12 @@ class TaskEngine {
     $taskArray = array();
 
     $tasks = $this->getTasks('install');
+    $extras = $this->getTasks($this->getExtraTasksName());
+
+    // Patch in the extra group.
+    if (is_array($extras)) {
+      $tasks = $tasks + $extras;
+    }
 
     foreach ($tasks as $task) {
       $taskArray[$task->getMachineName()] = array(
@@ -115,6 +149,22 @@ class TaskEngine {
     }
 
     return $taskArray;
+  }
+
+  /**
+   * [setExtraTasksName description]
+   * @param [type] $val [description]
+   */
+  protected function setExtraTasksName($val) {
+    $this->extraTasks = $val;
+  }
+
+  /**
+   * [getExtraTasksName description]
+   * @return [type] [description]
+   */
+  public function getExtraTasksName() {
+    return $this->extraTasks;
   }
 
 

@@ -8,6 +8,7 @@ abstract class AbstractTask {
 
   // Variables
   // ---------------------------------------------------------------------------
+  protected $machineName;
 
 
   // Constructor
@@ -38,6 +39,24 @@ abstract class AbstractTask {
    */
   public function requirements() {
     return array();
+  }
+
+  /**
+   * @return string
+   */
+  public function getMachineName() {
+    if (!empty($this->machineName)) {
+      return $this->machineName;
+    }
+    return drupal_clean_css_identifier(get_class($this));
+  }
+
+  /**
+   * [setMachineName description]
+   * @param [type] $name [description]
+   */
+  public function setMachineName($name) {
+    $this->machineName == $name;
   }
 
 }

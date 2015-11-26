@@ -8,10 +8,16 @@
  * Include the files necessary to do the install tasks.
  */
 function itasks_includes() {
+
+  // Things take a long time to run. Lets try to up the limit.
+  ini_set('max_execution_time', 300); //300 seconds = 5 minutes
+
   require_once dirname(__FILE__) . "/InstallTaskInterface.php";
   require_once dirname(__FILE__) . "/AbstractTask.php";
   require_once dirname(__FILE__) . "/AbstractInstallTask.php";
+  require_once dirname(__FILE__) . "/AbstractUpdateTask.php";
   require_once dirname(__FILE__) . "/TaskEngine.php";
+
 }
 
 /**
@@ -23,14 +29,43 @@ function itasks_form_install_configure_form_alter(&$form, $form_state) {
 
   itasks_includes();
 
+  // Find out what other groups we have.
   $engine = new TaskEngine($form_state['build_info']['args'][0]['profile_info'], $form_state['build_info']['args'][0]);
+  $tasks = $engine->getTasks();
 
-  // Pre-populate the site name with the server name.
+  // Get rid of the default ones.
+  unset($tasks["install"]);
+  unset($tasks["update"]);
+
+  // What do we have left.
+  $options = array("none" => "-- None --");
+  $extras = array_keys($tasks);
+  $extras_keyed = array_combine($extras, $extras);
+  $extra_options = $options + $extras_keyed;
+
+  $form["itasks"] = array(
+    '#type' => 'fieldset',
+    '#title' => t('iTasks Configuration'),
+    '#weight' => 5,
+    '#collapsible' => TRUE,
+    '#collapsed' => FALSE,
+  );
+
+  $form["itasks"]["itasks_extra_tasks"] = array(
+    "#type" => "select",
+    "#title" => "Extra install tasks",
+    "#options" => $extra_options,
+    '#default_value' => "none",
+  );
+
+  // // Pre-populate the site name with the server name.
   $form['site_information']['site_name']['#default_value'] = $_SERVER['SERVER_NAME'];
-  $form = $engine->getTaskOptionsForm($form, $form_state);
 
-  $form["#validate"][] = "itasks_install_form_install_configure_form_alter_validate";
-  $form["#submit"][] = "itasks_install_form_install_configure_form_alter_submit";
+  // This is not ready..
+  // $form = $engine->getTaskOptionsForm($form, $form_state);
+
+  // $form["#validate"][] = "itasks_install_form_install_configure_form_alter_validate";
+  // $form["#submit"][] = "itasks_install_form_install_configure_form_alter_submit";
 
 }
 
@@ -54,10 +89,10 @@ function itasks_form_install_configure_form_alter_validate($form, &$form_state) 
  * @return [type]              [description]
  */
 function itasks_form_install_configure_form_alter_submit($form, &$form_state) {
-  if (empty($form_state['values']['itasks']['tasks'])) {
-    return;
-  }
-  $form_state['build_info']['args'][0]['install_task_list'] = $form_state['values']['itasks']['tasks'];
+  // if (empty($form_state['values']['itasks']['tasks'])) {
+  //   return;
+  // }
+  // $form_state['build_info']['args'][0]['install_task_list'] = $form_state['values']['itasks']['tasks'];
 }
 
 /**
@@ -134,7 +169,14 @@ function itasks_install_verify_requirements(&$install_state) {
 function itask_run_install_task(&$install_state) {
   itasks_includes();
   $engine = new TaskEngine($install_state['profile_info'], $install_state);
+
   $tasks = $engine->getTasks("install");
+  $extras = $engine->getTasks($engine->getExtraTasksName());
+
+  // Add any extra tasks we want to run.
+  if (!empty($extras)) {
+    $tasks = $tasks + $extras;
+  }
 
   if (function_exists('drush_log')) {
     $time = microtime(TRUE);

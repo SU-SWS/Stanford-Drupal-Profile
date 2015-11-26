@@ -11,7 +11,6 @@ abstract class AbstractInstallTask extends AbstractTask implements InstallTaskIn
   protected $installType = "normal";
   protected $installRun = INSTALL_TASK_RUN_IF_NOT_COMPLETED;
   protected $installFunction = "itask_run_install_task";
-  protected $machineName;
   protected $description;
 
   /**
@@ -23,24 +22,6 @@ abstract class AbstractInstallTask extends AbstractTask implements InstallTaskIn
    */
   public function installTaskAlter(&$tasks) {
     // You can modify other installation tasks here.
-  }
-
-  /**
-   * @return string
-   */
-  public function getMachineName() {
-    if (!empty($this->machineName)) {
-      return $this->machineName;
-    }
-    return drupal_clean_css_identifier(get_class($this));
-  }
-
-  /**
-   * [setMachineName description]
-   * @param [type] $name [description]
-   */
-  public function setMachineName($name) {
-    $this->machineName == $name;
   }
 
   /**
