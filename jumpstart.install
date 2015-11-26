@@ -5,35 +5,8 @@
  */
 
 /**
- * Implements hook_install().
- */
-function jumpstart_install() {
-  // Nothing to see here.
-}
-
-/**
- * [jumpstart_install_finished description]
- * @return [type] [description]
+ * Implements hook_install_finished.
  */
 function jumpstart_install_finished() {
-  // Kill all static vars.
-  drupal_static_reset();
-
-  // If features are around lets rebuild them to be sure they
-  // are as they should be.
-  if (module_exists("features")) {
-    features_rebuild();
-    features_revert();
-  }
-
-  // Flush all caches.
-  drupal_flush_all_caches();
-}
-
-/**
- * Implements hook_requirements().
- */
-function jumpstart_requirements($phase) {
-  $requirements = array();
-  return $requirements;
+  itasks_install_finished();
 }

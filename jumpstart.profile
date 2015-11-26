@@ -13,7 +13,7 @@ require_once dirname(__FILE__) . "/includes/loader.php";
  * @return [type]                 [description]
  */
 function jumpstart_install_tasks(&$install_state) {
-  return itasks_install_install_tasks($install_state);
+  return itasks_install_tasks($install_state);
 }
 
 /**
@@ -24,7 +24,7 @@ function jumpstart_install_tasks(&$install_state) {
  * dependencies to the veryify check before executing it.
  */
 function jumpstart_install_tasks_alter(&$tasks, &$install_state) {
-  itasks_install_install_tasks_alter($tasks, $install_state);
+  itasks_install_tasks_alter($tasks, $install_state);
 }
 
 /**
@@ -36,5 +36,15 @@ function jumpstart_install_tasks_alter(&$tasks, &$install_state) {
  * @param $install_state
  */
 function jumpstart_install_verify_requirements(&$install_state) {
-  itasks_install_install_verify_requirements($install_state);
+  itasks_install_verify_requirements($install_state);
+}
+
+
+/**
+ * Implements hook_form_FORM_ID_alter() for install_configure_form().
+ *
+ * Allows the profile to alter the site configuration form.
+ */
+function jumpstart_form_install_configure_form_alter(&$form, $form_state) {
+  itasks_form_install_configure_form_alter($form, $form_state);
 }

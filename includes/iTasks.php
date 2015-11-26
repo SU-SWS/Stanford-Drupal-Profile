@@ -19,7 +19,7 @@ function itasks_includes() {
  *
  * Allows the profile to alter the site configuration form.
  */
-function itasks_install_form_install_configure_form_alter(&$form, $form_state) {
+function itasks_form_install_configure_form_alter(&$form, $form_state) {
 
   itasks_includes();
 
@@ -40,7 +40,7 @@ function itasks_install_form_install_configure_form_alter(&$form, $form_state) {
  * @param  [type] &$form_state [description]
  * @return [type]              [description]
  */
-function itasks_install_form_install_configure_form_alter_validate($form, &$form_state) {
+function itasks_form_install_configure_form_alter_validate($form, &$form_state) {
   if (empty($form_state['values']['itasks']['tasks'])) {
     return;
   }
@@ -53,7 +53,7 @@ function itasks_install_form_install_configure_form_alter_validate($form, &$form
  * @param  [type] &$form_state [description]
  * @return [type]              [description]
  */
-function itasks_install_form_install_configure_form_alter_submit($form, &$form_state) {
+function itasks_form_install_configure_form_alter_submit($form, &$form_state) {
   if (empty($form_state['values']['itasks']['tasks'])) {
     return;
   }
@@ -66,7 +66,7 @@ function itasks_install_form_install_configure_form_alter_submit($form, &$form_s
  * Load up all the installation tasks defined in the .info file of this profile
  * and add them to the task array.
  */
-function itasks_install_install_tasks(&$install_state) {
+function itasks_install_tasks(&$install_state) {
   itasks_includes();
   $profile_name = $install_state['parameters']['profile'];
   $info_file = drupal_get_path('profile', $profile_name) . "/" . $profile_name . ".info";
@@ -82,7 +82,7 @@ function itasks_install_install_tasks(&$install_state) {
  * over the original verify_requirements function so that we can add additional
  * dependencies to the veryify check before executing it.
  */
-function itasks_install_install_tasks_alter(&$tasks, &$install_state) {
+function itasks_install_tasks_alter(&$tasks, &$install_state) {
   itasks_includes();
   $engine = new TaskEngine($install_state['profile_info'], $install_state);
   $iTasks = $engine->getTasks("install");
@@ -96,7 +96,7 @@ function itasks_install_install_tasks_alter(&$tasks, &$install_state) {
 
   // Take over the verify function so that we can add the tasks dependencies
   // before executing it.
-  $tasks["install_verify_requirements"]["function"] = "itasks_install_install_verify_requirements";
+  $tasks["install_verify_requirements"]["function"] = "itasks_install_verify_requirements";
 }
 
 /**
@@ -107,7 +107,7 @@ function itasks_install_install_tasks_alter(&$tasks, &$install_state) {
  *
  * @param $install_state
  */
-function itasks_install_install_verify_requirements(&$install_state) {
+function itasks_install_verify_requirements(&$install_state) {
   itasks_includes();
   $engine = new TaskEngine($install_state['profile_info'], $install_state);
   $iTasks = $engine->getTasks("install");
@@ -150,5 +150,23 @@ function itask_run_install_task(&$install_state) {
     drush_log("Finished executing in: " . $diff . " seconds", "ok");
   }
 
+}
+
+/**
+ * Implements hook_install_finished.
+ */
+function itasks_install_finished() {
+  // Kill all static vars.
+  drupal_static_reset();
+
+  // If features are around lets rebuild them to be sure they
+  // are as they should be.
+  if (module_exists("features")) {
+    features_rebuild();
+    features_revert();
+  }
+
+  // Flush all caches.
+  drupal_flush_all_caches();
 }
 

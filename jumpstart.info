@@ -10,57 +10,55 @@ taskdir = sites/all/tasks
 ; Install Tasks                          Install in the order they appear below.
 ; ------------------------------------------------------------------------------
 
-dependencies[] = itasks_install
-
 ; STANDARD INSTALL
-; task[install][] = Drupal\Standard\Install\FilteredHTMLFormat
-; task[install][] = Drupal\Standard\Install\FullHTMLFormat
-; task[install][] = Drupal\Standard\Install\BasicPageContentType
-; task[install][] = Drupal\Standard\Install\ArticleContentType
-; task[install][] = Drupal\Standard\Install\GeneralConfig
-; task[install][] = Drupal\Standard\Install\UserConfig
-; task[install][] = Drupal\Standard\Install\AdministratorRole
-; task[install][] = Drupal\Standard\Install\TagsTaxonomy
-; task[install][] = Drupal\Standard\Install\ImageFieldBase
-; task[install][] = Drupal\Standard\Install\ArticleTagsField
-; task[install][] = Drupal\Standard\Install\ArticleImageFieldInstance
-; task[install][] = Drupal\Standard\Install\StandardBlocks
-; task[install][] = Drupal\Standard\Install\StandardMenu
-;
-; ; STANFORD INSTALL
-; ; task[install][] = Stanford\DrupalProfile\Install\Authentication
-; task[install][] = Stanford\DrupalProfile\Install\ContentTypeArticleSettings
-; task[install][] = Stanford\DrupalProfile\Install\ContentTypePageSettings
-; task[install][] = Stanford\DrupalProfile\Install\DateTimeSettings
-; task[install][] = Stanford\DrupalProfile\Install\UserPermissions
-; task[install][] = Stanford\DrupalProfile\Install\SearchBlock
-; task[install][] = Stanford\DrupalProfile\Install\GeneralSettings
-; task[install][] = Stanford\DrupalProfile\Install\WYSIWYGSettings
-; task[install][] = Stanford\DrupalProfile\Install\FileSettings
-; task[install][] = Stanford\DrupalProfile\Install\StanfordSites\DisableModules
-; task[install][] = Stanford\DrupalProfile\Install\StanfordSites\EnableModules
-; task[install][] = Stanford\DrupalProfile\Install\StanfordSites\ThemeSettings
-; task[install][] = Stanford\DrupalProfile\Install\StanfordSites\TMPDir
-;
-; ; JUMPSTART INSTALL
-; ; task[install][] = Stanford\Jumpstart\Install\Authentication
-; task[install][] = Stanford\Jumpstart\Install\themeSettings
-; task[install][] = Stanford\Jumpstart\Install\RevertAllFeatures
-; task[install][] = Stanford\Jumpstart\Install\Content\Importer\LoadImporterLibrary
-; task[install][] = Stanford\Jumpstart\Install\Content\ImportVocabularies
-; task[install][] = Stanford\Jumpstart\Install\Content\ImportJSVNodes
-; task[install][] = Stanford\Jumpstart\Install\Content\ImportJSVBeans
-; task[install][] = Stanford\Jumpstart\Install\GeneralSettings
-; task[install][] = Stanford\Jumpstart\Install\PathologicSettings
-; task[install][] = Stanford\Jumpstart\Install\User\UserSettings
-; task[install][] = Stanford\Jumpstart\Install\User\SunetUser
-; task[install][] = Stanford\Jumpstart\Install\User\HowardUser
-; task[install][] = Stanford\Jumpstart\Install\User\LindseyUser
-; task[install][] = Stanford\Jumpstart\Install\Menu\MenuSettings
-; task[install][] = Stanford\Jumpstart\Install\Block\BlockSettings
-; task[install][] = Stanford\Jumpstart\Install\Block\RelatedLinksBlock
-; task[install][] = Stanford\Jumpstart\Install\JumpstartSettings
-; task[install][] = Stanford\Jumpstart\Install\JumpstartHomeStatic
+task[install][] = Drupal\Standard\Install\FilteredHTMLFormat
+task[install][] = Drupal\Standard\Install\FullHTMLFormat
+task[install][] = Drupal\Standard\Install\BasicPageContentType
+task[install][] = Drupal\Standard\Install\ArticleContentType
+task[install][] = Drupal\Standard\Install\GeneralConfig
+task[install][] = Drupal\Standard\Install\UserConfig
+task[install][] = Drupal\Standard\Install\AdministratorRole
+task[install][] = Drupal\Standard\Install\TagsTaxonomy
+task[install][] = Drupal\Standard\Install\ImageFieldBase
+task[install][] = Drupal\Standard\Install\ArticleTagsField
+task[install][] = Drupal\Standard\Install\ArticleImageFieldInstance
+task[install][] = Drupal\Standard\Install\StandardBlocks
+task[install][] = Drupal\Standard\Install\StandardMenu
+
+; STANFORD INSTALL
+; task[install][] = Stanford\DrupalProfile\Install\Authentication
+task[install][] = Stanford\DrupalProfile\Install\ContentTypeArticleSettings
+task[install][] = Stanford\DrupalProfile\Install\ContentTypePageSettings
+task[install][] = Stanford\DrupalProfile\Install\DateTimeSettings
+task[install][] = Stanford\DrupalProfile\Install\UserPermissions
+task[install][] = Stanford\DrupalProfile\Install\SearchBlock
+task[install][] = Stanford\DrupalProfile\Install\GeneralSettings
+task[install][] = Stanford\DrupalProfile\Install\WYSIWYGSettings
+task[install][] = Stanford\DrupalProfile\Install\FileSettings
+task[install][] = Stanford\DrupalProfile\Install\StanfordSites\DisableModules
+task[install][] = Stanford\DrupalProfile\Install\StanfordSites\EnableModules
+task[install][] = Stanford\DrupalProfile\Install\StanfordSites\ThemeSettings
+task[install][] = Stanford\DrupalProfile\Install\StanfordSites\TMPDir
+
+; JUMPSTART INSTALL
+; task[install][] = Stanford\Jumpstart\Install\Authentication
+task[install][] = Stanford\Jumpstart\Install\themeSettings
+task[install][] = Stanford\Jumpstart\Install\RevertAllFeatures
+task[install][] = Stanford\Jumpstart\Install\Content\Importer\LoadImporterLibrary
+task[install][] = Stanford\Jumpstart\Install\Content\ImportVocabularies
+task[install][] = Stanford\Jumpstart\Install\Content\ImportJSVNodes
+task[install][] = Stanford\Jumpstart\Install\Content\ImportJSVBeans
+task[install][] = Stanford\Jumpstart\Install\GeneralSettings
+task[install][] = Stanford\Jumpstart\Install\PathologicSettings
+task[install][] = Stanford\Jumpstart\Install\User\UserSettings
+task[install][] = Stanford\Jumpstart\Install\User\SunetUser
+task[install][] = Stanford\Jumpstart\Install\User\HowardUser
+task[install][] = Stanford\Jumpstart\Install\User\LindseyUser
+task[install][] = Stanford\Jumpstart\Install\Menu\MenuSettings
+task[install][] = Stanford\Jumpstart\Install\Block\BlockSettings
+task[install][] = Stanford\Jumpstart\Install\Block\RelatedLinksBlock
+task[install][] = Stanford\Jumpstart\Install\JumpstartSettings
+task[install][] = Stanford\Jumpstart\Install\JumpstartHomeStatic
 
 ; Needs to be last because of raisons.
 task[install][] = Stanford\DrupalProfile\Install\PrivateFileSettings
