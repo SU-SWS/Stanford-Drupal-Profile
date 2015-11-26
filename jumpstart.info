@@ -64,6 +64,23 @@ task[install][] = Stanford\Jumpstart\Install\JumpstartHomeStatic
 task[install][] = Stanford\DrupalProfile\Install\PrivateFileSettings
 
 
+; Environment Specific Tasks
+; ------------------------------------------------------------------------------
+
+; LOCAL
+task[local][install][] = Environment\Local\Install\GeneralSettings
+
+; SITES
+task[sites][install][] = Environment\Sites\Install\GeneralSettings
+; task[sites][update][] = Environment\Sites\Update\GeneralSettings
+
+; ANCHORAGE
+task[anchorage][install][] = Environment\Anchorage\Install\GeneralSettings
+
+; MAMP
+task[mamp][install][] = Environment\MAMP\Install\GeneralSettings
+
+
 ; Update Tasks
 ; ------------------------------------------------------------------------------
 
