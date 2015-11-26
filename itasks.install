@@ -16,7 +16,6 @@ function itasks_install() {
  * @return [type] [description]
  */
 function itasks_install_finished() {
-
   // Kill all static vars.
   drupal_static_reset();
 
@@ -29,7 +28,6 @@ function itasks_install_finished() {
 
   // Flush all caches.
   drupal_flush_all_caches();
-
 }
 
 /**
