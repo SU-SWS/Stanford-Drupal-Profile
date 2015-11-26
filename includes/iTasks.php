@@ -7,11 +7,11 @@
 /**
  * Include the files necessary to do the install tasks.
  */
-function itasks_install_include_includes() {
-  require_once dirname(__FILE__) . "/../../includes/InstallTaskInterface.php";
-  require_once dirname(__FILE__) . "/../../includes/AbstractTask.php";
-  require_once dirname(__FILE__) . "/../../includes/AbstractInstallTask.php";
-  require_once dirname(__FILE__) . "/../../includes/TaskEngine.php";
+function itasks_includes() {
+  require_once dirname(__FILE__) . "/InstallTaskInterface.php";
+  require_once dirname(__FILE__) . "/AbstractTask.php";
+  require_once dirname(__FILE__) . "/AbstractInstallTask.php";
+  require_once dirname(__FILE__) . "/TaskEngine.php";
 }
 
 /**
@@ -21,7 +21,7 @@ function itasks_install_include_includes() {
  */
 function itasks_install_form_install_configure_form_alter(&$form, $form_state) {
 
-  itasks_install_include_includes();
+  itasks_includes();
 
   $engine = new TaskEngine($form_state['build_info']['args'][0]['profile_info'], $form_state['build_info']['args'][0]);
 
@@ -67,7 +67,7 @@ function itasks_install_form_install_configure_form_alter_submit($form, &$form_s
  * and add them to the task array.
  */
 function itasks_install_install_tasks(&$install_state) {
-  itasks_install_include_includes();
+  itasks_includes();
   $profile_name = $install_state['parameters']['profile'];
   $info_file = drupal_get_path('profile', $profile_name) . "/" . $profile_name . ".info";
   $install_state['profile_info'] = drupal_parse_info_file($info_file);
@@ -83,7 +83,7 @@ function itasks_install_install_tasks(&$install_state) {
  * dependencies to the veryify check before executing it.
  */
 function itasks_install_install_tasks_alter(&$tasks, &$install_state) {
-  itasks_install_include_includes();
+  itasks_includes();
   $engine = new TaskEngine($install_state['profile_info'], $install_state);
   $iTasks = $engine->getTasks("install");
 
@@ -108,7 +108,7 @@ function itasks_install_install_tasks_alter(&$tasks, &$install_state) {
  * @param $install_state
  */
 function itasks_install_install_verify_requirements(&$install_state) {
-  itasks_install_include_includes();
+  itasks_includes();
   $engine = new TaskEngine($install_state['profile_info'], $install_state);
   $iTasks = $engine->getTasks("install");
 
@@ -132,7 +132,7 @@ function itasks_install_install_verify_requirements(&$install_state) {
  * @param $install_state
  */
 function itask_run_install_task(&$install_state) {
-  itasks_install_include_includes();
+  itasks_includes();
   $engine = new TaskEngine($install_state['profile_info'], $install_state);
   $tasks = $engine->getTasks("install");
 

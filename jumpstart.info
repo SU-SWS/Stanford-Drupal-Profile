@@ -1,8 +1,8 @@
-name = iTasks
-description = Installation tasks separation and sharization.
-version = 7.x-1.0-dev
+name = Jumpstart
+description = Jumpstart Distro
+version = 7.x-5.0
 core = 7.x
-files[] = itasks.install
+files[] = jumpstart.install
 
 ; ITasks Config
 taskdir = sites/all/tasks

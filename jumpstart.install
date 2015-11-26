@@ -7,15 +7,15 @@
 /**
  * Implements hook_install().
  */
-function itasks_install() {
+function jumpstart_install() {
   // Nothing to see here.
 }
 
 /**
- * [itasks_install_finished description]
+ * [jumpstart_install_finished description]
  * @return [type] [description]
  */
-function itasks_install_finished() {
+function jumpstart_install_finished() {
   // Kill all static vars.
   drupal_static_reset();
 
@@ -33,7 +33,7 @@ function itasks_install_finished() {
 /**
  * Implements hook_requirements().
  */
-function itasks_requirements($phase) {
+function jumpstart_requirements($phase) {
   $requirements = array();
   return $requirements;
 }
