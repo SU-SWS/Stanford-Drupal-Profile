@@ -132,6 +132,16 @@ function itasks_install_tasks_alter(&$tasks, &$install_state) {
   // Take over the verify function so that we can add the tasks dependencies
   // before executing it.
   $tasks["install_verify_requirements"]["function"] = "itasks_install_verify_requirements";
+
+  // We should set the update schema version on install so we don't get old ones
+  // from running when they shouldn't.
+  $tasks["itasks_install_set_update_schema"] = array(
+    'display_name' => "Set update schema",
+    'display' => FALSE,
+    'type' => "normal",
+    'run' => INSTALL_TASK_RUN_IF_NOT_COMPLETED,
+    'function' => "itasks_install_set_update_schema",
+  );
 }
 
 /**
@@ -193,6 +203,27 @@ function itask_run_install_task(&$install_state) {
   }
 
 }
+
+/**
+ * Set the update schema to the latest so we don't get old updates running.
+ * @param  [type] &$install_state [description]
+ */
+function itasks_install_set_update_schema(&$install_state) {
+
+  $updates = $install_state['profile_info']['task']['update'];
+
+  // Nothing to do...
+  if (!is_array($updates)) {
+    return;
+  }
+
+  $keys = array_keys($updates);
+  $version = array_pop($keys);
+
+  $profile_name = $install_state['parameters']['profile'];
+  drupal_set_installed_schema_version($profile_name, $version);
+}
+
 
 /**
  * Implements hook_install_finished.
