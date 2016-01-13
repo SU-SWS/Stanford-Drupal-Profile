@@ -43,7 +43,9 @@ class TaskEngine {
     $autoloader = $include . "autoloader.php";
 
     // Include the PHP autoloader.
-    require_once $autoloader;
+    if (is_file($autoloader)) {
+      require_once $autoloader;
+    }
 
     // Loop through each of the tasks and load it up.
     if (isset($info['task'])) {
