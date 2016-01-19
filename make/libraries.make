@@ -43,7 +43,7 @@ libraries[jw_player][directory_name] = "jwplayer"
 libraries[jw_player][destination] = "libraries"
 
 libraries[dompdf][download][type] = "get"
-libraries[dompdf][download][url] = https://github.com/dompdf/dompdf/releases/download/v0.6.1/dompdf-0.6.1.zip
+libraries[dompdf][download][url] = https://github.com/dompdf/dompdf/releases/download/v0.6.2/dompdf-0.6.2.zip
 libraries[dompdf][directory_name] = dompdf
 libraries[dompdf][destination] = "libraries"
 
