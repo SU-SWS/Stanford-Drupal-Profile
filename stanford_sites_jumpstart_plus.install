@@ -1,34 +1,12 @@
 <?php
 /**
  * @file
- * Default install file.
- * @author Shea McKinney <sheamck@stanford.edu>
- * @author John Bickar <jbickar@stanford.edu>
+ * Install, update and uninstall functions for the minimal installation profile.
  */
 
-
 /**
- * Implements hook_install().
- */
-function stanford_sites_jumpstart_plus_install() {
-  // Please do not use this function. Create installation tasks from within
-  // the installation profile class JumpstartSites.php
-}
-
-/**
- * Implements hook_install_finished()
+ * Implements hook_install_finished.
  */
 function stanford_sites_jumpstart_plus_install_finished() {
-  // Remove installation variables.
-  variable_del('stanford_jumpstart_install');
-  // Flush all caches.
-  drupal_flush_all_caches();
-}
-
-/**
- * Implements hook_requirements().
- */
-function stanford_sites_jumpstart_plus_requirements($phase) {
-  $requirements = array();
-  return $requirements;
+  itasks_install_finished();
 }
