@@ -44,23 +44,29 @@ task[install][] = Stanford\DrupalProfile\Install\StanfordSites\TMPDir
 task[install][] = Stanford\Jumpstart\Install\themeSettings
 task[install][] = Stanford\Jumpstart\Install\RevertAllFeatures
 task[install][] = Stanford\Jumpstart\Install\Content\Importer\LoadImporterLibrary
-task[install][] = Stanford\Jumpstart\Install\Content\ImportVocabularies
-task[install][] = Stanford\Jumpstart\Install\Content\ImportJSVNodes
-task[install][] = Stanford\Jumpstart\Install\Content\ImportJSVBeans
+; task[install][] = Stanford\Jumpstart\Install\Content\ImportVocabularies
+; task[install][] = Stanford\Jumpstart\Install\Content\ImportJSVNodes
+; task[install][] = Stanford\Jumpstart\Install\Content\ImportJSVBeans
 task[install][] = Stanford\Jumpstart\Install\GeneralSettings
 task[install][] = Stanford\Jumpstart\Install\PathologicSettings
 task[install][] = Stanford\Jumpstart\Install\User\UserSettings
 task[install][] = Stanford\Jumpstart\Install\User\SunetUser
 task[install][] = Stanford\Jumpstart\Install\User\HowardUser
 task[install][] = Stanford\Jumpstart\Install\User\LindseyUser
-task[install][] = Stanford\Jumpstart\Install\Menu\MenuSettings
+; task[install][] = Stanford\Jumpstart\Install\Menu\MenuSettings
 task[install][] = Stanford\Jumpstart\Install\Block\BlockSettings
 task[install][] = Stanford\Jumpstart\Install\Block\RelatedLinksBlock
-task[install][] = Stanford\Jumpstart\Install\JumpstartSettings
-task[install][] = Stanford\Jumpstart\Install\JumpstartHomeStatic
+; task[install][] = Stanford\Jumpstart\Install\JumpstartSettings
+; task[install][] = Stanford\Jumpstart\Install\JumpstartHomeStatic
 
 ; JUMPSTART PLUS INSTALL
-
+task[install][] = Stanford\Utility\Install\ViewsToDB
+task[install][] = Stanford\JumpstartPlus\Install\Content\ImportVocabularies
+task[install][] = Stanford\JumpstartPlus\Install\Content\ImportJSPlusNodes
+task[install][] = Stanford\JumpstartPlus\Install\Content\ImportJSPlusBeans
+task[install][] = Stanford\JumpstartPlus\Install\Menu\MenuSettings
+task[install][] = Stanford\JumpstartPlus\Install\Menu\MenuRules
+task[install][] = Stanford\Utility\Install\ViewsFromDB
 
 ; Needs to be last because of raisons.
 task[install][] = Stanford\DrupalProfile\Install\PrivateFileSettings
@@ -94,15 +100,7 @@ task[mamp][install][] = Environment\MAMP\Install\GeneralSettings
 
 dependencies[] = itasks_update
 
-task[update][7100] = Stanford\Jumpstart\Update\SiteName
-task[update][7101] = Stanford\Jumpstart\Update\SiteName
-task[update][7102] = Stanford\Jumpstart\Update\SiteName
-task[update][7103] = Stanford\Jumpstart\Update\SiteName
-task[update][7104] = Stanford\Jumpstart\Update\SiteName
-task[update][7106] = Stanford\Jumpstart\Update\SiteName
-task[update][7108] = Stanford\Jumpstart\Update\SiteName
-task[update][7110] = Stanford\Jumpstart\Update\SiteName
-task[update][7111] = Stanford\Jumpstart\Update\SiteName
+; task[update][7100] = Stanford\Jumpstart\Update\SiteName
 
 
 ; Dependencies
