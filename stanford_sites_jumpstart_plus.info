@@ -54,7 +54,7 @@ task[install][] = Stanford\Jumpstart\Install\User\SunetUser
 task[install][] = Stanford\Jumpstart\Install\User\HowardUser
 task[install][] = Stanford\Jumpstart\Install\User\LindseyUser
 ; task[install][] = Stanford\Jumpstart\Install\Menu\MenuSettings
-task[install][] = Stanford\Jumpstart\Install\Block\BlockSettings
+; task[install][] = Stanford\Jumpstart\Install\Block\BlockSettings
 task[install][] = Stanford\Jumpstart\Install\Block\RelatedLinksBlock
 ; task[install][] = Stanford\Jumpstart\Install\JumpstartSettings
 ; task[install][] = Stanford\Jumpstart\Install\JumpstartHomeStatic
@@ -66,7 +66,11 @@ task[install][] = Stanford\JumpstartPlus\Install\Content\ImportJSPlusNodes
 task[install][] = Stanford\JumpstartPlus\Install\Content\ImportJSPlusBeans
 task[install][] = Stanford\JumpstartPlus\Install\Menu\MenuSettings
 task[install][] = Stanford\JumpstartPlus\Install\Menu\MenuRules
+task[install][] = Stanford\JumpstartPlus\Install\Menu\MenuRedirects
 task[install][] = Stanford\Utility\Install\ViewsFromDB
+task[install][] = Stanford\JumpstartPlus\Install\Block\BlockSettings
+task[install][] = Stanford\JumpstartPlus\Install\GeneralSettings
+task[install][] = Stanford\JumpstartPlus\Install\HomePageSettings
 
 ; Needs to be last because of raisons.
 task[install][] = Stanford\DrupalProfile\Install\PrivateFileSettings
