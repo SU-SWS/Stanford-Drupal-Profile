@@ -44,20 +44,14 @@ task[install][] = Stanford\DrupalProfile\Install\StanfordSites\TMPDir
 task[install][] = Stanford\Jumpstart\Install\themeSettings
 task[install][] = Stanford\Jumpstart\Install\RevertAllFeatures
 task[install][] = Stanford\Jumpstart\Install\Content\Importer\LoadImporterLibrary
-; task[install][] = Stanford\Jumpstart\Install\Content\ImportVocabularies
-; task[install][] = Stanford\Jumpstart\Install\Content\ImportJSVNodes
-; task[install][] = Stanford\Jumpstart\Install\Content\ImportJSVBeans
 task[install][] = Stanford\Jumpstart\Install\GeneralSettings
 task[install][] = Stanford\Jumpstart\Install\PathologicSettings
 task[install][] = Stanford\Jumpstart\Install\User\UserSettings
 task[install][] = Stanford\Jumpstart\Install\User\SunetUser
 task[install][] = Stanford\Jumpstart\Install\User\HowardUser
 task[install][] = Stanford\Jumpstart\Install\User\LindseyUser
-; task[install][] = Stanford\Jumpstart\Install\Menu\MenuSettings
 task[install][] = Stanford\Jumpstart\Install\Block\BlockSettings
 task[install][] = Stanford\Jumpstart\Install\Block\RelatedLinksBlock
-; task[install][] = Stanford\Jumpstart\Install\JumpstartSettings
-; task[install][] = Stanford\Jumpstart\Install\JumpstartHomeStatic
 
 ; JUMPSTART PLUS INSTALL
 task[install][] = Stanford\Utility\Install\ViewsToDB
