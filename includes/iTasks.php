@@ -122,6 +122,14 @@ function itasks_install_tasks_alter(&$tasks, &$install_state) {
   $engine = new TaskEngine($install_state['profile_info'], $install_state);
   $iTasks = $engine->getTasks("install");
 
+  // Check for any extra tasks and loop them in so they get altered as well.
+  $extras = $engine->getTasks($engine->getExtraTasksName());
+
+  // Add any extra tasks we want to run.
+  if (!empty($extras)) {
+    $iTasks = $iTasks + $extras;
+  }
+
   // Allow each tasks to alter the tasks array.
   if (is_array($iTasks)) {
     foreach ($iTasks as $task) {
@@ -156,10 +164,18 @@ function itasks_install_verify_requirements(&$install_state) {
   itasks_includes();
   $engine = new TaskEngine($install_state['profile_info'], $install_state);
   $iTasks = $engine->getTasks("install");
+  $extras = $engine->getTasks($engine->getExtraTasksName());
+
+  // Add any extra tasks we want to run.
+  if (!empty($extras)) {
+    $iTasks = $iTasks + $extras;
+  }
 
   foreach ($iTasks as $task) {
     $dependencies = $task->requirements();
-    $install_state['profile_info']['dependencies'] = array_merge($install_state['profile_info']['dependencies'], $dependencies);
+    if (!is_null($dependencies)) {
+      $install_state['profile_info']['dependencies'] = array_merge($install_state['profile_info']['dependencies'], $dependencies);
+    }
   }
 
   // Remove the duplicates and run the original install_verify_requirements.
