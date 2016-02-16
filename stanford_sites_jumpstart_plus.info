@@ -47,7 +47,6 @@ task[install][] = Stanford\Jumpstart\Install\Content\Importer\LoadImporterLibrar
 task[install][] = Stanford\Jumpstart\Install\GeneralSettings
 task[install][] = Stanford\Jumpstart\Install\PathologicSettings
 task[install][] = Stanford\Jumpstart\Install\User\UserSettings
-task[install][] = Stanford\Jumpstart\Install\User\SunetUser
 task[install][] = Stanford\Jumpstart\Install\User\HowardUser
 task[install][] = Stanford\Jumpstart\Install\User\LindseyUser
 task[install][] = Stanford\Jumpstart\Install\Block\BlockSettings
@@ -77,7 +76,8 @@ task[local][install][] = Environment\Local\Install\GeneralSettings
 
 ; SITES
 task[sites][install][] = Environment\Sites\Install\GeneralSettings
-; task[sites][update][] = Environment\Sites\Update\GeneralSettings
+task[sites][install][] = Environment\Sites\Install\WebauthSettings
+task[sites][install][] = Stanford\Jumpstart\Install\User\SunetUser
 
 ; ANCHORAGE
 task[anchorage][install][] = Environment\Anchorage\Install\GeneralSettings
