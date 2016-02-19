@@ -1,6 +1,14 @@
 Stanford Profile 7.x-x.x xxxx-xx-xx
 -----------------------------------
 
+Stanford Profile 7.x-2.2+13-dev 2016-02-18
+-----------------------------------
+- Adding patch for simplesamlphp_auth
+- Changed release for CAPX to the php54 supported version
+- group and personal sites should get stanford_basic
+- Update pathauto to 1.3
+- Updated core drupal-7.41
+
 Stanford Profile 7.x-2.2 2015-09-08
 -----------------------------------
 Changes since 7.x-2.1:
