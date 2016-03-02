@@ -30,3 +30,6 @@ projects[wysiwyg][patch][] = "https://drupal.org/files/wysiwyg-non-empty-tags.55
 
 ; https://www.drupal.org/node/1687794 | WYSIWYG Filter - Validation occurs on disabled filter
 projects[wysiwyg_filter][patch][] = "https://www.drupal.org/files/wysiwyg_filter-1687794-1-skip-validation-if-filter-disabled.patch"
+
+; https://www.drupal.org/node/2221307 | Deleting host entity causes save during deletion and triggers pathauto
+projects[field_collection][patch][] = "https://www.drupal.org/files/issues/field_collection-2385985-27.patch"
