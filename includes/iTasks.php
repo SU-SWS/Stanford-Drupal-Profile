@@ -33,6 +33,7 @@ function itasks_form_install_configure_form_alter(&$form, $form_state) {
   $engine = new TaskEngine($form_state['build_info']['args'][0]['profile_info'], $form_state['build_info']['args'][0]);
   $tasks = $engine->getTasks();
 
+
   // Get rid of the default ones.
   unset($tasks["install"]);
   unset($tasks["update"]);
@@ -61,11 +62,8 @@ function itasks_form_install_configure_form_alter(&$form, $form_state) {
   // // Pre-populate the site name with the server name.
   $form['site_information']['site_name']['#default_value'] = $_SERVER['SERVER_NAME'];
 
-  // This is not ready..
-  // $form = $engine->getTaskOptionsForm($form, $form_state);
-
-  // $form["#validate"][] = "itasks_install_form_install_configure_form_alter_validate";
-  // $form["#submit"][] = "itasks_install_form_install_configure_form_alter_submit";
+  // Allow each task to alter the form.
+  $engine->getConfigureFormFields($form, $form_state);
 
 }
 
@@ -76,10 +74,10 @@ function itasks_form_install_configure_form_alter(&$form, $form_state) {
  * @return [type]              [description]
  */
 function itasks_form_install_configure_form_alter_validate($form, &$form_state) {
-  if (empty($form_state['values']['itasks']['tasks'])) {
-    return;
-  }
-  // Do something here.....
+  itasks_includes();
+  $engine = new TaskEngine($form_state['build_info']['args'][0]['profile_info'], $form_state['build_info']['args'][0]);
+  $engine->getConfigureFormValidate($form, $form_state);
+
 }
 
 /**
@@ -89,10 +87,9 @@ function itasks_form_install_configure_form_alter_validate($form, &$form_state) 
  * @return [type]              [description]
  */
 function itasks_form_install_configure_form_alter_submit($form, &$form_state) {
-  // if (empty($form_state['values']['itasks']['tasks'])) {
-  //   return;
-  // }
-  // $form_state['build_info']['args'][0]['install_task_list'] = $form_state['values']['itasks']['tasks'];
+  itasks_includes();
+  $engine = new TaskEngine($form_state['build_info']['args'][0]['profile_info'], $form_state['build_info']['args'][0]);
+  $engine->getConfigureFormSubmit($form, $form_state);
 }
 
 /**
