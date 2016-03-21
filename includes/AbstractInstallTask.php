@@ -85,4 +85,27 @@ abstract class AbstractInstallTask extends AbstractTask implements InstallTaskIn
     return $this->getMachineName() . ": Missing description";
   }
 
+  /**
+   * [form description]
+   * @param  [type] $form        [description]
+   * @param  [type] &$form_state [description]
+   * @return [type]              [description]
+   */
+  public function form(&$form, &$form_state) {
+    return;
+  }
+
+  /**
+   * [validate description]
+   * @return [type] [description]
+   */
+  public function validate(&$form, &$form_state) {
+    // Nothing needed.
+  }
+
+  /** [submit description] */
+  public function submit(&$form, &$form_state) {
+    // Nothing needed.
+  }
+
 }

@@ -234,36 +234,45 @@ class TaskEngine {
   // ---------------------------------------------------------------------------
 
   /**
-   * [getTaskOptionsForm description].
-   *
-   * @return [type] [description]
+   * Loops through each of the installation tasks and allows them to alter the
+   * configuration form
+   * @param  array  $form        [description]
+   * @param  [type] &$form_state [description]
+   * @return [type]              [description]
    */
-  public function getTaskOptionsForm($form = array(), &$form_state) {
+  public function getConfigureFormFields(&$form, &$form_state) {
     $tasks = $this->getTasks('install');
-
-    $form['itasks'] = array(
-      "#type" => "fieldset",
-      "#title" => t("Task Options"),
-      "#description" => t("Choose which tasks you would like enabled."),
-      "#collapsible" => TRUE,
-      "#collapsed" => FALSE,
-      "#tree" => TRUE,
-    );
-
-    $options = array();
     foreach ($tasks as $machine => $task) {
-      $options[$machine] = $task->getDescription();
+      $task->form($form, $form_state);
     }
+  }
 
-    $form['itasks']['tasks'] = array(
-      "#type" => "checkboxes",
-      "#options" => $options,
-      "#title" => t("Installation tasks"),
-      "#description" => t("Check off all the installation tasks you would like to perform"),
-      "#default_value" => isset($form_state['values']['itasks']['tasks']) ? $form_state['values']['itasks']['tasks'] : array(),
-    );
+  /**
+   * Loops through each of the installation tasks and allows them to alter the
+   * configuration form
+   * @param  array  $form        [description]
+   * @param  [type] &$form_state [description]
+   * @return [type]              [description]
+   */
+  public function getConfigureFormValidate(&$form, &$form_state) {
+    $tasks = $this->getTasks('install');
+    foreach ($tasks as $machine => $task) {
+      $task->validate($form, $form_state);
+    }
+  }
 
-    return $form;
+/**
+   * Loops through each of the installation tasks and allows them to alter the
+   * configuration form
+   * @param  array  $form        [description]
+   * @param  [type] &$form_state [description]
+   * @return [type]              [description]
+   */
+  public function getConfigureFormSubmit(&$form, &$form_state) {
+    $tasks = $this->getTasks('install');
+    foreach ($tasks as $machine => $task) {
+      $task->submit($form, $form_state);
+    }
   }
 
 }
