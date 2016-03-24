@@ -180,7 +180,6 @@ dependencies[] = stanford_landing_page
 dependencies[] = stanford_landing_page_node_convert
 dependencies[] = stanford_jumpstart
 dependencies[] = stanford_jumpstart_home
-dependencies[] = stanford_jumpstart_login
 dependencies[] = stanford_jumpstart_shortcuts
 dependencies[] = stanford_jumpstart_site_actions
 dependencies[] = stanford_jumpstart_wysiwyg
