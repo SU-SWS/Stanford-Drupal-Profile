@@ -185,6 +185,7 @@ dependencies[] = stanford_jumpstart_shortcuts
 dependencies[] = stanford_jumpstart_site_actions
 dependencies[] = stanford_jumpstart_wysiwyg
 dependencies[] = stanford_jumpstart_roles
+dependencies[] = stanford_date_formats
 dependencies[] = stanford_date_timepicker
 dependencies[] = stanford_manage_content
 dependencies[] = stanford_jumpstart_plus
