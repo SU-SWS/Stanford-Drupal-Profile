@@ -207,7 +207,7 @@ function itask_run_install_task(&$install_state) {
   }
 
   // Call the bloody thing.
-  $tasks[$install_state['active_task']]->execute();
+  $tasks[$install_state['active_task']]->execute($install_state);
 
   if (function_exists("drush_log")) {
     $now = microtime(TRUE);
