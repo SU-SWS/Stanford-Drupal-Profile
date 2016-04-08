@@ -241,9 +241,21 @@ class TaskEngine {
    * @return [type]              [description]
    */
   public function getConfigureFormFields(&$form, &$form_state) {
-    $tasks = $this->getTasks('install');
-    foreach ($tasks as $machine => $task) {
-      $task->form($form, $form_state);
+    $groups = $this->getTasks();
+    foreach ($groups as $groupName => $tasks) {
+
+      // Create a fieldgroup for each of the extras
+      $form[$groupName] = array(
+        '#type' => 'fieldset',
+        '#title' => $groupName,
+        '#weight' => 50,
+        '#collapsible' => TRUE,
+        '#collapsed' => FALSE,
+      );
+
+      foreach ($tasks as $machineName => $task) {
+        $task->form($form, $form_state);
+      }
     }
   }
 
@@ -255,9 +267,11 @@ class TaskEngine {
    * @return [type]              [description]
    */
   public function getConfigureFormValidate(&$form, &$form_state) {
-    $tasks = $this->getTasks('install');
-    foreach ($tasks as $machine => $task) {
-      $task->validate($form, $form_state);
+    $groups = $this->getTasks();
+    foreach ($groups as $groupName => $tasks) {
+      foreach ($tasks as $machineName => $task) {
+        $task->validate($form, $form_state);
+      }
     }
   }
 
@@ -269,9 +283,11 @@ class TaskEngine {
    * @return [type]              [description]
    */
   public function getConfigureFormSubmit(&$form, &$form_state) {
-    $tasks = $this->getTasks('install');
-    foreach ($tasks as $machine => $task) {
-      $task->submit($form, $form_state);
+    $groups = $this->getTasks();
+    foreach ($groups as $groupName => $tasks) {
+      foreach ($tasks as $machineName => $task) {
+        $task->submit($form, $form_state);
+      }
     }
   }
 
