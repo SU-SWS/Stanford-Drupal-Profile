@@ -77,7 +77,7 @@ task[local][install][] = Environment\Local\Install\GeneralSettings
 ; SITES
 task[sites][install][] = Environment\Sites\Install\GeneralSettings
 task[sites][install][] = Environment\Sites\Install\WebauthSettings
-task[sites][install][] = Stanford\Jumpstart\Install\User\SunetUser
+task[sites][install][] = Environment\Sites\Install\User\SunetUser
 
 ; ANCHORAGE
 task[anchorage][install][] = Environment\Anchorage\Install\GeneralSettings
