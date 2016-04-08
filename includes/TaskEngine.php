@@ -274,7 +274,14 @@ class TaskEngine {
    * @return [type]              [description]
    */
   public function getConfigureFormValidate(&$form, &$form_state) {
-    $groups = $this->getTasks();
+    $extra = $this->getExtraTasksName();
+    $tasks = $this->getTasks('install');
+    $extras = $this->getTasks($extra);
+    $groups = array(
+      "install" => $tasks,
+      $extra => $extras,
+    );
+
     foreach ($groups as $groupName => $tasks) {
       foreach ($tasks as $machineName => $task) {
         $task->validate($form, $form_state);
@@ -290,7 +297,14 @@ class TaskEngine {
    * @return [type]              [description]
    */
   public function getConfigureFormSubmit(&$form, &$form_state) {
-    $groups = $this->getTasks();
+    $extra = $this->getExtraTasksName();
+    $tasks = $this->getTasks('install');
+    $extras = $this->getTasks($extra);
+    $groups = array(
+      "install" => $tasks,
+      $extra => $extras,
+    );
+
     foreach ($groups as $groupName => $tasks) {
       foreach ($tasks as $machineName => $task) {
         $task->submit($form, $form_state);
