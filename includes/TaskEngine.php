@@ -244,14 +244,21 @@ class TaskEngine {
     $groups = $this->getTasks();
     foreach ($groups as $groupName => $tasks) {
 
-      // Create a fieldgroup for each of the extras
-      $form[$groupName] = array(
-        '#type' => 'fieldset',
-        '#title' => $groupName,
-        '#weight' => 50,
-        '#collapsible' => TRUE,
-        '#collapsed' => FALSE,
-      );
+      if ($groupName !== "install") {
+         // Create a fieldgroup for each of the extras
+        $form[$groupName] = array(
+          '#type' => 'fieldset',
+          '#title' => $groupName,
+          '#weight' => 50,
+          '#collapsible' => TRUE,
+          '#collapsed' => FALSE,
+          '#states' => array(
+            'visible' => array(
+             ':input[name="itasks_extra_tasks"]' => array('value' => $groupName),
+            ),
+          )
+        );
+      }
 
       foreach ($tasks as $machineName => $task) {
         $task->form($form, $form_state);
