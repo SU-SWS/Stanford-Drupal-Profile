@@ -64,12 +64,6 @@ function stanford_sites_jumpstart_plus_form_install_configure_form_alter_validat
  * @param $form_state
  */
 function stanford_sites_jumpstart_plus_form_install_configure_form_alter_submit(&$form, &$form_state) {
-
-  // Force the pass through of all the variables when installing through the UI.
-  if (isset($form_state["build_info"]["args"][0]["interactive"]) && $form_state["build_info"]["args"][0]["interactive"]) {
-    $form_state["build_info"]["args"][0]["forms"]["install_configure_form"] = $form_state["values"];
-  }
-
   itasks_form_install_configure_form_alter_submit($form, $form_state);
 }
 

@@ -87,6 +87,11 @@ function itasks_form_install_configure_form_alter_validate($form, &$form_state) 
  * @return [type]              [description]
  */
 function itasks_form_install_configure_form_alter_submit($form, &$form_state) {
+  // Force the pass through of all the variables when installing through the UI.
+  if (isset($form_state["build_info"]["args"][0]["interactive"]) && $form_state["build_info"]["args"][0]["interactive"]) {
+    $form_state["build_info"]["args"][0]["forms"]["install_configure_form"] = $form_state["values"];
+  }
+
   itasks_includes();
   $engine = new TaskEngine($form_state['build_info']['args'][0]['profile_info'], $form_state['build_info']['args'][0]);
   $engine->getConfigureFormSubmit($form, $form_state);
