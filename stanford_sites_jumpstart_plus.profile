@@ -47,8 +47,8 @@ function stanford_sites_jumpstart_plus_install_verify_requirements(&$install_sta
  */
 function stanford_sites_jumpstart_plus_form_install_configure_form_alter(&$form, &$form_state) {
   itasks_form_install_configure_form_alter($form, $form_state);
-  $form["#validate"][] = "jumpstart_form_install_configure_form_alter_validate";
-  $form["#submit"][] = "jumpstart_form_install_configure_form_alter_submit";
+  $form["#validate"][] = "stanford_sites_jumpstart_plus_form_install_configure_form_alter_validate";
+  $form["#submit"][] = "stanford_sites_jumpstart_plus_form_install_configure_form_alter_submit";
 }
 
 /**
