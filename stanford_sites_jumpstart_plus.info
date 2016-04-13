@@ -12,38 +12,28 @@ taskdir = sites/all/libraries/tasks
 ; STANDARD INSTALL
 task[install][] = Drupal\Standard\Install\FilteredHTMLFormat
 task[install][] = Drupal\Standard\Install\FullHTMLFormat
-task[install][] = Drupal\Standard\Install\BasicPageContentType
-task[install][] = Drupal\Standard\Install\ArticleContentType
 task[install][] = Drupal\Standard\Install\GeneralConfig
 task[install][] = Drupal\Standard\Install\UserConfig
 task[install][] = Drupal\Standard\Install\AdministratorRole
 task[install][] = Drupal\Standard\Install\TagsTaxonomy
 task[install][] = Drupal\Standard\Install\ImageFieldBase
-task[install][] = Drupal\Standard\Install\ArticleTagsField
-task[install][] = Drupal\Standard\Install\ArticleImageFieldInstance
+task[install][] = Drupal\Standard\Install\BodyFieldBase
 task[install][] = Drupal\Standard\Install\StandardBlocks
 task[install][] = Drupal\Standard\Install\StandardMenu
 
 ; STANFORD INSTALL
-; task[install][] = Stanford\DrupalProfile\Install\Authentication
-task[install][] = Stanford\DrupalProfile\Install\ContentTypeArticleSettings
-task[install][] = Stanford\DrupalProfile\Install\ContentTypePageSettings
 task[install][] = Stanford\DrupalProfile\Install\DateTimeSettings
 task[install][] = Stanford\DrupalProfile\Install\UserPermissions
 task[install][] = Stanford\DrupalProfile\Install\SearchBlock
 task[install][] = Stanford\DrupalProfile\Install\GeneralSettings
 task[install][] = Stanford\DrupalProfile\Install\WYSIWYGSettings
 task[install][] = Stanford\DrupalProfile\Install\FileSettings
-task[install][] = Stanford\DrupalProfile\Install\StanfordSites\DisableModules
-task[install][] = Stanford\DrupalProfile\Install\StanfordSites\EnableModules
-task[install][] = Stanford\DrupalProfile\Install\StanfordSites\ThemeSettings
-task[install][] = Stanford\DrupalProfile\Install\StanfordSites\TMPDir
 
 ; JUMPSTART INSTALL
-; task[install][] = Stanford\Jumpstart\Install\Authentication
-task[install][] = Stanford\Jumpstart\Install\themeSettings
 task[install][] = Stanford\Jumpstart\Install\RevertAllFeatures
 task[install][] = Stanford\Jumpstart\Install\Content\Importer\LoadImporterLibrary
+
+task[install][] = Stanford\Jumpstart\Install\ThemeSettings
 task[install][] = Stanford\Jumpstart\Install\GeneralSettings
 task[install][] = Stanford\Jumpstart\Install\PathologicSettings
 task[install][] = Stanford\Jumpstart\Install\User\UserSettings
@@ -53,6 +43,7 @@ task[install][] = Stanford\Jumpstart\Install\Block\BlockSettings
 task[install][] = Stanford\Jumpstart\Install\Block\RelatedLinksBlock
 
 ; JUMPSTART PLUS INSTALL
+task[install][] = Stanford\JumpstartPlus\Install\EnableModules
 task[install][] = Stanford\Utility\Install\ViewsToDB
 task[install][] = Stanford\JumpstartPlus\Install\Content\ImportVocabularies
 task[install][] = Stanford\JumpstartPlus\Install\Content\ImportJSPlusNodes
@@ -68,23 +59,32 @@ task[install][] = Stanford\JumpstartPlus\Install\GeneralSettings
 ; Needs to be last because of raisons.
 task[install][] = Stanford\DrupalProfile\Install\PrivateFileSettings
 
-; Environment Specific Tasks
+; ENVIRONMENT SPECIFIC TASKS
+
+; usage:
+; drush si stanford_sites_jumpstart_academic install_configure_form.itasks_extra_tasks=anchorage -y
+
+; usage;
+; drush si stanford_sites_jumpstart_academic install_configure_form.itasks_extra_tasks=sites -y
+; install_configure_form.stanford_sites_requester_sunetid=sheamck
+; install_configure_form.stanford_sites_requester_name="Shea McKinney"
+; install_configure_form.stanford_sites_requester_email="sheamck@stanford.edu"
 ; ------------------------------------------------------------------------------
 
-; LOCAL
-task[local][install][] = Environment\Local\Install\GeneralSettings
-
 ; SITES
+task[sites][install][] = Stanford\DrupalProfile\Install\StanfordSites\EnableModules
+task[sites][install][] = Stanford\DrupalProfile\Install\StanfordSites\TMPDir
 task[sites][install][] = Environment\Sites\Install\GeneralSettings
 task[sites][install][] = Environment\Sites\Install\WebauthSettings
+task[sites][install][] = Environment\Sites\Install\WebauthExtras
 task[sites][install][] = Environment\Sites\Install\User\SunetUser
 
 ; ANCHORAGE
-task[anchorage][install][] = Environment\Anchorage\Install\GeneralSettings
+task[anchorage][install][] = Environment\Anchorage\Install\S3FSFileSettings
+task[anchorage][install][] = Environment\Anchorage\Install\SAMLSettings
 
-; MAMP
-task[mamp][install][] = Environment\MAMP\Install\GeneralSettings
-
+; LOCAL
+task[local][install][] = Environment\Local\Install\ImageAllowInsecureDerivatives
 
 ; Update Tasks
 ; ------------------------------------------------------------------------------
@@ -109,8 +109,6 @@ dependencies[] = admin_menu
 dependencies[] = admin_menu_toolbar
 dependencies[] = admin_views
 dependencies[] = block
-dependencies[] = color
-dependencies[] = comment
 dependencies[] = contextual
 dependencies[] = css_injector
 dependencies[] = date
@@ -172,26 +170,31 @@ dependencies[] = menu_position
 
 dependencies[] = stanford_bean_types
 dependencies[] = stanford_bean_types_permissions
+dependencies[] = stanford_date_formats
+dependencies[] = stanford_date_timepicker
+dependencies[] = stanford_events_importer
+dependencies[] = stanford_events_views
+dependencies[] = stanford_gallery
 dependencies[] = stanford_image
 dependencies[] = stanford_image_styles
-dependencies[] = stanford_metatag_nobots
-dependencies[] = stanford_page
-dependencies[] = stanford_landing_page
-dependencies[] = stanford_landing_page_node_convert
 dependencies[] = stanford_jumpstart
 dependencies[] = stanford_jumpstart_home
 dependencies[] = stanford_jumpstart_shortcuts
 dependencies[] = stanford_jumpstart_site_actions
 dependencies[] = stanford_jumpstart_wysiwyg
 dependencies[] = stanford_jumpstart_roles
-dependencies[] = stanford_date_formats
-dependencies[] = stanford_date_timepicker
-dependencies[] = stanford_manage_content
 dependencies[] = stanford_jumpstart_plus
+dependencies[] = stanford_jsplus_layouts
+dependencies[] = stanford_landing_page
+dependencies[] = stanford_landing_page_node_convert
+dependencies[] = stanford_manage_content
+dependencies[] = stanford_metatag_nobots
 dependencies[] = stanford_news
 dependencies[] = stanford_news_views
-dependencies[] = stanford_events_importer
-dependencies[] = stanford_events_views
-dependencies[] = stanford_gallery
-dependencies[] = stanford_jsplus_layouts
-dependencies[] = stanford_jsplus_permissions
+dependencies[] = stanford_page
+
+; These modules are dependant on items that happen in install tasks.
+; Dependencies listed here get installed before the tasks are run.
+; To get around this we can install this module with a task.
+
+; dependencies[] = stanford_jsplus_permissions // Installed in Stanford\JumpstartPlus\Install\EnableModules
