@@ -351,3 +351,4 @@ projects[stanford][type] = "profile"
 projects[stanford][download][type] = "git"
 projects[stanford][download][url] = "git@github.com:SU-SWS/Stanford-Drupal-Profile.git"
 projects[stanford][download][tag] = 7.x-2.2
+projects[stanford][subdir] = FALSE
