@@ -1,5 +1,5 @@
 #[Stanford Drupal Profile](https://github.com/SU-SWS/Stanford-Drupal-Profile)
-##### Version: 7.x-2.3
+##### Version: 7.x-2.x
 Maintainers: [Marco Wise](https://github.com/mistermarco), [John Bickar](https://github.com/jbickar), [Shea McKinney](https://github.com/sherakama)
 
 URL: [http://sites.stanford.edu](http://sites.stanford.edu)
