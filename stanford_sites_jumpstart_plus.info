@@ -58,6 +58,9 @@ task[install][] = Stanford\JumpstartPlus\Install\Block\BlockSettings
 task[install][] = Stanford\JumpstartPlus\Install\HomePageSettings
 task[install][] = Stanford\JumpstartPlus\Install\GeneralSettings
 
+; This Jumpstart tasks needs to be after the content has been downloaded
+task[install][] = Stanford\Jumpstart\Install\Content\FourOFour
+
 ; Needs to be last because of raisons.
 task[install][] = Stanford\DrupalProfile\Install\PrivateFileSettings
 
