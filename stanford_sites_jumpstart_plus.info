@@ -32,7 +32,6 @@ task[install][] = Stanford\DrupalProfile\Install\FileSettings
 ; JUMPSTART INSTALL
 task[install][] = Stanford\Jumpstart\Install\RevertAllFeatures
 task[install][] = Stanford\Jumpstart\Install\Content\Importer\LoadImporterLibrary
-
 task[install][] = Stanford\Jumpstart\Install\ThemeSettings
 task[install][] = Stanford\Jumpstart\Install\GeneralSettings
 task[install][] = Stanford\Jumpstart\Install\PathologicSettings
@@ -41,6 +40,9 @@ task[install][] = Stanford\Jumpstart\Install\User\HowardUser
 task[install][] = Stanford\Jumpstart\Install\User\LindseyUser
 task[install][] = Stanford\Jumpstart\Install\Block\BlockSettings
 task[install][] = Stanford\Jumpstart\Install\Block\RelatedLinksBlock
+task[install][] = Stanford\Jumpstart\Install\AddFeaturesPage
+task[install][] = Stanford\Jumpstart\Install\GetHelpPage
+task[install][] = Stanford\Jumpstart\Install\LaunchChecklistPage
 
 ; JUMPSTART PLUS INSTALL
 task[install][] = Stanford\JumpstartPlus\Install\EnableModules
@@ -55,6 +57,9 @@ task[install][] = Stanford\Utility\Install\ViewsFromDB
 task[install][] = Stanford\JumpstartPlus\Install\Block\BlockSettings
 task[install][] = Stanford\JumpstartPlus\Install\HomePageSettings
 task[install][] = Stanford\JumpstartPlus\Install\GeneralSettings
+
+; This Jumpstart tasks needs to be after the content has been downloaded
+task[install][] = Stanford\Jumpstart\Install\Content\FourOFour
 
 ; Needs to be last because of raisons.
 task[install][] = Stanford\DrupalProfile\Install\PrivateFileSettings
