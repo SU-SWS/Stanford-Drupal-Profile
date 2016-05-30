@@ -193,11 +193,12 @@ dependencies[] = stanford_jsplus_layouts
 dependencies[] = stanford_landing_page
 dependencies[] = stanford_landing_page_node_convert
 dependencies[] = stanford_manage_content
-dependencies[] = stanford_metatag_nobots
+dependencies[] = nobots
 dependencies[] = stanford_news
 dependencies[] = stanford_news_views
 dependencies[] = stanford_news_administration
 dependencies[] = stanford_page
+dependencies[] = stanford_helper
 
 ; These modules are dependant on items that happen in install tasks.
 ; Dependencies listed here get installed before the tasks are run.
