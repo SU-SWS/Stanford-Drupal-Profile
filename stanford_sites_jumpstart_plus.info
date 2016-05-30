@@ -196,6 +196,7 @@ dependencies[] = stanford_manage_content
 dependencies[] = stanford_metatag_nobots
 dependencies[] = stanford_news
 dependencies[] = stanford_news_views
+dependencies[] = stanford_news_administration
 dependencies[] = stanford_page
 
 ; These modules are dependant on items that happen in install tasks.
