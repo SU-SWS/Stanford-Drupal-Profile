@@ -18,7 +18,7 @@ api = 2
 ; Core project
 ; ------------
 projects[drupal][type] = core
-projects[drupal][version] = 6.35
+projects[drupal][version] = 6.38
 
 ; Projects
 ; --------
@@ -37,7 +37,7 @@ projects[computed_field] = 1.0
 projects[content_access] = 1.2
 projects[cnr] = 4.1
 projects[css_injector] = 1.4
-projects[ctools] = 1.12
+projects[ctools] = 1.15
 projects[custom_breadcrumbs] = 2.0-rc1
 projects[date] = 2.10
 projects[diff] = 2.3
@@ -46,7 +46,7 @@ projects[features] = 1.2
 projects[feeds] = 1.0-beta13
 projects[feeds_tamper] = 1.0
 projects[feeds_xpathparser] = 1.12
-projects[filefield] = 3.13
+projects[filefield] = 3.14
 projects[filefield_paths] = 1.5
 projects[globalredirect] = 1.5
 projects[google_analytics] = 3.6
@@ -79,7 +79,7 @@ projects[token] = 1.19
 projects[transliteration] = 3.1
 projects[vertical_tabs] = 1.0-rc2
 projects[views] = 2.18
-projects[views_bulk_operations] = 1.16
+projects[views_bulk_operations] = 1.17
 projects[views_slideshow] = 2.4
 projects[webform] = 3.23
 projects[wysiwyg] = 2.4
