@@ -19,5 +19,15 @@ abstract class AbstractUpdateTask extends AbstractTask {
   public function getDescription() {
     return $this->description;
   }
+  
+  /**
+   * [form description]
+   * @param  [type] $form        [description]
+   * @param  [type] &$form_state [description]
+   * @return [type]              [description]
+   */
+  public function form(&$form, &$form_state) {
+    return;
+  }
 
 }
