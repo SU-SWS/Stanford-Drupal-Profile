@@ -185,7 +185,7 @@ projects[workbench_moderation][version] = "1.4"
 projects[wysiwyg][subdir] = "contrib"
 projects[wysiwyg][version] = "2.2"
 projects[wysiwyg_filter][subdir] = "contrib"
-projects[wysiwyg_filter][version] = "1.60-rc3"
+projects[wysiwyg_filter][version] = "1.6-rc3"
 projects[xmlsitemap][subdir] = "contrib"
 projects[xmlsitemap][version] = "2.3"
 
