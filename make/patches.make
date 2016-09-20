@@ -29,19 +29,6 @@ projects[field_collection][patch][] = "https://www.drupal.org/files/issues/field
 ; Has not been committed as of 9.19.2016 - jbickar
 projects[pathauto][patch][] = "https://drupal.org/files/pathauto_admin.patch"
 
-; Fixed as of 7.x-3.12 - jbickar, 9.19.2016
-; https://www.drupal.org/node/1036962 | Edit link destination incorrect when using AJAX-enabled views
-; projects[views][patch][] = "https://www.drupal.org/files/views-fix-destination-link-for-ajax-1036962-29.patch"
-
-; Fixed as of 7.x-3.12 - jbickar
-; https://www.drupal.org/node/1819538 | More link disappears when time-based views cache is enabled
-; projects[views][patch][] = "https://www.drupal.org/files/issues/views-more_link_disappears_with_caching-1819538-6.patch"
-
 ; https://www.drupal.org/node/550428 No empty tags patch.
 ; Has not been committed as of 9.19.2016 - jbickar
 projects[wysiwyg][patch][] = "https://drupal.org/files/wysiwyg-non-empty-tags.550428.79.patch"
-
-; Fixed as of 7.x-1.6-rc3 - jbickar, 9.19.2016
-; https://www.drupal.org/node/1687794 | WYSIWYG Filter - Validation occurs on disabled filter
-; projects[wysiwyg_filter][patch][] = "https://www.drupal.org/files/wysiwyg_filter-1687794-1-skip-validation-if-filter-disabled.patch"
-
