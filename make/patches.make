@@ -21,6 +21,10 @@ projects[date][patch][] = "https://www.drupal.org/files/issues/calendar_pager_br
 ; Has not been committed as of 9.19.2016; there is an updated patch in comment #82 on https://drupal.org/node/927566 - jbickar.
 projects[features][patch][] = "https://drupal.org/files/issues/features-parent_identifier-927566-79.patch"
 
+; https://www.drupal.org/node/2221307 | Deleting host entity causes save during deletion and triggers pathauto
+; Has not been committed as of 9.19.2016 - jbickar
+projects[field_collection][patch][] = "https://www.drupal.org/files/issues/field_collection-2385985-29.patch"
+
 ; https://drupal.org/node/1267966 - entity tokens bugs
 ; Has not been committed as of 9.19.2016 - jbickar
 projects[pathauto][patch][] = "https://drupal.org/files/pathauto_admin.patch"
@@ -41,6 +45,3 @@ projects[wysiwyg][patch][] = "https://drupal.org/files/wysiwyg-non-empty-tags.55
 ; https://www.drupal.org/node/1687794 | WYSIWYG Filter - Validation occurs on disabled filter
 ; projects[wysiwyg_filter][patch][] = "https://www.drupal.org/files/wysiwyg_filter-1687794-1-skip-validation-if-filter-disabled.patch"
 
-; https://www.drupal.org/node/2221307 | Deleting host entity causes save during deletion and triggers pathauto
-; Has not been committed as of 9.19.2016 - jbickar
-projects[field_collection][patch][] = "https://www.drupal.org/files/issues/field_collection-2385985-29.patch"
