@@ -1,5 +1,5 @@
 #[Stanford Drupal Profile](https://github.com/SU-SWS/Stanford-Drupal-Profile)
-##### Version: 7.x-2.0-dev+5
+##### Version: 7.x-2.4
 Maintainers: [Marco Wise](https://github.com/mistermarco), [John Bickar](https://github.com/jbickar), [Shea McKinney](https://github.com/sherakama)
 
 URL: [http://sites.stanford.edu](http://sites.stanford.edu)
@@ -12,7 +12,7 @@ Leading-edge development occurs on the -dev branch for each Drupal core version 
 
 ## Drush Make
 
-* Run `drush make make/group.make` to create a group or personal site.
+* Run `drush make make/group.make` to create a group or personal site (includes the Stanford Basic theme; `drush make` will fail if you do not have access to that private theme repository. You may want to use the `--force-complete` flag).
 * Run `drush make make/dept.make` to create a department site (includes Stanford-specific themes; `drush make` will fail if you do not have access to the private theme repositories).
 * Run `drush make make/anchorage.make` to create a department site for the Anchorage hosting environment (includes Stanford-specific themes; `drush make` will fail if you do not have access to the private theme repositories).
 
