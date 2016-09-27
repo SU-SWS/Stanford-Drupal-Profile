@@ -47,9 +47,13 @@ task[install][] = Stanford\Jumpstart\Install\LaunchChecklistPage
 task[install][] = Stanford\Jumpstart\Install\GetHelpPage
 
 ; JUMPSTART LAB INSTALL
+task[install][] = Stanford\JumpstartAcademic\Install\EnableModules
 task[install][] = Stanford\Utility\Install\ViewsToDB
 task[install][] = Stanford\JumpstartLab\Install\HomePageSettings
 task[install][] = Stanford\Utility\Install\ViewsFromDB
+task[install][] = Stanford\JumpstartLab\Install\Content\ImportJSLabVocabularies
+task[install][] = Stanford\JumpstartLab\Install\Content\ImportJSLabNodes
+task[install][] = Stanford\JumpstartLab\Install\Content\ImportJSLabBeans
 
 ; Needs to be last because of raisons.
 task[install][] = Stanford\Jumpstart\Install\Content\FourOFour
