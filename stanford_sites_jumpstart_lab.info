@@ -49,11 +49,16 @@ task[install][] = Stanford\Jumpstart\Install\GetHelpPage
 ; JUMPSTART LAB INSTALL
 task[install][] = Stanford\JumpstartAcademic\Install\EnableModules
 task[install][] = Stanford\Utility\Install\ViewsToDB
-task[install][] = Stanford\JumpstartLab\Install\HomePageSettings
-task[install][] = Stanford\Utility\Install\ViewsFromDB
 task[install][] = Stanford\JumpstartLab\Install\Content\ImportJSLabVocabularies
 task[install][] = Stanford\JumpstartLab\Install\Content\ImportJSLabNodes
 task[install][] = Stanford\JumpstartLab\Install\Content\ImportJSLabBeans
+task[install][] = Stanford\JumpstartLab\Install\Menu\MenuRedirects
+task[install][] = Stanford\JumpstartLab\Install\Menu\MenuSettings
+task[install][] = Stanford\JumpstartLab\Install\Menu\MenuRules
+task[install][] = Stanford\Utility\Install\ViewsFromDB
+task[install][] = Stanford\JumpstartLab\Install\Block\BlockSettings
+task[install][] = Stanford\JumpstartLab\Install\GeneralSettings
+task[install][] = Stanford\JumpstartLab\Install\HomePageSettings
 
 ; Needs to be last because of raisons.
 task[install][] = Stanford\Jumpstart\Install\Content\FourOFour
