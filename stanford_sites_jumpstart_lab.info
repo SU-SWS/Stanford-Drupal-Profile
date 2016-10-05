@@ -200,9 +200,9 @@ dependencies[] = stanford_events_views
 dependencies[] = stanford_gallery
 dependencies[] = stanford_image
 dependencies[] = stanford_image_styles
-dependencies[] = stanford_jsa_layouts
+dependencies[] = stanford_jsl_layouts
 dependencies[] = stanford_jumpstart
-dependencies[] = stanford_jumpstart_academic
+dependencies[] = stanford_jumpstart_lab
 dependencies[] = stanford_jumpstart_home
 dependencies[] = stanford_jumpstart_roles
 dependencies[] = stanford_jumpstart_shortcuts
@@ -223,12 +223,6 @@ dependencies[] = stanford_publication
 dependencies[] = stanford_publication_views_reference
 dependencies[] = stanford_slides
 dependencies[] = stanford_helper
-
-; These modules are dependant on items that happen in install tasks.
-; Dependencies listed here get installed before the tasks are run.
-; To get around this we can install this module with a task.
-
-; dependencies[] = stanford_jsa_roles // Installed in Stanford\JumpstartAcademic\Install\EnableModules
 
 ; Include files.
 files[] = stanford_sites_jumpstart_lab.profile
