@@ -59,6 +59,7 @@ task[install][] = Stanford\Utility\Install\ViewsFromDB
 task[install][] = Stanford\JumpstartLab\Install\Block\BlockSettings
 task[install][] = Stanford\JumpstartLab\Install\GeneralSettings
 task[install][] = Stanford\JumpstartLab\Install\HomePageSettings
+task[install][] = Stanford\JumpstartLab\Install\EnableModules
 
 ; Needs to be last because of raisons.
 task[install][] = Stanford\Jumpstart\Install\Content\FourOFour
