@@ -35,7 +35,6 @@ task[install][] = Stanford\DrupalProfile\Install\FileSettings
 ; JUMPSTART INSTALL
 task[install][] = Stanford\Jumpstart\Install\RevertAllFeatures
 task[install][] = Stanford\Jumpstart\Install\Content\Importer\LoadImporterLibrary
-task[install][] = Stanford\Jumpstart\Install\ThemeSettings
 task[install][] = Stanford\Jumpstart\Install\GeneralSettings
 task[install][] = Stanford\Jumpstart\Install\PathologicSettings
 task[install][] = Stanford\Jumpstart\Install\User\UserSettings
@@ -59,6 +58,7 @@ task[install][] = Stanford\Utility\Install\ViewsFromDB
 task[install][] = Stanford\JumpstartLab\Install\Block\BlockSettings
 task[install][] = Stanford\JumpstartLab\Install\GeneralSettings
 task[install][] = Stanford\JumpstartLab\Install\HomePageSettings
+task[install][] = Stanford\Jumpstart\Install\ThemeSettings
 task[install][] = Stanford\JumpstartLab\Install\EnableModules
 
 ; Needs to be last because of raisons.
