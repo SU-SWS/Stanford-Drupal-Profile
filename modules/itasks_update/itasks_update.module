@@ -140,7 +140,7 @@ function itasks_update_do_updates_cli($tasks = array()) {
   }
 
   // Make sure we have everything...
-  itasks_includes();
+  itasks_autoload_library();
 
   // The profile we are updating.
   $profile = variable_get("install_profile", "itasks");
