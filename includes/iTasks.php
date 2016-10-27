@@ -85,7 +85,7 @@ function itasks_form_install_configure_form_alter_submit(&$form, &$form_state) {
   }
 
   itasks_autoload_library();
-  $engine = new T\ITasks\askEngine($form_state['build_info']['args'][0]['profile_info'], $form_state['build_info']['args'][0]);
+  $engine = new \ITasks\TaskEngine($form_state['build_info']['args'][0]['profile_info'], $form_state['build_info']['args'][0]);
   $engine->getConfigureFormSubmit($form, $form_state);
 }
 
@@ -100,7 +100,7 @@ function itasks_install_tasks(&$install_state) {
   $profile_name = $install_state['parameters']['profile'];
   $info_file = drupal_get_path('profile', $profile_name) . "/" . $profile_name . ".info";
   $install_state['profile_info'] = drupal_parse_info_file($info_file);
-  $engine = new T\ITasks\askEngine($install_state['profile_info'], $install_state);
+  $engine = new \ITasks\TaskEngine($install_state['profile_info'], $install_state);
   return $engine->getInstallTaskArray();
 }
 
