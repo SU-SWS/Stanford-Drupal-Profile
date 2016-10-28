@@ -153,6 +153,7 @@ dependencies[] = token
 dependencies[] = transliteration
 dependencies[] = views
 dependencies[] = views_ui
+dependencies[] = webform
 dependencies[] = wysiwyg
 dependencies[] = entity
 dependencies[] = bean
@@ -171,7 +172,7 @@ dependencies[] = wysiwyg
 dependencies[] = uuid
 dependencies[] = better_formats
 
-; Academic Profile Module Requirements.
+; Lab Profile Module Requirements.
 dependencies[] = bean_uuid
 dependencies[] = menu_position
 dependencies[] = uuid
@@ -220,6 +221,9 @@ dependencies[] = stanford_person
 dependencies[] = stanford_person_layouts
 dependencies[] = stanford_person_views
 dependencies[] = stanford_person_reference
+dependencies[] = stanford_private_page
+dependencies[] = stanford_private_page_administration
+dependencies[] = stanford_private_page_section
 dependencies[] = stanford_publication
 dependencies[] = stanford_publication_views_reference
 dependencies[] = stanford_slides
