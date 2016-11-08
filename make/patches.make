@@ -17,6 +17,9 @@ projects[css_injector][patch][] = "https://www.drupal.org/files/issues/css_injec
 ; Committed to 7.x-2.x and in 7.x-2.10-rc1, but not in 7.x-2.9, as of 9.19.2016 - jbickar
 projects[date][patch][] = "https://www.drupal.org/files/issues/calendar_pager_broken-2375235-35.patch"
 
+; https://www.drupal.org/node/2221307 | Patch allows for field groups to be rendered in ds custom block regions
+projects[ds][patch][] = "https://www.drupal.org/files/issues/ds_extras_field_group_not_rendered-2221307-18.patch"
+
 ; https://drupal.org/node/927566 & https://drupal.org/node/860974 | Menu Links will not import/revert
 ; Has not been committed as of 9.19.2016; there is an updated patch in comment #82 on https://drupal.org/node/927566 - jbickar.
 projects[features][patch][] = "https://drupal.org/files/issues/features-parent_identifier-927566-79.patch"
