@@ -56,10 +56,12 @@ task[install][] = Stanford\JumpstartLab\Install\Menu\MenuRedirects
 task[install][] = Stanford\JumpstartLab\Install\Menu\MenuSettings
 task[install][] = Stanford\JumpstartLab\Install\Menu\MenuRules
 task[install][] = Stanford\Utility\Install\ViewsFromDB
-task[install][] = Stanford\JumpstartLab\Install\Block\BlockSettings
 task[install][] = Stanford\JumpstartLab\Install\GeneralSettings
 task[install][] = Stanford\JumpstartLab\Install\HomePageSettings
 task[install][] = Stanford\JumpstartLab\Install\EnableModules
+task[install][] = Stanford\JumpstartLab\Install\Block\BlockSettings
+task[install][] = Stanford\JumpstartEngineering\Install\CAPx\CAPxConfig
+task[install][] = Stanford\JumpstartLab\Install\CAPx\CAPxConfigChange
 
 ; Needs to be last because of raisons.
 task[install][] = Stanford\Jumpstart\Install\Content\FourOFour
