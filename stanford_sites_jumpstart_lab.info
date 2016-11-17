@@ -121,6 +121,7 @@ dependencies[] = bean_admin_ui
 dependencies[] = better_formats
 dependencies[] = block
 dependencies[] = block_class
+dependencies[] = content_access
 dependencies[] = context_accordion
 dependencies[] = context_respect
 dependencies[] = context_ui
