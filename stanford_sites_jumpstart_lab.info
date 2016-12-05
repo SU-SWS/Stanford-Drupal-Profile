@@ -44,6 +44,7 @@ task[install][] = Stanford\Jumpstart\Install\Block\BlockSettings
 task[install][] = Stanford\Jumpstart\Install\Block\RelatedLinksBlock
 task[install][] = Stanford\Jumpstart\Install\LaunchChecklistPage
 task[install][] = Stanford\Jumpstart\Install\GetHelpPage
+task[install][] = Stanford\Jumpstart\Install\VersionIdentifier
 
 ; JUMPSTART LAB INSTALL
 task[install][] = Stanford\Jumpstart\Install\ThemeSettings
