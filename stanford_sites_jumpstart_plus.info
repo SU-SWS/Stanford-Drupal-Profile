@@ -43,6 +43,7 @@ task[install][] = Stanford\Jumpstart\Install\Block\RelatedLinksBlock
 task[install][] = Stanford\Jumpstart\Install\AddFeaturesPage
 task[install][] = Stanford\Jumpstart\Install\GetHelpPage
 task[install][] = Stanford\Jumpstart\Install\LaunchChecklistPage
+task[install][] = Stanford\Jumpstart\Install\VersionIdentifier
 
 ; JUMPSTART PLUS INSTALL
 task[install][] = Stanford\JumpstartPlus\Install\EnableModules
