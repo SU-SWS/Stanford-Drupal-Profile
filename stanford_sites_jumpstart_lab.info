@@ -48,7 +48,6 @@ task[install][] = Stanford\Jumpstart\Install\VersionIdentifier
 
 ; JUMPSTART LAB INSTALL
 task[install][] = Stanford\Jumpstart\Install\ThemeSettings
-task[install][] = Stanford\JumpstartAcademic\Install\EnableModules
 task[install][] = Stanford\Utility\Install\ViewsToDB
 task[install][] = Stanford\JumpstartLab\Install\Content\ImportJSLabVocabularies
 task[install][] = Stanford\JumpstartLab\Install\Content\ImportJSLabNodes
