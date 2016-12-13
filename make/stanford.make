@@ -233,10 +233,10 @@ projects[social_share][subdir] = "contrib"
 projects[social_share][download][type] = "git"
 projects[social_share][download][url] = "http://git.drupal.org/project/social-share.git"
 projects[social_share][download][tag] = "7.x-2.1"
-projects[token_tweaks][type] = "module"⏎
-projects[token_tweaks][subdir] = "contrib"⏎
-projects[token_tweaks][download][type] = "git"⏎
-projects[token_tweaks][download][url] = "http://git.drupal.org/project/token_tweaks.git"⏎
+projects[token_tweaks][type] = "module"
+projects[token_tweaks][subdir] = "contrib"
+projects[token_tweaks][download][type] = "git"
+projects[token_tweaks][download][url] = "http://git.drupal.org/project/token_tweaks.git"
 projects[token_tweaks][download][revision] = "7232bbad4f53131021fefd490ba7f411b2287ea5"
 
 ; Contributed themes
