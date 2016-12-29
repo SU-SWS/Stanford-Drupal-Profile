@@ -62,6 +62,7 @@ task[install][] = Stanford\JumpstartLab\Install\EnableModules
 task[install][] = Stanford\JumpstartEngineering\Install\CAPx\CAPxConfig
 task[install][] = Stanford\JumpstartLab\Install\CAPx\CAPxConfigChange
 task[install][] = Stanford\JumpstartLab\Install\PathologicSettings
+task[install][] = Stanford\JumpstartLab\Install\Block\BlockSettings
 
 ; Needs to be last because of raisons.
 task[install][] = Stanford\Jumpstart\Install\Content\FourOFour
@@ -94,10 +95,6 @@ task[anchorage][install][] = Environment\Anchoarge\Install\EnableModules
 
 ; LOCAL
 task[local][install][] = Environment\Local\Install\ImageAllowInsecureDerivatives
-
-; Run last to clean up block configs
-task[install][] = Stanford\JumpstartLab\Install\Block\BlockSettings
-task[install][] = Stanford\Jumpstart\Install\Block\BlockSettings
 
 ; Update Tasks
 ; ------------------------------------------------------------------------------
