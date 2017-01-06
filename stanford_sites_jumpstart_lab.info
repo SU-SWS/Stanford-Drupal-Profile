@@ -239,6 +239,7 @@ dependencies[] = stanford_publication
 dependencies[] = stanford_publication_views_reference
 dependencies[] = stanford_slides
 dependencies[] = stanford_video
+dependencies[] = stanford_alt_check
 
 ; Include files.
 files[] = stanford_sites_jumpstart_lab.profile
