@@ -63,6 +63,7 @@ task[install][] = Stanford\JumpstartLab\Install\CAPx\CAPxConfigChange
 task[install][] = Stanford\JumpstartLab\Install\PathologicSettings
 task[install][] = Stanford\JumpstartLab\Install\Block\BlockSettings
 task[install][] = Stanford\Jumpstart\Install\Block\BlockSettings
+task[install][] = Stanford\JumpstartLab\Install\ContextSettings
 
 ; Needs to be last because of raisons.
 task[install][] = Stanford\Jumpstart\Install\Content\FourOFour
