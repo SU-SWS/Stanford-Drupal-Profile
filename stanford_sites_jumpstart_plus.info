@@ -198,6 +198,7 @@ dependencies[] = stanford_news_views
 dependencies[] = stanford_news_administration
 dependencies[] = stanford_page
 dependencies[] = stanford_helper
+dependencies[] = stanford_alt_check
 
 ; These modules are dependant on items that happen in install tasks.
 ; Dependencies listed here get installed before the tasks are run.
