@@ -227,6 +227,7 @@ dependencies[] = stanford_landing_page
 dependencies[] = stanford_landing_page_node_convert
 dependencies[] = stanford_manage_content
 dependencies[] = stanford_news
+dependencies[] = stanford_news_administration
 dependencies[] = stanford_news_views
 dependencies[] = stanford_page
 dependencies[] = stanford_person
