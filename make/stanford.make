@@ -234,7 +234,7 @@ projects[token_tweaks][type] = "module"
 projects[token_tweaks][subdir] = "contrib"
 projects[token_tweaks][download][type] = "git"
 projects[token_tweaks][download][url] = "http://git.drupal.org/project/token_tweaks.git"
-projects[token_tweaks][download][revision] = "7232bbad4f53131021fefd490ba7f411b2287ea5"
+projects[token_tweaks][download][revision] = "75818fbfb97bf8882ca106e6af703be7644b11bb"
 
 ; Contributed themes
 projects[cube][type] = "theme"
