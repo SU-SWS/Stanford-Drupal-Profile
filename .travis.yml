@@ -60,7 +60,7 @@ env:
     - DISABLE_MODULES="webauth"
     - ONLY_TEST="field_collection"
     - DEPLOYER_BRANCH=""
-    - DRUPAL_PROFILE_BRANCH=""
+    - DRUPAL_PROFILE_BRANCH="update-field-collections"
     - CLICKY_BRANCH=""
     - SCRIPTS_BRANCH=""
 
