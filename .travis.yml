@@ -56,11 +56,11 @@
 env:
   global:
     - PRODUCT_NAME=""
-    - ENABLE_MODULES="field_collection"
+    - ENABLE_MODULES="views"
     - DISABLE_MODULES="webauth"
-    - ONLY_TEST="field_collection"
+    - ONLY_TEST="views"
     - DEPLOYER_BRANCH=""
-    - DRUPAL_PROFILE_BRANCH="update-field-collections"
+    - DRUPAL_PROFILE_BRANCH=""
     - CLICKY_BRANCH=""
     - SCRIPTS_BRANCH=""
 
