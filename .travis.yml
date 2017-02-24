@@ -62,7 +62,7 @@ env:
     - DEPLOYER_BRANCH=""
     - DRUPAL_PROFILE_BRANCH=""
     - CLICKY_BRANCH=""
-    - SCRIPTS_BRANCH=""
+    - SCRIPTS_BRANCH="test-deployer"
 
 language: php
 php:
