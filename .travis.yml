@@ -61,7 +61,7 @@ env:
     - ONLY_TEST="backup_migrate"
     - DEPLOYER_BRANCH=""
     - DRUPAL_PROFILE_BRANCH=""
-    - CLICKY_BRANCH="uat-high-value"
+    - CLICKY_BRANCH="bam"
     - SCRIPTS_BRANCH=""
 
 language: php
