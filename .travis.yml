@@ -58,10 +58,10 @@ env:
     - PRODUCT_NAME=""
     - ENABLE_MODULES=""
     - DISABLE_MODULES="webauth"
-    - ONLY_TEST=""
+    - ONLY_TEST="backup_migrate"
     - DEPLOYER_BRANCH=""
     - DRUPAL_PROFILE_BRANCH=""
-    - CLICKY_BRANCH=""
+    - CLICKY_BRANCH="bam"
     - SCRIPTS_BRANCH=""
 
 language: php
