@@ -61,7 +61,7 @@ env:
     - ONLY_TEST=""
     - DEPLOYER_BRANCH=""
     - DRUPAL_PROFILE_BRANCH=""
-    - CLICKY_BRANCH=""
+    - CLICKY_BRANCH="uat-travis-fixes"
     - SCRIPTS_BRANCH=""
 
 language: php
