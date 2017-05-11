@@ -1,10 +1,6 @@
 core = 7.x
 api = 2
 
-; https://drupal.org/node/1326998 - PHP notice
-; Still on RTBC as of 9.19.2016 - jbickar
-projects[context_useragent][patch][] = "https://drupal.org/files/issues/context_useragent-undefined_offset_error-1326998-3.patch"
-
 ; https://www.drupal.org/node/2471911 Form validation fails with "the directory is not writable" when public file system is remote
 ; Committed to 7.x-1.x-dev but no new point release as of 9.19.2016 - jbickar
 projects[css_injector][patch][] = "https://www.drupal.org/files/issues/css_injector-remove_drupal_realpath-2471911-2.patch"
