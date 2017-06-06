@@ -24,6 +24,9 @@ projects[ds][patch][] = "https://www.drupal.org/files/issues/ds_extras_field_gro
 ; Has not been committed as of 9.19.2016; there is an updated patch in comment #82 on https://drupal.org/node/927566 - jbickar.
 projects[features][patch][] = "https://drupal.org/files/issues/features-parent_identifier-927566-79.patch"
 
+; https://www.drupal.org/node/2713921 | Cannot install on mysql 5.7+
+projects[jw_player][patch][] = "https://www.drupal.org/files/issues/jw-player-mysql57-2713921-8.patch"
+
 ; https://drupal.org/node/1267966 - entity tokens bugs
 ; Has not been committed as of 9.19.2016 - jbickar
 projects[pathauto][patch][] = "https://drupal.org/files/pathauto_admin.patch"
