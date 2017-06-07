@@ -62,7 +62,7 @@ env:
     - BEHAT_TAG=""
     - DEPLOYER_BRANCH=""
     - DRUPAL_PROFILE_BRANCH=""
-    - CLICKY_BRANCH=""
+    - CLICKY_BRANCH="uat20170505-updates"
     - SCRIPTS_BRANCH=""
 
 language: php
