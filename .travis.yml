@@ -59,7 +59,7 @@ env:
     - ENABLE_MODULES=""
     - DISABLE_MODULES="webauth"
     - ONLY_TEST=""
-    - BEHAT_TAG="deploy"
+    - BEHAT_TAG=""
     - DEPLOYER_BRANCH=""
     - DRUPAL_PROFILE_BRANCH=""
     - CLICKY_BRANCH=""
