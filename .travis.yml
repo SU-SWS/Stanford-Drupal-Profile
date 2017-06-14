@@ -59,9 +59,10 @@ env:
     - ENABLE_MODULES=""
     - DISABLE_MODULES="webauth"
     - ONLY_TEST=""
+    - BEHAT_TAG=""
     - DEPLOYER_BRANCH=""
     - DRUPAL_PROFILE_BRANCH=""
-    - CLICKY_BRANCH=""
+    - CLICKY_BRANCH="remove_masonry_news"
     - SCRIPTS_BRANCH=""
 
 language: php
