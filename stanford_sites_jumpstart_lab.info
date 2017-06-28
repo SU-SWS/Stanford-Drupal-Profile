@@ -4,7 +4,7 @@ description = Stanford Sites Jumpstart Lab Installation.
 project = stanford_sites_jumpstart_lab
 project status url = https://github.com/SU-SWS/stanford_sites_jumpstart_lab
 core = 7.x
-version = 7.x-5.0-alpha2
+version = 7.x-5.x
 
 ; ITasks Config
 taskdir = sites/all/libraries/tasks
