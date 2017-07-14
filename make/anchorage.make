@@ -29,7 +29,7 @@ projects[stanford_ssp][subdir] = "stanford"
 projects[stanford_ssp][type] = "module"
 projects[stanford_ssp][download][type] = "git"
 projects[stanford_ssp][download][url] = "git@github.com:SU-SWS/stanford_ssp.git"
-projects[stanford_ssp][download][revision] = "97e9816f6f64b84dfaaac12cf7ed2abea1501a78"
+projects[stanford_ssp][download][revision] = "2bec6506b80d198504d519de40cd97f638324e9f"
 
 projects[stanford_s3fs_if][subdir] = "stanford"
 projects[stanford_s3fs_if][type] = "module"
