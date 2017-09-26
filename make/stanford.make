@@ -406,5 +406,5 @@ projects[stanford_seven][download][tag] = "7.x-1.1"
 projects[stanford][type] = "profile"
 projects[stanford][download][type] = "git"
 projects[stanford][download][url] = "git@github.com:SU-SWS/Stanford-Drupal-Profile.git"
-projects[stanford][download][tag] = 7.x-2.5
+projects[stanford][download][tag] = 7.x-2.6
 projects[stanford][subdir] = FALSE
