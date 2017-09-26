@@ -58,7 +58,7 @@ env:
     - PRODUCT_NAME=""
     - ENABLE_MODULES=""
     - DISABLE_MODULES="webauth"
-    - ONLY_TEST=""
+    - ONLY_TEST="stanford_date_timepicker"
     - BEHAT_TAG=""
     - DEPLOYER_BRANCH=""
     - DRUPAL_PROFILE_BRANCH=""
