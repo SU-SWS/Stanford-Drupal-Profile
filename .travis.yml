@@ -62,7 +62,7 @@ env:
     - BEHAT_TAG=""
     - DEPLOYER_BRANCH=""
     - DRUPAL_PROFILE_BRANCH=""
-    - CLICKY_BRANCH="test-imgur-api"
+    - CLICKY_BRANCH="stanford-page-features-overridden"
     - SCRIPTS_BRANCH=""
 
 language: php
