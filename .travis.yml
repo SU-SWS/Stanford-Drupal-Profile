@@ -62,6 +62,7 @@ env:
     - BEHAT_TAG=""
     - DEPLOYER_BRANCH=""
     - DRUPAL_PROFILE_BRANCH=""
+    - SCRIPTS_BRANCH="test-chrome-update"
     - CLICKY_BRANCH="stanford-page-features-overridden"
     - SCRIPTS_BRANCH=""
 
