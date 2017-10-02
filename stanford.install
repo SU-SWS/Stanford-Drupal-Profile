@@ -121,7 +121,6 @@ function stanford_install() {
     $query->values($block);
   }
   $query->execute();
-  features_revert_module('stanford_page');
 }
 
 /**
@@ -250,3 +249,4 @@ function stanford_sites_install_configure_form_submit($form, &$form_state) {
   variable_set('stanford_sites_requester_email', $form['stanford_sites_requester_email']['#value']);
   variable_set('stanford_sites_auth_method', $form['stanford_authentication']['#value']);
 }
+
