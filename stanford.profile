@@ -228,7 +228,6 @@ function stanford_sites_tasks() {
       }
     }
   }
-  features_revert_module('stanford_page');
 }
 
 /**
@@ -306,8 +305,22 @@ function stanford_sites_add_webauth_user($sunet, $name = '', $email = '') {
  */
 function stanford_install_finished() {
   drupal_flush_all_caches();
+  module_enable(array('stanford_page'));
+//  features_rebuild();
   features_revert_module('stanford_page');
-  drupal_cron_run();
+//  registry_rebuild();
+//  drupal_cron_run();
   drupal_flush_all_caches();
+  registry_rebuild();
+  features_revert_module('stanford_page');
+  drupal_flush_all_caches();
+  registry_rebuild();
   watchdog("stanford", t("Finished reverting stanford_page and flushing caches."));
+}
+
+function stanford_install_tasks_alter(&$tasks, &$install_state) {
+//  $final_task = $tasks['stanford_install_finished'];
+//  unset($tasks['stanford_install_finished']);
+//  var_dump($tasks);
+  $tasks['install_finished']['function'] = 'stanford_install_finished';
 }
