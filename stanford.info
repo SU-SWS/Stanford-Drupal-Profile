@@ -42,7 +42,6 @@ dependencies[] = redirect
 dependencies[] = rdf
 dependencies[] = search
 dependencies[] = stanford_date_formats
-dependencies[] = stanford_page
 dependencies[] = stanford_wysiwyg
 dependencies[] = strongarm
 dependencies[] = taxonomy
