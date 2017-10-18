@@ -307,6 +307,5 @@ function stanford_install_finished() {
   module_enable(array('stanford_page'));
   features_revert_module('stanford_page');
   drupal_flush_all_caches();
-  watchdog("stanford", t("Finished reverting stanford_page and flushing caches."));
+  watchdog("stanford", "Finished reverting stanford_page and flushing caches.");
 }
-
