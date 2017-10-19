@@ -121,7 +121,6 @@ function stanford_install() {
     $query->values($block);
   }
   $query->execute();
-  features_revert_module('stanford_page');
 }
 
 /**
