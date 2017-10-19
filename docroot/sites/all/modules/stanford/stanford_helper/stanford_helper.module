@@ -1,0 +1,57 @@
+<?php
+/**
+ * @file
+ * File description
+ *
+ * Long description
+ */
+
+/**
+ * Implements hook_menu().
+ */
+function stanford_helper_menu() {
+
+  $items['admin/config/stanford'] = array(
+    'title' => 'Stanford Modules',
+    'description' => 'Stanford specific module configuration.',
+    'position' => 'right',
+    'weight' => -50,
+    'page callback' => 'stanford_helper_menu_block_page',
+    'access arguments' => array('access administration pages'),
+  );
+
+  return $items;
+}
+
+/**
+ * Helper function for stanford configuration menu items.
+ * @return string
+ *     HTML content.
+ */
+function stanford_helper_menu_block_page() {
+  $item = menu_get_item();
+  if ($content = system_admin_menu_block($item)) {
+    $output = theme('admin_block_content', array('content' => $content));
+  }
+  else {
+    $output = t('You do not have any administrative items.');
+  }
+  return $output;
+}
+
+
+/**
+ * Implements hook_preprocess().
+ */
+function stanford_helper_jumpstart_preprocess_node(&$vars) {
+
+  // If the view mode is not set to 'Full Page' because of display suite
+  // view_mode switch override settings or the title will show up double.
+  if (module_exists("ds") && isset($vars["ds_switch"])) {
+    $is_node_page = node_is_page($vars["node"]);
+    if ($is_node_page) {
+      $vars['page'] = TRUE;
+    }
+  }
+
+}

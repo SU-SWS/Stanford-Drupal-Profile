@@ -1,0 +1,33 @@
+/* ----- Admin Shortcuts -------- */
+.admin-shortcuts {font-size:12px; }
+#admin-shortcuts {background: #4D4F53; margin: 0px; padding: 3px 10px;}
+#admin-shortcuts .nav {margin: 0; padding: 0;}
+#admin-shortcuts .content a {background: #4D4F53; color: #fff; padding: 3px 10px; display:block;}
+#admin-shortcuts .content a:hover, #admin-shortcuts .block a:active {background: #222; -webkit-border-radius: 10px; -moz-border-radius: 10px; border-radius: 10px; text-decoration: none;}
+#admin-shortcuts .block.shortcuts-home {top: -2px;}
+#admin-shortcuts .content ul.menu {display: block; background: #4D4F53;}
+#admin-shortcuts .content ul.menu li {float: left; margin: 0; list-style-image: none; list-style: none; display: block; line-height:20px;}
+#admin-shortcuts .content ul.menu li:hover ul {display: block; position: absolute; top: 26px; z-index: 1000;}
+#admin-shortcuts .content ul.menu ul {display: none; background: #4D4F53;}
+#admin-shortcuts .content ul.menu ul li {float: none; display: block;}
+
+/* ----- General styles -------- */
+.well { background-color: #FAFAFA; border: 1px solid #E8E8E8; margin-bottom: 30px; padding: 5px 20px 15px; }
+
+/* ----- Second Sidebar -------- */
+#sidebar-second, #content.sidebar-second { vertical-align:top; display:inline-block; }
+#sidebar-second { width:28%; margin-left:1%; }
+#content.sidebar-second { width:69%; border-right: 1px solid #E8E8E8; padding-right:1%; }
+
+@media (max-width: 979px) {
+#admin-shortcuts .block.shortcuts-user {top: -15px; position: relative;}
+}
+@media (max-width: 640px) {
+	#sidebar-second, #content.sidebar-second { display:block; width:100%; margin-left:0; margin-right:0; border:none;}
+}
+
+/* ----- Alerts ----------------- */
+.alert {background-color: #FCF8E3; border: 1px solid #FBEED5; padding: 8px 14px; color: #C09853;}
+.alert-success {background-color: #DFF0D8; border-color: #D6E9C6; color: #468847;}
+.alert-info {background-color: #D9EDF7; border-color: #BCE8F1; color: #3A87AD;}
+.alert-error {background-color: #F2DEDE; border-color: #EED3D7; color: #B94A48;}

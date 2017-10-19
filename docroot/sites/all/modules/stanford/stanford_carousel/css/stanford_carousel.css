@@ -1,0 +1,125 @@
+/* Styles for the Stanford Carousel Feature */
+
+/* GENERAL STYLES ************************ */
+.offscreen {
+  position: absolute;
+  clip: rect(1px 1px 1px 1px); /* IE6, IE7 */
+  clip: rect(1px, 1px, 1px, 1px);
+  padding: 0;
+  border: 0;
+  height: 1px;
+  width: 1px;
+  overflow: hidden;
+  z-index: -1000;
+}
+
+/* CAROUSEL STYLES *********************** */
+#block-views-stanford-carousel-span-9-block, #block-views-stanford-carousel-span-12-block {margin-bottom:0px;}
+
+/* Hide the arrows and replace them with background images */
+.carousel-controls .carousel-control {
+   background-image: url('../images/btn-arrow-right.png');
+   background-repeat: no-repeat;
+   background-position: center center;
+   font-size: 0;
+   color: transparent;
+}
+.carousel-controls .carousel-control:hover, .carousel-controls .carousel-control:focus {
+   font-size: 0;
+   color: transparent;
+}
+.carousel-controls .carousel-control.left {
+   background-image: url('../images/btn-arrow-left.png');
+}
+
+/* Carousel caption defaults */
+.view.carousel .carousel-caption .slide-caption {letter-spacing: 0.02em; line-height: 1.4em;}
+.view.carousel .carousel-caption .slide-caption a:hover {text-decoration: none;}
+.view.carousel .carousel-caption h2 {margin-top:0px;}
+.view.carousel .carousel-caption h2 a:hover {text-decoration: none;}
+.view.carousel .carousel-caption {-moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box;}
+
+/* Carousel caption position */
+.view.carousel .carousel-caption.carousel-position-top {top: 10%; bottom:auto;}
+.view.carousel .carousel-caption.carousel-position-bottom {bottom: 10%; }
+.view.carousel .carousel-caption.carousel-position-left, .view.carousel .carousel-caption.carousel-position-right {width: 70%; max-width: 70%; padding: 15px 25px;}
+.view.carousel .carousel-caption.carousel-position-left {left: 0; right: auto; padding-left: 70px;}
+.view.carousel .carousel-caption.carousel-position-right {left: auto; right: 0; padding-right: 70px;}
+
+/* Carousel caption color */
+.view.carousel .carousel-caption.carousel-dark {color: #EEEEEE;}
+.view.carousel .carousel-caption.carousel-dark h2 a, .view.carousel .carousel-caption.carousel-dark .slide-caption a { color: #EEEEEE; }
+.view.carousel .carousel-caption.carousel-light {color: #000000; background:none repeat scroll 0 0 rgba(255, 255, 255, 0.75);}
+.view.carousel .carousel-caption.carousel-light h2 a, .view.carousel .carousel-caption.carousel-light .slide-caption a { color: #000000; }
+.view.carousel .carousel-caption.carousel-dark a.more-link, .view.carousel .carousel-caption.carousel-dark .more-link a { color: #00a1f1;} /* color for OFW more-link */
+.view.carousel .carousel-caption.carousel-dark a.more-link:hover, .view.carousel .carousel-caption.carousel-dark .more-link a:hover, 
+.view.carousel .carousel-caption.carousel-dark a.more-link:focus, .view.carousel .carousel-caption.carousel-dark .more-link a:focus { color: #EEEEEE;} /* color for OFW more-link hover */
+
+/* Carousel slide title color */
+.carousel-dark .slide-title {color: #EEEEEE;}
+
+/* Carousel block display styles */
+.view.carousel .carousel-block .carousel-caption { bottom: 1px; display: block; position: absolute; top: 0; width: 34%; overflow:hidden; }
+.view.carousel .carousel-block .carousel-caption.carousel-position-left {left: 0; right: auto; padding: 20px 25px 25px 75px;}
+.view.carousel .carousel-block .carousel-caption.carousel-position-right {left: auto; right: 0; padding: 20px 75px 25px 25px;}
+
+/* Carousel dots */
+.view.carousel .carousel-indicators {margin:0 auto; text-align:center; position: relative; right: auto; top: auto; z-index: auto; }
+.view.carousel .carousel-indicators li {background-color: #FFFFFF; border: 1px solid #666666; border-radius: 7px; display: inline-block; float: none; height: 12px; width: 12px;}
+.view.carousel .carousel-indicators .active {background-color: #666666;}
+.view.carousel .carousel-indicators li:hover {cursor: pointer; background-color: #666666;}
+.view.carousel .carousel-indicators li a {margin-left: -99999px}
+
+/* Carousel controls */
+.view.carousel .carousel-controls {height: 0px;}
+.view.carousel .carousel-control, .view.carousel .carousel-control:focus {opacity:0.3;}
+.view.carousel .carousel-control:hover {opacity:0.9;}
+.view.carousel .carousel-control:focus {outline: 1px dotted #444444;}
+
+/* Carousel Image */
+#main-content .carousel img { border: medium none; }
+
+/* Carousel media queries */
+@media (max-width: 1199px) {
+.view.carousel .carousel-block .carousel-caption {width: 50%;}
+}
+@media (max-width: 979px) {
+.view.carousel .carousel-caption h2, #content-body .view.carousel .carousel-caption h2 {font-size: 20px; margin-top: 10px;}
+}
+@media (min-width: 768px) and (max-width: 979px) { 
+.view.carousel .carousel-caption.carousel-position-left, .view.carousel .carousel-caption.carousel-position-right {width: 100%; max-width: 100%; padding: 15px 65px; position: inherit; }
+.view.carousel .carousel-block .carousel-caption {position: relative; width:100%; max-width: 100%; padding: 20px 70px; margin-top: -2px;}
+.view.carousel .carousel-control {top:auto; bottom:30%; width:30px; height: 30px; font-size:40px; line-height:20px;}
+.view.carousel .carousel-block .carousel-caption.carousel-light, .view.carousel .carousel-caption.carousel-light { background: #F5F5F5; } /* color for OFW slide bkg */
+.view.carousel .carousel-block .carousel-caption.carousel-position-left,  .view.carousel .carousel-block .carousel-caption.carousel-position-right { padding: 20px 70px; }
+.view.carousel .carousel-control { bottom: auto; top: 30%; }
+#main-content .carousel img { -moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box; border: 15px solid #F5F5F5; } /* color for OFW slide bkg */
+.view.carousel .carousel-caption.carousel-dark,
+.view.carousel .carousel-caption.carousel-dark h2 a, .view.carousel .carousel-caption.carousel-dark .slide-caption a,
+.view.carousel .carousel-caption.carousel-dark a.more-link:hover, .view.carousel .carousel-caption.carousel-dark .more-link a:hover, 
+.view.carousel .carousel-caption.carousel-dark a.more-link:focus, .view.carousel .carousel-caption.carousel-dark .more-link a:focus {color: #000000;}
+.view.carousel .carousel-caption.carousel-dark { background: #F5F5F5; } /* color for OFW slide bkg */
+.view.carousel .carousel-caption.carousel-dark a.more-link, .view.carousel .carousel-caption.carousel-dark .more-link a { color: #006395;} /* color for OFW more-link (normal) */
+.view.carousel .carousel-caption.carousel-dark a.more-link:hover, .view.carousel .carousel-caption.carousel-dark .more-link a:hover, 
+.view.carousel .carousel-caption.carousel-dark a.more-link:focus, .view.carousel .carousel-caption.carousel-dark .more-link a:focus { color: #000000;} /* color for OFW more-link hover */
+}
+@media (max-width: 767px) {
+.view.carousel .carousel-block .carousel-caption {width: 50%;}
+}
+@media (max-width: 630px) {
+.view.carousel .carousel-caption.carousel-position-left, .view.carousel .carousel-caption.carousel-position-right {width: 100%; max-width: 100%; padding: 15px 65px; position: inherit; }
+.view.carousel .carousel-block .carousel-caption {position: relative; width:100%; max-width: 100%; padding: 20px 70px; margin-top: -2px;}
+.view.carousel .carousel-control {top:auto; bottom:30%; width:30px; height: 30px; font-size:40px; line-height:20px;}
+.view.carousel .carousel-block .carousel-caption.carousel-light, .view.carousel .carousel-caption.carousel-light { background: #F5F5F5; } /* color for OFW slide bkg */
+.view.carousel .carousel-block .carousel-caption.carousel-position-left,  .view.carousel .carousel-block .carousel-caption.carousel-position-right { padding: 20px 70px; }
+.view.carousel .carousel-control { bottom: auto; top: 30%; }
+#main-content .carousel img { -moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box; border: 15px solid #F5F5F5; } /* color for OFW slide bkg */
+.view.carousel .carousel-caption.carousel-dark,
+.view.carousel .carousel-caption.carousel-dark h2 a, .view.carousel .carousel-caption.carousel-dark .slide-caption a,
+.view.carousel .carousel-caption.carousel-dark a.more-link:hover, .view.carousel .carousel-caption.carousel-dark .more-link a:hover, 
+.view.carousel .carousel-caption.carousel-dark a.more-link:focus, .view.carousel .carousel-caption.carousel-dark .more-link a:focus {color: #000000;}
+.view.carousel .carousel-caption.carousel-dark { background: #F5F5F5; } /* color for OFW slide bkg */
+.view.carousel .carousel-caption.carousel-dark a.more-link, .view.carousel .carousel-caption.carousel-dark .more-link a { color: #006395;} /* color for OFW more-link (normal) */
+.view.carousel .carousel-caption.carousel-dark a.more-link:hover, .view.carousel .carousel-caption.carousel-dark .more-link a:hover, 
+.view.carousel .carousel-caption.carousel-dark a.more-link:focus, .view.carousel .carousel-caption.carousel-dark .more-link a:focus { color: #000000;} /* color for OFW more-link hover */
+}

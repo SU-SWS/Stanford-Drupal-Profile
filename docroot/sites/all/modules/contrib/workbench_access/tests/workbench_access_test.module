@@ -1,0 +1,13 @@
+<?php
+
+/**
+ * @file
+ * Test module for Workbench Access.
+ */
+
+/**
+ * Implements hook_workbench_access_node_element_alter().
+ */
+function workbench_access_test_workbench_access_node_element_alter(&$element, $form_state, $active) {
+  $element['#workbench_access_test'] = TRUE;
+}

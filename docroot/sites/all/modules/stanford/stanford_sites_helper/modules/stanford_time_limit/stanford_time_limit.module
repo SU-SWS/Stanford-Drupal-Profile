@@ -1,0 +1,14 @@
+<?php
+/**
+ * @file
+ * Code for the Stanford Time Limit Booster module.
+ */
+
+/**
+ * Implements hook_init().
+ */
+function stanford_time_limit_init() {
+  // Set the max_execution_time to what we set the variable as, or else grab it from the PHP config.
+  $time_limit = variable_get('stanford_time_limit', ini_get('max_execution_time'));
+  drupal_set_time_limit($time_limit);
+}

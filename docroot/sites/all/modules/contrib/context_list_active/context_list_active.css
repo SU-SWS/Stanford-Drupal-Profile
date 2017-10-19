@@ -1,0 +1,38 @@
+#context_list_active ol {
+  list-style-position: outside;
+}
+
+#context_list_active-overlay {
+  display: none;
+}
+
+#context_list_active-overlay {
+  background-color: #FFFFFF;
+  border: 2px solid #AAA;
+  height: 80%;
+  left: 25%;
+  overflow: scroll;
+  padding: 25px;
+  position: fixed;
+  top: 10%;
+  width: 50%;
+  z-index: 100;
+}
+
+#context_list_active-fade {
+  display: none;  /* ensures it’s invisible until it’s called */
+  position: absolute;  /* makes the div go into a position that’s absolute to the browser viewing area */
+  left: 0%; /* makes the div span all the way across the viewing area */
+  top: 0%; /* makes the div span all the way across the viewing area */
+  background-color: black;
+  -moz-opacity: 0.7; /* makes the div transparent, so you have a cool overlay effect */
+  opacity: .70;
+  filter: alpha(opacity=70);
+  width: 100%;
+  height: 100%;
+  z-index: 90; /* makes the div the second most top layer, so it’ll lay on top of everything else EXCEPT for divs with a higher z-index (meaning the #overlay ruleset) */
+}
+
+#context_list_active-overlay table {
+  width: 100%;
+}

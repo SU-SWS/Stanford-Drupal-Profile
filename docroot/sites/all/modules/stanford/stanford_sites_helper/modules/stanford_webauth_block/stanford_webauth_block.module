@@ -1,0 +1,7 @@
+<?php
+/**
+ * @file
+ * Code for the Stanford Jumpstart Login feature.
+ */
+
+include_once 'stanford_webauth_block.features.inc';

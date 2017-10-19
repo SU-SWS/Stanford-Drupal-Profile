@@ -1,0 +1,76 @@
+<?php
+/**
+ * @file
+ * CAPx Tamper Install.
+ */
+
+/**
+ * Implements hook_schema().
+ */
+function capx_tamper_schema() {
+  $schema = array();
+  $schema['capx_tamper'] = array(
+    'description' => 'Table storing CAPx tamper instances.',
+    'fields' => array(
+      'id' => array(
+        'type' => 'varchar',
+        'length' => 128,
+        'not null' => TRUE,
+        'default' => '',
+        'description' => 'Id of the CAPx tamper instance.',
+      ),
+      'mapper' => array(
+        'type' => 'varchar',
+        'length' => 128,
+        'not null' => TRUE,
+        'default' => '',
+        'description' => 'Id of the CAPx importer.',
+      ),
+      'source' => array(
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+        'default' => '',
+        'description' => 'The source field of the importer.',
+      ),
+      'target' => array(
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+        'default' => '',
+        'description' => 'The target field of the importer.',
+      ),
+      'plugin_id' => array(
+        'type' => 'varchar',
+        'length' => 128,
+        'not null' => TRUE,
+        'default' => '',
+        'description' => 'Id of the tamper plugin.',
+      ),
+      'settings' => array(
+        'type' => 'text',
+        'size' => 'big',
+        'description' => 'A serialized array of options for a CAPx Tamper plugin.',
+        'serialize' => TRUE,
+      ),
+      'weight' => array(
+        'type' => 'int',
+        'not null' => TRUE,
+        'unsigned' => FALSE,
+        'description' => 'The weight of a plugin instance. Plugins are executed in order.',
+      ),
+      'description' => array(
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+        'default' => '',
+        'description' => 'Description of this plugin.',
+      ),
+    ),
+    'primary key' => array('id'),
+    'indexes' => array(
+      'mapper' => array('mapper'),
+    ),
+  );
+  return $schema;
+}

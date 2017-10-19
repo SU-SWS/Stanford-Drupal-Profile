@@ -1,0 +1,289 @@
+body {
+  color: #333333;
+  background: white;
+}
+
+.header {
+  background: #8c1515;
+}
+
+.site-main-menu {
+  background: #8c1515;
+  border-bottom: 1px solid #8c1515;
+}
+
+.main {
+  background: white;
+}
+
+.bodybg .main {
+  background: transparent;
+}
+
+.site-footer {
+  background: #8c1515;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  color: #8c1515;
+}
+
+h1 {
+  color: #333333;
+}
+
+h2, h2 a, h2 a:hover, h2 a:focus {
+  color: #8c1515;
+}
+
+h2 a:hover, h2 a:focus {
+  text-decoration: underline;
+}
+
+.site-name a, .site-name a:hover {
+  color: #333333;
+}
+
+#site-slogan {
+  color: #333333;
+}
+
+.caption {
+  color: #c4bfa9;
+}
+
+a {
+  color: #8c1515;
+}
+
+a:hover, a:focus {
+  color: #333333;
+}
+
+a.btn, .btn a {
+  background: #8c1515;
+  color: #fbfbf9;
+}
+
+a.btn:hover, a.btn:focus, .btn a:hover, .btn a:focus {
+  background: #333333;
+  color: white;
+}
+
+a.more-link, .more-link a {
+  color: #8c1515;
+}
+
+a.more-link:hover, a.more-link:focus, .more-link a:hover, .more-link a:focus {
+  color: #333333;
+}
+
+a.edit-link:hover, a.edit-link:focus, .edit-link a:hover, .edit-link a:focus {
+  background: #333333;
+  color: white;
+}
+
+.well {
+  background: #f2f1eb;
+}
+
+.navbar .nav > li > a {
+  color: white;
+  background: transparent;
+}
+
+.navbar .nav > .active > a, .navbar .nav > .active > a:hover, .navbar .nav > .active > a:focus, .navbar .nav > li > a:focus, .navbar .nav > li > a:hover {
+  color: #333333;
+  background: white;
+}
+
+.sidebar .nav li a:hover, .sidebar .nav li a:focus, .sidebar .nav li a.active {
+  color: #333333;
+}
+
+.dropdown-menu {
+  background: #8c1515;
+  border: 1px solid #8c1515;
+}
+
+.navbar .nav li.dropdown.open > .dropdown-toggle, .navbar .nav li.dropdown.active > .dropdown-toggle, .navbar .nav li.dropdown.open.active > .dropdown-toggle {
+  background: transparent;
+  color: white;
+}
+
+.navbar .nav li.dropdown.open > .dropdown-toggle:hover, .navbar .nav li.dropdown.open > .dropdown-toggle:focus, .navbar .nav li.dropdown.active > .dropdown-toggle:hover, .navbar .nav li.dropdown.active > .dropdown-toggle:focus, .navbar .nav li.dropdown.open.active > .dropdown-toggle:hover, .navbar .nav li.dropdown.open.active > .dropdown-toggle:focus {
+  color: #333333;
+  background: white;
+}
+
+.navbar .nav li.dropdown.open > .dropdown-toggle .caret, .navbar .nav li.dropdown.active > .dropdown-toggle .caret, .navbar .nav li.dropdown.open.active > .dropdown-toggle .caret {
+  border-bottom-color: white;
+  border-top-color: white;
+}
+
+.dropdown-menu > li > a:hover, .dropdown-menu > li > a:focus, .dropdown-submenu:hover > a, .dropdown-submenu:focus > a {
+  color: #8c1515;
+  background: #333333;
+}
+
+.bodybg .sidebar .region, .bodybg .content-wrapper {
+  background-color: white;
+}
+
+.bodybg .sidebar .region {
+  opacity: 1;
+}
+
+.borders .sidebar .region, .borders .content-wrapper, .bodybg.borders .breadcrumb {
+  border: 1px solid #8c1515;
+}
+
+.roundedcorners .well {
+  border-radius: 5px;
+}
+
+.breadcrumb {
+  background-color: white;
+  border-radius: 0;
+}
+
+.bean-stanford-social-media-connect a {
+  opacity: 0.75;
+}
+
+.site-footer {
+  border-top: 1px solid #8c1515;
+}
+
+.header-bkg .site-main-menu {
+  padding-top: 0px;
+}
+
+.site-name a,
+.site-name a:hover,
+.site-name a:active {
+  color: white;
+}
+
+.site-login,
+.site-login a {
+  color: white;
+}
+
+.site-login a:hover,
+.site-login a:active {
+  text-decoration: underline;
+}
+
+#site-slogan {
+  color: white;
+}
+
+.site-main-menu {
+  border-bottom: 0;
+  background: #8c1515;
+}
+
+@media (min-width: 768px) {
+  .navbar {
+    margin-bottom: 0;
+  }
+}
+.navbar .nav > li > a {
+  padding: 0.5em 1em;
+  margin-right: 0.25em;
+  text-transform: uppercase;
+}
+
+.navbar .nav > .active > a,
+.navbar .nav > .active > a:hover,
+.navbar .nav > .active > a:focus,
+.navbar .nav > li > a:focus,
+.navbar .nav > li > a:hover {
+  color: #333333;
+}
+
+.roundedcorners .navbar .nav > li > a {
+  border-radius: 5px 5px 0 0;
+}
+
+@media (max-width: 767px) {
+  .navbar .btn-navbar {
+    background: #8c1515;
+    border: 1px solid white;
+  }
+
+  .navbar .btn-navbar:hover,
+  .navbar .btn-navbar:focus,
+  .navbar .btn-navbar:active,
+  .navbar .btn-navbar.active,
+  .navbar .btn-navbar.disabled,
+  .navbar .btn-navbar[disabled] {
+    background: #333333;
+    border: 1px solid white;
+  }
+
+  .roundedcorners .navbar .nav > li > a {
+    border-radius: 5px;
+    margin-right: 0;
+  }
+}
+.main .menu li a:hover,
+.main .menu li a:focus,
+.main .menu li a.active {
+  text-decoration: underline;
+}
+
+.main .border-simple-nowidth img,
+.main .border-simple img {
+  background-color: #c4bfa9;
+}
+
+.well .caption {
+  color: #a59d7c;
+}
+
+.site-footer {
+  color: white;
+}
+
+.site-footer .block h2 {
+  color: white;
+}
+
+.site-footer a {
+  color: white;
+}
+
+.site-footer a:hover,
+.site-footer a:focus,
+.site-footer a.active {
+  color: white;
+  text-decoration: underline;
+}
+
+.dropdown-menu {
+  background: white;
+}
+
+.dropdown-menu > li > a:hover,
+.dropdown-menu > li > a:focus,
+.dropdown-submenu:hover > a,
+.dropdown-submenu:focus > a {
+  color: white;
+  background: #8c1515;
+}
+
+.navbar .nav li.dropdown.open > .dropdown-toggle:hover .caret,
+.navbar .nav li.dropdown.active > .dropdown-toggle:hover .caret,
+.navbar .nav li.dropdown.open.active > .dropdown-toggle:hover .caret,
+.navbar .nav li.dropdown.open > .dropdown-toggle:focus .caret,
+.navbar .nav li.dropdown.active > .dropdown-toggle:focus .caret,
+.navbar .nav li.dropdown.open.active > .dropdown-toggle:focus .caret {
+  border-bottom-color: #333333;
+  border-top-color: #333333;
+}
+
+hr {
+  border-top: 1px solid #f2f1eb;
+}

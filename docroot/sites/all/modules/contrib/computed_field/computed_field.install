@@ -1,0 +1,63 @@
+<?php
+/**
+ * @file
+ * Install, update and uninstall functions for the computed field module.
+ */
+
+/**
+ * Implements hook_field_schema().
+ */
+function computed_field_field_schema($field) {
+  if ($field['type'] == 'computed') {
+    $settings = $field['settings'];
+
+    if ($settings['store']) {
+      $columns = array('value' => array());
+
+      // Hardcoded 'longtext' settings.
+      if ($settings['database']['data_type'] == 'longtext') {
+        $columns['value']['type'] = 'text';
+        $columns['value']['size'] = 'big';
+      }
+      else {
+        $columns['value']['type'] = isset($settings['database']['data_type']) ? $settings['database']['data_type'] : 'varchar';
+      }
+      // 'text' and 'varchar' fields get length settings.
+      if ($settings['database']['data_type'] == 'text' || $settings['database']['data_type'] == 'varchar') {
+        $columns['value']['length'] = isset($settings['database']['data_length']) ? $settings['database']['data_length'] : 32;
+      }
+      // 'int' and 'float' fields get size settings.
+      if ($settings['database']['data_type'] == 'int' || $settings['database']['data_type'] == 'float') {
+        $columns['value']['size'] = isset($settings['database']['data_size']) ? $settings['database']['data_size'] : 'normal';
+      }
+      // 'decimal' fields get precision and scale settings.
+      if ($settings['database']['data_type'] == 'numeric') {
+        $columns['value']['precision'] = isset($settings['database']['data_precision']) ? $settings['database']['data_precision'] : 10;
+        $columns['value']['scale'] = isset($settings['database']['data_scale']) ? $settings['database']['data_scale'] : 2;
+      }
+      // Add 'not null' settings.
+      $columns['value']['not null'] = isset($settings['database']['data_not_NULL']) ? $settings['database']['data_not_NULL'] : TRUE;
+      // Add default values if set.
+      if ($settings['database']['data_default'] !== '') {
+        $columns['value']['default'] = $settings['database']['data_default'];
+      }
+      // Add a simple index on the data if requested (except 'text' fields).
+      if ($settings['database']['data_index'] && $columns['value']['type'] != 'text') {
+        $indexes = array('value' => array('value'));
+      }
+    }
+  }
+
+  if (isset($columns) && isset($indexes)) {
+    return array(
+      'columns' => $columns,
+      'indexes' => $indexes,
+    );
+  }
+  elseif (isset($columns)) {
+    return array(
+      'columns' => $columns,
+    );
+  }
+  return;
+}

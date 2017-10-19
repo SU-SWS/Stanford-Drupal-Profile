@@ -1,0 +1,101 @@
+Stanford Sites Helper x.x-x.x, xxxx-xx-xx
+-----------------------------------------
+
+Stanford Sites Helper 7.x-1.7, 2017-04-21
+-----------------------------------------
+- CodeClimate integration
+- Updated HelpSU links to point to ServiceNow
+
+Stanford Sites Helper 7.x-1.6, 2016-05-30
+-----------------------------------------
+- Added stanford_time_limit module to allow for setting the php_max_execute time
+- Added stanford_webauth_block module
+
+
+Stanford Sites Helper 7.x-1.5, 2015-05-26
+-----------------------------------------
+Changes since 7.x-1.4:
+By jbickar:
+  - Only display block with link to HelpSU if the site is hosted on Stanford Sites
+  - Move AFS quota check into new submodule, stanford_afs_quota
+By sherakama:
+  - Install and update hooks to deal with moving AFS quota check into new module
+
+Stanford Sites Helper 7.x-1.4, 2015-02-10
+-----------------------------------------
+Changes since 7.x-1.3:
+By sherakama:
+  - Adds permission for bundle copy import ("Copy bundles")
+
+Stanford Sites Helper 7.x-1.3, 2014-11-08
+-----------------------------------------
+By jbickar: Minor update to welcome text.
+
+Stanford Sites Helper 7.x-1.2, 2014-08-19
+-----------------------------------------
+By jbickar: Updated default Backup and Migrate profiles to work with Backup and
+  Migrate 7.x-3.0
+
+Stanford Sites Helper 7.x-1.1, 2014-07-02
+-----------------------------------------
+-No functional changes; versioning cleanup only
+
+Stanford Sites Helper 7.x-1.0, 2014-06-30
+-----------------------------------------
+-Improvements to AFS storage quota warning email
+
+Stanford Sites Helper 7.x-1.0-beta11, 2014-04-17
+------------------------------------------------
+-Bug fixes and improvements to AFS storage quota warning
+
+Stanford Sites Helper 7.x-1.0-beta10, 2014-04-09
+-----------------------------------------------
+By jbickar: Added Stanford Memory Booster module for system administrators
+
+Stanford Sites Helper 7.x-1.0-beta9, 2014-03-11
+-----------------------------------------------
+By sheamck: Added AFS storage quota warning message and email functionality for sites that run on the AFS file storage.
+
+Stanford Sites Helper 7.x-1.0-beta8, 2013-09-06
+-----------------------------------------------
+-Minor CSS tweaks for welcome text
+-Updated welcome text language
+
+Stanford Sites Helper 7.x-1.0-beta7, 2013-09-03
+-----------------------------------------------
+By jbickar: Updated first steps block to show different language depending on underlying site configuration
+By jbickar: Minor CSS tweaks for welcome text
+
+Stanford Sites Helper 7.x-1.0-beta6, 2013-06-27
+-----------------------------------------------
+By jbickar: Removed language about user 1 in first steps block
+
+Stanford Sites Helper 7.x-1.0-beta5, 2013-01-18
+-----------------------------------------------
+By jbickar: fixed "undefined index 'type'" error
+By jbickar: added link to HelpSU on password request form
+
+Stanford Sites Helper 7.x-1.0-beta3, 2012-09-14
+-----------------------------------------------
+By meganem: Added plus icons to collapsible fieldsets
+
+Stanford Sites Helper 7.x-1.0-beta2, 2012-09-10
+-----------------------------------------------
+By jbickar: added Quickstart UI and first steps
+
+Stanford Sites Helper 7.x-1.0-beta1, 2012-08-24
+-----------------------------------------------
+By jbickar: added default Backup and Migrate backup profile
+
+Stanford Sites Helper 7.x-1.0-alpha3, 2012-07-16
+------------------------------------------------
+-No functional changes; release fixes version mismatch
+
+Stanford Sites Helper 7.x-1.0-alpha2, 2012-04-06
+------------------------------------------------
+-Added "first steps" block on front page
+-Added "get help" block to all admin pages
+
+Stanford Sites Helper 7.x-1.0-alpha1, 2012-04-05
+------------------------------------------------
+Initial alpha release

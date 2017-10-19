@@ -1,0 +1,10 @@
+name = Stanford Landing Page FC Link Formatter
+description = Provides an additional formatter for image field collection item, to allow linking image to a field on the field collection.
+core = 7.x
+version = 7.x-1.4+3-dev
+dependencies[] = link
+dependencies[] = field_collection
+dependencies[] = image
+package = Fields
+
+

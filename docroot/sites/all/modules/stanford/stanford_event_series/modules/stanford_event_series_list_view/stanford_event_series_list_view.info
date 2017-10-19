@@ -1,0 +1,13 @@
+name = Stanford Event Series List View
+description = View listing event series
+core = 7.x
+package = Stanford
+version = 7.x-1.x
+project = stanford_event_series_list_view
+dependencies[] = ctools
+dependencies[] = stanford_event_series
+dependencies[] = views
+features[ctools][] = views:views_default:3.0
+features[features_api][] = api:2
+features[views_view][] = stanford_event_series_list
+mtime = 1426549406

@@ -1,0 +1,25 @@
+Version 7.x-1.5
+------------------------------
+by hyperboy: Added terms of use text file
+
+Version 7.x-1.4
+------------------------------
+by hyperboy: Added default values for theme settings
+by hyperboy: Minor CSS fixes
+
+Version 7.x-1.3
+------------------------------
+by hyperboy: Updated background image upload options in theme settings
+by hyperboy: Updated spacing between header and content sections
+
+Version 7.x-1.2
+------------------------------
+by hyperboy: Updated sidebar names in CSS
+
+Version 7.x-1.1
+------------------------------
+by hyperboy: Updated sidebar block region names
+
+Version 7.x-1.0
+------------------------------
+by hyperboy: Initial Release

@@ -1,0 +1,25 @@
+<?php
+/**
+ *
+ */
+
+/**
+ * Saves an obsolete view to the database.
+ */
+function stanford_slides_update_7100() {
+  include "views/manage_slides.obsolete.view.inc";
+  $view = stanford_slides_update_7100_views();
+
+  $name = $view->name;
+  $indb = db_select("views_view", "vv")
+    ->fields("vv", array("vid"))
+    ->condition("name", $name)
+    ->range(0,1)
+    ->execute()
+    ->fetchObject();
+
+  if (!$indb) {
+    $view->save();
+  }
+
+}

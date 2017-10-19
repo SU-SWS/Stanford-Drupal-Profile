@@ -1,0 +1,19 @@
+name = Menu position
+description = Customize menu position of nodes depending on their content type, associated terms and others conditions.
+
+core = 7.x
+dependencies[] = menu (>7.11)
+
+files[] = menu_position.module
+files[] = menu_position.admin.inc
+files[] = menu_position.install
+files[] = menu_position.node_type.inc
+
+configure = admin/structure/menu-position
+
+; Information added by Drupal.org packaging script on 2015-11-29
+version = "7.x-1.2"
+core = "7.x"
+project = "menu_position"
+datestamp = "1448814840"
+

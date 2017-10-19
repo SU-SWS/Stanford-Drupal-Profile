@@ -1,0 +1,30 @@
+#main .field-name-field-s-event-speakers-name {
+  margin-bottom: 0;
+}
+
+#main .field-name-field-s-event-speakers {
+  margin-bottom: 20px;
+}
+
+.descriptor.group-descriptor-info > .field-collection-container {
+  display: inline-block;
+  display: -moz-box;
+  display: -webkit-box;
+}
+
+.field-name-field-s-event-speakers > .field-items {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.field-name-field-s-event-speakers .field-collection-view .field-name-field-s-event-speakers-name .field-items .field-item {
+  margin-right: 5px;
+}
+
+.field-name-field-s-event-speakers .field-collection-view .field-name-field-s-event-speakers-name .field-items .field-item:after {
+  content: ",";
+}
+
+.field-name-field-s-event-speakers .field-collection-view.field-collection-view-final .field-name-field-s-event-speakers-name .field-items .field-item:after {
+  content: normal;
+}

@@ -1,0 +1,53 @@
+======================================================
+INSTALLATION
+======================================================
+1. Unpack the context_http_header folder and contents in the appropriate modules directory 
+   of your Drupal installation.  Normally sites/all/modules/
+   
+2. Enable the context_http_header module on the Modules admin page (admin/build/modules)
+
+======================================================
+USAGE
+======================================================
+
+The main feature of this module is to work with the Context module and provide 
+two hooks:
+
+hook_context_http_header_def()
+hook_context_http_header_build()
+
+allowing your modules to provide http header changes when entering certain
+contexts.
+
+
+/**
+ * hook_context_http_header_def works with Forms API to
+ * return a simple form that is used as settings for the context reaction.
+ */
+function hook_context_http_header_def() {
+  return array(
+    	// fapi array for your form to use with context
+    ),
+  );
+}
+
+/**
+ * hook_context_http_header_build does the work of 
+ * building the actual headers that will be injected into the context
+ */
+function hook_context_http_header_build() {
+  // build your headers here
+}
+
+
+* context_http_header will work with Context 3.
+See Akamai module for working example of hook usage.
+
+======================================================
+FAQ
+======================================================
+Q: My reactions aren't showing up in the HTTP headers.  Where is it?
+A: Check your htaccess file at the base of your drupal instance.  Any rules set there will override the settings you have in your context.
+
+
+Akamai is a registered trademark of Akamai Technologies, Inc.

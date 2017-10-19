@@ -1,0 +1,8 @@
+# The ACSF settings.php must be included in the repository, so we explicitly
+# override the standard docroot/.gitignore here. In fact we will list all ACSF
+# files here, just in case the docroot/.gitignore was further customized.
+!.gitignore
+!apc_rebuild.php
+!settings.php
+!SimpleRest.php
+!sites.inc

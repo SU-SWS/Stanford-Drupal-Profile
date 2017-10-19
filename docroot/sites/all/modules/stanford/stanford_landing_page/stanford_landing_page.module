@@ -1,0 +1,140 @@
+<?php
+/**
+ * @file
+ * Code for the Stanford Landing Page feature.
+ */
+
+include_once 'stanford_landing_page.features.inc';
+
+
+/**
+ * Implements hook_preprocess().
+ */
+function stanford_landing_page_preprocess_node(&$vars) {
+
+  if ($vars["type"] == "stanford_landing_page") {
+    // Add display mode machine-name.
+    if (isset($vars['field_s_landing_page_layout'][LANGUAGE_NONE][0]['value'])) {
+      $vars['classes_array'][] = drupal_clean_css_identifier($vars['field_s_landing_page_layout'][LANGUAGE_NONE][0]['value']);
+    }
+  }
+
+}
+
+/**
+ * Implements hook_entity_info_alter().
+ */
+function stanford_landing_page_entity_info_alter(&$entity_info) {
+  // Override the entity class to allow different view modes per field
+  // collection item.
+  $entity_info['field_collection_item']['entity class'] = 'FieldCollectionViewMode';
+  $entity_info['field_collection_item']['view modes'] += variable_get('field_collection_view_modes', array());
+}
+
+/**
+ * [stanford_landing_page_preprocess_field description]
+ * @param  [type] $vars [description]
+ * @return [type]       [description]
+ */
+function stanford_landing_page_preprocess_field(&$vars) {
+  if ($vars['element']['#field_name'] == "field_landing_page_item") {
+    if (isset($vars['element']['#object'])) {
+      $view_mode = $vars['element']['#object']->field_s_landing_page_layout[LANGUAGE_NONE][0]['value'];
+      $vars['classes_array'][] = drupal_clean_css_identifier($view_mode . "-view-mode");
+    }
+  }
+}
+
+/**
+ * [stanford_landing_page_form_node_form_alter description]
+ * @param  [type] &$form      [description]
+ * @param  [type] $form_state [description]
+ * @return [type]             [description]
+ */
+function stanford_landing_page_form_stanford_landing_page_node_form_alter(&$form, $form_state) {
+
+  // Add a validation function to the form so that we can enforce primary links
+  // on the cards layout.
+  $form["#validate"][] = "stanford_landing_page_node_form_validate";
+
+  // The secondary links are not available on the cards layout and we should
+  // hide them when the cards option is selected.
+
+  // Loop through the landing page items and add the javascript state to the
+  // secondary links fields.
+  foreach ($form['field_landing_page_item'][LANGUAGE_NONE] as $key => &$collection) {
+    // Skip the extra junk that drupal puts in there.
+    if (!is_numeric($key)) {
+      continue;
+    }
+
+    // Add the javascript to hide the field.
+    $collection['field_s_lp_2nd_links']["#states"] = array(
+      'invisible' => array(
+        '#edit-field-s-landing-page-layout select' => array('value' => 'large_landscape'),
+      ),
+    );
+
+  }
+
+}
+
+/**
+ * [stanford_landing_page_node_form_validate description]
+ * @param  [type] &$from      [description]
+ * @param  [type] $form_state [description]
+ * @return [type]             [description]
+ */
+function stanford_landing_page_node_form_validate(&$form, $form_state) {
+
+  // If the 'cards' option is selected then all the primary links must be set.
+  $values = $form_state["values"];
+  $layout = $values['field_s_landing_page_layout'][LANGUAGE_NONE][0]['value'];
+
+  // Don't need to check anything if other view mode than 'cards'
+  if ($layout !== "large_landscape") {
+    return;
+  }
+
+  // Loop through the field collections and check the primary link field.
+  foreach ($values['field_landing_page_item'][LANGUAGE_NONE] as $index => $collection) {
+
+    // Skip the 'add another item button.
+    if (!is_array($collection)) {
+      continue;
+    }
+
+    if (!isset($collection['field_s_lp_item_link'][LANGUAGE_NONE][0]['url']) || empty($collection['field_s_lp_item_link'][LANGUAGE_NONE][0]['url'])) {
+      $field_name = "field_landing_page_item][und][" . $index . "][field_s_lp_item_link][und][0][url";
+      form_set_error($field_name, "Primary link is required for all landing page items when using the Cards layout");
+    }
+  }
+
+}
+
+
+/**
+ * Entity class for field collection items.
+ *
+ * If we are a landing page content type parent and on the node_view page
+ * we want to tweak the layout to match.
+ *
+ */
+class FieldCollectionViewMode extends FieldCollectionItemEntity {
+  public function view($view_mode = 'full', $langcode = NULL, $page = NULL) {
+
+    if ($this->field_name == "field_landing_page_item") {
+      $arg0 = arg(0);
+      $arg1 = arg(1);
+
+      if ($arg0 == "node" && is_numeric($arg1)) {
+        $node = node_load($arg1);
+        $view_mode = $node->field_s_landing_page_layout[LANGUAGE_NONE][0]['value'];
+      }
+    }
+
+    return parent::view($view_mode, $langcode, $page);
+  }
+}
+
+

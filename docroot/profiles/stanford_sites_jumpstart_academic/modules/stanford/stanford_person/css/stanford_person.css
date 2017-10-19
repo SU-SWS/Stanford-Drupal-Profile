@@ -1,0 +1,73 @@
+.view-stanford-person .postcard-col2 {
+  padding-right: 15px;
+  min-width: 40%;
+}
+
+@media (max-width: 480px) {
+  .view-stanford-person .postcard-left > div {
+    display: block;
+    width: 100%;
+    padding: 0 0 15px 0;
+  }
+  .view-stanford-person .postcard-left > div:first-child {
+    float: none;
+  }
+}
+
+.view-stanford-person-grid .views-row h3 {
+  margin: .9em 0 0;
+}
+
+.view-stanford-person-grid.views-grid-four .views-row {
+  margin-bottom: 30px;
+}
+
+.view-stanford-person-grid .views-row .edit-link {
+  margin-top: 10px;
+}
+
+/* CAP VIEW MODE STYLES */
+
+.node-type-stanford-person .view-mode-stanford_cap .group-s-contact .field-name-field-s-person-phone-display,
+.node-type-stanford-person .view-mode-stanford_cap .group-s-contact .field-name-field-s-person-email,
+.node-type-stanford-person .view-mode-stanford_cap .group-s-contact .field-name-field-s-person-office-location,
+.node-type-stanford-person .view-mode-stanford_cap .group-s-contact .field-name-field-s-person-office-hours {
+  margin-bottom: 0;
+}
+
+.view-mode-stanford_cap .descriptor-btn .field-name-field-s-person-interests .field-item {
+  color: #333333;
+  background-color: #e9e6df;
+  padding: 3px 9px;
+  border-radius: 5px;
+  font-weight: 500;
+  margin-bottom: 0.5em;
+  margin-right: 0.5em;
+  display: inline-block;
+}
+
+.view-mode-stanford_cap .field-name-field-s-person-profile-link a {
+  background: #8c1515;
+  color: #fbfbf9;
+  background-image: url("../images/btn-arrow-right.png");
+  background-position: calc(100% - 10px) center;
+  background-repeat: no-repeat;
+  text-align: left;
+  padding: 0.5em 1em;
+  padding-right: 30px;
+  border-radius: 0.3em;
+  font-weight: 400;
+  font-size: inherit;
+  display: inline-block;
+  margin-bottom: 0;
+  line-height: 20px;
+  vertical-align: middle;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.view-mode-stanford_cap .field-name-field-s-person-profile-link a:hover,
+.view-mode-stanford_cap .field-name-field-s-person-profile-link a:focus {
+  background: #333333;
+  transition: background-position .1s linear;
+}

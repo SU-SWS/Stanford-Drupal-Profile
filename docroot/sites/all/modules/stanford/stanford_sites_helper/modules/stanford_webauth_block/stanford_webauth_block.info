@@ -1,0 +1,12 @@
+name = Stanford Webauth Login Block
+description = Places the SUNetID Login block
+core = 7.x
+package = Stanford
+version = 7.x-1.7
+dependencies[] = block
+dependencies[] = context
+dependencies[] = ctools
+dependencies[] = features
+features[context][] = stanford-webauth-login
+features[ctools][] = context:context:3
+features[features_api][] = api:2

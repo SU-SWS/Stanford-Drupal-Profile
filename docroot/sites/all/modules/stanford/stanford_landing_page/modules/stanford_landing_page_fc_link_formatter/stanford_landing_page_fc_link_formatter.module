@@ -1,0 +1,186 @@
+<?php
+/**
+ * @file
+ * This file is essentially a copy/paste from the core image module:
+ * image.module.
+ * Applied the patch and few changes suggested at:
+ * http://drupal.org/node/1570072
+ */
+
+/**
+ * Implements hook_field_formatter_info().
+ */
+function stanford_landing_page_fc_link_formatter_field_formatter_info() {
+  $formatters = array(
+    'stanford_landing_page_fc_link_formatter' => array(
+      'label' => t('Image - Stanford Landing Page'),
+      'field types' => array('image'),
+      'settings' => array('image_style' => '', 'image_link' => ''),
+      'module' => 'stanford_landing_page_fc_link_formatter',
+      'description' => t('Format the file as an image. The image can be displayed using an image style and can optionally be linked to the field collection field field-s-lp-item-link.'),
+    ),
+  );
+  return $formatters;
+}
+
+/**
+ * Implements hook_field_formatter_settings_form().
+ */
+function stanford_landing_page_fc_link_formatter_field_formatter_settings_form($field, $instance, $view_mode, $form, &$form_state) {
+  if(isset($field['bundles']['field_collection_item'])){
+
+    $display = $instance['display'][$view_mode];
+    $settings = $display['settings'];
+    $image_styles = image_style_options(FALSE);
+
+    $element['image_style'] = array(
+      '#title' => t('Image style'),
+      '#type' => 'select',
+      '#default_value' => $settings['image_style'],
+      '#empty_option' => t('None (original image)'),
+      '#options' => $image_styles,
+    );
+
+    $link_types = stanford_landing_page_fc_link_formatter_image_field_link_types($instance);
+    $element['image_link'] = array(
+      '#title' => t('Link image to'),
+      '#type' => 'select',
+      '#default_value' => $settings['image_link'],
+      '#empty_option' => t('Nothing'),
+      '#options' => $link_types,
+    );
+
+  return $element;
+  }
+
+}
+
+/**
+ * Implements hook_field_formatter_settings_summary().
+ */
+function stanford_landing_page_fc_link_formatter_field_formatter_settings_summary($field, $instance, $view_mode) {
+  $display = $instance['display'][$view_mode];
+  $settings = $display['settings'];
+
+  $summary = array();
+  $image_styles = image_style_options(FALSE);
+  unset($image_styles['']);
+  if (isset($image_styles[$settings['image_style']])) {
+    $summary[] = t('Image style: @style', array('@style' => $image_styles[$settings['image_style']]));
+  }
+  elseif(!isset($field['bundles']['field_collection_item'])){
+    $summary[] = t('This formatter is available only for image field collection item');
+  }
+  else {
+    $summary[] = t('Original image');
+  }
+
+  $link_types = stanford_landing_page_fc_link_formatter_image_field_link_types($instance);
+
+  if (isset($link_types[$settings['image_link']])) {
+    $summary[] = filter_xss_admin($link_types[$settings['image_link']]);
+  }
+
+  return implode('<br />', $summary);
+}
+
+/**
+ * Implements hook_field_formatter_view().
+ */
+function stanford_landing_page_fc_link_formatter_field_formatter_view($entity_type, $entity, $field, $instance, $langcode, $items, $display) {
+  $element = array();
+  $image_link = $display['settings']['image_link'];
+  global $language;
+
+  if ($image_link == 'content') {
+    $uri = entity_uri($entity_type, $entity);
+  }
+  elseif ($image_link == 'file') {
+    $link_file = TRUE;
+  }
+  elseif ($image_link == 'item-link') {
+    if (!empty($entity->field_s_lp_item_link[$language->language])) {
+      $uri = array(
+        'path' => $entity->field_s_lp_item_link[$language->language][0]['url'],
+        'options' => array(),
+      );
+    }
+    elseif (!empty($entity->field_s_lp_item_link[LANGUAGE_NONE])) {
+      $uri = array(
+        'path' => $entity->field_s_lp_item_link[LANGUAGE_NONE][0]['url'],
+        'options' => array(),
+      );
+    }
+
+  }
+
+  foreach ($items as $delta => $item) {
+
+    if (isset($link_file)) {
+      $uri = array(
+        'path' => file_create_url($item['uri']),
+        'options' => array(),
+      );
+    }
+
+    $element[$delta] = array(
+      '#theme' => 'image_formatter',
+      '#item' => $item,
+      '#image_style' => $display['settings']['image_style'],
+      '#path' => isset($uri) ? $uri : '',
+    );
+
+  }
+
+  return $element;
+}
+
+/**
+ * Helper function link types.
+ */
+function stanford_landing_page_fc_link_formatter_image_field_link_types($instance) {
+  $link_types = array(
+    'content' => t('Content'),
+    'file' => t('File'),
+    'item-link' => t('field-s-lp-item-link'),
+  );
+  return $link_types;
+}
+/**
+ * [stanford_landing_page_fc_link_formatter_form_alter description]
+ * @param  [type] $form       [description]
+ * @param  [type] $form_state [description]
+ * @param  [type] $form_id    [description]
+ * @return [type]             [description]
+ */
+function stanford_landing_page_fc_link_formatter_form_alter(&$form, &$form_state, $form_id) {
+
+  if ($form_id == 'field_ui_display_overview_form' && $form['#bundle'] !== 'field_landing_page_item'){
+
+    // Remove option from non field_landing_page_item items
+    foreach ($form['#fields'] as $k => $field_name) {
+      if (isset($form['fields'][$field_name]['format']['type']['#options']['stanford_landing_page_fc_link_formatter'])) {
+        unset($form['fields'][$field_name]['format']['type']['#options']['stanford_landing_page_fc_link_formatter']);
+      }
+    }
+
+    $form['#validate'][] = "stanford_landing_page_fc_link_field_collection_formatter_validate";
+  }
+
+}
+
+/**
+ * [field_collection_formatter_validate description]
+ * @param  [type] $form       [description]
+ * @param  [type] $form_state [description]
+ * @return [type]             [description]
+ */
+function stanford_landing_page_fc_link_field_collection_formatter_validate($form, &$form_state){
+  if(isset($form_state['values'])){
+    foreach($form_state['values']['fields'] as $field){
+      if(isset($field['type']) && $field['type'] == 'stanford_landing_page_fc_link_formatter'){
+        form_set_error('field-ui-display-overview-form',t('This formatter is available only for field_landing_page_item field collection item'));
+      }
+    }
+  }
+}

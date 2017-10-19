@@ -1,0 +1,7 @@
+<?php
+/**
+ * @file
+ * Code for the Stanford News Extras Views feature.
+ */
+
+include_once 'stanford_news_extras_views.features.inc';

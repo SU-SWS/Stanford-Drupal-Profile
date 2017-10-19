@@ -1,0 +1,326 @@
+<?php
+/**
+ * @file
+ * Code for the Stanford AFS Quota Check module.
+ */
+
+// How often system should check file system usage. 1 time a day.
+define('SSH_QUOTA_CHECK_LIMIT', 60 * 60 * 24);
+// Whole integer percentage in which to check against.
+define('STANFORD_AFSQUOTA_THRESHOLD', 90);
+
+/**
+ * Implements hook_init().
+ */
+function stanford_afs_quota_init() {
+
+  // Check to see if the quota is past the threshold.
+  // If it is then prompt the user with a message.
+  if(!_is_ajax_request() && user_is_logged_in() && _stanford_afs_quota_check_quota()) {
+    _stanford_afs_quota_set_quota_warning_message();
+  }
+
+}
+
+/**
+ * Implements hook_menu().
+ */
+function stanford_afs_quota_menu() {
+  $items['admin/config/stanford-sites-helper/filequota/check'] = array(
+    'title' => 'Check File Storage Quota',
+    'page callback' => 'stanford_afs_quota_page_check_quota',
+    'type' => MENU_CALLBACK,
+    'access callback' => 'user_access',
+    'access arguments' => array('administer site configuration'),
+  );
+  return $items;
+}
+
+/**
+ * Implements hook_file_insert().
+ */
+function stanford_afs_quota_file_insert($file) {
+
+  // Every time a new file is saved we should run the check quota.
+  variable_set('stanford_afs_quota_afsquota_threshold_bool', 0);
+  variable_set('stanford_afs_quota_afsquota_ts', 0);
+
+  if (_stanford_afs_quota_check_quota()) {
+    _stanford_afs_quota_set_quota_warning_message();
+  }
+}
+
+/**
+ * Implements hook_file_update().
+ */
+function stanford_afs_quota_file_update($file) {
+
+  // Every time a new file is updated we should run the check quota.
+  variable_set('stanford_afs_quota_afsquota_threshold_bool', 0);
+  variable_set('stanford_afs_quota_afsquota_ts', 0);
+
+  if (_stanford_afs_quota_check_quota()) {
+    _stanford_afs_quota_set_quota_warning_message();
+  }
+}
+
+/**
+ * Implements hook_file_delete().
+ */
+function stanford_afs_quota_file_delete($file) {
+  // Every time a file is deleted we should reset the clock.
+  variable_set('stanford_afs_quota_afsquota_threshold_bool', 0);
+  variable_set('stanford_afs_quota_afsquota_ts', 0);
+}
+
+/**
+ * Implements hook_mail
+ */
+function stanford_afs_quota_mail($key, &$message, $params) {
+  switch ($key) {
+    case 'afsquota_warning':
+      $usage = _stanford_afs_quota_get_usage();
+      $site_url = url("<front>", array('absolute' => TRUE));
+
+      $message['headers']['Content-Type'] = 'text/html; charset=UTF-8; format=flowed';
+
+      $message['subject'] = "You are nearing your storage limit on " . $params['site_name'];
+      $message['body'][] = "<p>****************** DO NOT REPLY TO THIS AUTOMATED MESSAGE ******************</p>";
+      $message['body'][] = "<p><strong>You are currently using " . $usage . "% of your available disk space for documents and images on " . l($site_url, $site_url) . ".</strong></p>";
+      $message['body'][] = "<p>If you exceed your disk space limit, you may encounter errors when trying to upload files to your site.";
+      $message['body'][] = "<p>Additional disk space is available at no charge. Please submit a service request at " . l(t("!service", array('!service' => "https://stanford.service-now.com/it_services?id=sc_cat_item&sys_id=c44652e04f13ae0054c23f828110c7d9")), "https://stanford.service-now.com/it_services?id=sc_cat_item&sys_id=c44652e04f13ae0054c23f828110c7d9") . " to increase your limit.</p>";
+      $message['body'][] = "<p>If you think this message is incorrect or the issue has been resolved, you can try checking again. " . l('Check available space.', 'admin/config/stanford-sites-helper/filequota/check', array('absolute' => TRUE)) . "</p>";
+      $message['body'][] = "<p>****************** DO NOT REPLY TO THIS AUTOMATED MESSAGE ******************</p>";
+
+      break;
+  }
+}
+
+
+// -----------------------------------------------------------------------------
+// AFS QUOTA CHECK HELPERS -----------------------------------------------------
+// -----------------------------------------------------------------------------
+
+/**
+ * url: admin/config/stanford-sites-helper/filequota/check
+ * A page to manually check the quota available. Provides additional
+ * information and bypasses the limit check.
+ * @return  'string' page markup
+ */
+function stanford_afs_quota_page_check_quota() {
+  $output = '';
+
+  variable_set('stanford_afs_quota_afsquota_threshold_bool', 0);
+  variable_set('stanford_afs_quota_afsquota_ts', 0);
+
+  $check = _stanford_afs_quota_check_quota();
+
+  if($check){
+    $output .= "<h3 class=\"warning\">" . t('You are nearing your file storage limit. Please submit a') . ' ' . l(t('service request'), 'https://stanford.service-now.com/it_services?id=sc_cat_item&sys_id=c44652e04f13ae0054c23f828110c7d9') . ' ' . t('for more storage.') . "</h3>";
+  }
+  else {
+    $output .= "<h3>" . t('No problems here!') . "</h3><p>" . t('You are well under your file storage limit. Please carry on your site tasks as normal. For more information please see the ') . l('site status report page.', 'admin/reports/status') . "</p>";
+  }
+
+  return $output;
+}
+
+/**
+ * Returns the quota boolean. Quota boolean is a switch for under or over quota.
+ * @return [type] [description]
+ */
+function _stanford_afs_quota_get_quota_bool() {
+  return variable_get('stanford_afs_quota_afsquota_threshold_bool', 0);
+}
+
+/**
+ * Check quota function performs the file system storage usage check. If the
+ * qouta threshold has been surpassed an email is sent to user 1 and a message
+ * is prompted to administration users.
+ * @return boolean - True for over threshold.
+ */
+function _stanford_afs_quota_check_quota() {
+
+  global $argv;
+
+  // Check if we need to check.
+  $last_check = variable_get('stanford_afs_quota_afsquota_ts', 0);
+  $is_install = (isset($argv) && $argv[3] == "si") ? TRUE : FALSE;
+  if(($last_check + SSH_QUOTA_CHECK_LIMIT) < time() && !$is_install) {
+    $usage = _stanford_afs_quota_get_usage();
+    if($usage >= STANFORD_AFSQUOTA_THRESHOLD) {
+      variable_set('stanford_afs_quota_afsquota_threshold_bool', 1);
+
+      $have_i_sent_email = variable_get('stanford_afs_quota_afsquota_sent_email', 0);
+      if($have_i_sent_email == 0) {
+        _stanford_afs_quota_send_warning_email();
+        variable_set('stanford_afs_quota_afsquota_sent_email', 1);
+      }
+      return TRUE;
+    }
+    else {
+      // Quota is back to being ok. Reset warning bool and email notification.
+      variable_set('stanford_afs_quota_afsquota_threshold_bool', 0);
+      variable_set('stanford_afs_quota_afsquota_sent_email', 0);
+      return FALSE;
+    }
+  }
+
+  // See if the quota message has been tiggered.
+  // If it has then we return.
+  if(_stanford_afs_quota_get_quota_bool()) {
+    return TRUE;
+  }
+
+  return FALSE;
+}
+
+/**
+ * Returns an array of information about file system usage
+ * @return array - An array of information
+ * - volume name
+ * - quota in bits
+ * - used space in bits
+ * - used percentage
+ * - Total disk usage percentage
+ */
+function _stanford_afs_quota_get_usage_info() {
+  variable_set('stanford_afs_quota_afsquota_ts', time());  $raw = shell_exec(escapeshellcmd('fs lq sites/default/files'));
+
+  // Volume Name | Quota | Used | %Used | Partition
+  // list($volume_name, $max_quota, $bytes_used, $percentage_used, $partition_usage) = explode($raw, " ");
+
+  $keys = array(
+    'volume_name',
+    'max_bits_quota',
+    'bits_used',
+    'percentage_used',
+    'partition_usage',
+  );
+
+  $results = preg_split('/[\r\n]+/', $raw, -1, PREG_SPLIT_NO_EMPTY);
+  if (!isset($results[1])) {
+    throw new Exception("Could not get file storage data.");
+  }
+  $data = preg_split('/ +/', trim($results[1]));
+
+  // If for some reason the above processing does not produce an array of
+  // information we should throw out an exception.
+  if(!is_array($data) || count($data) < 5) {
+    throw new Exception("Could not get file storage data.");
+  }
+
+  // remove anything but numbers from data
+  $data[3] = preg_replace('/[^0-9]/', '', $data[3]);
+  $data[4] = preg_replace('/[^0-9]/', '', $data[4]);
+
+  // Ensure only 5 pieces of data.
+  $data = array_slice($data, 0, 5);
+
+  // Key the data and return to caller.
+  return array_combine($keys, $data);
+}
+
+/**
+ * Returns the percentage of disk usage.
+ * @return integer
+ */
+function _stanford_afs_quota_get_usage() {
+
+  try{
+    $info = _stanford_afs_quota_get_usage_info();
+  }
+  catch (Exception $e) {
+    watchdog('stanford_afs_quota', 'Error getting file storage data. Possibly could not execute shell function or shell function does not exist.');
+    return 0;
+  }
+
+  variable_set('stanford_afs_quota_afsquota_current', $info['percentage_used']);
+  return $info['percentage_used'];
+}
+
+/**
+ * Creates a user message for adminstrators to let them know that their afs
+ * storage is nearing its limit.
+ */
+function _stanford_afs_quota_set_quota_warning_message() {
+
+  global $user;
+
+  // Do not add message for non authenticated users.
+  if(!user_is_logged_in()) {
+    return;
+  }
+
+  $accepted_roles = variable_get('stanford_afs_quota_afsquota_roles', array('administrator'));
+  $check = array_intersect($accepted_roles, array_values($user->roles));
+
+  // Do not add message for non admin type users.
+  if(!$check) {
+    return;
+  }
+
+  $usage = _stanford_afs_quota_get_usage();
+
+  $message = t('You are currently using @usage% of your available storage. Please submit a', array('@usage' => $usage)) . ' ' . l(t('service request'), 'https://stanford.service-now.com/it_services?id=sc_cat_item&sys_id=c44652e04f13ae0054c23f828110c7d9') . ' ' . t('for more storage. If you think this message is incorrect and the issue has been resolved try') . ' ' . l(t('checking again'), 'admin/config/stanford-sites-helper/filequota/check') . ".";
+  drupal_set_message($message, 'warning', FALSE);
+
+}
+
+/**
+ * Sends an email about the status of the AFS storage usage to user 1
+ * or the passed in array of emails.
+ * @param  array  $emails an array of email accounts to send the email to.
+ * @return boolean - True for success
+ */
+function _stanford_afs_quota_send_warning_email($emails = array()) {
+
+  $to = !empty($emails) ? implode(",", $emails) : _stanford_afs_quota_get_user_1_email();
+  $site_name = variable_get('site_name', 'Your Website');
+  $from = $site_name . ' <no-reply@stanford.edu>';
+  $params = array('site_name' => $site_name);
+  $language = language_default();
+  $my_module = 'stanford_afs_quota';
+  $my_mail_token = 'afsquota_warning';
+  $message = array();
+  stanford_afs_quota_mail($my_mail_token, $message, $params);
+  $body = drupal_wrap_mail(implode("",$message['body']));
+  $subject = $message['subject'];
+
+  //  return drupal_mail('stanford_afs_quota', 'afsquota_warning', $to, $language, $params, $from);
+
+  // $system = drupal_mail_system($my_module, $my_mail_token);
+  // if ($system->mail($message)) {
+  //   watchdog('stanford_afs_quota', 'Sent AFS Storage Warning Email.', array($system), WATCHDOG_NOTICE);
+  // }
+  // else {
+  //   watchdog('stanford_afs_quota', 'FAILED TO SEND AFS Storage Warning Email.', array($system), WATCHDOG_ERROR);
+  //   print_r($system->error);
+  // }
+
+  // To send HTML mail, the Content-type header must be set
+  $headers  = 'MIME-Version: 1.0' . "\r\n";
+  $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
+
+  // Additional headers
+  $headers .= 'From:' . addslashes($from) . "\r\n";
+
+  mail($to, $subject, $body, $headers);
+}
+
+/**
+ * Returns user 1's email address
+ * @return string - email address
+ */
+function _stanford_afs_quota_get_user_1_email() {
+  $user = user_load(1);
+  return $user->mail;
+}
+
+/**
+ * Small helper function to check to see if request was an ajax request.
+ * @return boolean [description]
+ */
+function _is_ajax_request() {
+  return !empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest';
+}

@@ -1,0 +1,185 @@
+<?php
+
+/**
+ * @file social_share.install
+ */
+
+/**
+ * Implements hook_schema().
+ */
+function social_share_schema() {
+  $schema = array();
+
+  $schema['social_share_networks'] = array(
+    'fields' => array(
+      'machine_name' => array(
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+      ),
+      'human_name' => array(
+        'type' => 'varchar',
+        'length' => 255,
+      ),
+      'url' => array(
+        'type' => 'blob',
+      ),
+      'weight' => array(
+        'type' => 'int',
+        'length' => 4,
+        'unsigned' => FALSE,
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+      'locked' => array(
+        'type' => 'int',
+        'length' => 1,
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+    ),
+    'primary key' => array('machine_name'),
+  );
+
+  return $schema;
+}
+
+/**
+ * Implements hook_install().
+ */
+function social_share_install() {
+  // Everything that needs to happen on first install is the same as
+  // what happens during update 7200.
+  social_share_update_7200();
+}
+
+/**
+ * Implements hook_uninstall().
+ */
+function social_share_uninstall() {
+  // Remove all social share configuration from the database.
+  db_delete('variable')
+      ->condition('name', 'social_share_%', 'LIKE')
+      ->execute();
+}
+
+/**
+ * Install DB Schema,
+ * Populate Default Social Networks
+ */
+function social_share_update_7200() {
+  if (!db_table_exists('social_share_networks')) {
+    drupal_install_schema('social_share');
+  }
+  else {
+    db_truncate('social_share_networks')->execute();
+  }
+
+  module_load_include('inc', 'social_share', 'include/social_share.networks');
+  $networks = _social_share_get_networks();
+  _social_share_install_networks($networks);
+
+  variable_set('social_share_utm_settings', array(
+    'social_share_append_utm' => 0,
+    'social_share_utm_campaign' => variable_get('site_name', ''),
+  ));
+}
+
+/**
+ * Migrate from 7.x-1.x to 7.x-2.x
+ */
+function social_share_update_7201() {
+  // Update label variable from string to array:
+  $default_language = language_default();
+  $label = variable_get('social_share_label', t('Share to'));
+  if (is_array($label)) {
+    variable_set('social_share_label', $label);
+  }
+  else {
+    variable_set('social_share_label', array($default_language->language => $label));
+  }
+
+  // Gather list of enabled networks:
+  $available_networks = social_share_available_networks();
+  $networks = variable_get('social_share_sites', array());
+  $enabled_networks = array();
+  foreach ($networks as $network => $enabled) {
+    if (!$enabled) {
+      unset($networks[$network]);
+    }
+  }
+
+  foreach ($available_networks as $available_network) {
+    if (isset($networks[$available_network['machine_name']])) {
+      $enabled_networks[] = $available_network['machine_name'];
+    }
+  }
+
+  // Set up enabled networks for each enabled node type.
+  $node_types = variable_get('social_share_node_types', array());
+  foreach ($node_types as $type => $enabled) {
+    if ($enabled) {
+      variable_set('social_share_enabled_' . $type, 1);
+      variable_set('social_share_networks_' . $type, $enabled_networks);
+      variable_set('social_share_title_' . $type, '[node:title]');
+      variable_set('social_share_description_' . $type, '[node:body]');
+      variable_set('social_share_url_' . $type, '[node:url:absolute]');
+      variable_set('social_share_image_' . $type, '');
+      variable_set('social_share_theme_' . $type, 'social_share_link');
+      variable_set('social_share_show_label_' . $type, 1);
+    }
+  }
+
+  // Set up enabled networks for block (if block is enabled):
+  if (variable_get('social_share_block', 0)) {
+    $block_enabled_networks = array();
+    foreach ($available_networks as $available_network) {
+      $block_enabled_networks[$available_network['machine_name']] = (in_array($enabled_networks, $available_network['machine_name'])) ? 1 : 0;
+    }
+    $block_settings = array(
+      'social_share_show_label' => 1,
+      'social_share_title' => '[current-page:title]',
+      'social_share_description' => '',
+      'social_share_url' => '[current-page:url:absolute]',
+      'social_share_image' => '',
+      'social_share_theme' => 'social_share_link',
+      'social_share_networks' => $block_enabled_networks,
+    );
+
+    variable_set('social_share_block_settings', $block_settings);
+  }
+
+  // Clean up no longer needed variables
+  $vars = array(
+    'social_share_node_types',
+    'social_share_sites',
+    'social_share_teaser',
+    'social_share_weight',
+  );
+
+  foreach ($vars as $var) {
+    variable_del($var);
+  }
+
+  drupal_flush_all_caches();
+}
+
+/**
+ * Helper function to install a list of social networks
+ *
+ * @param array $networks
+ * @return boolean
+ */
+function _social_share_install_networks(array $networks) {
+  if (!count($networks)) {
+    return FALSE;
+  }
+
+  foreach ($networks as $network) {
+    db_insert('social_share_networks')
+        ->fields($network)
+        ->execute();
+  }
+  return TRUE;
+}

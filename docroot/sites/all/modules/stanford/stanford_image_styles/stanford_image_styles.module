@@ -1,0 +1,21 @@
+<?php
+
+/**
+ * @file
+ * Code for the Stanford Image Styles feature.
+ */
+
+include_once 'stanford_image_styles.features.inc';
+
+/**
+ * Add the style name to the image.
+ *
+ * @param array $vars
+ *   The image theme vars.
+ */
+function stanford_image_styles_preprocess_image_style(array &$vars) {
+  if (isset($vars['attributes']['class']) && is_string($vars['attributes']['class'])) {
+    $vars['attributes']['class'] = array($vars['attributes']['class']);
+  }
+  $vars['attributes']['class'][] = "image-style-" . drupal_clean_css_identifier($vars['style_name']);
+}

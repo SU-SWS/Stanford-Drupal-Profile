@@ -1,0 +1,125 @@
+<?php
+/**
+ * @file
+ * Code for the Stanford Gallery Block feature.
+ */
+
+include_once 'stanford_gallery_block.features.inc';
+
+
+/**
+ * Implements hook_field_formatter_info().
+ */
+function stanford_gallery_block_field_formatter_info() {
+  $formatters = array(
+    'stanford_gallery_block' => array(
+      'label' => t('Stanford Gallery'),
+      'field types' => array('entityreference'),
+      'settings' => array(),
+      'module' => 'stanford_gallery_block',
+      'description' => t('A colorbox gallery'),
+    ),
+  );
+  return $formatters;
+}
+
+/**
+ * Implements hook_form_alter().
+ */
+function stanford_gallery_block_form_bean_form_alter(&$form, &$form_state) {
+
+  // Only work on the stanford_gallery bean type.
+  if (!isset($form['#bundle']) || $form['#bundle'] !== "stanford_gallery") {
+    return;
+  }
+
+  // Get rid of beans view mode option.
+  $form['view_mode']['#access'] = FALSE;
+}
+
+/**
+ * Implements hook_field_formatter_settings_form().
+ */
+function stanford_gallery_block_field_formatter_settings_form($field, $instance, $view_mode, $form, &$form_state) {
+  $element = array();
+  $element['something']['#markup'] = "<p>" . t("no settings") . "</p>";
+  return $element;
+}
+
+/**
+ * Implements hook_field_formatter_settings_summary().
+ */
+function stanford_gallery_block_field_formatter_settings_summary($field, $instance, $view_mode) {
+  return '<br /> Colorbox Gallery';
+}
+
+/**
+ * Implements hook_field_formatter_prepare_view().
+ */
+function stanford_gallery_block_field_formatter_prepare_view($entity_type, $entities, $field, $instances, $langcode, &$items, $displays) {
+  entityreference_field_formatter_prepare_view($entity_type, $entities, $field, $instances, $langcode, $items, $displays);
+}
+
+/**
+ * Implements hook_field_formatter_view().
+ */
+function stanford_gallery_block_field_formatter_view($entity_type, $entity, $field, $instance, $langcode, $items, $display) {
+  $result = array();
+  $settings = $display['settings'];
+  $bean = $entity;
+
+  // For the Field Collections.
+  $view_mode = !empty($entity->field_s_gallery_view_mode[LANGUAGE_NONE][0]['value']) ? $entity->field_s_gallery_view_mode[LANGUAGE_NONE][0]['value'] : 'gallery_large';
+
+  foreach ($items as $delta => $item) {
+    // Protect ourselves from recursive rendering.
+    static $depth = 0;
+    $depth++;
+    if ($depth > 20) {
+      throw new EntityReferenceRecursiveRenderingException(t('Recursive rendering detected when rendering entity @entity_type(@entity_id). Aborting rendering.', array('@entity_type' => $entity_type, '@entity_id' => $item['target_id'])));
+    }
+
+    $entity = clone $item['entity'];
+    unset($entity->content);
+
+    // Change the view mode of the field collections.
+    $entity->field_s_gallery_view_mode[LANGUAGE_NONE][0]['value'] = $view_mode;
+
+    // Remove the body.
+    if (isset($bean->field_s_gallery_show_body[LANGUAGE_NONE][0]['value'])) {
+      if (!$bean->field_s_gallery_show_body[LANGUAGE_NONE][0]['value']) {
+        unset($entity->body);
+      }
+    }
+
+    // Render entity.
+    $settings['view_mode'] = "beanblockoverrideviewmodekey";
+    $result[$delta] = entity_view($field['settings']['target_type'], array($item['target_id'] => $entity), $settings['view_mode'], $langcode, FALSE);
+
+    // Remove nested contextual links.
+    unset($result[$delta]['node'][$item['target_id']]['#contextual_links']);
+
+    // Links.
+    if (empty($settings['links']) && isset($result[$delta][$field['settings']['target_type']][$item['target_id']]['links'])) {
+      $result[$delta][$field['settings']['target_type']][$item['target_id']]['links']['#access'] = FALSE;
+    }
+
+    $depth = 0;
+  }
+
+  return $result;
+}
+
+/**
+ * Implements hook_preprocess().
+ */
+function stanford_gallery_block_preprocess_node(&$vars) {
+
+  // If we are rendering the node from the block then we kill the title by this.
+  if ($vars["view_mode"] == "beanblockoverrideviewmodekey") {
+    $vars["page"] = TRUE;
+    $vars["view_mode"] = "full";
+  }
+
+}
+

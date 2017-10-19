@@ -1,0 +1,6 @@
+name = Stanford SimpleSAMLphp authentication
+description = Allows users to authenticate to a remote SAML identity provider (IdP) via a locally configured SimpleSAMLphp service point (SP).
+core = 7.x
+project = "stanford_simplesamlphp_auth"
+package = Stanford
+version = 7.x-2.1-dev

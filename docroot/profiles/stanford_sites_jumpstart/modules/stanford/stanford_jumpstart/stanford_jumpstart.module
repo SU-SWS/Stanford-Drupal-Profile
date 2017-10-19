@@ -1,0 +1,281 @@
+<?php
+/**
+ * @file
+ * Code for the Stanford Sites Jumpstart module.
+ */
+/**
+ * Implements hook_menu().
+ */
+function stanford_jumpstart_menu() {
+
+  $items['admin/stanford-jumpstart'] = array(
+    'title' => 'Jumpstart Help',
+    'page callback' => 'theme',
+    'page arguments' => array('gethelp_template', array()),
+    'access arguments' => array('access jumpstart help'),
+    'type' => MENU_NORMAL_ITEM,
+  );
+  $items['admin/stanford-jumpstart/help'] = array(
+    'title' => 'Get Help',
+    'type' => MENU_DEFAULT_LOCAL_TASK,
+    'weight' => 90,
+  );
+  $items['admin/stanford-jumpstart/features'] = array(
+    'title' => 'Add Features',
+    'page callback' => 'theme',
+    'page arguments' => array('addfeatures_template'),
+    'access arguments' => array('access jumpstart features'),
+    'type' => MENU_LOCAL_TASK,
+    'weight' => 80,
+  );
+  $items['admin/stanford-jumpstart/launch-checklist'] = array(
+    'title' => 'Launch Checklist',
+    'page callback' => 'theme',
+    'page arguments' => array('launchchecklist_template'),
+    'access arguments' => array('access jumpstart help'),
+    'type' => MENU_LOCAL_TASK,
+    'weight' => 100,
+  );
+  $items['admin/stanford-jumpstart/settings'] = array(
+    'title' => 'Settings',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('stanford_jumpstart_help_settings_form'),
+    'access arguments' => array('administer jumpstart help'),
+    'type' => MENU_NORMAL_ITEM,
+    'weight' => 110,
+  );
+
+  return $items;
+}
+
+/**
+ * [stanford_jumpstart_help_settings_form description]
+ * @param  [type] $form       [description]
+ * @param  [type] $form_state [description]
+ * @return [type]             [description]
+ */
+function stanford_jumpstart_help_settings_form($form, &$form_state) {
+
+  $settings = stanford_jumpstart_help_get_settings();
+
+  // TREES! because it is Stanford after all.
+  $form['jumpstart']['#tree'] = TRUE;
+
+  // Help text.
+  $form['jumpstart']['help_text'] = array(
+    '#type' => 'textarea',
+    '#title' => 'Help text',
+    '#description' => 'The introductory text in the request assistance block on the help page. Please use plain text.',
+    '#size' => 5,
+    '#default_value' => strip_tags($settings['help_text']),
+    '#maxlength' => 300,
+  );
+
+  // Help request url.
+  $form['jumpstart']['request_help_url'] = array(
+    '#type' => 'textfield',
+    '#title' => 'Request assistance url',
+    '#description' => 'Use this field to set the value of the request assistance button on the jumpstart get help page',
+    '#default_value' => $settings['request_help_url'],
+    '#maxlength' => 255,
+  );
+
+  // Or use it in a form:
+  $form['tokens'] = array(
+    '#theme' => 'token_tree_link',
+    '#token_types' => array('user', 'site'),
+    '#prefix' => "<div style=\"margin: -15px 0 15px;\">",
+    '#suffix' => "</div>",
+  );
+
+  // duh.
+  $form['submit'] = array(
+    '#type' => 'submit',
+    '#value' => t('Save'),
+  );
+
+  return $form;
+}
+
+/**
+ * Default settings wrapper for variable_get
+ * @return [type] [description]
+ */
+function stanford_jumpstart_help_get_settings() {
+  $settings = variable_get('stanford_jumpstart_help_settings', array(
+    'request_help_url' => 'https://stanforduniversity.qualtrics.com/SE/?SID=SV_1EK9guIGepRtvwh&Name=[current-user:name]&Email=[current-user:mail]&URL=[site:url]',
+    'help_text' => 'Submit a help form to Stanford Web Services to request personal assistance with your site.',
+  ));
+  return $settings;
+}
+
+/**
+ * [stanford_jumpstart_help_settings_form_submit description]
+ * @param  [type] $form       [description]
+ * @param  [type] $form_state [description]
+ * @return [type]             [description]
+ */
+function stanford_jumpstart_help_settings_form_submit($form, &$form_state) {
+  $values = $form_state['values'];
+  $settings = stanford_jumpstart_help_get_settings();
+  $new_settings = array_merge($settings, $values['jumpstart']);
+
+  $new_settings['help_text'] = filter_xss($new_settings['help_text']);
+
+  variable_set('stanford_jumpstart_help_settings', $new_settings);
+
+  drupal_set_message("Your settings have been saved.");
+}
+
+/**
+ * Page callback for admin/stanford-jumpstart/features.
+ */
+function stanford_jumpstart_theme($existing, $type, $theme, $path) {
+  // Set the default Add Features template.
+  $addfeatures_template = 'templates/addfeatures';
+  // Use a different template for Add Features if this is a Jumpstart Academic site.
+  if(variable_get('stanford_jumpstart_academic')) {
+    $addfeatures_template = 'templates/addfeaturesjsa';
+  }
+
+  return array(
+    'gethelp_template' => array(
+      'template' => 'templates/gethelp',
+    ),
+    'addfeatures_template' => array(
+      'template' => $addfeatures_template,
+    ),
+    'launchchecklist_template' => array(
+      'template' => 'templates/launchchecklist',
+    ),
+  );
+}
+
+/**
+ * Implements hook_permission().
+ */
+function stanford_jumpstart_permission() {
+  return array(
+    'administer jumpstart help' => array(
+      'title' => t('Administer Jumpstart Help'),
+      'description' => t('Configure jumpstart help settings'),
+    ),
+    'access jumpstart help' => array(
+      'title' => t('Access Jumpstart Help'),
+      'description' => t('View the Jumpstart Help pages, launch checklist and instructions'),
+    ),
+    'access jumpstart features' => array(
+      'title' => t('Access Jumpstart Features'),
+      'description' => t('View and request additional features within the Stanford Sites Jumpstart service.')
+    ),
+    'jumpstart assign administrator role' => array(
+      'title' => t('Assign Administrator Role'),
+      'description' => t('Give users the "administrator" (i.e., "all-powerful") role.'),
+      'restrict access' => TRUE,
+    ),
+    'jumpstart use full block' => array(
+      'title' => t('Use Full Block Interface'),
+      'description' => t('View all options for editing blocks.'),
+    ),
+  );
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function stanford_jumpstart_form_block_admin_configure_alter(&$form, &$form_state, $form_id) {
+  if (!user_access('jumpstart use full block')) {
+    $form['regions']['#type'] = 'hidden';
+    $form['visibility']['node_type']['#type'] = 'hidden';
+    $form['visibility']['role']['#type'] = 'hidden';
+    $form['visibility']['user']['#type'] = 'hidden';
+    $form['settings']['css_class']['#type'] = 'hidden';
+    //"visiblity" - ya rly.
+    $form['visiblity']['context_respect']['#type'] = 'hidden';
+  }
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function stanford_jumpstart_form_bean_form_alter(&$form, &$form_state, $form_id) {
+  if (!user_access('jumpstart use full block')) {
+    $form['revision']['#type'] = 'hidden';
+    $form['actions']['delete']['#type'] = 'hidden';
+  }
+  $form['#validate'][] = 'stanford_jumpstart_bean_form_validate';
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function stanford_jumpstart_form_stanford_page_node_form_alter(&$form, &$form_state, $form_id) {
+  if (!user_access('jumpstart use full block')) {
+    $form['options']['promote']['#type'] = 'hidden';
+    $form['options']['sticky']['#type'] = 'hidden';
+  }
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function stanford_jumpstart_form_system_site_information_settings_alter(&$form, &$form_state, $form_id) {
+
+  // JSA and JSV use the jumpstart use full block perm differently.
+  // Cannot use this here...
+
+  // if (!user_access('jumpstart use full block')) {
+  //   $form['site_information']['site_slogan']['#type'] = 'hidden';
+  //   $form['error_page']['#type'] = 'hidden';
+  //   $form['front_page']['#type'] = 'hidden';
+  // }
+
+  global $user;
+  $form['site_information']['site_slogan']['#access'] = in_array('administrator', $user->roles);
+  $form['error_page']['#access'] = in_array('administrator', $user->roles);
+  $form['front_page']['#access'] = in_array('administrator', $user->roles);
+
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function stanford_jumpstart_form_user_profile_form_alter(&$form, &$form_state, $form_id) {
+  if (!user_access('jumpstart assign administrator role')) {
+    $admin_rid = variable_get('user_admin_role', user_role_load_by_name('administrator')->rid);
+    unset($form['account']['roles']['#options'][$admin_rid]);
+  }
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function stanford_jumpstart_form_views_form_admin_views_user_system_1_alter(&$form, &$form_state, $form_id) {
+  if (!user_access('jumpstart assign administrator role')) {
+    $admin_rid = variable_get('user_admin_role', user_role_load_by_name('administrator')->rid);
+    unset($form['add_roles']['#options'][$admin_rid]);
+    unset($form['remove_roles']['#options'][$admin_rid]);
+  }
+}
+
+/**
+ * Implements hook_menu_alter().
+ */
+function stanford_jumpstart_menu_alter(&$items) {
+  $items['admin/people/permissions']['access arguments'] = array('jumpstart assign administrator role');
+  $items['admin/structure/block']['access arguments'] = array('jumpstart use full block');
+
+  $items['admin/structure/services']['access callback'] = array('user access');
+  $items['admin/structure/services']['access arguments'] = array('administer services');
+}
+
+/**
+ * Validation function for bean form.
+ */
+function stanford_jumpstart_bean_form_validate($form, &$form_state) {
+/*  dpm($form);
+  dpm($form_state);
+  if (1==1) {
+    form_set_error(NULL, "Message.");
+  }*/
+}

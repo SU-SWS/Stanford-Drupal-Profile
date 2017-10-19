@@ -1,0 +1,10 @@
+.capx-schema-controls,
+#stanford-capx-admin-config-data-browser-refresh {
+  display: inline-block;
+}
+
+.capx-schema-controls .btn:hover {
+  opacity: 0.7;
+  color: #000;
+  background: #CCC;
+}

@@ -1,0 +1,41 @@
+<?php
+/**
+ * @file
+ */
+
+/**
+ * Update content editor and filtered html profiles to use new easy setting.
+ */
+function stanford_jumpstart_wysiwyg_update_7400() {
+  $content_editor = wysiwyg_get_profile("content_editor_text_format");
+  $filtered = wysiwyg_get_profile("filtered_html");
+
+  // Check to see that content editor is using easy.
+  if ($content_editor && $content_editor->settings['css_setting'] !== "easy") {
+    $content_editor->settings['css_setting'] = "easy";
+    stanford_jumpstart_wysiwyg_update_save_profile($content_editor);
+  }
+
+  // Check to see that filtered editor is using easy.
+  if ($filtered && $filtered->settings['css_setting'] !== "easy") {
+    $filtered->settings['css_setting'] = "easy";
+    stanford_jumpstart_wysiwyg_update_save_profile($filtered);
+  }
+
+}
+
+/**
+ * Saves the given wysiwyg profile.
+ * @param  object $profile A wysiwyg profile.
+ */
+function stanford_jumpstart_wysiwyg_update_save_profile($profile) {
+  db_merge('wysiwyg')
+    ->key(array('format' => $profile->format))
+    ->fields(array(
+      'editor' => $profile->editor,
+      'settings' => serialize($profile->settings),
+    ))
+    ->execute();
+
+    wysiwyg_profile_cache_clear();
+}

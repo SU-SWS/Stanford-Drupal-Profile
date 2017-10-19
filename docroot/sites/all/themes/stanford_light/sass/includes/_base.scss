@@ -1,0 +1,132 @@
+body {
+}
+@media (max-width: 767px) {
+    body {
+        padding: 0;
+    }
+    .container {
+        margin-left: 20px;
+        margin-right: 20px;
+    }
+}
+.header {
+    margin: 0;
+    padding: 20px 0;
+}
+.red-bar .header {
+    border-top: 10px solid $clr-cardinal;
+}
+.nav-search {
+    margin-right: 2%;
+}
+.site-main-menu {
+}
+.main {
+    padding-top: 40px;
+    padding-bottom: 20px;
+    margin: 0;
+}
+.mc-content {
+    padding: 0 1%;
+    @include box-sizing(border-box);
+    @media (max-width: 767px) {
+        padding: 0;
+    }
+}
+.site-footer {
+    margin: 0;
+    padding: 30px 0 20px 0;
+}
+h1, h2, h3, h4, h5, h6 {
+}
+h1 {
+}
+h2 {
+}
+h3 {
+}
+h4 {
+}
+h5 {
+}
+h6 {
+}
+strong {
+}
+.content ul li {
+    list-style-type: square;
+}
+.site-logo img {
+    margin-right: 15px;
+    @media (max-width: 480px) {
+        margin-right: 0;
+    }
+}
+#name-and-slogan {
+    padding-left: 0;
+}
+.site-name {
+    margin-left: -4px;
+}
+.site-name a, .site-name a:hover {
+}
+#site-slogan {
+}
+.summary {
+}
+.descriptor {
+}
+.credits {
+}
+.caption {
+    margin-bottom: 0;
+}
+.quote {
+}
+a {
+}
+a:hover, a:focus {
+}
+a.btn, .btn a {
+    padding: 0.5em 1em;
+    border: none;
+    @include text-shadow(none);
+    @include box-shadow(none);
+    @include border-radius(0.3em);
+}
+a.btn:hover, a.btn:focus, .btn a:hover, .btn a:focus {
+}
+a.more-link, .more-link a {
+    text-transform: none;
+    display: inline;
+    font-size: 16px;
+    font-weight: 600;
+    letter-spacing: 0;
+}
+a.more-link:after, .more-link a:after {
+    content:" »";
+}
+a.more-link:hover, a.more-link:focus, .more-link a:hover, .more-link a:focus {
+}
+a.edit-link, .edit-link a {
+    @include border-radius(0.3em);
+    padding: 0.5em 1em;
+    border: 1px solid $clr-gray;
+    font-size: .8em;
+    text-decoration: none;
+}
+a.edit-link:hover, a.edit-link:focus, .edit-link a:hover, .edit-link a:focus {
+    background: $clr-gray-light;
+}
+.block {
+}
+.block > h2 {
+    margin-top: 0;
+}
+.well {
+    border: none;
+    @include border-radius(0);
+    @include box-shadow(none);
+}
+.block.well h2 {
+}

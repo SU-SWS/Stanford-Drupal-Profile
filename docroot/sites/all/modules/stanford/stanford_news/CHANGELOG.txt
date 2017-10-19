@@ -1,0 +1,84 @@
+Stanford News x.x-x.x, xxxx-xx-xx
+---------------------------------
+
+Stanford News 7.x-3.3+8-dev, 2016-07-19
+---------------------------------
+-	Removed block titles on banner and banner overlay
+-	SOE-884: Enabling new extras context
+- SOE-884: adding css
+
+Stanford News 7.x-3.3, 2016-06-08
+---------------------------------
+- Work on Banner and Banner overlay for News Extras
+- Add test for conflicting news views
+- SOE-849: added stanford_news_banner, and default image variable
+- SOE-849: added dependency to stanford_feeds_helper
+- SOE-849: Updated config info in readme.md
+- Straighten up overlapping cruft from Stanford Person
+
+Stanford News 7.x-3.2, 2016-05-30
+---------------------------------
+- Enable revisions by default on stanford_news_item content type
+- Resolves BASIC-1363 update URL Cutoff settings to 160
+- SOE-627: Added all the extra fields in SoE to make a new extras module
+- SOE-745: Removed manage content from the news views module
+- SOE-745: replaced manage content view
+- SOE-745: removed project path from .info files
+- SOE-745: Added install hook() to enable administration module
+- SOE-811: added News Extras view mode
+- Update news feature with strongarm variables
+- SOE-790: Added stanford_news_extras_views
+- SOE-790: updated to install() function to disable the conficting module: stanford_news_views
+- SOE-811: added News Extras view mode
+- Added new administration views module
+
+Stanford News 7.x-3.1, 2015-06-25
+---------------------------------
+Changes since 7.x-3.0:
+By cynmij:
+  - Added image insert field
+By sherakama:
+  - Cached the Views
+
+Stanford News 7.x-3.0, 2014-11-27
+----------------------------------------
+- BASIC-826 | images link to content in news views
+- BASIC-842 | See more news is sentence case BASIC-1012 | Fix See more news link on homepage block
+- Added row to manage view
+- Update and rename README.txt to README.md
+- Support for dash syntax for field group classes
+
+Stanford News 7.x-3.0-alpha2, 2014-05-16
+----------------------------------------
+  - BASIC-802 | Updated CSS for news category display
+  - BASIC-796: Add 3-item news display
+  - BASIC-696: Fixed
+  - BASIC-696: changed file field label to hidden
+
+Stanford News 7.x-3.0-alpha1, 2014-03-11
+----------------------------------------
+  - Features 2.x Compatible Version
+  - News Categories CSS
+  - Updated News Display
+  - Updated Views Displays
+  - Consolidated features, new sub module features
+  - Image style fixes
+  - Display suite view mode clean up
+
+Stanford News 7.x-2.0-alpha6, 2013-10-14
+----------------------------------------
+  -Removed leftover entityreference dependency
+  -Add VBO to Manage Content menu
+
+Stanford News 7.x-2.0-alpha5, 2013-08-19
+----------------------------------------
+Note: There are no tagged releases for -alpha2 through -alpha4
+
+Changes since 7.x-2.0-alpha1:
+  -Changes to Views
+  -Renamed field from s_slide_featured to s_news_featured
+  -Updates to fields
+
+Stanford News 7.x-2.0-alpha1, 2013-08-13
+----------------------------------------
+Initial release

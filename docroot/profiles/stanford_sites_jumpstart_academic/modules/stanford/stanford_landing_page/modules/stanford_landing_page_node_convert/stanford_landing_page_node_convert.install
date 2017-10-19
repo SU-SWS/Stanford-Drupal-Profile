@@ -1,0 +1,37 @@
+<?php
+/**
+ * @file
+ * Install tasks.
+ */
+
+/**
+ * Implements hook_install().
+ */
+function stanford_landing_page_node_convert_install() {
+  $templates = stanford_landing_page_node_convert_get_template();
+  foreach ($templates as $template) {
+    $template['data'] = serialize($template['data']);
+    drupal_write_record("node_convert_templates", $template);
+  }
+}
+
+/**
+ * Implements hook_enable().
+ */
+function stanford_landing_page_node_convert_enable() {}
+
+/**
+ * Implements hook_disable().
+ */
+function stanford_landing_page_node_convert_disable() {}
+
+/**
+ * Implements hook_uninstall().
+ */
+function stanford_landing_page_node_convert_uninstall() {
+  $templates = stanford_landing_page_node_convert_get_template();
+  $machine_names = array_keys($templates);
+  foreach ($machine_names as $template_name) {
+    node_convert_delete_template($template_name);
+  }
+}

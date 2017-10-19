@@ -1,0 +1,45 @@
+<?php
+/**
+ * @file
+ */
+
+/**
+ * Implements hook_install().
+ */
+function stanford_sites_helper_install() {}
+
+/**
+ * Implements hook_enable().
+ */
+function stanford_sites_helper_enable() {}
+
+/**
+ * Implements hook_disable().
+ */
+function stanford_sites_helper_disable() {}
+
+/**
+ * Implements hook_uninstall().
+ */
+function stanford_sites_helper_uninstall() {}
+
+/**
+ * Remove old afs check variables. Enable new AFS check module (but only if site is hosted on Stanford Sites).
+ */
+function stanford_sites_helper_update_7100($node) {
+
+  // Remove variables from previous version.
+  variable_del('stanford_sites_helper_afsquota_threshold_bool');
+  variable_del('stanford_sites_helper_afsquota_roles');
+  variable_del('stanford_sites_helper_afsquota_ts');
+  variable_del('stanford_sites_helper_afsquota_current');
+  variable_del('stanford_sites_helper_afsquota_sent_email');
+
+  // Check if still on sites.
+  if (stanford_sites_helper_stanford_sites_hosted()) {
+    if (!module_exists("stanford_afs_quota")) {
+      module_enable(array("stanford_afs_quota"));
+    }
+  }
+
+}

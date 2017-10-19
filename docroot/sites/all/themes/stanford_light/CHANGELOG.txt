@@ -1,0 +1,7 @@
+Version 7.x-1.1
+------------------------------
+by hyperboy: Added https to google web font references
+
+Version 7.x-1.0
+------------------------------
+by hyperboy: Initial Release

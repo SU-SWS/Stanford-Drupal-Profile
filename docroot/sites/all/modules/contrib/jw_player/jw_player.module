@@ -1,0 +1,412 @@
+<?php
+/**
+ * @file
+ * Adds a theme function which allows theme developers to use the JW Player.
+ */
+
+/**
+ * Implements hook_menu().
+ */
+function jw_player_menu() {
+  $items['admin/config/media/jw_player/settings'] = array(
+    'title' => 'Settings',
+    'description' => 'JW Player general settings',
+    'type' => MENU_LOCAL_TASK,
+    'access arguments' => array('administer JW Player presets'),
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('jw_player_settings_form'),
+    'file' => 'jw_player.admin.inc'
+  );
+
+  return $items;
+}
+
+/**
+ * Implements hook_permission().
+ */
+function jw_player_permission() {
+  return array(
+    'administer JW Player presets' => array(
+      'title' => t('administer JW Player presets'),
+      'description' => t('Perform administration of JW Player presets'),
+    ),
+  );
+}
+
+/**
+ * Implements hook_theme().
+ */
+function jw_player_theme() {
+  return array(
+    'jw_player' => array(
+      'variables' => array(
+        'file_object' => NULL,
+        'preset' => '',
+        'file_url' => '',
+        'file_mime' => '',
+        'options' => array(),
+      ),
+      'template' => 'theme/jw_player',
+    ),
+  );
+}
+
+/**
+ * Implements hook_field_formatter_info().
+ */
+function jw_player_field_formatter_info() {
+  $formatters = array(
+    'jw_player' => array(
+      'label' => t('JW player'),
+      'field types' => array('file'),
+      'settings' => array(
+        'jwplayer_preset' => '',
+      ),
+    ),
+  );
+  return $formatters;
+}
+
+/**
+ * Implements hook_field_formatter_settings_form().
+ */
+function jw_player_field_formatter_settings_form($field, $instance, $view_mode, $form, &$form_state) {
+  $element = array();
+
+  $display = $instance['display'][$view_mode];
+  $settings = $display['settings'];
+
+  // Formatter types.
+  switch ($display['type']) {
+    case 'jw_player':
+      $presets = jw_player_preset_load();
+
+      // If there are presets prompt the user to select one or create another.
+      // If no, prompt to create a preset.
+      if (!empty($presets)) {
+        foreach (jw_player_preset_load() as $preset => $item) {
+          $options[$preset] = $item['preset_name'];
+        }
+
+        $element['jwplayer_preset'] = array(
+          '#title' => t('Select preset'),
+          '#type' => 'select',
+          '#default_value' => ($settings['jwplayer_preset']) ?  $settings['jwplayer_preset'] : FALSE,
+          '#options' => $options,
+        );
+        $element['links'] = array(
+          '#theme' => 'links',
+          '#links' => array(
+            array(
+              'title' => t('Create new preset'),
+              'href' => 'admin/config/media/jw_player/add',
+            ),
+            array(
+              'title' => t('Manage presets'),
+              'href' => 'admin/config/media/jw_player',
+            ),
+          ),
+        );
+      }
+      else {
+        $element['no_preset_message'] = array(
+          '#markup' => '<div class="messages warning">' . t('No presets are available. You must to <a href="@create">create a preset</a> to proceed.', array('@create' => url('admin/config/media/jw_player/add'))) . '</div>',
+        );
+      }
+      break;
+
+    default:
+      break;
+  }
+  return $element;
+}
+
+/**
+ * Implements hook_field_formatter_settings_summary().
+ */
+function jw_player_field_formatter_settings_summary($field, $instance, $view_mode) {
+  $display = $instance['display'][$view_mode];
+  $settings = $display['settings'];
+
+  $summary = array();
+  $presets = jw_player_preset_load();
+
+  if (isset($presets[$settings['jwplayer_preset']])) {
+    $summary[] = t('Preset: @name', array('@name' => $presets[$settings['jwplayer_preset']]['preset_name']));
+    $summary[] = t('Description: @description', array('@description' => $presets[$settings['jwplayer_preset']]['description']));
+
+    $settings = $presets[$settings['jwplayer_preset']]['settings'];
+    foreach ($settings as $key => $val) {
+      // Filter out complex settings in the form of arrays (such as plugins).
+      // @todo Tackle the display of enabled plugins separately.
+      if (!is_array($val)) {
+        $summary[] = t('@key: @val', array('@key' => $key, '@val' => !empty($val) ? $val : t('default')));
+      }
+    }
+  }
+  else {
+    $summary[] = t('No preset selected');
+  }
+
+  return implode('<br />', $summary);
+}
+
+/**
+ * Implements hook_field_formatter_view().
+ */
+function jw_player_field_formatter_view($entity_type, $entity, $field, $instance, $langcode, $items, $display) {
+  $element = array();
+
+  if ($display['type'] == 'jw_player') {
+    // Process files for the theme function.
+    $files = array();
+    foreach ($items as $delta => $item) {
+      $files[$delta] = (object) $item;
+    }
+    foreach ($files as $delta => $file) {
+      $element[$delta] = array(
+        '#theme' => 'jw_player',
+        '#file_object' => $file,
+        '#preset' => $display['settings']['jwplayer_preset'],
+      );
+    }
+  }
+  return $element;
+}
+
+/**
+ * Retrieves all available skins.
+ */
+function jw_player_skins($name = NULL) {
+  $skins = &drupal_static(__FUNCTION__);
+
+  if (!isset($skins)) {
+    $directory = libraries_get_path('jwplayer_skins');
+    $skins = file_scan_directory($directory, '/\.xml|\.swf$/');
+  }
+
+  if ($name) {
+    foreach ($skins as $file) {
+      if ($file->name == $name) {
+        return $file;
+      }
+    }
+  }
+  return $skins;
+}
+
+/**
+ * Implements hook_ctools_plugin_api().
+ */
+function jw_player_ctools_plugin_api($owner, $api) {
+  if ($owner == 'jw_player' && $api == 'jw_player_presets') {
+    return array('version' => 1);
+  }
+}
+
+/**
+ * Implements hook_ctools_plugin_directory().
+ */
+function jw_player_ctools_plugin_directory($module, $type) {
+  // Load the export_ui plugin.
+  if ($type =='export_ui') {
+    return 'plugins/export_ui';
+  }
+}
+
+/**
+ * Load the given preset(s).
+ * @param string $machine_name
+ * @return array
+ */
+function jw_player_preset_load($machine_name = NULL) {
+  ctools_include('export');
+  if (isset($machine_name)) {
+    $items = ctools_export_crud_load('jwplayer_preset', $machine_name);
+
+    // CTools returns an object, so we explictly typecast it to array before
+    // returning.
+    return $items = (array) $items;
+  }
+  else {
+    $result = ctools_export_crud_load_all('jwplayer_preset');
+    if (!empty($result)) {
+      foreach ($result as $key => $item) {
+        $items[$key] = (array) $item;
+      }
+      return $items;
+    }
+  }
+}
+
+/**
+ * Returns the default settings for JW Player. Used in cases where a preset is
+ * not provided when the JW Player theme function is called.
+ */
+function jw_player_default_settings() {
+  $defaults = &drupal_static(__FUNCTION__);
+
+  if (!isset($defaults)) {
+    $defaults = array(
+      'flashplayer' => file_create_url(libraries_get_path('jwplayer') . '/player.swf'),
+      'width' => '640',
+      'height' => '480',
+      'autoplay' => FALSE,
+      'controlbar' => 'bottom',
+    );
+  }
+
+  return $defaults;
+}
+
+/**
+ * Implements hook_preprocess_HOOK().
+ */
+function jw_player_preprocess_jw_player(&$variables) {
+  // If a file object has been passed grab the file URL and MIME from it,
+  // but only if the values haven't already been set.
+  if (isset($variables['file_object'])) {
+    if (empty($variables['file_url'])) {
+      $variables['file_url'] = file_create_url($variables['file_object']->uri);
+    }
+    if (empty($variables['file_mime'])) {
+      $variables['file_mime'] = $variables['file_object']->filemime;
+    }
+  }
+
+  // Load defaults as the starting point.
+  $default_settings = jw_player_default_settings();
+
+  // Load preset if set.
+  $preset_settings = array();
+  if (!empty($variables['preset'])) {
+    $preset = jw_player_preset_load($variables['preset']);
+    // Additional check to ensure that the preset has actually loaded. This
+    // prevents problems where a preset has been deleted but a field is still
+    // configured to use it.
+    if (!empty($preset)) {
+      $preset_settings = $preset['settings'];
+    }
+  }
+
+  // Get any preset override options that were sent through the formatter or
+  // theme call.
+  $options = array();
+  if (isset($variables['options'])) {
+    $options = $variables['options'];
+    unset($variables['options']);
+  }
+
+  // Merge all variables together. Preset settings take priority over defaults,
+  // variables passed directly to the theme function take priority over both.
+  $variables = array_merge($default_settings, $preset_settings, $options, $variables);
+
+  // Give each instance of the player a unique id. A random hash is used in
+  // place of drupal_html_id() due to potentially conflicting ids in cases where
+  // the entire output of the theme function is cached.
+  $variables['html_id'] = md5(rand());
+
+  // Create a configuration array which will be passed to JWPlayer's JavaScript.
+  $variables['config']['file'] = $variables['file_url'];
+
+  // Resolve skin url
+  $skin = !empty($variables['skin']) ? jw_player_skins($variables['skin']) : '';
+  $variables['skin'] = !empty($skin) ? file_create_url($skin->uri) : '';
+
+  // Copy player variables into their own array to be set as JavaScript
+  // configuration.
+  // @todo Bad smell here. Refactoring needed.
+  $player_variables = array('width', 'height', 'controlbar', 'playlist.position', 'playlist.size', 'skin', 'autoplay');
+  foreach ($player_variables as $key) {
+    if (!empty($variables[$key])) {
+      $variables['config'][$key] = $variables[$key];
+    }
+  }
+
+  // Initalize the player modes. The order of this array determines which
+  // playback mode will be tried first before the browser falls back to the next
+  // option. The default is html5 first, but this can be overridden by a preset
+  // (see the code directly below).
+  $variables['config']['modes'] = array(
+    array('type' => 'html5'),
+    array(
+      'type' => 'flash',
+      'src' => file_create_url(libraries_get_path('jwplayer') . '/player.swf'),
+    ),
+  );
+
+  // If the preset has the primary mode set, modify the modes array so that it
+  // comes first.
+  if (isset($variables['mode'])) {
+    foreach ($variables['config']['modes'] as $key => $value) {
+      if ($value['type'] == $variables['mode']) {
+        unset($variables['config']['modes'][$key]);
+        array_unshift($variables['config']['modes'], $value);
+      }
+    }
+  }
+
+  // Copy over all enabled plugins into the 'config' section as this is the key
+  // that is sent over to the player.
+  if (!empty($variables['plugins'])) {
+    foreach ($variables['plugins'] as $plugin => $info) {
+      if (!$info['enable']) {
+        continue;
+      }
+      $variables['config']['plugins'][$plugin] = $info;
+    }
+  }
+}
+
+/**
+ * Implements hook_process_HOOK().
+ *
+ * Add the JW Player Javascript according to the method selected.
+ */
+function jw_player_process_jw_player(&$variables) {
+  // If inline option is selected, add the js code inline. It will be printed
+  // in the tpl file. This is needed so that the videos still have their config
+  // after page is cached. In this case the player itself is loaded on all pages
+  // via hook_init().
+  if (variable_get('jw_player_inline_js', FALSE)) {
+    $variables['jw_player_inline_js_code'] = stripslashes(json_encode($variables['config']));
+  }
+  // If inline is not selected, add all relevant JavaScript now.
+  else {
+    drupal_add_js(libraries_get_path('jwplayer') . '/jwplayer.js'); // Add library
+    drupal_add_js(drupal_get_path('module', 'jw_player') . '/jw_player.js'); // Attaches JW Player element
+    drupal_add_js(array('jw_player' => array($variables['html_id'] => $variables['config'])), 'setting'); // Player settings
+  }
+}
+
+/**
+ * Implements hook_init().
+ *
+ * If the player configuration is set to print inline, load the JW Player
+ * JavaScript on all pages. Due to caching one never knows when it will be
+ * needed.
+ */
+function jw_player_init() {
+  if (variable_get('jw_player_inline_js', FALSE)) {
+    drupal_add_js(libraries_get_path('jwplayer') . '/jwplayer.js'); // Add library
+  }
+}
+
+/**
+ * Retrieves all available preset plugins.
+ */
+function jw_player_preset_plugins($name = NULL) {
+  $plugins = &drupal_static(__FUNCTION__);
+
+  if (!isset($plugins)) {
+    $plugins = module_invoke_all('jw_player_plugin_info');
+    // Allow modules to alter other modules' plugin definitions
+    drupal_alter('jw_player_plugin_info', $plugins);
+  }
+
+  if ($name && isset($plugins[$name])) {
+    return $plugins[$name];
+  }
+
+  return $plugins;
+}

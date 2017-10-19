@@ -1,0 +1,13 @@
+name = No Bots
+description = Blocks (well-behaved) search engine robots from crawling, indexing, or archiving your site.
+version = 7.x-1.0
+core = 7.x
+package = Stanford
+project = nobots
+
+; Information added by Drupal.org packaging script on 2016-08-17
+version = "7.x-1.0"
+core = "7.x"
+project = "nobots"
+datestamp = "1471466040"
+

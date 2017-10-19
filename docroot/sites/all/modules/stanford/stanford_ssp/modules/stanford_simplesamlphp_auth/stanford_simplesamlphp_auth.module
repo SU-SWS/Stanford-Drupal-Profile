@@ -1,0 +1,436 @@
+<?php
+
+/**
+ * @file
+ * simpleSAMLphp authentication module for Drupal.
+ *
+ * This authentication module is based on the shibboleth authentication module,
+ * with changes to adapt to use simpleSAMLphp.
+ **/
+
+/**
+ * Implements hook_help().
+ */
+function stanford_simplesamlphp_auth_help($path, $arg) {
+  switch ($path) {
+    case 'admin/config/stanford/stanford_ssp':
+      $output = '<p>' . t('This module integrates Drupal with a SimpleSAMLphp Service Point (SP), effectively federating Drupal.') . '</p>';
+      return $output;
+  }
+}
+
+/**
+ * Loads simplesamlphp class and initializes global variables.
+ *
+ * @return bool
+ *   True if library and transaction with IDP checks out.
+ */
+function stanford_simplesamlphp_auth_autoload() {
+
+  // Do nothing if config says we are not enabled.
+  if (!stanford_simplesamlphp_auth_is_enabled()) {
+    return FALSE;
+  }
+
+  // Stored static var of information for later.
+  $saml = &drupal_static(__FUNCTION__, NULL);
+
+  // If we have already loaded up the information we need just return true.
+  if (!is_null($saml)) {
+    return TRUE;
+  }
+
+  // Set SAML as an array if we don't have info.
+  $saml = array();
+
+  // Get the simplesamlphp session.
+  $basedir = variable_get('stanford_simplesamlphp_auth_installdir', '/usr/share/simplesamlphp');
+
+  // Find out if simplesaml is available and can be loaded.
+  if (file_exists($basedir . '/lib/_autoload.php')) {
+    require_once $basedir . '/lib/_autoload.php';
+  }
+  else {
+    throw new Exception("Could not load simplesamlphp library");
+  }
+
+  // Set the static vars if we don't already have this information.
+  $saml['instance'] = SimpleSAML_Configuration::getInstance();
+  $saml['version'] = $saml['instance']->getVersion();
+
+  // Load simpleSAMLphp, configuration and metadata.
+  $saml['source'] = new SimpleSAML_Auth_Simple(variable_get('stanford_simplesamlphp_auth_authsource', 'default-sp'));
+  $saml['attributes'] = $saml['source']->getAttributes();
+
+  // Do some sanity checking before attempting anything.
+  $config_store_type = $saml['instance']->getValue('store.type');
+
+  // Make sure phpsession is NOT being used.
+  if ($config_store_type == 'phpsession') {
+    $message = t('A user attempted to login using simplesamlphp but the store.type is phpsession, use memcache or sql for simplesamlphp session storage. See: simplesamlphp/config/config.php.');
+    watchdog('stanford_simplesamlphp_auth', $message, NULL, WATCHDOG_ERROR);
+    throw new Exception($message);
+  }
+
+  return TRUE;
+}
+
+/**
+ * Implements hook_init().
+ *
+ * If the user has logged out via SAML, log out the user in Drupal as well.
+ */
+function stanford_simplesamlphp_auth_init() {
+
+  // Lots of functionality in here.
+  module_load_include("inc", "stanford_simplesamlphp_auth", "stanford_simplesamlphp_auth");
+
+  // If our user is anonymous then we don't need to worry about SAML.
+  if (user_is_anonymous()) {
+    // Logged out cookie message to the user.
+    stanford_simplesamlphp_auth_get_logged_out_cookie();
+    return FALSE;
+  }
+
+  // Fire up SIMPLE SAML. Throws an error if an issue pops up.
+  stanford_simplesamlphp_auth_autoload();
+
+}
+
+/**
+ * Implements hook_user_login().
+ *
+ * @param $edit
+ * @param $account
+ */
+function stanford_simplesamlphp_auth_user_login(&$edit, $account) {
+
+  // Only execute this on auth mapped users.
+  // $saml = stanford_simplesamlphp_auth_get_saml_info();
+  // if (empty($saml['instance'])) {
+  //   return;
+  // }
+
+  // Allow other modules to alter the users' roles.
+  drupal_alter('stanford_simplesamlphp_auth_user_roles', $account);
+
+  // Check to see if user is allowed to log in. If not log the user out. This is
+  // done after the role assignments because that has an impact on who can/cant.
+  $is_good = stanford_simplesamlphp_auth_validate_user_ability_to_login($account);
+
+  if (!$is_good) {
+    stanford_simplesamlphp_auth_set_logged_out_cookie("not_authorized");
+    module_load_include('pages.inc', 'user');
+    user_logout();
+    return;
+  }
+
+  // Fire off the rules event.
+  if (module_exists('rules')) {
+    rules_invoke_all('stanford_simplesamlphp_auth_rules_event_login', $account);
+  }
+
+}
+
+/**
+ * Checks wether the user is allowed to be logged in or not.
+ * @param  [type] $user [description]
+ * @return [type]          [description]
+ */
+function stanford_simplesamlphp_auth_validate_user_ability_to_login($user) {
+
+  // Get users that are allowed default login.
+  $allowed_default_login_users = variable_get('stanford_simplesamlphp_auth_allowdefaultloginusers', '');
+  $allowed_uids = explode(",", $allowed_default_login_users);
+  $user_allowed_default_login = FALSE;
+  $allowed_default_login_roles = variable_get('stanford_simplesamlphp_auth_allowdefaultloginroles', array());
+
+  // Check if user is allowed default login.
+  if (variable_get('stanford_simplesamlphp_auth_allowdefaultlogin', TRUE)) {
+    // Check whether the site is using these settings.
+    if (empty($allowed_default_login_users) && empty($allowed_default_login_roles)) {
+      $user_allowed_default_login = TRUE;
+    }
+    // Check if the uid is allowed.
+    elseif (in_array($user->uid, $allowed_uids)) {
+      $user_allowed_default_login = TRUE;
+    }
+    // Check whether all local accounts can log in.
+    elseif (empty($allowed_default_login_users)) {
+      // Check whether the user has any of the allowed roles.
+      $user_allowed_default_login_roles = array_intersect_key($user->roles, $allowed_default_login_roles);
+      if (!empty($user_allowed_default_login_roles)) {
+        $user_allowed_default_login = TRUE;
+      }
+    }
+  }
+
+  // Allow other modules to allow or deny.
+  $saml = stanford_simplesamlphp_auth_get_saml_info();
+  $other_checks = TRUE;
+  if (!empty($saml['instance'])) {
+    $other_checks = stanford_simplesamlphp_auth_allow_user_by_attribute();
+  }
+
+  // If either returns true.
+  return ($user_allowed_default_login && $other_checks);
+}
+
+/**
+ * Implements hook_user_logout().
+ */
+function stanford_simplesamlphp_auth_user_logout($account) {
+
+  $saml = stanford_simplesamlphp_auth_get_saml_info();
+  $source = $saml['source'];
+  $attributes = $saml['attributes'];
+
+  if (!empty($attributes)) {
+
+    // KLUDGE: for some reason Drupal is not killing the session, even if I
+    // were to call drupal_session_destroy_uid() here.
+    session_destroy();
+
+    $gotourl = base_path();
+    if (variable_get('simplesamlphp_auth_logoutgotourl', '')) {
+      $gotourl = variable_get('simplesamlphp_auth_logoutgotourl', '');
+    }
+
+    $source->logout($gotourl);
+  }
+
+}
+
+/**
+ * Implements hook_user_delete().
+ */
+function stanford_simplesamlphp_auth_user_delete($account) {
+
+  // Remove the entry from the authmap table.
+  db_delete('authmap')
+    ->condition('uid', $account->uid)
+    ->execute();
+
+}
+
+/**
+ * Implements hook_form_alter().
+ */
+function stanford_simplesamlphp_auth_form_alter(&$form, $form_state, $form_id) {
+
+  module_load_include("inc", "stanford_simplesamlphp_auth", "stanford_simplesamlphp_auth");
+
+  // If this module is not enabled just go away quietly.
+  if (!stanford_simplesamlphp_auth_is_enabled()) {
+    // Exit without executing.
+    return;
+  }
+
+  $is_user_profile_account_form = (($form_id == 'user_profile_form') && ($form['#user_category'] == 'account'));
+
+  $login_path = variable_get('simplesamlphp_auth_login_path', 'saml_login');
+  $login_name = variable_get('simplesamlphp_auth_login_link_display_name', t('Federated Log In'));
+  $destination = drupal_get_destination();
+  $link = l($login_name, $login_path, array('query' => $destination));
+
+  // Add SAML login link to user login form.
+  if ($form_id == 'user_login_block' || $form_id == 'user_account_form') {
+    $links = $form['links']['#markup'];
+    $links = str_replace('</ul>', '<li class="saml">' . $link . '</li></ul>', $links);
+    $form['links']['#markup'] = $links;
+  }
+
+  if ($form_id == 'user_login') {
+    $form['links']['#markup'] = $link;
+  }
+
+  // if (($form_id == 'user_register_form' || $is_user_profile_account_form) && user_access('change saml authentication setting')) {
+  //   $form['saml'] = array(
+  //     '#type' => 'checkbox',
+  //     '#title' => t('Enable this user to leverage SAML authentication'),
+  //     '#default_value' => $form_id == 'user_register_form' ? TRUE : (bool) user_get_authmaps($form['#user']->name),
+  //   );
+  //   $form['#submit'][] = 'simplesaml_auth_user_profile_form_submit';
+  // }
+
+  // If the user has a simplesamlphp_auth authmap record, then don't require
+  // them to know their Drupal password. This will allow them to change their
+  // e-mail address, and set a Drupal password if they want to (and are
+  // allowed).
+  if ($is_user_profile_account_form && (isset($form['#user']->init) && $form['#user']->init) && stanford_simplesamlphp_auth_user_has_authmap($form["#user"]->name)) {
+
+    unset($form['account']['current_pass']);
+    unset($form['account']['current_pass_required_values']);
+    $form['#validate'] = array_diff($form['#validate'], array('user_validate_current_pass'));
+
+    // If the user is a simplesamlphp_auth user and is NOT allowed to set their
+    // Drupal password, remove the fields from the form.
+    if (!variable_get('stanford_simplesamlphp_auth_allowsetdrupalpwd')) {
+      unset($form['account']['pass']);
+    }
+  }
+}
+
+/**
+ * Implements hook_block_view().
+ */
+function stanford_simplesamlphp_auth_block_view($delta = '') {
+
+  if (!stanford_simplesamlphp_auth_autoload()) {
+    // Exit without executing.
+    return;
+  }
+
+  $block = array();
+  switch ($delta) {
+    case 0:
+      $block = array(
+        'subject' => t('simpleSAMLphp login'),
+        'content' => stanford_simplesamlphp_auth_generate_block_text(),
+      );
+      break;
+  }
+  return $block;
+}
+
+/**
+ * Implements hook_block_info().
+ */
+function stanford_simplesamlphp_auth_block_info() {
+  $block = array(
+    array(
+      'info' => t('simpleSAMLphp authentication'),
+      'cache' => DRUPAL_NO_CACHE,
+    ),
+  );
+  return $block;
+}
+
+/**
+ * Generates the text for the log in block.
+ */
+function stanford_simplesamlphp_auth_generate_block_text() {
+  $saml = stanford_simplesamlphp_auth_get_saml_info();
+  $source = $saml['source'];
+  $block_content = '';
+  global $user;
+
+  if (!stanford_simplesamlphp_auth_is_enabled()) {
+    // Exit without executing.
+    return;
+  }
+
+  // Check if valid local session exists..
+  if ($source ->isAuthenticated()) {
+    $block_content .= '<p>' . t('Logged in as: @username', array('@username' => $user->name))
+    . '<br />' . l(t('Log Out'), 'user/logout') . '</p>';
+  }
+  else {
+    $login_path = variable_get('stanford_simplesamlphp_auth_login_path', 'sso/login');
+    $login_name = variable_get('stanford_simplesamlphp_auth_login_link_display_name', t('Federated Log In'));
+    $block_content .= '<p>' . l($login_name, $login_path) . '</p>';
+  }
+
+  return $block_content;
+}
+
+/**
+ * Evaluates a role rule.
+ *
+ * The rules work as follows:
+ * = does an exact match on an attribute and will iterate over array values if
+ * the array is multivalued.
+ * @= matches the domain portion of an email address. It assumes the attribute
+ * is a string, and will not iterate over an array (but take the first value).
+ * ~= does a partial string match on the attribute, and does iterate over
+ * multiple values, returning true if any of the values match.
+ *
+ * @param array $roleruleevaluation
+ *   An array containing the role rule to evaluate.
+ * @param array $attributes
+ *   An array containing the identity attributes.
+ *
+ * @return array
+ *   An array containing role value and the attribute, or FALSE.
+ */
+function stanford_simplesamlphp_auth_evaulaterolerule($roleruleevaluation, $attributes) {
+  if (variable_get('stanford_simplesamlphp_auth_debug', 0)) {
+    watchdog('stanford_simplesamlphp_auth', 'Evaluate rule (key=%key,operator=%op,value=%val)', array(
+      '%key' => $roleruleevaluation[0],
+      '%op' => $roleruleevaluation[1],
+      '%val' => $roleruleevaluation[2],
+    ), WATCHDOG_DEBUG);
+  }
+
+  if (!array_key_exists($roleruleevaluation[0], $attributes)) {
+    return FALSE;
+  }
+  $attribute = $attributes[$roleruleevaluation[0]];
+
+  switch ($roleruleevaluation[1]) {
+    case '=':
+      return in_array($roleruleevaluation[2], $attribute);
+
+    case '@=':
+      $dc = explode('@', $attribute[0]);
+      if (count($dc) != 2) {
+        return FALSE;
+      }
+
+      return $dc[1] == $roleruleevaluation[2];
+
+    case '~=':
+      foreach ($attribute as $subattr) {
+        $pos = strpos($subattr, $roleruleevaluation[2]);
+        if ($pos !== FALSE) {
+          return TRUE;
+        }
+      }
+      return FALSE;
+  }
+
+  return FALSE;
+}
+
+/**
+ * Performs role population.
+ *
+ * @param array $rolemap
+ *   A string containing the role map.
+ *
+ * @return array
+ *   An array containing user's roles.
+ */
+function stanford_simplesamlphp_auth_rolepopulation($rolemap) {
+  $saml = stanford_simplesamlphp_auth_get_saml_info();
+  $source = $saml['source'];
+  $attributes = $saml["attributes"];
+  $roles = array();
+
+  // Check if valid local session exists..
+  if (!empty($rolemap) && $source->isAuthenticated()) {
+    $rolerules = explode('|', $rolemap);
+
+    foreach ($rolerules as $rolerule) {
+
+      $roleruledecompose = explode(':', $rolerule, 2);
+      $roleid = $roleruledecompose[0];
+      $roleruleevaluations = explode(';', $roleruledecompose[1]);
+      $addnew = TRUE;
+
+      foreach ($roleruleevaluations as $roleruleevaluation) {
+        $roleruleevaluationdc = str_getcsv($roleruleevaluation);
+        if (!stanford_simplesamlphp_auth_evaulaterolerule($roleruleevaluationdc, $attributes)) {
+          $addnew = FALSE;
+        }
+      }
+
+      if ($addnew) {
+        $roles[$roleid] = $roleid;
+      }
+
+    }
+  }
+
+  return $roles;
+}

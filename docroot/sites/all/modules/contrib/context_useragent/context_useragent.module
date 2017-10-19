@@ -1,0 +1,59 @@
+<?php
+/**
+ * @file context_useragent.module
+ *    Adds useragent conditions to Context
+ */
+
+
+/**
+ * Make module compatible with context 3
+ * implement hook_ctools_plugin_api().
+ */
+function context_useragent_ctools_plugin_api($module, $api) {
+  if ($module == 'context' && $api == 'plugins') {
+    return array('version' => 3);
+  }
+}
+
+/**
+ * Make module compatible with context 3
+ * Implement hook_context_plugins().
+ */
+function context_useragent_context_plugins() {
+  $plugins = array();
+  $plugins['context_condition_useragent'] = array(
+    'handler' => array(
+      'path' => drupal_get_path('module', 'context_useragent'),
+      'file' =>  'context_condition_useragent.inc',
+      'class' => 'context_condition_useragent',
+      'parent' => 'context_condition',
+    ),
+  );
+
+  return $plugins;
+}
+
+/**
+ * Make module compatible with context 3
+ * Implement hook_context_registry().
+ */
+function context_useragent_context_registry() {
+  $registry['conditions'] = array(
+    'useragent' => array(
+      'title' => t('Useragent string'),
+      'description' => t("Set context based on the browser's useragent string."),
+      'plugin' => 'context_condition_useragent',
+    ),
+  );
+  return $registry;
+}
+
+/**
+ * Implementation of hook_context_page_reaction()
+ * adds context based on the browser useragent string.
+ */
+function context_useragent_context_page_condition() {
+  if ($plugin = context_get_plugin('condition', 'useragent')) {
+    $plugin->execute();
+  }
+}

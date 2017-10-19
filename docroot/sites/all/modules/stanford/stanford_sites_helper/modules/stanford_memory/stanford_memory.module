@@ -1,0 +1,14 @@
+<?php
+/**
+ * @file
+ * Code for the Stanford Memory Booster module.
+ */
+
+/**
+ * Implements hook_init().
+ */
+function stanford_memory_init() {
+  // set the memory_limit to what we set the variable as, or else grab it from the PHP config
+  $memory_limit = variable_get('stanford_memory_limit', ini_get('memory_limit'));
+  ini_set('memory_limit', $memory_limit);
+}

@@ -1,0 +1,42 @@
+.header-bkg .navbar {
+    margin-bottom: 10px;
+}
+.header-bkg .site-main-menu {
+    border-top: 1px solid $clr-line;
+}
+.navbar .nav > li > a {
+    padding-bottom: .25em;
+    border-bottom: 5px solid transparent;
+}
+.navbar .nav > .active > a, 
+.navbar .nav > .active > a:hover, 
+.navbar .nav > .active > a:focus, 
+.navbar .nav > li > a:focus, 
+.navbar .nav > li > a:hover {
+    border-bottom: 5px solid $clr-menu-link-border;
+}
+.site-footer {
+    color: $clr-page-bkg;
+}
+.site-footer .block h2 {
+    color: $clr-page-bkg;
+}
+.site-footer a, 
+.site-footer a:hover, 
+.site-footer a:focus, 
+.site-footer a.active {
+    color: $clr-page-bkg;
+}
+.site-footer a:hover, 
+.site-footer a:focus, 
+.site-footer a.active {
+    text-decoration: underline;
+}
+@media (max-width: 767px) {
+    .navbar .btn-navbar {
+        background: $clr-footer-bkg;
+    }
+}
+.well .caption {
+    color: darken( $clr-icons, 25% );
+}

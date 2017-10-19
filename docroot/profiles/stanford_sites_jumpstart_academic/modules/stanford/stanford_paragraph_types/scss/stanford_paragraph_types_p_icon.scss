@@ -1,0 +1,149 @@
+
+.paragraphs-item-p-icon {
+  text-align: center;
+  line-height: 1em;
+
+  .field-collection-view.span4:nth-child(3n+1) {
+    clear: none;
+  }
+
+  i,
+  .field-name-field-p-icon-image {
+    font-size: 80px;
+    height: 160px;
+    width: 160px;
+    border-radius: 80px;
+    position: relative;
+    margin-bottom: -2.5px;
+  }
+
+  i::before {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  .content div.field-name-field-p-icon-image {
+    height: 160px;
+    width: 160px;
+    border-radius: 80px;
+    display: table;
+    margin: 0 auto;
+
+    > div {
+      display: table-cell;
+      vertical-align: middle;
+    }
+
+    img {
+      height: 80px;
+      width: 80px;
+    }
+  }
+
+  .field-name-field-p-icon-title {
+    margin: 20px 0;
+  }
+
+  .field-name-field-p-icon-links {
+    margin-bottom: 20px;
+  }
+
+  .color-red {
+    i,
+    .field-name-field-p-icon-image {
+      background-color: #8c1515;
+      color: #ffffff;
+    }
+  }
+
+  .color-black {
+    i,
+    .field-name-field-p-icon-image {
+      background-color: #000000;
+      color: #ffffff;
+    }
+  }
+
+  .color-white {
+    i,
+    .field-name-field-p-icon-image {
+      background-color: #ffffff;
+      color: #000000;
+    }
+  }
+
+  .color-cool-gray {
+    i,
+    .field-name-field-p-icon-image {
+      background-color: #4d4f53;
+      color: #ffffff;
+    }
+  }
+
+  .color-dark-taupe {
+    i,
+    .field-name-field-p-icon-image {
+      background-color: #928b81;
+      color: #ffffff;
+    }
+  }
+
+  .color-light-taupe {
+    i,
+    .field-name-field-p-icon-image {
+      background-color: #d5d0c0;
+      color: #ffffff;
+    }
+  }
+
+  .color-deep-blue {
+    i,
+    .field-name-field-p-icon-image {
+      background-color: #006374;
+      color: #ffffff;
+    }
+  }
+
+  .color-deep-purple {
+    i,
+    .field-name-field-p-icon-image {
+      background-color: #53284f;
+      color: #ffffff;
+    }
+
+  }
+
+  .color-bright-green {
+    i,
+    .field-name-field-p-icon-image {
+      background-color: #009b76;
+      color: #ffffff;
+    }
+  }
+
+  .color-bright-blue {
+    i,
+    .field-name-field-p-icon-image {
+      background-color: #0f6c91;
+      color: #ffffff;
+    }
+  }
+
+  .color-bright-yellow {
+    i,
+    .field-name-field-p-icon-image {
+      background-color: #eaab00;
+      color: #ffffff;
+    }
+  }
+
+  .color-bright-orange {
+    i,
+    .field-name-field-p-icon-image {
+      background-color: #e98300;
+      color: #ffffff;
+    }
+  }
+}

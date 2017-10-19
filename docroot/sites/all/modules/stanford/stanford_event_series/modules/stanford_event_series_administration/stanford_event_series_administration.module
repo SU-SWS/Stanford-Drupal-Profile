@@ -1,0 +1,59 @@
+<?php
+/**
+ * @file
+ * Code for the Stanford Event Series Administration feature.
+ */
+
+include_once 'stanford_event_series_administration.features.inc';
+
+/**
+ * Implementation of hook_views_pre_render().
+ */
+function stanford_event_series_administration_views_pre_view(&$view) {
+
+  /**
+   * Add event series column to manage events view.
+   * @var [type]
+   */
+  if ($view->name == 'stanford_events_manage' && $view->current_display == "page") {
+
+    // Get all of the page fields.
+    $items = $view->get_items("field", "page");
+
+    // Let us re-arrange the fields.
+    foreach ($items as $field_name => $value) {
+
+      // Got to remove the item to change the order.
+      $view->set_item("page", "field", $field_name, NULL);
+
+      // If the field is the event type field we want to insert the series after.
+      if ($field_name == "field_s_event_type") {
+        // Set the event field type first.
+        $view->set_item("page", "field", $field_name, $value);
+
+        // Then create the multiple value field using UL list.
+        $view->add_item($view->current_display, 'field', 'field_data_field_s_event_series', 'field_s_event_series', array(
+          'label' => t('Event series'),
+          'element_default_classes' => 1,
+          'element_label_colon' => 0,
+          'hide_empty' => 1,
+          'settings' => array(
+            'link' => 1,
+          ),
+          'group_type' => "group",
+          'group_rows' => 1,
+          'multi_type' => "ul",
+        ),
+        'field_s_event_series');
+
+        continue;
+      }
+
+      // All other items just get saved in the same order.
+      $view->set_item("page", "field", $field_name, $value);
+
+    }
+
+  }
+
+}

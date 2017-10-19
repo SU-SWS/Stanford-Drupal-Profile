@@ -1,0 +1,7 @@
+<?php
+/**
+ * @file
+ * Code for the Stanford Event Series Event List View feature.
+ */
+
+include_once 'stanford_event_series_event_list_view.features.inc';

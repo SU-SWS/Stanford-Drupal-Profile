@@ -1,0 +1,24 @@
+<?php
+/**
+ * @file
+ */
+
+/**
+ * Implements hook_requirements().
+ */
+function stanford_news_extras_views_requirements($phase) {
+  $requirements = array();
+  // Ensure translations don't break at install time
+  $t = get_t();
+
+  if ($phase == 'install') {
+    if (module_exists('stanford_news_views')) {
+      $requirements['stanford_news_extras_views'] = array(
+        'title' => $t('Stanford News Extras Views'), 
+        'value' => $t('Stanford News Extras Views is not compatible with Stanford News Views. Please disable Stanford News Views if you wish to use this module'), 
+        'severity' => REQUIREMENT_ERROR, 
+      );
+    }
+  }
+  return $requirements;
+}

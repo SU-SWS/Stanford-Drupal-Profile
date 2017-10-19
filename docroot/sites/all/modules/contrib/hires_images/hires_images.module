@@ -1,0 +1,52 @@
+<?php
+/**
+ * @file
+ * Main module file for Hi-Res Images.
+ */
+
+/**
+ * Implements hook_image_effect_info().
+ */
+function hires_images_image_effect_info() {
+  $effects = array(
+    'image_hires' => array(
+      'label' => t("Hi-Res (x2)"),
+      'help' => t("<img> dimensions will be half the dimensions of the styled image."),
+      'effect callback' => 'hires_images_effect',
+      'dimensions callback' => 'hires_images_dimensions',
+    ),
+  );
+
+  return $effects;
+}
+
+/**
+ * Image effect callback; Hi-Res.
+ *
+ * @param $image
+ *   An image object returned by image_load().
+ * @param $data
+ *   An array of attributes to use when performing the effect.
+ *
+ * @return
+ *   TRUE on success. FALSE on failure to resize image.
+ */
+function hires_images_effect($image, array $data) {
+  return TRUE;
+}
+
+/**
+ * Image dimensions callback; Hi-Res.
+ *
+ * @param $dimensions
+ *   Dimensions to be modified - an array with components width and height, in
+ *   pixels.
+ * @param $data
+ *   An array of attributes to use when performing the effect.
+ */
+function hires_images_dimensions(array &$dimensions, array $data) {
+  if (isset($dimensions['width']) && isset($dimensions['height'])) {
+    $dimensions['width'] /= 2;
+    $dimensions['height'] /= 2;
+  }
+}

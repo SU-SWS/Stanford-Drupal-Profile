@@ -1,0 +1,9 @@
+{
+  "require": {
+    "drupal/drupal-extension": "@dev",
+    "lakion/mink-debug-extension": "^1.0.3"
+  },
+  "config": {
+    "bin-dir": "bin/"
+  }
+}

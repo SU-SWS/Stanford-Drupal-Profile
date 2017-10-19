@@ -1,0 +1,7 @@
+<?php
+/**
+ * @file
+ * Code for the Stanford publication landing page context feature.
+ */
+
+include_once 'stanford_publication_landing_page_context.features.inc';

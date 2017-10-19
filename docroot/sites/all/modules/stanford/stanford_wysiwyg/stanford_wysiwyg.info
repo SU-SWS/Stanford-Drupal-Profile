@@ -1,0 +1,25 @@
+name = Stanford WYSIWYG
+description = Baseline WYSIWYG Feature
+core = 7.x
+package = Stanford
+version = 7.x-2.4
+project = stanford_wysiwyg
+project status url = https://github.com/SU-SWS/stanford_wysiwyg
+dependencies[] = better_formats
+dependencies[] = features
+dependencies[] = pathologic
+dependencies[] = stanford_easy_wysiwyg_css
+dependencies[] = wysiwyg (>=2.2)
+dependencies[] = wysiwyg_filter
+features[features_api][] = api:2
+features[filter][] = content_editor_text_format
+features[wysiwyg][] = content_editor_text_format
+features[user_permission][] = administer filters
+features[user_permission][] = show format selection for node
+features[user_permission][] = show format selection for taxonomy_term
+features[user_permission][] = show format selection for user
+features[user_permission][] = show format tips
+features[user_permission][] = show more format tips link
+features[user_permission][] = use text format content_editor_text_format
+features[user_permission][] = use text format filtered_html
+features[user_permission][] = use text format full_html

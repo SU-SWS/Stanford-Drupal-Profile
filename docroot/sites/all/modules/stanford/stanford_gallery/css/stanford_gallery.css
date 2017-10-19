@@ -1,0 +1,116 @@
+/**
+ * Some Base Settings
+ */
+/* line 10, stanford_gallery.scss */
+.node-stanford-gallery .field-name-field-s-gallery-image-info > .field-items > .field-item {
+  display: -moz-inline-stack;
+  display: inline-block;
+  vertical-align: middle;
+  *vertical-align: auto;
+  zoom: 1;
+  *display: inline;
+  vertical-align: top;
+}
+/* line 13, stanford_gallery.scss */
+.node-stanford-gallery .field-name-field-s-gallery-image-info > .field-items > .field-item img {
+  max-width: 100%;
+  width: 100%;
+  height: auto;
+}
+/* line 18, stanford_gallery.scss */
+.node-stanford-gallery .field-name-field-s-gallery-image-info > .field-items > .field-item a.stanford-gallery-image {
+  border: 0;
+  margin: 0;
+}
+/* line 21, stanford_gallery.scss */
+.node-stanford-gallery .field-name-field-s-gallery-image-info > .field-items > .field-item a.stanford-gallery-image :hover {
+  border: solid 2px #8c1515;
+  margin: -2px;
+  opacity: .9;
+}
+
+/* Hover States For Design Options */
+/* line 36, stanford_gallery.scss */
+.style-custom-styles-dark .node-stanford-gallery .field-name-field-s-gallery-image-info > .field-items > .field-item a.stanford-gallery-image :hover,
+.style-custom-styles-contrast .node-stanford-gallery .field-name-field-s-gallery-image-info > .field-items > .field-item a.stanford-gallery-image :hover {
+  border: solid 2px #b3995d;
+}
+
+/* line 40, stanford_gallery.scss */
+.style-custom-styles-rich .node-stanford-gallery .field-name-field-s-gallery-image-info > .field-items > .field-item a.stanford-gallery-image :hover {
+  border: solid 2px #5e4a1b;
+}
+
+/* line 44, stanford_gallery.scss */
+.style-custom-styles-bright .node-stanford-gallery .field-name-field-s-gallery-image-info > .field-items > .field-item a.stanford-gallery-image :hover {
+  border: solid 2px #ffce49;
+}
+
+/**
+ * View Modes
+ */
+/* line 56, stanford_gallery.scss */
+.field-collection-view.view-mode-gallery-large {
+  display: -moz-inline-stack;
+  display: inline-block;
+  vertical-align: middle;
+  *vertical-align: auto;
+  zoom: 1;
+  *display: inline;
+  padding: 0 1em 0.5em 0;
+}
+/* line 60, stanford_gallery.scss */
+.field-collection-view.view-mode-gallery-large .field-name-field-s-image-credits,
+.field-collection-view.view-mode-gallery-large .field-name-field-s-image-caption {
+  max-width: 270px;
+}
+/* line 63, stanford_gallery.scss */
+.field-collection-view.view-mode-gallery-large .field-name-field-s-image-credits {
+  display: none;
+}
+/* line 69, stanford_gallery.scss */
+.field-collection-view.view-mode-gallery-medium {
+  display: -moz-inline-stack;
+  display: inline-block;
+  vertical-align: middle;
+  *vertical-align: auto;
+  zoom: 1;
+  *display: inline;
+  padding: 0 1em 0.5em 0;
+}
+/* line 73, stanford_gallery.scss */
+.field-collection-view.view-mode-gallery-medium .field-name-field-s-image-credits,
+.field-collection-view.view-mode-gallery-medium .field-name-field-s-image-caption {
+  max-width: 140px;
+}
+/* line 76, stanford_gallery.scss */
+.field-collection-view.view-mode-gallery-medium .field-name-field-s-image-credits {
+  display: none;
+}
+/* line 82, stanford_gallery.scss */
+.field-collection-view.view-mode-gallery-small {
+  display: -moz-inline-stack;
+  display: inline-block;
+  vertical-align: middle;
+  *vertical-align: auto;
+  zoom: 1;
+  *display: inline;
+  padding: 0 1em 0.5em 0;
+}
+/* line 86, stanford_gallery.scss */
+.field-collection-view.view-mode-gallery-small .field-name-field-s-image-credits,
+.field-collection-view.view-mode-gallery-small .field-name-field-s-image-caption {
+  max-width: 100px;
+}
+/* line 89, stanford_gallery.scss */
+.field-collection-view.view-mode-gallery-small .field-name-field-s-image-credits {
+  display: none;
+}
+
+/* line 97, stanford_gallery.scss */
+#cboxTitle .caption {
+  font-size: 1em;
+  color: #000000;
+  font-weight: 600;
+  font-style: normal;
+}

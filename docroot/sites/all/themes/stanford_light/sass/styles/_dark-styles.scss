@@ -1,0 +1,56 @@
+.header-bkg .navbar {
+    margin-bottom: 10px;
+}
+.header-bkg .site-main-menu {
+    border-top: 1px solid $clr-line;
+}
+.navbar .nav > li > a {
+    padding-bottom: .25em;
+    border-bottom: 5px solid transparent;
+}
+.navbar .nav > .active > a, 
+.navbar .nav > .active > a:hover, 
+.navbar .nav > .active > a:focus, 
+.navbar .nav > li > a:focus, 
+.navbar .nav > li > a:hover {
+    border-bottom: 5px solid $clr-menu-link-border;
+}
+a.btn, 
+.btn a {
+    border: 1px solid transparent;
+}
+a.btn:hover, 
+a.btn:focus, 
+.btn a:hover, 
+.btn a:focus {
+    border: 1px solid $clr-text;
+}
+@media (max-width: 767px) {
+    .navbar .btn-navbar {
+        background: $clr-btn-bkg;
+        border: 1px solid transparent;
+    }
+    .navbar .btn-navbar:hover, 
+    .navbar .btn-navbar:focus, 
+    .navbar .btn-navbar:active, 
+    .navbar .btn-navbar.active, 
+    .navbar .btn-navbar.disabled, 
+    .navbar .btn-navbar[disabled] {
+        background: $clr-btn-bkg-hvr;
+        border: 1px solid $clr-text;
+    }
+}
+.nav > li > a:hover, 
+.nav > li > a:focus {
+    color: $clr-well-bkg;
+}
+.dropdown-menu {
+    background: $clr-text;
+}
+.dropdown-menu > li > a:hover, 
+.dropdown-menu > li > a:focus, 
+.dropdown-submenu:hover > a, 
+.dropdown-submenu:focus > a {
+    color: $clr-text;
+    background: $clr-header-bkg;
+}

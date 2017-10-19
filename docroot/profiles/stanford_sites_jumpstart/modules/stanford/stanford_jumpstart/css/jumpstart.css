@@ -1,0 +1,189 @@
+@charset "UTF-8";
+/* Jumpstart CSS */
+
+/* Homepage banner */
+.banner-overlay p {font-size:14px;}
+.page-node .content-body .bean-stanford-banner .field {margin-bottom:0;}
+
+/* Format default image, caption, and credits on Stanford Page */
+.node .group_s_postcard_image, .node .group-s-postcard-image {width:283px; float:right; margin-left:20px; margin-bottom:20px; max-width: 50%;}
+.page-node #content-body .group_s_postcard_image .field, .page-node #content-body .group-s-postcard-image .field {margin-bottom:0px;}
+.node .group_s_postcard_image, .node .group-s-postcard-image { margin-bottom: 0px; margin-left: 0px; width: auto; }
+.node .group_s_postcard_image .field-collection-container > .field > .field-items > .field-item, .node .group-s-postcard-image .field-collection-container > .field > .field-items > .field-item { margin-left:1em; margin-bottom: 1em; max-width: 270px; }
+.page-node .content-body .group_s_postcard_content .field, .page-node .content-body .group-s-postcard-content .field {margin-bottom:0;}
+.page-node .content-body .postcard-left-wrap > div:first-child, .page-node .content-body .postcard-left > div:first-child { margin-bottom: 1em; margin-right: 1em; }
+
+/* In Stanford Page node body, make sure images are never wider than node body */
+.node .group_s_postcard_content img, .node .group-s-postcard-content img {max-width:100%;}
+
+/* Hide menu tabs on homepage */
+.front #content-head .tabs {display:none;}
+
+/* Contact us block */
+.field-group-div.group-s-contact-us-address {margin-bottom:0.8em;}
+
+/* Map block */
+#content-body #block-bean-jumpstart-location-map-block .content h2 {margin-top:1em;}
+
+/* Footer text size */
+#footer .block {font-size: 12px;}
+
+/* Hide contextual editor on search box */
+html.js .region-search-box div.contextual-links-wrapper {display:none;}
+
+/* Media queries */
+@media (max-width: 767px) {
+/* Footer blocks to single column */
+#footer-content .block {width:100%;}
+}
+@media (max-width: 640px) {
+.node .group_s_postcard_image, .node .group-s-postcard-image {max-width:50%;}
+#main-menu .contextual-links-wrapper {display:none;}
+}
+@media (max-width: 480px;) {
+.view-mode-stanford-8-col-banner img {width:100%;}
+.page-node .content-body .view-mode-stanford-8-col-banner .field, #main-content .view-mode-stanford-8-col-banner .border-simple img {margin-bottom: 0;}
+}
+@media (max-width: 300px) {
+.node .group_s_postcard_image, .node .group-s-postcard-image {max-width:100%;}
+.node .group_s_postcard_image .field-collection-container > .field > .field-items > .field-item, .node .group-s-postcard-image .field-collection-container > .field > .field-items > .field-item { margin-left: 0; }
+}
+
+/* ----- Features styles --------- */
+
+/* News */
+.node-stanford-news-item .field-name-field-s-news-categories {margin-top:1em;}
+.node-stanford-news-item .field-name-field-s-news-categories .field-item, .node-stanford-news-item .field-name-field-s-news-date, .node-stanford-news-item .field-name-field-s-news-source {display:inline-block;}
+.node-stanford-news-item .field-name-field-s-news-source { padding-left:5px; border-left:1px solid #585754; margin-left:5px;}
+.node.node-stanford-news-item .group_s_postcard_image, .node.node-stanford-news-item .group-s-postcard-image { margin-left: 15px; margin-bottom: 15px; }
+
+/* Courses */
+.view-id-courses table td:last-child { font-size: 12px; letter-spacing: 0.04em; line-height: 1.5em; margin-bottom: 4px; text-transform: uppercase; color: #585754; }
+.view-id-courses table td:first-child a {color:#8c1515; font-size: 18px; line-height: 1.3em; font-weight: 600;}
+.view-id-courses table td:first-child a:hover, .view-id-courses table td:first-child a:active, .view-id-courses table td:first-child a:focus {color: #2e2d29;}
+#block-views-exp-courses-search-page .views-submit-button {clear:left;}
+
+/* Events */
+.content-body .view-stanford-events-calendar .view-header ul.pager {display:none;}
+.page-node .content-body .view-stanford-events-views .postcard-left > div:first-child { margin-bottom: 0;}
+.node-type-stanford-event .group_floatright.float-right, .node-type-stanford-event .group-floatright.float-right { max-width: 50%; }
+.date-stacked {background-color: #d7d4c8; min-width: 30px; padding: 8px 10px 10px; text-align: center; margin-right:10px;}
+.date-month {font-size: 12px; font-weight: 500; letter-spacing: 0.05em; line-height: 12px; text-transform: uppercase;}
+.date-day { font-size: 25px; font-weight: 300; line-height: 18px;}
+/* Mini-calendar navigtaion */
+.calendar-calendar td.mini a, .calendar-calendar td.mini .mini-day-off { font-weight: 600; text-decoration:none; padding: 4px 8px 21px 4px !important; text-align: right; display:block; color: #000000; }
+.calendar-calendar .mini td { text-align:center; border:1px solid #FFFFFF;background:#F2F1EB; }
+.calendar-calendar .mini td.has-events {background:#DAD7CB;}
+.calendar-calendar .mini td.today {background:#8c1515;}
+.calendar-calendar td.mini .mini-day-off { color: #000000; }
+.calendar-calendar td.today .mini-day-off { color: #ffffff; }
+.calendar-calendar tr td.has-events a:hover { background: #8C1515; color: #FFFFFF; }
+.calendar-calendar table.mini td .month { font-size:10px; line-height:16px; padding:0; }
+.calendar-calendar tr td.today a, .calendar-calendar tr td.today a:hover {background: none repeat scroll 0 0 #8C1515; color:#FFFFFF;}
+.calendar-calendar table.mini td.empty {background: #DAD7CB;}
+.calendar-calendar th.days { background:#F2F1EB; border:0; padding:4px; font-size:9px; color:#343434; }
+.view-stanford-events-calendar .date-nav-wrapper {background:#F2F1EB; }
+.view-stanford-events-calendar .date-nav-wrapper .date-nav {margin-bottom: 0; padding-bottom: 5px; padding-top: 10px;}
+.view-stanford-events-calendar .date-nav-wrapper .date-nav .date-heading a { color: #8c1515; font-weight: normal;}
+.view-stanford-events-calendar .date-nav-wrapper .date-nav .date-heading a:hover {color:#8a1515;}
+.view-stanford-events-calendar .date-nav-wrapper .date-nav .pager {background: none; border-bottom: 0; border-top: 0; padding-bottom: 0; padding-top: 0;}
+.view-stanford-events-calendar .date-nav-wrapper .date-nav .pager li.date-prev, .view-stanford-events-calendar .date-nav-wrapper .date-nav .pager li.date-next {margin-top: 6px; background: none repeat scroll 0 0 transparent;}
+.view-stanford-events-calendar .date-nav-wrapper .date-nav .pager li.date-prev a, .view-stanford-events-calendar .date-nav-wrapper .date-nav .pager li.date-next a {height: 14px; width: 3px;}
+.view-stanford-events-calendar .date-nav-wrapper .date-nav .pager li.date-prev {left:4px;}
+.view-stanford-events-calendar .date-nav-wrapper .date-nav .pager li.date-next {right:4px;}
+.view-stanford-events-calendar .date-nav-wrapper .date-nav .pager li.date-prev a, .view-stanford-events-calendar .date-nav-wrapper .date-nav .pager li.date-next a {background: white; border-radius: 15px 15px 15px 15px; color: #DAD7CB; font-size: 1.5em; padding: 3px 15px 11px 11px;}
+.view .date-nav-wrapper .date-next a {margin-right:-10px;}
+.view .date-nav-wrapper .date-prev a {margin-left:-10px;}
+.view-stanford-events-calendar .date-nav-wrapper .date-nav .pager li.date-prev a:hover, .view-stanford-events-calendar .date-nav-wrapper .date-nav .pager li.date-next a:hover {background-color: #8c1515; color:white;}
+.calendar-calendar tr td.today, .calendar-calendar tr.odd td.today, .calendar-calendar tr.even td.today {background-color:#8c1515; color:#ffffff;}
+ul.pager li div.ajax-progress-throbber {display:none;} /* hide the throbber */
+
+@media (max-width: 767px) {
+.calendar-calendar td.mini a, .calendar-calendar td.mini .mini-day-off {padding:4px 4px 10px 4px !important;}
+.calendar-calendar table.mini td .month {line-height:1em;}
+.calendar-calendar .mini td {display:table-cell;}
+.calendar-calendar table.mini td.empty {height:100%;}
+.calendar-calendar th.days {display:table-cell;}
+}
+@media (max-width: 480px) {
+.node-type-stanford-event .row-fluid .node .group_floatright.float-right, .node-type-stanford-event .row-fluid .node .group-floatright.float-right { float: none !important; margin-left:0; max-width:100%; width: 100%; }
+}
+
+/* People */
+.node-type-stanford-person h1.title {display:none;}
+.node-type-stanford-person .node .field-name-field-s-person-faculty-type {font-size:1.5em;}
+.node-type-stanford-person .content-body .field.field-name-field-s-person-profile-picture {margin-bottom:0;}
+.view-stanford-person-faculty .faculty-type, .view-stanford-person-staff .title-dept {margin-bottom: 0.5em; font-style:italic;}
+.page-node.node-type-stanford-person .content-body .postcard-left > div:first-child { max-width: 50%; }
+.node-type-stanford-person #main-content .postcard-left > div:first-child .border-simple-nowidth img { margin:0;}
+@media (max-width: 480px) {
+.page-node.node-type-stanford-person .content-body .postcard-left > div:first-child { display:block; float: none; margin-right:0; max-width:100%; width: 100%; }
+}
+
+/* Publications */
+.view-publications .views-field-field-s-image-info img {margin-bottom:0.5em;}
+.view-publications.view-display-id-block_4 h3.normal-link {margin-bottom:0;}
+.node-type-stanford-publication .node .group_s_postcard_image .field-collection-container > .field > .field-items > .field-item, .node-type-stanford-publication .node .group-s-postcard-image .field-collection-container > .field > .field-items > .field-item { margin-left:0em; }
+
+
+/* ----- Admin Shortcuts bar --------- */
+
+/* Hide headers */
+#admin-shortcuts h2 {display:none;}
+#admin-shortcuts .block {display: inline-block; position: relative;}
+
+/* Hide editing of these blocks */
+#admin-shortcuts .block .contextual-links-wrapper {display:none;}
+
+/* Home block */
+#admin-shortcuts .block.shortcuts-home { top: -9px;}
+#admin-shortcuts .shortcuts-home .content a { background-image: url("../images/home.png"); color: transparent; display: inline-block; font-size: 0; height: 25px; padding: 0; width: 30px; }
+#admin-shortcuts .shortcuts-home .content a:hover { background-image: url("../images/home.png"); }
+
+/* Hello, gorgeous and logout */
+#block-stanford-jumpstart-shortcuts-hello {float:right; margin-top: 6px;}
+#admin-shortcuts .shortcuts-user, #admin-shortcuts .shortcuts-logout { display:inline-block; }
+#admin-shortcuts .content .shortcuts-user a {text-decoration:underline; margin-right: 10px; padding: 0;}
+#admin-shortcuts .content .shortcuts-user a:hover {background: transparent;  color: #CCCCCC;}
+#admin-shortcuts .content .shortcuts-user a {display:inline;}
+#admin-shortcuts .shortcuts-user .field-content a {display: inline-block; padding: 0; margin-bottom: 2px;}
+#admin-shortcuts .shortcuts-user .content a:hover {text-decoration:underline;}
+
+/* Launch status ribbon block */
+#admin-shortcuts .shortcuts-launch-block { background-image: url("../images/launch-block-border.png"); background-position: center bottom; border-left: 1px solid black; border-right: 1px solid black; padding-bottom: 15px; position: absolute; right: 50px; top: 0; width: 150px; z-index: 100; }
+#admin-shortcuts .shortcuts-launch-block .content {background-color: #A32A2A; padding:10px; text-align:center;}
+#admin-shortcuts .shortcuts-launch-block .nextstep { border-bottom: 1px solid #611616; border-top: 1px solid #611616; color: #611616; display: block; font-size: 10px; font-weight: bold; letter-spacing: 0.03em; margin-bottom: 5px; text-transform: uppercase; }
+#admin-shortcuts .shortcuts-launch-block .content a { background: none repeat scroll 0 0 #222222; border: medium none; -webkit-border-radius: 8px; -moz-border-radius: 8px; border-radius: 8px; display: block; font-weight: bold; margin-top: 5px; }
+#admin-shortcuts .shortcuts-launch-block .content a:hover {background: none repeat scroll 0 0 #4D4F53;}
+
+/* Responsive admin shortcuts */
+@media (max-width: 979px) {
+#admin-shortcuts .content a, #admin-shortcuts .shortcuts-user {margin-bottom: 7px;}
+#block-stanford-jumpstart-shortcuts-hello {float:none; margin-top: auto; margin-left: 1em;}
+}
+@media (max-width: 640px) {
+#admin-shortcuts .shortcuts-launch-block {display:none;}
+#admin-shortcuts .region-admin-shortcuts {max-width:100%;}
+}
+
+/* ----- Styles to move to Stanford Seven theme ----- */
+.page-admin-stanford-jumpstart h2:first-child {margin-top: 0.5em;}
+.page-admin-stanford-jumpstart h2 {margin-top:1.5em;}
+.page-admin-stanford-jumpstart a.btn-request {background-color: green; color: white; padding:8px 15px; -webkit-border-radius: 4px; -moz-border-radius: 4px; border-radius: 4px; display:inline-block;}
+.page-admin-stanford-jumpstart a:hover.btn-request {background-color:#284D15; text-decoration:none;}
+.page-admin-stanford-jumpstart td {vertical-align:top; border-top:1px solid #E8E8E8; border-left:none; border-right:none; padding-left: 0; padding-right: 30px;}
+.page-admin-stanford-jumpstart tr td:last-child {border-right:none;}
+.page-admin-stanford-jumpstart-features td .btn-request {margin-top:45px; text-align:center; display:block;}
+.page-admin-stanford-jumpstart-features table {border-bottom: 1px solid #E8E8E8 !important; margin-bottom:3em; margin-top:2em; }
+.page-admin-stanford-jumpstart .block-extrainfo {width:40%; border:1px solid #E8E8E8; float:right; padding:5px 20px 15px 20px; background-color:#FAFAFA; margin-bottom: 30px; clear:right;}
+.page-admin-stanford-jumpstart .block-extrainfo-full {border:1px solid #E8E8E8; padding:5px 20px 15px 20px; background-color:#FAFAFA;}
+
+/* Dropdown menu behavior for Admin Shortcuts region */
+.region-admin-shortcuts .shortcuts-dropdown ul.nav ul {display:none; position: absolute; top: 100%;}
+.region-admin-shortcuts .shortcuts-dropdown ul.nav ul li {float: none; position: relative;}
+.region-admin-shortcuts .shortcuts-dropdown ul.nav ul li a {margin-bottom: 5px; margin-left: 7px; min-width: 150px;}
+.region-admin-shortcuts .shortcuts-dropdown ul.nav ul li.first a {margin-top: 4px;}
+.region-admin-shortcuts .shortcuts-dropdown ul.nav ul li.last a {margin-bottom: 10px;}
+.region-admin-shortcuts .shortcuts-dropdown ul.nav li.expanded > a:after {background-image: url("../images/expanded-arrow.png"); background-position: center center; background-repeat: no-repeat; content: ""; display: inline-block; height: 5px; margin-left: 5px; padding-bottom: 2px; width: 13px;}
+.region-admin-shortcuts .shortcuts-dropdown ul.nav li a {display: block; padding: 25px 40px;}
+.region-admin-shortcuts .shortcuts-dropdown ul.nav li:hover > ul {display:block; display: block; z-index: 100; border: 1px solid rgba(0, 0, 0, 0.2);  -webkit-border-radius: 6px; -moz-border-radius: 6px; border-radius: 6px;  -moz-box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2); -webkit-box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2); box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);}

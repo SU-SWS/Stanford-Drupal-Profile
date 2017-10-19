@@ -1,0 +1,16 @@
+Stanford Easy Wysiwyg CSS
+-----------------------------------------------------
+
+7.x-1.2                                    2016.05.30
+-----------------------------------------------------
+- CSS injector sorting fixes
+
+7.x-1.1                                    2015.06.25
+-----------------------------------------------------
+* Updated documentation
+* Added drupal static to css_alter hook to avoid multiple var_get calls
+* Handle errors mo betta
+
+7.x-1.0                                March 19, 2015
+-----------------------------------------------------
+* Initial release

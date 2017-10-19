@@ -1,0 +1,7 @@
+<?php
+/**
+ * @file
+ * Code for the Stanford Publication Views Brief List Reference feature.
+ */
+
+include_once 'stanford_publication_views_brief_list_reference.features.inc';

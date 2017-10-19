@@ -1,0 +1,26 @@
+<?php
+/**
+ * @file
+ * Code for the newrelic_appname module.
+ *
+ */
+
+/**
+ * Implements hook_boot().
+ *
+ * Set the appname for NewRelic.
+ */
+function newrelic_appname_boot() {
+  if (function_exists('newrelic_set_appname')) {
+    // This allows us to set a different appname of our choosing.
+    $appname = variable_get('newrelic_appname');
+    // Otherwise, get the current working directory.
+    if (empty($appname)) {
+      $appname = check_plain(getcwd());
+      $appname = preg_replace('/\/var\/www\//', "", $appname);
+      $appname = preg_replace('/\/public_html/', "", $appname);
+    }
+    newrelic_set_appname($appname);
+    variable_set('newrelic_appname', $appname);
+  }
+}

@@ -1,0 +1,39 @@
+Stanford SimpleSAML PHP x.x-x.x, xxxx-xx-xx
+-------------------------------------------
+
+Stanford SimpleSAML PHP 7.x-2.1         2016-10-13
+--------------------------------------------------
+- Added code climate yaml file
+- Protection on form alter for installation when everything is not available.
+  This is to prevent a php critical error bug that was stopping installation
+  profiles in their tracks.
+- HSDO-435: Fixes for missing email attribute. Sometimes a person does not have
+  an email attribute but they always have a sunetid. We can cheat an email with
+  using the sunet and appending @stanford.edu
+- Upgrade path from previous simplesamlphp_auth module. Changes the authmaps to
+  the new goodness.
+- HSDO-510: HTTP/HTTPS redirect and redirect on login functionality. So you get
+  where you are going and are no longer presented an access denied error.
+
+Stanford SimpleSAML PHP 7.x-2.0         2016-08-22
+--------------------------------------------------
+
+A complete re-write!
+We brought in all of the goodness of Webauth in to
+the simplesamlphp auth module and made it even
+better!
+
+Features include:
+- Role Mappings
+- Add SSO User form
+- Configuration over login form
+- Automatic provisioning and control over username,
+  email, and unique id settings in SAML
+- Configuration for HTTPS requirements and user
+  page caching
+- Drush commands for creating users and role
+  mappings.
+
+Stanford SimpleSAML PHP 7.x-1.0-alpha1, 2015-05-26
+--------------------------------------------------
+Initial alpha release

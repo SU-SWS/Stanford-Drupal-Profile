@@ -1,0 +1,5 @@
+name = Stanford Sites System Tools
+description = Miscellaneous functions to make the hosting service easier to use and manage. This module cannot be disabled.
+package = Stanford
+core = 7.x
+version = 7.x-1.3

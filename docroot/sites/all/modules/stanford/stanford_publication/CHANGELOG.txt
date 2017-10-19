@@ -1,0 +1,78 @@
+Stanford Publication x.x-x.x, xxxx-xx-xx
+----------------------------------------
+
+Stanford Publication 7.x-2.2, 2016-05-30
+-----------------------------------------------
+- SOE-485: Removed SQL rewrite from views
+- added spacing to sidebar block to address #145
+- Update human-readable name of the module
+- changed image from small profile to small scaled
+- Buh-bye foreign keys
+
+Stanford Publication 7.x-2.1, 2015-06-26
+-----------------------------------------------
+- Added caching to lots of views.
+
+Stanford Publication 7.x-2.0, 2014-11-27
+-----------------------------------------------
+
+- Added caching, and added divs to make view more accessible. HISTORY-2, HISTORY-29 and HISTORY-30
+- HISTORY-26 and HISTORY-25 fixes
+- Change view more link to sentence case
+- HISTORY-2: Added dependency to context, ctools, views, and stanford_publications_landing_page
+- Removed project path
+- Added stanford_publication_landing_page_context context
+- HISTORY-2: added dependency on stanford_person_reference and ctools
+- HISTORY-2: Changed the image size to icon-profile, added dependency on stanford_person_reference and ctools
+- HISTORY-2: Added view for listing publications but with no body text.
+- HISTORY-2: Added view for listing publications
+- BASIC-858 and BASIC-854 remove empty courses block from people, change the publications landing page to display an event 20.
+- Changed the image view mode for the publication to stanford_large_scaled
+- Switched author search into a combined field to search on both the author link and author fields
+- BASIC-1057 | removed 300_flex_width_no_caption image style because it was missing and set to large-scaled
+- BASIC-1035 | Added Type exposed filter, Type column, Modify Type, default sort is now last updated date
+- Update and rename README.txt to README.md
+- Update stanford_publication.info
+
+
+Stanford Publication 7.x-2.0-alpha2, 2014-05-16
+-----------------------------------------------
+  - ARTDEPT-237 | Changed more link to sentence case
+
+Stanford Publication 7.x-2.0-alpha1, 2014-03-11
+-----------------------------------------------
+  -Features 2.x Compatible Version
+  -Consolidated all publication feature modules into sub modules
+  -Updated node view
+  -New publication views person reference sub module and views
+  -Updated context layout & new context layout
+  -Updated image styles
+  -Updated field weights
+  -Split out views into multiple feature modules
+
+Stanford Publication 7.x-1.0-alpha5, 2013-10-14
+-----------------------------------------------
+Changes since 7.x-1.0-alpha4:
+  -Updates to Views
+  -Changes to fields and field groups
+  -Code cleanup
+
+Stanford Publication 7.x-1.0-alpha4, 2013-08-19
+-----------------------------------------------
+Changes since 7.x-1.0-alpha3:
+  -Added Views
+  -Changes to fields
+  -Added Field Groups
+
+Stanford Publication 7.x-1.0-alpha3, 2013-05-16
+-----------------------------------------------
+Changed machine name of content type to stanford_publication
+Added Description field to Document filefield
+
+Stanford Publication 7.x-1.0-alpha2, 2013-05-15
+-----------------------------------------------
+Added "Publication Type" term reference field to content type
+
+Stanford Publication 7.x-1.0-alpha1, 2013-05-14
+-----------------------------------------------
+Initial release. Content type and vocabulary only.

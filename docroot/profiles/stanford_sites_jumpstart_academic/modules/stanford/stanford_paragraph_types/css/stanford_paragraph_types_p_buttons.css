@@ -1,0 +1,22 @@
+.paragraphs-item-p-buttons {
+  text-align: center;
+}
+.paragraphs-item-p-buttons .field-item {
+  margin-bottom: 30px;
+}
+.paragraphs-item-p-buttons .btn a,
+.paragraphs-item-p-buttons a.btn {
+  padding: 1.5em 2em;
+  font-size: 1.2em;
+  line-height: 1.2em;
+}
+@media (max-width: 767px) {
+  .paragraphs-item-p-buttons {
+    padding: 0 1em;
+  }
+  .paragraphs-item-p-buttons .btn a,
+  .paragraphs-item-p-buttons a.btn {
+    width: 100%;
+    padding: 1.5em 0;
+  }
+}

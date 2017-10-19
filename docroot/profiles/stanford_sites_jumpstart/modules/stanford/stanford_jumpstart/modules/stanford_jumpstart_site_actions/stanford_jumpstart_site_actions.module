@@ -1,0 +1,32 @@
+<?php
+/**
+ * @file
+ */
+
+/**
+ * Implements hook_menu().
+ */
+function stanford_jumpstart_site_actions_menu() {
+// Site actions edit contact block
+  $items['admin/stanford/jumpstart/shortcuts/site-actions/contact-block'] = array(
+    'title' => 'Edit Contact Information',
+    'page callback' => 'drupal_goto',
+    'page arguments' => array('block/jumpstart-footer-contact-block/edit'),
+    'access arguments' => array('edit any stanford_contact bean'),
+    'type' => MENU_NORMAL_ITEM,
+    'menu_name' => 'menu-admin-shortcuts',
+    'weight' => -45,
+  );
+
+  // Edit social media links
+  $items['admin/stanford/jumpstart/shortcuts/site-actions/social-block'] = array(
+    'title' => 'Edit Social Media Links',
+    'page callback' => 'drupal_goto',
+    'page arguments' => array('block/jumpstart-footer-social-media--0/edit'),
+    'access arguments' => array('edit any stanford_social_media_connect bean'),
+    'type' => MENU_NORMAL_ITEM,
+    'menu_name' => 'menu-admin-shortcuts',
+    'weight' => -44,
+  );
+  return $items;
+}

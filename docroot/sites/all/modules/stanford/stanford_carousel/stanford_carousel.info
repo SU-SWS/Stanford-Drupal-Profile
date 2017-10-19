@@ -1,0 +1,14 @@
+name = Stanford Carousel
+description = Bootstrap based slide show view using the Stanford Slide content type
+core = 7.x
+package = Stanford
+version = 7.x-2.3
+project = stanford_carousel
+dependencies[] = stanford_slides
+dependencies[] = views
+scripts[] = js/stanford_carousel.js
+stylesheets[all][] = css/stanford_carousel.css
+features[ctools][] = views:views_default:3.0
+features[features_api][] = api:2
+features[views_view][] = stanford_carousel
+project status url = https://github.com/SU-SWS/stanford_carousel

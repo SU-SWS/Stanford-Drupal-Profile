@@ -1,0 +1,7 @@
+<?php
+/**
+ * @file
+ * Code for the Stanford Gallery Administration feature.
+ */
+
+include_once 'stanford_gallery_administration.features.inc';

@@ -1,0 +1,49 @@
+/* WebAuth Authentication */
+ .region-site-login .block-webauth h2 {
+    display: none;
+}
+/* User Login */
+ .region-site-login .block-user {
+    display: table;
+    float: right;
+    text-align: left;
+    margin-bottom: 10px;
+}
+.region-site-login .block-user h2 {
+    display: none;
+}
+.region-site-login .block-user form {
+    display: table-row;
+}
+.region-site-login .block-user .form-item {
+    display: table-cell;
+    padding-right: 10px;
+}
+.region-site-login .block-user .form-item input {
+    width: 120px;
+}
+.region-site-login .block-user .item-list {
+    display: none;
+}
+.region-site-login .block-user .form-actions {
+    display: table-cell;
+    vertical-align: bottom;
+}
+@media (max-width: 480px) {
+    .region-site-login .block-user {
+        display: block;
+        float: none;
+    }
+    .region-site-login .block-user form {
+        display: block;
+    }
+    .region-site-login .block-user .form-item {
+        display: block;
+    }
+    .region-site-login .block-user .form-item input {
+        width: 100%;
+    }
+    .region-site-login .block-user .form-actions {
+        display: block;
+    }
+}

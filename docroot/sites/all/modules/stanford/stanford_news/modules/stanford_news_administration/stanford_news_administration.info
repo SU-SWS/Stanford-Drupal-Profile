@@ -1,0 +1,13 @@
+name = Stanford News Administration
+description = Provides the manage content view for administering news items
+core = 7.x
+package = Stanford
+version = 7.x-3.3+8-dev
+project = stanford_news_administration
+dependencies[] = ctools
+dependencies[] = views
+dependencies[] = stanford_news
+features[ctools][] = views:views_default:3.0
+features[features_api][] = api:2
+features[views_view][] = admin_manage_stanford_news_item
+project status url = https://github.com/SU-SWS/stanford_news.git

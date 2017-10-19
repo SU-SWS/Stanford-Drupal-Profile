@@ -1,0 +1,7 @@
+<?php
+/**
+ * @file
+ * Code for the Stanford Course Views feature.
+ */
+
+include_once 'stanford_courses_administration.features.inc';

@@ -1,0 +1,522 @@
+<?php
+/**
+ * Implementation of hook_ctools_plugin_api().
+ */
+function context_useragent_defaults_ctools_plugin_api() {
+  list($module, $api) = func_get_args();
+  if ($module == "context" && $api == "context") {
+    return array("version" => 3);
+  }
+}
+
+/**
+ * Implementation of hook_context_default_contexts().
+ */
+function context_useragent_defaults_context_default_contexts() {
+  $export = array();
+  $context = new stdClass;
+  $context->disabled = FALSE;
+  $context->api_version = 3;
+  $context->name = 'useragent_os_linux';
+  $context->description = '';
+  $context->tag = 'useragent';
+  $context->conditions = array(
+    'useragent' => array(
+      'values' => array(
+        0 => 'Linux',
+      ),
+    ),
+  );
+  $context->reactions = array(
+    'theme' => array(
+      'title' => '',
+      'subtitle' => '',
+      'class' => 'linux',
+    ),
+  );
+  $context->condition_mode = 0;
+  t('useragent');
+  $export['useragent_os_linux'] = $context;
+
+  $context = new stdClass;
+  $context->disabled = FALSE;
+  $context->api_version = 3;
+  $context->name = 'useragent_os_mac';
+  $context->description = '';
+  $context->tag = 'useragent';
+  $context->conditions = array(
+    'useragent' => array(
+      'values' => array(
+        0 => 'Mac',
+      ),
+    ),
+  );
+  $context->reactions = array(
+    'theme' => array(
+      'title' => '',
+      'subtitle' => '',
+      'class' => 'mac',
+    ),
+  );
+  $context->condition_mode = 0;
+  t('useragent');
+  $export['useragent_os_mac'] = $context;
+
+  $context = new stdClass;
+  $context->disabled = FALSE;
+  $context->api_version = 3;
+  $context->name = 'useragent_os_windows';
+  $context->description = '';
+  $context->tag = 'useragent';
+  $context->conditions = array(
+    'useragent' => array(
+      'values' => array(
+        0 => 'Windows',
+      ),
+    ),
+  );
+  $context->reactions = array(
+    'theme' => array(
+      'title' => '',
+      'subtitle' => '',
+      'class' => 'windows',
+    ),
+  );
+  $context->condition_mode = 0;
+  t('useragent');
+  $export['useragent_os_windows'] = $context;
+
+  $context = new stdClass;
+  $context->disabled = FALSE;
+  $context->api_version = 3;
+  $context->name = 'useragent_browser_chrome';
+  $context->description = '';
+  $context->tag = 'useragent';
+  $context->conditions = array(
+    'useragent' => array(
+      'values' => array(
+        0 => 'Chrome',
+      ),
+    ),
+  );
+  $context->reactions = array(
+    'theme' => array(
+      'title' => '',
+      'subtitle' => '',
+      'class' => 'chrome',
+    ),
+  );
+  $context->condition_mode = 0;
+  t('useragent');
+  $export['useragent_browser_chrome'] = $context;
+
+  $context = new stdClass;
+  $context->disabled = FALSE;
+  $context->api_version = 3;
+  $context->name = 'useragent_browser_chrome-6';
+  $context->description = '';
+  $context->tag = 'useragent';
+  $context->conditions = array(
+    'useragent' => array(
+      'values' => array(
+        0 => 'Chrome\\/6',
+      ),
+    ),
+  );
+  $context->reactions = array(
+    'theme' => array(
+      'title' => '',
+      'subtitle' => '',
+      'class' => 'ch-6',
+    ),
+  );
+  $context->condition_mode = 0;
+  t('useragent');
+  $export['useragent_browser_chrome-6'] = $context;
+
+  $context = new stdClass;
+  $context->disabled = FALSE;
+  $context->api_version = 3;
+  $context->name = 'useragent_browser_chrome-7';
+  $context->description = '';
+  $context->tag = 'useragent';
+  $context->conditions = array(
+    'useragent' => array(
+      'values' => array(
+        0 => 'Chrome\\/7',
+      ),
+    ),
+  );
+  $context->reactions = array(
+    'theme' => array(
+      'title' => '',
+      'subtitle' => '',
+      'class' => 'ch-7',
+    ),
+  );
+  $context->condition_mode = 0;
+  t('useragent');
+  $export['useragent_browser_chrome-7'] = $context;
+
+  $context = new stdClass;
+  $context->disabled = FALSE;
+  $context->api_version = 3;
+  $context->name = 'useragent_browser_firefox';
+  $context->description = '';
+  $context->tag = 'useragent';
+  $context->conditions = array(
+    'useragent' => array(
+      'values' => array(
+        0 => 'Firefox',
+      ),
+    ),
+  );
+  $context->reactions = array(
+    'theme' => array(
+      'title' => '',
+      'subtitle' => '',
+      'class' => 'firefox',
+    ),
+  );
+  $context->condition_mode = 0;
+  t('useragent');
+  $export['useragent_browser_firefox'] = $context;
+
+  $context = new stdClass;
+  $context->disabled = FALSE;
+  $context->api_version = 3;
+  $context->name = 'useragent_browser_firefox-2';
+  $context->description = '';
+  $context->tag = 'useragent';
+  $context->conditions = array(
+    'useragent' => array(
+      'values' => array(
+        0 => 'Firefox\\/2',
+      ),
+    ),
+  );
+  $context->reactions = array(
+    'theme' => array(
+      'title' => '',
+      'subtitle' => '',
+      'class' => 'fx-2',
+    ),
+  );
+  $context->condition_mode = 0;
+  t('useragent');
+  $export['useragent_browser_firefox-2'] = $context;
+
+  $context = new stdClass;
+  $context->disabled = FALSE;
+  $context->api_version = 3;
+  $context->name = 'useragent_browser_firefox-3';
+  $context->description = '';
+  $context->tag = 'useragent';
+  $context->conditions = array(
+    'useragent' => array(
+      'values' => array(
+        0 => 'Firefox\\/3',
+      ),
+    ),
+  );
+  $context->reactions = array(
+    'theme' => array(
+      'title' => '',
+      'subtitle' => '',
+      'class' => 'fx-3',
+    ),
+  );
+  $context->condition_mode = 0;
+  t('useragent');
+  $export['useragent_browser_firefox-3'] = $context;
+
+  $context = new stdClass;
+  $context->disabled = FALSE;
+  $context->api_version = 3;
+  $context->name = 'useragent_browser_firefox-4';
+  $context->description = '';
+  $context->tag = 'useragent';
+  $context->conditions = array(
+    'useragent' => array(
+      'values' => array(
+        0 => 'Firefox\\/4',
+      ),
+    ),
+  );
+  $context->reactions = array(
+    'theme' => array(
+      'title' => '',
+      'subtitle' => '',
+      'class' => 'fx-4',
+    ),
+  );
+  $context->condition_mode = 0;
+  t('useragent');
+  $export['useragent_browser_firefox-4'] = $context;
+
+  $context = new stdClass;
+  $context->disabled = FALSE;
+  $context->api_version = 3;
+  $context->name = 'useragent_browser_msie';
+  $context->description = '';
+  $context->tag = 'useragent';
+  $context->conditions = array(
+    'useragent' => array(
+      'values' => array(
+        0 => 'MSIE',
+      ),
+    ),
+  );
+  $context->reactions = array(
+    'theme' => array(
+      'title' => '',
+      'subtitle' => '',
+      'class' => 'msie',
+    ),
+  );
+  $context->condition_mode = 0;
+  t('useragent');
+  $export['useragent_browser_msie'] = $context;
+
+  $context = new stdClass;
+  $context->disabled = FALSE;
+  $context->api_version = 3;
+  $context->name = 'useragent_browser_msie-6';
+  $context->description = '';
+  $context->tag = 'useragent';
+  $context->conditions = array(
+    'useragent' => array(
+      'values' => array(
+        0 => 'MSIE 6',
+      ),
+    ),
+  );
+  $context->reactions = array(
+    'theme' => array(
+      'title' => '',
+      'subtitle' => '',
+      'class' => 'ie6',
+    ),
+  );
+  $context->condition_mode = 0;
+  t('useragent');
+  $export['useragent_browser_msie-6'] = $context;
+
+  $context = new stdClass;
+  $context->disabled = FALSE;
+  $context->api_version = 3;
+  $context->name = 'useragent_browser_msie-7';
+  $context->description = '';
+  $context->tag = 'useragent';
+  $context->conditions = array(
+    'useragent' => array(
+      'values' => array(
+        0 => 'MSIE 7',
+      ),
+    ),
+  );
+  $context->reactions = array(
+    'theme' => array(
+      'title' => '',
+      'subtitle' => '',
+      'class' => 'ie7',
+    ),
+  );
+  $context->condition_mode = 0;
+  t('useragent');
+  $export['useragent_browser_msie-7'] = $context;
+
+  $context = new stdClass;
+  $context->disabled = FALSE;
+  $context->api_version = 3;
+  $context->name = 'useragent_browser_msie-8';
+  $context->description = '';
+  $context->tag = 'useragent';
+  $context->conditions = array(
+    'useragent' => array(
+      'values' => array(
+        0 => 'MSIE 8',
+      ),
+    ),
+  );
+  $context->reactions = array(
+    'theme' => array(
+      'title' => '',
+      'subtitle' => '',
+      'class' => 'ie8',
+    ),
+  );
+  $context->condition_mode = 0;
+  t('useragent');
+  $export['useragent_browser_msie-8'] = $context;
+
+  $context = new stdClass;
+  $context->disabled = FALSE;
+  $context->api_version = 3;
+  $context->name = 'useragent_browser_opera';
+  $context->description = '';
+  $context->tag = 'useragent';
+  $context->conditions = array(
+    'useragent' => array(
+      'values' => array(
+        0 => 'Opera',
+      ),
+    ),
+  );
+  $context->reactions = array(
+    'theme' => array(
+      'title' => '',
+      'subtitle' => '',
+      'class' => 'opera',
+    ),
+  );
+  $context->condition_mode = 0;
+  t('useragent');
+  $export['useragent_browser_opera'] = $context;
+
+  $context = new stdClass;
+  $context->disabled = FALSE;
+  $context->api_version = 3;
+  $context->name = 'useragent_browser_opera-9';
+  $context->description = '';
+  $context->tag = 'useragent';
+  $context->conditions = array(
+    'useragent' => array(
+      'values' => array(
+        0 => 'Opera\\/9',
+      ),
+    ),
+  );
+  $context->reactions = array(
+    'theme' => array(
+      'title' => '',
+      'subtitle' => '',
+      'class' => 'op-9',
+    ),
+  );
+  $context->condition_mode = 0;
+  t('useragent');
+  $export['useragent_browser_opera-9'] = $context;
+
+  $context = new stdClass;
+  $context->disabled = FALSE;
+  $context->api_version = 3;
+  $context->name = 'useragent_browser_opera10';
+  $context->description = '';
+  $context->tag = 'useragent';
+  $context->conditions = array(
+    'useragent' => array(
+      'values' => array(
+        0 => 'Opera\\/10',
+      ),
+    ),
+  );
+  $context->reactions = array(
+    'theme' => array(
+      'title' => '',
+      'subtitle' => '',
+      'class' => 'op-10',
+    ),
+  );
+  $context->condition_mode = 0;
+  t('useragent');
+  $export['useragent_browser_opera10'] = $context;
+
+  $context = new stdClass;
+  $context->disabled = FALSE;
+  $context->api_version = 3;
+  $context->name = 'useragent_browser_safari';
+  $context->description = '';
+  $context->tag = 'useragent';
+  $context->conditions = array(
+    'useragent' => array(
+      'values' => array(
+        0 => 'Safari',
+      ),
+    ),
+  );
+  $context->reactions = array(
+    'theme' => array(
+      'title' => '',
+      'subtitle' => '',
+      'class' => 'safari',
+    ),
+  );
+  $context->condition_mode = 0;
+  t('useragent');
+  $export['useragent_browser_safari'] = $context;
+
+  $context = new stdClass;
+  $context->disabled = FALSE;
+  $context->api_version = 3;
+  $context->name = 'useragent_browser_safari-3';
+  $context->description = '';
+  $context->tag = 'useragent';
+  $context->conditions = array(
+    'useragent' => array(
+      'values' => array(
+        0 => 'Safari(.*)Version\\/3',
+      ),
+    ),
+  );
+  $context->reactions = array(
+    'theme' => array(
+      'title' => '',
+      'subtitle' => '',
+      'class' => 'sf-3',
+    ),
+  );
+  $context->condition_mode = 0;
+  t('useragent');
+  $export['useragent_browser_safari-3'] = $context;
+
+  $context = new stdClass;
+  $context->disabled = FALSE;
+  $context->api_version = 3;
+  $context->name = 'useragent_browser_safari-4';
+  $context->description = '';
+  $context->tag = 'useragent';
+  $context->conditions = array(
+    'useragent' => array(
+      'values' => array(
+        0 => 'Safari(.*)Version\\/4',
+      ),
+    ),
+  );
+  $context->reactions = array(
+    'theme' => array(
+      'title' => '',
+      'subtitle' => '',
+      'class' => 'sf-4',
+    ),
+  );
+  $context->condition_mode = 0;
+  t('useragent');
+  $export['useragent_browser_safari-4'] = $context;
+
+  $context = new stdClass;
+  $context->disabled = FALSE;
+  $context->api_version = 3;
+  $context->name = 'useragent_browser_safari-5';
+  $context->description = '';
+  $context->tag = 'useragent';
+  $context->conditions = array(
+    'useragent' => array(
+      'values' => array(
+        0 => 'Safari(.*)Version\\/5',
+      ),
+    ),
+  );
+  $context->reactions = array(
+    'theme' => array(
+      'title' => '',
+      'subtitle' => '',
+      'class' => 'sf-5',
+    ),
+  );
+  $context->condition_mode = 0;
+  t('useragent');
+  $export['useragent_browser_safari-5'] = $context;
+
+  return $export;
+}

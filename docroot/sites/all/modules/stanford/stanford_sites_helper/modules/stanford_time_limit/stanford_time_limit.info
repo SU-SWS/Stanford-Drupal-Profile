@@ -1,0 +1,6 @@
+name = "Stanford Time Limit Booster"
+description = "Allows system admins to boost the time limit for a site"
+package = "Stanford"
+core = 7.x
+version = 7.x-1.7
+hidden = TRUE

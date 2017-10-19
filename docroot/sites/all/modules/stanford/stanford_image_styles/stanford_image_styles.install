@@ -1,0 +1,26 @@
+<?php
+
+/**
+ * @file
+ * Install functions.
+ */
+
+/**
+ * Flush all the image styles and ensure the new dependency is enabled.
+ */
+function stanford_image_styles_update_7400(&$sandbox) {
+
+  // Turn on the hires_images module as it is a new dependency.
+  if (!module_exists('hires_images')) {
+    if (!module_enable(array('hires_images'))) {
+      watchdog('stanford_image_styles', 'Could not enable hires_images module');
+      throw new DrupalUpdateException("Could not enable hires_images module. Please check that the module exists.");
+    }
+    else {
+      watchdog('stanford_image_styles', 'Enabled hires_images module.');
+    }
+  }
+
+  // Flush all the image styles.
+  image_style_flush(array());
+}

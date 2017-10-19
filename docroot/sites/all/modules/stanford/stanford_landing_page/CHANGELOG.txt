@@ -1,0 +1,49 @@
+Stanford Landing Page
+------------------------------------------------------
+
+
+7.x-1.4+3-dev                              2016-06-08
+------------------------------------------------------
+- BASIC-2027: Fix up column class for titles
+
+7.x-1.4                                    2015-11-10
+------------------------------------------------------
+- Added pathauto pattern
+- Set create new revision as true for default
+- Changed help text on field Lead text
+
+7.x-1.3                                    2015-06-26
+------------------------------------------------------
+- VPSADEV-327: Removed title links on list and blocks view modes
+- Clean up of removed view modes and actions
+- VPSADEV-67: Added secondary links field to feature
+- VPSADEV-67: Hide/show secondary links on cards select and enforce a url for primary on cards layout
+- Removed numbered guide and callouts view modes
+- Reverted lost VBO options
+- VPSADEV-146: Added author to exposed filters of manage view and row counter
+- Handle field formatter language values with grace
+- CSS Fixes
+
+7.x-1.2                                     2015-06-26
+------------------------------------------------------
+ - Changed default sorting to descending for changed date
+ - Removed field_s_page_manager_information from the convert fields
+ - Layout field is set to list by default
+
+7.x-1.1                                     2014-11-05
+------------------------------------------------------
+ - PHP Notice bug fixes
+ - CAW-171: Provide easy node convert from stanford page to stanford landing page
+ - CAW-171: Removed convert option from create new stanford page form
+ - CAW-171: Adjusted permissions on node convert form
+ - Created new field formatter for title field to be able to be linked elsewhere
+ - CAW-261: New title link formatter module in place
+ - CSS Fixes
+ - CAW-275: Fixed bug with double html encoding on links
+ - BASIC-909: Added permission to view/use the vertical tab convert
+ - BASIC-909: Created node convert bypass function that skips node_convert permission checks.
+ - CAW-364 | changed default sort to updated date
+
+7.x-1.0                                     2014-11-05
+------------------------------------------------------
+ - Initial Release

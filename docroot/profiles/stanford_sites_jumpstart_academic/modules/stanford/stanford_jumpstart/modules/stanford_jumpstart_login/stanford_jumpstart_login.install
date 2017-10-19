@@ -1,0 +1,59 @@
+<?php
+/**
+ * @file
+ * Schema definitions. Install/update/uninstall hooks.
+ */
+/**
+ * Implements hook_requirements().
+ */
+function stanford_jumpstart_login_requirements($phase) {
+  $auth_scheme = variable_get('stanford_sites_auth_method', 'webauth');
+  $requirements = array();
+
+  switch ($phase) {
+    case 'install':
+      $t = get_t();
+      // At least one of the following modules is required in order for
+      // stanford_jumpstart_login to function properly.
+      // See https://www.drupal.org/node/2042693.
+      $singularly_required_modules = array(
+        'webauth',
+        'stanford_ssp',
+      );
+      // If this module is being installed as part of a Drupal installation,
+      //  check for the existence of required modules without relying on the
+      //  "module_exists()" function, which will always return false for these
+      //  modules during a Drupal installation.
+      if (drupal_installation_attempted()) {
+        $files = drupal_system_listing('/^' . DRUPAL_PHP_FUNCTION_PATTERN . '\.info$/', 'modules', 'name', 0);
+        foreach ($singularly_required_modules as $module_name) {
+          if (isset($files[$module_name])) {
+            $requirements['stanford_jumpstart_login']['severity'] = REQUIREMENT_OK;
+            break;
+          }
+        }
+      }
+      // If this module is being installed manually (after Drupal has been
+      //  installed), check to ensure that one of the required modules exists
+      //  and is enabled.
+      else {
+        foreach ($singularly_required_modules as $module_name) {
+          if (module_exists($module_name)) {
+            $requirements['stanford_jumpstart_login']['severity'] = REQUIREMENT_OK;
+            break;
+          }
+        }
+      }
+
+      if (!isset($requirements['stanford_jumpstart_login']['severity'])) {
+        $requirements['stanford_jumpstart_login']['severity'] = REQUIREMENT_ERROR;
+        $requirements['stanford_jumpstart_login']['description'] = $t(
+          'Neither the WebAuth Module for Drupal nor the Stanford SimpleSAML PHP module are installed or activated.
+          Stanford Jumpstart Login needs at least one of those modules to work.'
+        );
+      }
+
+    break;
+  }
+  return $requirements;
+}

@@ -1,0 +1,1055 @@
+<?php
+
+/**
+ * @file
+ * Test file for Workbench Access.
+ */
+
+abstract class WorkbenchAccessTestCase extends DrupalWebTestCase {
+  protected $user_list;
+  protected $editor_role;
+  protected $permissions;
+
+  function setUp() {
+    parent::setUp(array('workbench_access', 'workbench_access_test'));
+    // Add an editor role.
+    $this->permissions = array(
+      'access content',
+      'create page content',
+      'edit any page content',
+      'delete any page content',
+      'access workbench access by role',
+    );
+
+    $this->editor_role = $this->drupalCreateRole($this->permissions);
+  }
+
+  /**
+   * Helper function to create nodes.
+   */
+  function createWorkbenchAccessNodes($count = 10) {
+    // Create some nodes.
+    for ($i = 0; $i < $count; $i++) {
+      $settings = array(
+        'type' => 'page',
+        'title' => $this->randomName(32),
+        'body' => array(LANGUAGE_NONE => array(array($this->randomName(64)))),
+        'promote' => 1,
+      );
+      $this->drupalCreateNode($settings);
+    }
+  }
+
+  /**
+   * Helper function to create users.
+   */
+  function createWorkbenchAccessUsers($count = 10) {
+    for ($i = 0; $i < $count; $i++) {
+      // Using drupalCreateUser runs tests we don't want.
+      $edit = array(
+        'name' => $this->randomName(32),
+        'mail' => $this->randomName(32) . '@example.com',
+        'roles' => drupal_map_assoc(array(DRUPAL_AUTHENTICATED_RID, $this->editor_role)),
+        'status' => 1,
+        'pass' => 'fubar',
+      );
+      $this->user_list[] = user_save(NULL, $edit);
+    }
+  }
+
+  /**
+   * Helper function for form introspection.
+   *
+   * Forms are sensitive to the global user account, so we must reset it when
+   * using this technique.
+   *
+   * @param $uid
+   *   A user id representing the account to test.
+   * @param $type
+   *   The node type of the form.
+   */
+  public function workbenchAccessNodeForm($uid, $type) {
+    $temp = $GLOBALS['user'];
+    $user = user_load($uid, TRUE);
+    $GLOBALS['user'] = $user;
+    $node = (object) array('uid' => $user->uid, 'name' => (isset($user->name) ? $user->name : ''), 'type' => $type, 'language' => LANGUAGE_NONE);
+    module_load_include('inc', 'node', 'node.pages');
+    $form = drupal_get_form($type . '_node_form', $node);
+    $GLOBALS['user'] = $temp;
+    return $form;
+  }
+
+  /**
+   * Simple method for running the same node access checks repeatedly.
+   *
+   * @param $nodes
+   *  The nodes to check. If one fails, the test fails.
+   * @param $account
+   *  The user account being tested.
+   * @param $message
+   *  The string to prefix in front of the test result message.
+   * @param $true
+   *  Boolean indicator that we want to test TRUE or FALSE on this test.
+   */
+  function assertWorkbenchAccessCheck($nodes, $account, $message, $true = TRUE) {
+    // Since we change conditions, reset node access.
+    drupal_static_reset('node_access');
+    // Check the node operations.
+    $actions = array('create', 'update', 'delete');
+    foreach ($actions as $action) {
+      foreach ($nodes as $node) {
+        $status[$action] = FALSE;
+        if ($action == 'create') {
+          $result = node_access($action, $node->type, $account);
+        }
+        else {
+          $result = node_access($action, $node, $account);
+        }
+        if ($result) {
+          $status[$action] = TRUE;
+          break;
+        }
+      }
+      if ($true) {
+        $this->assertTrue(!empty($status[$action]), t('@message. Test user can @action content.', array('@message' => $message, '@action' => $action)));
+      }
+      else {
+        $this->assertTrue(empty($status[$action]), t('@message. Test user cannot @action content.', array('@message' => $message, '@action' => $action)));
+      }
+    }
+  }
+
+  /**
+   * Any tests that can be abstracted should go here in a new method.
+   */
+  function assertWorkbenchScheme($scheme, $root = 'workbench_access') {
+    workbench_access_reset_tree();
+    $active = workbench_access_get_active_tree();
+    $this->assertTrue(!empty($active['access_scheme']), t('Active access scheme set.'));
+    $this->assertTrue(!empty($active['tree']), t('Active access tree set.'));
+    $this->assertTrue(!empty($active['active']), t('Active access sections set.'));
+    $this->assertTrue($active['access_scheme']['access_scheme'] == $scheme, t('Using %scheme access scheme.', array('%scheme' => $scheme)));
+    $this->assertTrue(in_array($root, $active['access_scheme']['access_type_id']), t('Using Workbench Access test scheme.'));
+    $this->assertTrue(isset($active['tree'][$root]), t('Tree returned correctly.'));
+  }
+
+  /**
+   * Helper method for grabbing a new user from the list.
+   *
+   * @param $id
+   *   The array key of the current user being tested.
+   *
+   * @return
+   *   A user account from the user list.
+   */
+  function getWorkbenchAccessUser($id = NULL) {
+    if (is_null($id)) {
+      $id = array_rand($this->user_list);
+    }
+    elseif ($id < (count($this->user_list) - 1)) {
+      $id++;
+    }
+    else {
+      $id--;
+    }
+    $account = $this->user_list[$id];
+    // Store the id key for later lookups.
+    $account->testId = $id;
+    return $account;
+  }
+}
+
+class WorkbenchAccessBaseTestCase extends WorkbenchAccessTestCase {
+  public static function getInfo() {
+    return array(
+      'name' => 'Workbench access installation',
+      'description' => 'Test installation for Workbench Access.',
+      'group' => 'Workbench Access'
+    );
+  }
+
+  function testWorkbenchAccessInstall() {
+    // Create some nodes and users.
+    $this->createWorkbenchAccessNodes();
+    $this->createWorkbenchAccessUsers();
+    // Check for user creation.
+    $this->assertTrue(count($this->user_list) == 10, t('Ten new users were created.'));
+    $this->assertTrue(!empty($this->editor_role), t('Created editor role.'));
+    // Check for node creation.
+    $count = db_query("SELECT COUNT(n.nid) FROM {node} n")->fetchField();
+    $this->assertTrue($count == 10, t('Ten initial nodes created.'));
+    $nid = db_query_range("SELECT n.nid FROM {node} n INNER JOIN {workbench_access_node} wan ON n.nid = wan.nid", 0, 1)->fetchField();
+    $this->assertTrue(empty($nid), t('Initial nodes have no access data.'));
+  }
+}
+
+class WorkbenchAccessTaxonomyTestCase extends WorkbenchAccessTestCase {
+  public static function getInfo() {
+    return array(
+      'name' => 'Workbench access taxonomy',
+      'description' => 'Test Taxonomy access control rules for Workbench Access.',
+      'group' => 'Workbench Access'
+    );
+  }
+
+  // Base test for installation.
+  function testWorkbenchAccessTaxonomy() {
+    // Create some nodes and users.
+    $this->createWorkbenchAccessNodes();
+    $this->createWorkbenchAccessUsers();
+    // Create the taxonomy test scheme.
+    module_load_include('inc', 'workbench_access', 'workbench_access.admin');
+    workbench_access_example_taxonomy();
+    $count = db_query("SELECT COUNT(n.nid) FROM {node} n INNER JOIN {workbench_access_node} wan ON n.nid = wan.nid")->fetchField();
+    $this->assertTrue($count == 10, t('Initial nodes assigned access data.'));
+
+    // Check that the vocabulary is setup correctly.
+    $this->assertWorkbenchScheme('taxonomy');
+
+    // Check that nodes have been assigned to the top-level item.
+    $count = db_query("SELECT COUNT(n.nid) FROM {node} n INNER JOIN {workbench_access_node} wan ON n.nid = wan.nid WHERE wan.access_id = 'workbench_access' AND wan.access_scheme = 'taxonomy'")->fetchField();
+    $this->assertTrue($count == 10, t('Initial nodes assigned to top-level hierarchy.'));
+
+    // Test access settings of user 1.
+    $account = user_load(1, TRUE);
+    $this->assertTrue(!empty($account->workbench_access['workbench_access']), t('User 1 assigned to top-level hierarchy.'));
+
+    // Change the machine_name of the vocabulary and check that we track
+    // the change. See https://drupal.org/node/1779502
+    $vocabulary = taxonomy_vocabulary_machine_name_load('workbench_access');
+    $vocabulary->machine_name = 'workbench_access_foo';
+    taxonomy_vocabulary_save($vocabulary);
+
+    // Check that the vocabulary is setup correctly.
+    workbench_access_reset_tree();
+    $active = workbench_access_get_active_tree();
+
+    // Check that we reset properly.
+    $this->assertTrue(isset($active['tree']['workbench_access_foo']) && $active['active'][1]['access_type_id'] == 'workbench_access_foo', t('Updated vocabulary machine_name successfully.'));
+    // Check that nodes have been assigned to the top-level item.
+    $count = db_query("SELECT COUNT(n.nid) FROM {node} n INNER JOIN {workbench_access_node} wan ON n.nid = wan.nid WHERE wan.access_id = 'workbench_access_foo' AND wan.access_scheme = 'taxonomy'")->fetchField();
+    $this->assertTrue($count == 10, t('Initial nodes re-assigned to top-level hierarchy.'));
+    // Test access settings of user 1.
+    $account = user_load(1, TRUE);
+    $this->assertTrue(!empty($account->workbench_access['workbench_access_foo']), t('User 1 re-assigned to top-level hierarchy.'));
+
+    // Set things back.
+    $vocabulary->machine_name = 'workbench_access';
+    taxonomy_vocabulary_save($vocabulary);
+    workbench_access_reset_tree();
+
+    // Assign a user to a section and check permissions.
+    // This is a multi-step check.
+
+    // First, the user should not be able to do anything (Create, Update or Delete).
+    $account = $this->getWorkbenchAccessUser();
+    $id = $account->testId;
+    $this->assertTrue(empty($account->workbench_access['workbench_access']), t('Test user not assigned to a section.'));
+    $nids = db_query("SELECT nid FROM {node}")->fetchAllAssoc('nid');
+    $nodes = node_load_multiple(array_keys($nids));
+    $assigned = TRUE;
+    foreach ($nodes as $node) {
+      if (!isset($node->workbench_access['workbench_access'])) {
+        $assigned = FALSE;
+      }
+    }
+    $this->assertTrue(!empty($assigned), t('All nodes properly assigned.'));
+    $this->assertWorkbenchAccessCheck($nodes, $account, t('No sections'), FALSE);
+
+    // Test that the role lookup function works correctly.
+    $roles = workbench_access_get_roles('access workbench access by role');
+    // The 'administrator' role always has permission.
+    $this->assertTrue(count($roles) == 2, t('One user role assigned.'));
+
+    // Now, we assign the user to a section and check again.
+    workbench_access_user_section_save($account->uid, 'workbench_access', $active['access_scheme']['access_scheme']);
+    $account = user_load($account->uid, TRUE);
+    $this->assertTrue(!empty($account->workbench_access['workbench_access']), t('Test user assigned to top-level hierarchy.'));
+    $this->assertWorkbenchAccessCheck($nodes, $account, t('Assigned sections'), TRUE);
+
+    // Remove the permission to 'access workbench access by role' and check again.
+    user_role_revoke_permissions($this->editor_role, array('access workbench access by role'));
+    $account = user_load($account->uid, TRUE);
+    $this->assertTrue(empty($account->workbench_access['workbench_access']), t('Permission revoked and test user not assigned to a section.'));
+    $this->assertWorkbenchAccessCheck($nodes, $account, t('Role disallowed'), FALSE);
+
+    // Test that the role lookup function works correctly.
+    drupal_static_reset('workbench_access_get_roles');
+    $roles = workbench_access_get_roles('access workbench access by role');
+    // The 'administrator' role always has permission. Ignore that.
+    $this->assertTrue(count($roles) == 1, t('No user roles assigned.'));
+
+    // Now give them permissions again.
+    user_role_grant_permissions($this->editor_role, array('access workbench access by role'));
+    $account = user_load($account->uid, TRUE);
+    $this->assertTrue(!empty($account->workbench_access['workbench_access']), t('Permission reinstated and test user assigned to a section.'));
+    $this->assertWorkbenchAccessCheck($nodes, $account, t('Role allowed'), TRUE);
+
+    // Test the autocomplete query for adding new editors.
+    drupal_static_reset('workbench_access_get_roles');
+    module_load_include('inc', 'workbench_access', 'workbench_access.pages');
+    // Search for the existing user via autocomplete. Should return empty.
+    $test = workbench_access_autocomplete('taxonomy', 'workbench_access', substr($account->name, 0), TRUE);
+    $this->assertTrue(empty($test), t('Autocomplete did not match assigned user.'));
+    $test_account = $this->getWorkbenchAccessUser($id);
+    $test = workbench_access_autocomplete('taxonomy', 'workbench_access', substr($test_account->name, 0, 1), TRUE);
+    $this->assertTrue(!empty($test), t('Autocomplete matched unassigned user.'));
+
+    // Now take away the core permissions to page content and test.
+    $perms = array(
+      'create page content',
+      'edit any page content',
+      'delete any page content',
+    );
+    user_role_revoke_permissions($this->editor_role, $perms);
+    $account = user_load($account->uid, TRUE);
+    $this->assertWorkbenchAccessCheck($nodes, $account, t('Page access disallowed'), FALSE);
+
+    // Now give back the core permissions.
+    user_role_grant_permissions($this->editor_role, $perms);
+    $account = user_load($account->uid, TRUE);
+    $this->assertWorkbenchAccessCheck($nodes, $account, t('Page access allowed'), TRUE);
+
+    // Form testing in Drupal is horribly broken.
+    // We can confirm that a form page is loaded, but cannot perform
+    // any introspection on the $form array.
+    $account->pass_raw = 'fubar';
+    $this->drupalLogin($account);
+    // Set the form label.
+    // Attempt to access edit page.
+    $this->drupalGet("node/$node->nid/edit");
+    $this->assertResponse(200);
+    $this->assertRaw('Section', t('Workbench Access field was found.'));
+    // Note that the field is nested as
+    // $form['workbench_access']['workbench_access'], which forces FormAPI to
+    // add the --2 suffix to the id.
+    $this->assertRaw('<select id="edit-workbench-access--2" name="workbench_access" class="form-select required">', t('Form presents a select list with no multiple select.'));
+    // Change some values and try again.
+    variable_set('workbench_access_allow_multiple', 1);
+    variable_set('workbench_access_label', 'TestWA');
+    $this->drupalGet("node/$node->nid/edit");
+    $this->assertRaw('TestWA', t('Workbench Access field was renamed.'));
+    $this->assertRaw('<select multiple="multiple" name="workbench_access[]" id="edit-workbench-access--2" class="form-select required">', t('Form presents a select list with multiple select.'));
+
+    // Try some form introspection.
+    $form = $this->workbenchAccessNodeForm($account->uid, $node->type);
+    $this->assertTrue(isset($form['workbench_access']['workbench_access']['#options']), t('Form element returns properly.'));
+    $this->assertTrue(count($form['workbench_access']['workbench_access']['#options']) == 10, t('Form element returned ten options to user with all sections.'));
+    // Delete global permission.
+    workbench_access_user_section_delete($account->uid, 'workbench_access', 'taxonomy');
+    // Add sub permission.
+    $term = taxonomy_term_load(1);
+    workbench_access_user_section_save($account->uid, $term->tid, 'taxonomy');
+    $form = $this->workbenchAccessNodeForm($account->uid, $node->type);
+    $this->assertTrue(count($form['workbench_access']['workbench_access']['#options']) == 3, t('Form element returned three options to user with limited options.'));
+
+    // Check that access control by node type settings work.
+    $this->assertTrue(variable_get('workbench_access_node_type_' . $node->type, 1), t('Workbench Access enforced for %type content.', array('%type' => $node->type)));
+    // Force a fail by removing this user's access rules. Else it will just
+    // return NODE_ACCESS_IGNORE, which cannot be tested.
+    $account->workbench_access = array('foo');
+    $response = workbench_access_node_access($node, 'update', $account);
+    $this->assertTrue($response == NODE_ACCESS_DENY, t('Workbench Access rules enforced on test node.'));
+
+    // Since the user is not in a section, this should DENY, unless the node
+    // type is ignored.
+
+    // Test for ignore.
+    variable_set('workbench_access_node_type_' . $node->type, 0);
+    $this->assertFalse(variable_get('workbench_access_node_type_' . $node->type, 1), t('Workbench Access not enforced for %type content.', array('%type' => $node->type)));
+    $response = workbench_access_node_access($node, 'update', $account);
+    $this->assertTrue($response == NODE_ACCESS_IGNORE, t('Workbench Access rules ignored on test node.'));
+    // Test for deny.
+    variable_set('workbench_access_node_type_' . $node->type, 1);
+    $this->assertTrue(variable_get('workbench_access_node_type_' . $node->type, 1), t('Workbench Access enforced for %type content.', array('%type' => $node->type)));
+    $response = workbench_access_node_access($node, 'update', $account);
+    $this->assertTrue($response == NODE_ACCESS_DENY, t('Workbench Access rules enforced on test node.'));
+
+    // If the node is not assigned, we should ignore.
+    $temp = $node->workbench_access;
+    $node->workbench_access = array();
+    $response = workbench_access_node_access($node, 'update', $account);
+    $this->assertTrue($response == NODE_ACCESS_IGNORE, t('Workbench Access rules ignored for unassigned node.'));
+    // Make sure the above was not a false positive.
+    $node->workbench_access = $temp;
+    $response = workbench_access_node_access($node, 'update', $account);
+    $this->assertTrue($response == NODE_ACCESS_DENY, t('Workbench Access rules enforced on test node.'));
+
+    // Delete the user account.
+    user_delete($account->uid);
+    $records = db_query("SELECT 1 FROM {workbench_access_user} WHERE uid = :uid", array(':uid' => $account->uid))->fetchField();
+    $this->assertFalse($records, 'User section assignments removed.');
+
+    // Test module hooks.
+    // Ensure that our node type uses the form element.
+    $GLOBALS['conf']['workbench_access_node_type_' . $node->type] = TRUE;
+    $form = drupal_get_form($node->type . '_node_form', $node);
+    $this->assertTrue(!empty($form['workbench_access']['workbench_access']['#workbench_access_test']), t('hook_workbench_access_node_element_alter() fired correctly.'));
+  }
+}
+
+class WorkbenchAccessMenuTestCase extends WorkbenchAccessTestCase {
+  protected $node_titles = array(
+    1  => 'A',
+    3  => 'A1',
+    7  => 'A1a',
+    15 => 'A1a1',
+    16 => 'A1a2',
+    8  => 'A1b',
+    17 => 'A1b1',
+    18 => 'A1b2',
+    4  => 'A2',
+    9  => 'A2a',
+    19 => 'A2a1',
+    20 => 'A2a2',
+    10 => 'A2b',
+    21 => 'A2b1',
+    22 => 'A2b2',
+    2  => 'B',
+    5  => 'B1',
+    11 => 'B1a',
+    23 => 'B1a1',
+    24 => 'B1a2',
+    12 => 'B1b',
+    25 => 'B1b1',
+    26 => 'B1b2',
+    6  => 'B2',
+    13 => 'B2a',
+    27 => 'B2a1',
+    28 => 'B2a2',
+    14 => 'B2b',
+    29 => 'B2b1',
+    30 => 'B2b2',
+  );
+
+  public static function getInfo() {
+    return array(
+      'name' => 'Workbench access menu',
+      'description' => 'Test Menu access control rules for Workbench Access.',
+      'group' => 'Workbench Access'
+    );
+  }
+
+  function testWorkbenchAccessMenu() {
+    // Load all includes.
+    workbench_access_load_include();
+
+    // Create some node and users.
+    $this->createWorkbenchAccessUsers();
+    $this->createWorkbenchAccessNodes(30);
+
+    // Set node titles for easier debugging.
+    for ($i = 1; $i <= 30; $i++) {
+      $node = node_load($i);
+      $node->title = $this->node_titles[$i];
+      node_save($node);
+    }
+
+    // Create a menu.
+    $menu = array(
+      'menu_name' => 'menu-workbench_access',
+      'description' => '',
+      'title' =>  $this->randomName(16),
+    );
+    menu_save($menu);
+    $menu_name = $menu['menu_name'];
+
+    // Attach menu to content type.
+    variable_set('menu_options_page', array('menu_options[' . $menu_name . ']' => $menu_name));
+    // Make all menu items access sections.
+    variable_set('workbench_access_auto_assign', 1);
+    // Set this menu as our active section.
+    variable_set('workbench_access', 'menu');
+    variable_set('workbench_access_menu', array($menu_name));
+    // Use a custom form element.
+    variable_set('workbench_access_custom_form', 1);
+
+    // Set up the top-level menu.
+    $section = array(
+      'access_id' => $menu_name,
+      'access_scheme' => 'menu',
+      'access_type' => 'menu',
+      'access_type_id' => $menu_name,
+    );
+    workbench_access_section_save($section);
+
+    /**
+     * Assign menu links for nodes.
+     * The hierarchy should four levels deep with two options per level
+     * A helpful diagram
+     *
+     * A
+     *   A1
+     *     A1a
+     *        A1a1
+     *        A1a2
+     *     A1b
+     *        A1b1
+     *        A1b2
+     *   A2
+     *     A2a
+     *        A2a1
+     *        A2a2
+     *     A2b
+     *        A2b1
+     *        A2b2
+     * B
+     *   B1
+     *     B1a
+     *        B1a1
+     *        B1a2
+     *     B1b
+     *        B1b1
+     *        B1b2
+     *   B2
+     *     B2a
+     *        B2a1
+     *        B2a2
+     *     B2b
+     *        B2b1
+     *        B2b2
+     */
+    $mlids = array();
+    $nodes = db_query("SELECT nid, title FROM {node} ORDER BY nid")->fetchAll();
+    foreach ($nodes as $nid => $node) {
+      // Create a menu item
+      $settings = array(
+        'link_path' => 'node/' . $node->nid,
+        'link_title' => $node->title,
+        'menu_name' => $menu_name,
+        'weight' => $node->nid,
+        'plid' => 0,
+      );
+
+      if ($nid > 1) {
+        $settings['plid'] = $mlids[floor(($nid - 2) / 2)];
+      }
+
+      $mlids[] = menu_link_save($settings);
+    }
+
+    // Check that the menu scheme is setup correctly.
+    $this->assertWorkbenchScheme('menu', $menu_name);
+
+    // Check for node creation.
+    $count = db_query("SELECT COUNT(n.nid) FROM {node} n")->fetchField();
+    $this->assertTrue($count == 30, t('Thirty initial nodes created.'));
+
+    // Check for node assignment.
+    $count = db_query("SELECT COUNT(n.nid) FROM {node} n INNER JOIN {workbench_access_node} wan ON n.nid = wan.nid")->fetchField();
+    $this->assertTrue($count == 0, t('Initial nodes have no access data.'));
+
+    // Save data for nodes.
+    foreach ($nodes as $node) {
+      $mlid = db_query("SELECT mlid FROM {menu_links} WHERE link_path = :link_path", array(':link_path' => 'node/' . $node->nid))->fetchField();
+      if (!isset($first_mlid)) {
+        $first_mlid = $mlid;
+      }
+      $edit = array(
+        'nid' => $node->nid,
+        'access_id' => $mlid,
+        'access_scheme' => 'menu',
+      );
+      db_insert('workbench_access_node')->fields($edit)->execute();
+    }
+
+    // Assign user 1 to the top-level.
+    workbench_access_user_section_save(1, $menu_name, 'menu');
+
+    // Check node data.
+    $count = db_query("SELECT COUNT(n.nid) FROM {node} n INNER JOIN {workbench_access_node} wan ON n.nid = wan.nid")->fetchField();
+    $this->assertTrue($count == 30, t('Initial nodes assigned access data.'));
+
+    $active = workbench_access_get_active_tree();
+
+    // Check that a node has been assigned to a first-level menu item.
+    $count = db_query("SELECT COUNT(n.nid) FROM {node} n INNER JOIN {workbench_access_node} wan ON n.nid = wan.nid WHERE wan.access_id = :access_id AND wan.access_scheme = 'menu'", array(':access_id' => $first_mlid))->fetchField();
+    $this->assertTrue($count == 1, t('One node assigned to first-level menu item.'));
+
+    // Test access settings of user 1.
+    $account = user_load(1, TRUE);
+    $this->assertTrue(!empty($account->workbench_access[$menu_name]), t('User 1 assigned to top-level hierarchy.'));
+    // End setup tests.
+
+    // Assign a user to a section and check permissions.
+    // This is a multi-step check.
+    // First, the user should not be able to do anything (Create, Update or Delete).
+    $account = $this->getWorkbenchAccessUser();
+    $id = $account->testId;
+    $this->assertTrue(empty($account->workbench_access[$menu_name]), t('Test user not assigned to a section.'));
+
+    $nids = db_query("SELECT nid FROM {node}")->fetchCol('nid');
+    $nodes = node_load_multiple($nids);
+    $assigned = TRUE;
+    foreach ($nodes as $node) {
+      // Just check if its set or not
+      if (!isset($node->workbench_access) && !empty($node->workbench_access)) {
+        $assigned = FALSE;
+      }
+    }
+    $this->assertTrue(!empty($assigned), t('All nodes properly assigned.'));
+    $this->assertWorkbenchAccessCheck($nodes, $account, t('No sections'), FALSE);
+
+    // Test that the role lookup function works correctly.
+    $roles = workbench_access_get_roles('access workbench access by role');
+    // The 'administrator' role always has permission.
+    $this->assertTrue(count($roles) == 2, t('One user role assigned.'));
+
+    // Now, we assign the user to a section and check again.
+    workbench_access_user_section_save($account->uid, $menu_name, 'menu');
+    $account = user_load($account->uid, TRUE);
+    $this->assertTrue(!empty($account->workbench_access[$menu_name]), t('Test user assigned to top-level hierarchy.'));
+    $this->assertWorkbenchAccessCheck($nodes, $account, t('Assigned sections'), TRUE);
+
+    // Remove the permission to 'access workbench access by role' and check again.
+    user_role_revoke_permissions($this->editor_role, array('access workbench access by role'));
+    $account = user_load($account->uid, TRUE);
+    $this->assertTrue(empty($account->workbench_access[$menu_name]), t('Permission revoked and test user not assigned to a section.'));
+    $this->assertWorkbenchAccessCheck($nodes, $account, t('Role disallowed'), FALSE);
+
+    // Test that the role lookup function works correctly.
+    drupal_static_reset('workbench_access_get_roles');
+    $roles = workbench_access_get_roles('access workbench access by role');
+    // The 'administrator' role always has permission. Ignore that.
+    $this->assertTrue(count($roles) == 1, t('One user roles assigned.'));
+
+    // Now give them permissions again.
+    user_role_grant_permissions($this->editor_role, array('access workbench access by role'));
+    $account = user_load($account->uid, TRUE);
+    $this->assertTrue(!empty($account->workbench_access[$menu_name]), t('Permission reinstated and test user assigned to a section.'));
+    $this->assertWorkbenchAccessCheck($nodes, $account, t('Role allowed'), TRUE);
+
+    // Test the autocomplete query for adding new editors.
+    drupal_static_reset('workbench_access_get_roles');
+    module_load_include('inc', 'workbench_access', 'workbench_access.pages');
+    // Search for the existing user via autocomplete. Should return empty.
+    $test = workbench_access_autocomplete('menu', $menu_name, substr($account->name, 0), TRUE);
+    $this->assertTrue(empty($test), t('Autocomplete did not match assigned user.'));
+    // Test another user who is currently not assigned.
+    $test_account = $this->getWorkbenchAccessUser($id);
+    $test = workbench_access_autocomplete('menu', $menu_name, substr($test_account->name, 0, 1), TRUE);
+    $this->assertTrue(!empty($test), t('Autocomplete matched unassigned user.'));
+
+    // Now take away the core permissions to page content and test.
+    $perms = array(
+      'create page content',
+      'edit any page content',
+      'delete any page content',
+    );
+    user_role_revoke_permissions($this->editor_role, $perms);
+    $account = user_load($account->uid, TRUE);
+    $this->assertWorkbenchAccessCheck($nodes, $account, t('Page access disallowed'), FALSE);
+
+    // Now give back the core permissions.
+    user_role_grant_permissions($this->editor_role, $perms);
+    $account = user_load($account->uid, TRUE);
+    $this->assertWorkbenchAccessCheck($nodes, $account, t('Page access allowed'), TRUE);
+
+    // Form testing in Drupal is horribly broken.
+    // We can confirm that a form page is loaded, but cannot perform
+    // any introspection on the $form array.
+    $account->pass_raw = 'fubar';
+    $this->drupalLogin($account);
+    // Set the form label.
+    // Attempt to access edit page.
+    $this->drupalGet("node/$node->nid/edit");
+    $this->assertResponse(200);
+    $this->assertRaw('Section', t('Workbench Access field was found.'));
+    // Note that the field is nested as
+    // $form['workbench_access']['workbench_access'], which forces FormAPI to
+    // add the --2 suffix to the id.
+    $this->assertRaw('<select id="edit-workbench-access--2" name="workbench_access" class="form-select required">', t('Form presents a select list with no multiple select.'));
+    // Change some values and try again.
+    variable_set('workbench_access_allow_multiple', 1);
+    variable_set('workbench_access_label', 'TestWA');
+    $this->drupalGet("node/$node->nid/edit");
+    $this->assertRaw('TestWA', t('Workbench Access field was renamed.'));
+    $this->assertRaw('<select multiple="multiple" name="workbench_access[]" id="edit-workbench-access--2" class="form-select required">', t('Form presents a select list with multiple select.'));
+
+    // Test module hooks.
+    // Ensure that our node type uses the form element.
+    $GLOBALS['conf']['workbench_access_node_type_' . $node->type] = TRUE;
+    module_load_include('inc', 'node', 'node.pages');
+    $form = drupal_get_form($node->type . '_node_form', $node);
+    $this->assertTrue(!empty($form['workbench_access']['workbench_access']['#workbench_access_test']), t('hook_workbench_access_node_element_alter() fired correctly.'));
+
+    // Try some form introspection.
+    $form = $this->workbenchAccessNodeForm($account->uid, $node->type);
+    $this->assertTrue(isset($form['workbench_access']['workbench_access']['#options']), t('Form element returns properly.'));
+    $this->assertTrue(count($form['workbench_access']['workbench_access']['#options']) == 31, t('Form element returned thirty-one options (top menu and thirty nodes) to user with all sections.'));
+    // Delete global permission.
+    workbench_access_user_section_delete($account->uid, $menu_name, 'menu');
+    // Add sub permission.
+    $array = array_slice($active['tree'][$menu_name]['children'], 0, 1);
+    $mlid = array_shift($array);
+    workbench_access_user_section_save($account->uid, $mlid, 'menu');
+
+    $form = $this->workbenchAccessNodeForm($account->uid, $node->type);
+    $this->assertTrue(count($form['workbench_access']['workbench_access']['#options']) == 15, t('Form element returned fifteen options to user with limited options.'));
+
+    // Test the form again using native support.
+
+    // Do not set a custom form element.
+    variable_set('workbench_access_custom_form', 0);
+    $custom = variable_get('workbench_access_custom_form', 1);
+    $this->assertTrue(empty($custom), t('Switched to using native menu form.'));
+    // Try some form introspection.
+    $form = $this->workbenchAccessNodeForm($account->uid, $node->type);
+    $this->assertTrue(count($form['menu']['link']['parent']['#options']) == 15, t('Native menu form element returned fifteen options to user with limited options.'));
+
+    // Check that access control by node type settings work.
+    $this->assertTrue(variable_get('workbench_access_node_type_' . $node->type, 1), t('Workbench Access enforced for %type content.', array('%type' => $node->type)));
+    // Force a fail by removing this user's access rules. Else it will just
+    // return NODE_ACCESS_IGNORE, which cannot be tested.
+    $account->workbench_access = array('foo');
+    $response = workbench_access_node_access($node, 'update', $account);
+    $this->assertTrue($response == NODE_ACCESS_DENY, t('Workbench Access rules enforced on test node.'));
+
+    // Since the user is not in a section, this should DENY, unless the node
+    // type is ignored.
+
+    // Test for ignore.
+    variable_set('workbench_access_node_type_' . $node->type, 0);
+    $this->assertFalse(variable_get('workbench_access_node_type_' . $node->type, 1), t('Workbench Access not enforced for %type content.', array('%type' => $node->type)));
+    $response = workbench_access_node_access($node, 'update', $account);
+    $this->assertTrue($response == NODE_ACCESS_IGNORE, t('Workbench Access rules ignored on test node.'));
+    // Test for deny.
+    variable_set('workbench_access_node_type_' . $node->type, 1);
+    $this->assertTrue(variable_get('workbench_access_node_type_' . $node->type, 1), t('Workbench Access enforced for %type content.', array('%type' => $node->type)));
+    $response = workbench_access_node_access($node, 'update', $account);
+    $this->assertTrue($response == NODE_ACCESS_DENY, t('Workbench Access rules enforced on test node.'));
+
+    // If the node is not assigned, we should ignore.
+    $temp = $node->workbench_access;
+    $node->workbench_access = array();
+    $response = workbench_access_node_access($node, 'update', $account);
+    $this->assertTrue($response == NODE_ACCESS_IGNORE, t('Workbench Access rules ignored for unassigned node.'));
+    // Make sure the above was not a false positive.
+    $node->workbench_access = $temp;
+    $response = workbench_access_node_access($node, 'update', $account);
+    $this->assertTrue($response == NODE_ACCESS_DENY, t('Workbench Access rules enforced on test node.'));
+
+    // Delete the user account.
+    user_delete($account->uid);
+    $records = db_query("SELECT 1 FROM {workbench_access_user} WHERE uid = :uid", array(':uid' => $account->uid))->fetchField();
+    $this->assertFalse($records, 'User section assignments removed.');
+
+    // Tests access per menu levels.  We have structured our menu so that we
+    // know what these results should return.
+
+    // Test another user who is currently not assigned.
+    $account = $this->getWorkbenchAccessUser($id);
+
+    // @todo: This is pretty obtuse. Can we improve it?
+    // @params are $account, $nid, $depth, $expected_count.
+    // See the map in the large docblock at the top of this test.
+    $this->assertMenuUpdateNodes($account, 1, 1, 15);
+    $this->assertMenuUpdateNodes($account, 3, 2, 7);
+    $this->assertMenuUpdateNodes($account, 7, 3, 3);
+    $this->assertMenuUpdateNodes($account, 15, 4, 1);
+
+    // Test for issue #1203260. Some menu links cause fatal error.
+
+    // Make all menu items access sections.
+    variable_set('workbench_access_auto_assign', 1);
+
+    // Create a menu item that triggers the failure, which is based on access
+    // checks for menu links while we are fetching our raw tree.
+    $link = array(
+      'link_path' => 'node/add',
+      'link_title' => 'Add content',
+      'menu_name' => $menu_name,
+      'weight' => 0,
+      'plid' => 0,
+    );
+    menu_link_save($link);
+
+    // Bug is triggered by anonymous users building the cache.
+    $this->drupalLogout();
+    workbench_access_reset_tree();
+    // Check that the menu scheme is setup correctly.
+    drupal_flush_all_caches();
+    $this->drupalGet('node');
+    // If we hit an infinite loop, the page does not return listings.
+    // Note the HTML fragent here, which assures success on various installs.
+    $this->assertRaw('node/30">B2b2</a>', t('Node listing page returns properly.'));
+    $this->assertWorkbenchScheme('menu', $menu_name);
+  }
+
+  /**
+   * Helper function for testing node access over the menu hierarchy.
+   *
+   * @param $account
+   *   A user account object.
+   * @param $nid
+   *   The node id to test for access control.
+   * @param $depth
+   *   The menu depth of the node being tested.
+   * @param $expected_count
+   *   A count of the expected returns based on the known children of this node.
+   *   See the setup in $this->node_titles.
+   */
+  private function assertMenuUpdateNodes($account, $nid, $depth, $expected_count) {
+    // Since we change conditions, reset node access.
+    drupal_static_reset('node_access');
+
+    // Confirm the account isn't assigned any sections.
+    $account = user_load($account->uid, TRUE);
+    $this->assertTrue(empty($account->workbench_access), t('Test user not assigned any sections.'));
+
+    // Assign section
+    $mlid = db_query("SELECT link_title, mlid FROM {menu_links} WHERE link_path = :link_path", array(':link_path' => 'node/' . $nid))->fetchObject();
+    if (empty($account->workbench_access[$mlid->mlid])) {
+      workbench_access_user_section_save($account->uid, $mlid->mlid, 'menu');
+    }
+    $account = user_load($account->uid, TRUE);
+    $this->assertTrue(array_key_exists($mlid->mlid, $account->workbench_access), t('Test user assigned section :section.', array(':section' => $mlid->link_title)));
+
+    // Get an array of editable nodes.
+    // Use db_select because of the variable depth.
+    $query = db_select('menu_links', 'ml');
+    $query->condition('p' . $depth, $mlid->mlid);
+    $query->addExpression("SUBSTRING(ml.link_path, 6, (LENGTH(ml.link_path) - 1))", 'nid');
+    $count = $query->countQuery()->execute()->fetchField();
+    $this->assertTrue($count == $expected_count, t('!mlids menu items found associated with a !depth-level deep node.', array('!mlids' => $expected_count, '!depth' => $depth)));
+    $editable_nids = $query->execute()->fetchCol();
+    sort($editable_nids);
+
+    // Check update permission on editable nodes.
+    foreach ($editable_nids as $nid) {
+      $node = node_load($nid, NULL, TRUE);
+      $result = node_access('update', $node, $account);
+      $this->assertTrue($result, t('Page update allowed on :title.', array(':title' => $node->title)));
+    }
+
+    // Get an array of non-editable nodes.
+    $non_editable_nids = db_query("SELECT nid FROM {node} WHERE nid NOT IN (:nids)", array(':nids' => $editable_nids))->fetchCol();
+
+    // Check update permission on non-editable nodes.
+    foreach ($non_editable_nids as $nid) {
+      $node = node_load($nid, null, TRUE);
+      $result = node_access('update', $node, $account);
+      $this->assertTrue(!$result, t('Page update disallowed on :title.', array(':title' => $node->title)));
+    }
+
+    // Revoke assigned section
+    workbench_access_user_section_delete($account->uid, $mlid->mlid, 'menu');
+    $account = user_load($account->uid, TRUE);
+    $this->assertTrue(empty($account->workbench_access), t('Test user removed from section :section.', array(':section' => $mlid->link_title)));
+  }
+
+}
+
+class WorkbenchAccessTokenTestCase extends DrupalWebTestCase {
+  private $nodes = array();
+
+  public static function getInfo() {
+    return array(
+      'name' => 'Workbench access tokens',
+      'description' => 'Tests tokens provided by Workbench Access.',
+      'group' => 'Workbench Access',
+      'dependencies' => array('token'),
+    );
+  }
+
+  function setUp() {
+    parent::setUp('workbench_access', 'token');
+
+    // Allow nodes to be assigned multiple sections.
+    variable_set('workbench_access_allow_multiple', 1);
+
+    // Disable access control for basic page nodes.
+    variable_set('workbench_access_node_type_page', 0);
+  }
+
+  function testTaxonomyTokens() {
+    $assigned_node = $this->drupalCreateNode(array('type' => 'article'));
+    module_load_include('inc', 'workbench_access', 'admin');
+    workbench_access_example_taxonomy();
+    $assigned_node = node_load($assigned_node->nid);
+
+    // Fetch a list of additional sections to be used in the tests.
+    $terms = taxonomy_get_term_by_name('Exhibits');
+    $terms += taxonomy_get_term_by_name('Library');
+    $terms += taxonomy_get_term_by_name('Gift Shop');
+
+    // Test tokens for a node that has been assigned to the Museum section only.
+    $tokens = array(
+      'workbench-access-sections' => 'Museum',
+      'workbench-access-sections:keys' => 'workbench_access',
+      'workbench-access-sections:count' => 1,
+    );
+    $this->assertTokens('node', array('node' => $assigned_node), $tokens);
+
+    $assigned_node->workbench_access = array_keys($terms);
+    node_save($assigned_node);
+
+    // Test tokens now that the node has multiple section assignments.
+    $assigned_node = node_load($assigned_node->nid);
+    $tokens = array(
+      'workbench-access-sections' => 'Exhibits, Library, Gift Shop',
+      'workbench-access-sections:keys' => implode(', ', array_keys($terms)),
+      'workbench-access-sections:count' => 3,
+      'workbench-access-sections:first' => 'Exhibits',
+      'workbench-access-sections:last' => 'Gift Shop',
+    );
+    $this->assertTokens('node', array('node' => $assigned_node), $tokens);
+
+    // Test tokens for a node that has not been assigned to any sections.
+    $unassigned_node = $this->drupalCreateNode(array('type' => 'article'));
+    $tokens = array(
+      'workbench-access-sections' => 'Unassigned',
+      'workbench-access-sections:keys' => NULL,
+      'workbench-access-sections:count' => NULL,
+    );
+    $this->assertTokens('node', array('node' => $unassigned_node), $tokens);
+
+    // Test tokens for a node that is not under section access control.
+    $unassigned_node = $this->drupalCreateNode(array('type' => 'page'));
+    $tokens = array(
+      'workbench-access-sections' => NULL,
+      'workbench-access-sections:keys' => NULL,
+      'workbench-access-sections:count' => NULL,
+    );
+    $this->assertTokens('node', array('node' => $unassigned_node), $tokens);
+
+    // Test tokens for a user that has been assigned to the Museum section only.
+    $admin_user = user_load(1);
+    $tokens = array(
+      'workbench-access-sections' => 'Museum',
+      'workbench-access-sections:keys' => 'workbench_access',
+      'workbench-access-sections:count' => 1,
+    );
+    $this->assertTokens('user', array('user' => $admin_user), $tokens);
+
+    // Change the sections for the user.
+    foreach ($terms as $term) {
+      workbench_access_user_section_save($admin_user->uid, $term->tid, 'taxonomy');
+    }
+    workbench_access_user_section_delete($admin_user->uid, 'workbench_access', 'taxonomy');
+
+    // Test tokens now that the user has multiple section assignments.
+    $admin_user = user_load(1);
+    $tokens = array(
+      'workbench-access-sections' => 'Exhibits, Library, Gift Shop',
+      'workbench-access-sections:keys' => implode(', ', array_keys($terms)),
+      'workbench-access-sections:count' => 3,
+      'workbench-access-sections:first' => 'Exhibits',
+      'workbench-access-sections:last' => 'Gift Shop',
+    );
+    $this->assertTokens('user', array('user' => $admin_user), $tokens);
+
+    // Test tokens for a user that is not assigned to any sections.
+    $unassigned_user = $this->drupalCreateUser();
+    $tokens = array(
+      'workbench-access-sections' => NULL,
+      'workbench-access-sections:keys' => NULL,
+      'workbench-access-sections:count' => NULL,
+    );
+    $this->assertTokens('user', array('user' => $unassigned_user), $tokens);
+
+    // Test the site-wide access scheme tokens.
+    $tokens = array(
+      'workbench-access-scheme' => t('Taxonomy'),
+      'workbench-access-scheme:name' => t('Taxonomy'),
+      'workbench-access-scheme:machine-name' => 'taxonomy',
+      'workbench-access-scheme:description' => t('Uses taxonomy vocabularies for assigning hierarchical access control.'),
+    );
+    $this->assertTokens('site', array(), $tokens);
+
+    // Change the site-wide scheme to menu.module.
+    variable_set('workbench_access', 'menu');
+    $tokens = array(
+      'workbench-access-scheme' => t('Menu'),
+      'workbench-access-scheme:name' => t('Menu'),
+      'workbench-access-scheme:machine-name' => 'menu',
+      'workbench-access-scheme:description' => t('Uses the menu system for assigning hierarchical access control.'),
+    );
+    $this->assertTokens('site', array(), $tokens);
+  }
+
+  /**
+   * Function copied from TokenTestHelper::assertTokens().
+   */
+  function assertTokens($type, array $data, array $tokens, array $options = array()) {
+    $token_input = drupal_map_assoc(array_keys($tokens));
+    $values = token_generate($type, $token_input, $data, $options);
+    foreach ($tokens as $token => $expected) {
+      if (!isset($expected)) {
+        $this->assertTrue(!isset($values[$token]), t("Token value for [@type:@token] was not generated.", array('@type' => $type, '@token' => $token)));
+      }
+      elseif (!isset($values[$token])) {
+        $this->fail(t("Token value for [@type:@token] was not generated.", array('@type' => $type, '@token' => $token)));
+      }
+      elseif (!empty($options['regex'])) {
+        $this->assertTrue(preg_match('/^' . $expected . '$/', $values[$token]), t("Token value for [@type:@token] was '@actual', matching regular expression pattern '@expected'.", array('@type' => $type, '@token' => $token, '@actual' => $values[$token], '@expected' => $expected)));
+      }
+      else {
+        $this->assertIdentical($values[$token], $expected, t("Token value for [@type:@token] was '@actual', expected value '@expected'.", array('@type' => $type, '@token' => $token, '@actual' => $values[$token], '@expected' => $expected)));
+      }
+    }
+
+    return $values;
+  }
+}
+
+class WorkbenchAccessRoleTestCase extends WorkbenchAccessTestCase {
+  public static function getInfo() {
+    return array(
+      'name' => 'Workbench access role',
+      'description' => 'Test Taxonomy access control rules applied by role.',
+      'group' => 'Workbench Access'
+    );
+  }
+
+  // Test for assignment by role.
+  function testWorkbenchAccessRoles() {
+    // Create some nodes and users.
+    $this->createWorkbenchAccessNodes();
+    $this->createWorkbenchAccessUsers();
+    // Create the taxonomy test scheme.
+    module_load_include('inc', 'workbench_access', 'workbench_access.admin');
+    workbench_access_example_taxonomy();
+    $count = db_query("SELECT COUNT(n.nid) FROM {node} n INNER JOIN {workbench_access_node} wan ON n.nid = wan.nid")->fetchField();
+    $this->assertTrue($count == 10, t('Initial nodes assigned access data.'));
+
+    // Check that the vocabulary is setup correctly.
+    $this->assertWorkbenchScheme('taxonomy');
+
+    // Check that nodes have been assigned to the top-level item.
+    $count = db_query("SELECT COUNT(n.nid) FROM {node} n INNER JOIN {workbench_access_node} wan ON n.nid = wan.nid WHERE wan.access_id = 'workbench_access' AND wan.access_scheme = 'taxonomy'")->fetchField();
+    $this->assertTrue($count == 10, t('Initial nodes assigned to top-level hierarchy.'));
+
+    // First, the user should not be able to do anything (Create, Update or Delete).
+    $account = $this->getWorkbenchAccessUser();
+    $id = $account->testId;
+    $this->assertTrue(empty($account->workbench_access['workbench_access']), t('Test user not assigned to a section.'));
+    $nids = db_query("SELECT nid FROM {node}")->fetchAllAssoc('nid');
+    $nodes = node_load_multiple(array_keys($nids));
+    $assigned = TRUE;
+    foreach ($nodes as $node) {
+      if (!isset($node->workbench_access['workbench_access'])) {
+        $assigned = FALSE;
+      }
+    }
+    $this->assertTrue(!empty($assigned), t('All nodes properly assigned.'));
+    $this->assertWorkbenchAccessCheck($nodes, $account, t('No sections'), FALSE);
+
+    // Test that the role lookup function works correctly.
+    $roles = workbench_access_get_roles('access workbench access by role');
+    // The 'administrator' role always has permission.
+    $this->assertTrue(count($roles) == 2, t('One user role assigned.'));
+
+    // Now, we assign the user's role to a section and check again.
+    $active = workbench_access_get_active_tree();
+    workbench_access_role_section_save($this->editor_role, 'workbench_access', $active['access_scheme']['access_scheme']);
+    $account = user_load($account->uid, TRUE);
+    $this->assertTrue(!empty($account->workbench_access['workbench_access']), t('Test user assigned to top-level hierarchy.'));
+    $this->assertWorkbenchAccessCheck($nodes, $account, t('Assigned sections by role'), TRUE);
+    // Revoke the role and test again.
+    workbench_access_role_section_delete($this->editor_role, 'workbench_access', $active['access_scheme']['access_scheme']);
+    $account = user_load($account->uid, TRUE);
+    $this->assertTrue(empty($account->workbench_access['workbench_access']), t('Test user removed from top-level hierarchy.'));
+    $this->assertWorkbenchAccessCheck($nodes, $account, t('No assigned sections by role'), FALSE);
+  }
+}

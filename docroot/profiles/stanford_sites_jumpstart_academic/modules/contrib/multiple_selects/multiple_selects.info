@@ -1,0 +1,13 @@
+name = Multiple Selects
+description = Adding a possibility to use multiple select fields rather than a multiselect field.
+package = Fields
+dependency[] = options
+core = 7.x
+
+
+; Information added by drupal.org packaging script on 2012-05-28
+version = "7.x-1.2"
+core = "7.x"
+project = "multiple_selects"
+datestamp = "1338214868"
+

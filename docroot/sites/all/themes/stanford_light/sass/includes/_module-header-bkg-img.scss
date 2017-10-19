@@ -1,0 +1,51 @@
+.header-bkg.header-bkg-image .header {
+    min-height: 100px;
+    background-repeat: no-repeat;
+    background-position: center 30%;
+    background-size: 100%;
+    margin: 0;
+    @media (max-width: 380px) {
+        background-size: cover;
+    }
+}
+.front.header-bkg.header-bkg-image .header {
+    min-height: 200px;
+}
+.header-bkg .site-main-menu {
+    padding-top: 10px;
+}
+@media (max-width: 767px) {
+    .header-bkg .site-main-menu {
+        padding-top: 0px;
+    }
+    .front.header-bkg.header-bkg-image .header {
+        min-height: 150px;
+    }
+}
+.header-bkg.header-bkg-wallpaper .header {
+    min-height: 100px;
+    background-repeat: repeat;
+    background-position: center top;
+    margin: 0;
+}
+.front.header-bkg.header-bkg-wallpaper .header {
+    min-height: 250px;
+}
+.header-bkg.header-bkg-text-light .site-name a, 
+.header-bkg.header-bkg-text-light .site-name a:hover, 
+.header-bkg.header-bkg-text-light .site-name a:active, 
+.header-bkg.header-bkg-text-light #site-slogan, 
+.header-bkg.header-bkg-text-light .site-login,
+.header-bkg.header-bkg-text-light .site-login a {
+    color: $clr-light;
+    text-shadow: 0 0 2px $clr-dark;
+}
+.header-bkg.header-bkg-text-dark .site-name a, 
+.header-bkg.header-bkg-text-dark .site-name a:hover, 
+.header-bkg.header-bkg-text-dark .site-name a:active, 
+.header-bkg.header-bkg-text-dark #site-slogan, 
+.header-bkg.header-bkg-text-dark .site-login,
+.header-bkg.header-bkg-text-dark .site-login a {
+    color: $clr-dark;
+    text-shadow: 0 0 2px $clr-light;
+}

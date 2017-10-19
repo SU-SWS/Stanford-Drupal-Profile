@@ -1,0 +1,14 @@
+; Example Make file to demonstrate how to automatically fetch JW Player.
+; See http://davehall.com.au/blog/dave/2011/05/17/drush-make-and-module-dependencies#comment-2261
+; as to why this file ends with .example rather than .make.
+libraries[jwplayer][download][type] = "get"
+libraries[jwplayer][download][url] = "http://www.longtailvideo.com/jw/upload/mediaplayer.zip"
+libraries[jwplayer][directory_name] = "jwplayer"
+
+libraries[jwplayer_skin_modieus][download][type] = "get"
+libraries[jwplayer_skin_modieus][download][url] = "http://www.longtailvideo.com/files/skins/modieus/5/modieus.zip"
+libraries[jwplayer_skin_modieus][directory_name] = "jwplayer_skins/modieus"
+
+libraries[jwplayer_skin_snel][download][type] = "get"
+libraries[jwplayer_skin_snel][download][url] = "http://www.longtailvideo.com/files/skins/snel/5/snel.zip"
+libraries[jwplayer_skin_snel][directory_name] = "jwplayer_skins/snel"

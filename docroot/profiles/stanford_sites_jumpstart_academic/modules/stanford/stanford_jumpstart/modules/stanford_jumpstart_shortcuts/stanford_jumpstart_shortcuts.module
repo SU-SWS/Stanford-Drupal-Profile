@@ -1,0 +1,242 @@
+<?php
+/**
+ * @file
+ * Code for the Stanford Jumpstart Layouts feature.
+ */
+
+include_once 'stanford_jumpstart_shortcuts.features.inc';
+
+/**
+ * Implements hook_block_info().
+ */
+function stanford_jumpstart_shortcuts_block_info() {
+  $blocks['hello']['info'] = t('Jumpstart Hello "User" Block');
+  $blocks['hello']['cache'] = DRUPAL_CACHE_PER_USER;
+  return $blocks;
+}
+
+/**
+ * Implements hook_block_view().
+ */
+function stanford_jumpstart_shortcuts_block_view($delta = '') {
+  $block = array();
+  switch($delta) {
+    case 'hello':
+      global $user;
+      $content = "";
+
+      if (isset($user->name)) {
+        $content .= '<div class="shortcuts-user">';
+        $content .= t('Hello, !name', array('!name' => l($user->name, 'user/' . $user->uid . '/edit')));
+        $content .= '</div><div class="shortcuts-logout">';
+        $content .= l(t('Log out'), 'user/logout');
+        $content .= '</div>';
+      }
+
+      $block['subject'] = NULL;
+      $block['content'] = $content;
+    break;
+  }
+  return $block;
+}
+
+/**
+ * Implements hook_permission().
+ */
+function stanford_jumpstart_shortcuts_permission() {
+  return array(
+    'stanford jumpstart clear caches' => array(
+      'title' => t('Clear Site Caches'),
+      'description' => t('Provide access to the "Clear Site Cache" shortcut item.'),
+    ),
+    'stanford jumpstart admin shortcuts' => array(
+      'title' => t('See admin shortcuts menu'),
+      'description' => t('Allow user to see the admin shortcuts menu bar'),
+    ),
+  );
+}
+
+/**
+ * Implements hook_menu().
+ */
+function stanford_jumpstart_shortcuts_menu() {
+
+  $items['admin/stanford/jumpstart/shortcuts/home'] = array(
+    'title' => 'Home',
+    'page callback' => 'stanford_jumpstart_shortcuts_go_home',
+    'access arguments' => array('stanford jumpstart admin shortcuts'),
+    'options' => array(
+      'attributes' => array(
+        'class' => 'home',
+        'title' => "Website front page",
+      ),
+    ),
+    'type' => MENU_NORMAL_ITEM,
+    'menu_name' => 'menu-admin-shortcuts',
+    'weight' => -40,
+  );
+  // Site actions top level
+  $items['admin/stanford/jumpstart/shortcuts/site-actions'] = array(
+    'title' => 'Site Actions',
+    'access arguments' => array('stanford jumpstart admin shortcuts'),
+    'expanded' => TRUE,
+    'type' => MENU_NORMAL_ITEM,
+    'menu_name' => 'menu-admin-shortcuts',
+    '#weight' => -30,
+  );
+  // manage taxonomies
+  $items['admin/stanford/jumpstart/shortcuts/site-actions/manage-taxonomies'] = array(
+    'title' => 'Manage Taxonomies',
+    'description' => 'Administer vocabularies with the Taxonomy Manager',
+    'page callback' => 'drupal_goto',
+    'page arguments' => array('admin/structure/taxonomy_manager/voc'),
+    'access arguments' => array('administer taxonomy'),
+    'type' => MENU_NORMAL_ITEM,
+    'menu_name' => 'menu-admin-shortcuts',
+    'weight' => -65,
+  );
+  // manage users
+  $items['admin/stanford/jumpstart/shortcuts/site-actions/manage-users'] = array(
+    'title' => 'Manage Users',
+    'description' => 'Manage all site users, Add/remove permissions',
+    'page callback' => 'drupal_goto',
+    'page arguments' => array('admin/people'),
+    'access arguments' => array('administer users'),
+    'type' => MENU_NORMAL_ITEM,
+    'menu_name' => 'menu-admin-shortcuts',
+    'weight' => -80,
+  );
+  // edit main menu
+  $items['admin/stanford/jumpstart/shortcuts/site-actions/edit-main-menu'] = array(
+    'title' => 'Edit Main Menu',
+    'description' => 'Edit the links in your Main Menu',
+    'page callback' => 'drupal_goto',
+    'page arguments' => array('admin/structure/menu/manage/main-menu'),
+    'access arguments' => array('administer menu'),
+    'type' => MENU_NORMAL_ITEM,
+    'menu_name' => 'menu-admin-shortcuts',
+    'weight' => -60,
+  );
+  // Edit site name
+  $items['admin/stanford/jumpstart/shortcuts/site-actions/edit-site-name'] = array(
+    'title' => 'Edit Site Name',
+    'description' => 'Edit your site name',
+    'page callback' => 'drupal_goto',
+    'page arguments' => array('admin/config/system/site-information'),
+    'access arguments' => array('administer site configuration'),
+    'type' => MENU_NORMAL_ITEM,
+    'menu_name' => 'menu-admin-shortcuts',
+    'weight' => -60,
+  );
+
+  // Get all content types and create a "content type name add" option
+  $types = node_type_get_types();
+  $ctweight = -101;
+  foreach ($types as $name => $obj) {
+
+    // Skip article and basic page
+    if ($obj->type == "page" || $obj->type == "article") {
+      continue;
+    }
+
+    // Remove the Stanford from each content type.
+    $title_name = str_ireplace("stanford", "", $obj->name);
+
+    $items['admin/stanford/jumpstart/shortcuts/site-actions/add/' . drupal_clean_css_identifier($name)] = array(
+      'title' => t('Add ' . trim($title_name)),
+      'page callback' => 'drupal_goto',
+      'page arguments' => array('node/add/' . drupal_clean_css_identifier($name)),
+      'access arguments' => array('create ' . $name . ' content'),
+      'type' => MENU_NORMAL_ITEM,
+      'menu_name' => 'menu-admin-shortcuts',
+      'weight' => ++$ctweight,
+    );
+  }
+
+  $items['admin/stanford/jumpstart/shortcuts/site-actions/clear-cache'] = array(
+    'title' => 'Clear Site Cache',
+    'page callback' => 'stanford_jumpstart_shortcuts_clear_all_caches',
+    'access arguments' => array('stanford jumpstart clear caches'),
+    'options' => array(
+      'query' => array(
+        'destination' => current_path(),
+      ),
+      'attributes' => array(
+        'class' => 'su-clear-cache',
+        'title' => "Don't see your changes? Clear your cache",
+      ),
+    ),
+    'type' => MENU_NORMAL_ITEM,
+    'menu_name' => 'menu-admin-shortcuts',
+    'weight' => 40,
+  );
+
+  $items['admin/stanford-jumpstart/shortcuts-features'] = array(
+    'title' => 'Add Features',
+    'page callback' => 'drupal_goto',
+    'page arguments' => array('admin/stanford-jumpstart/features'),
+    'access arguments' => array('access jumpstart features'),
+    'type' => MENU_NORMAL_ITEM,
+    'menu_name' => 'menu-admin-shortcuts',
+    'plid' => 0, // set this to 0 so that the menu item doesnt get stuck under get help
+    'weight' => 5,
+  );
+
+  $items['admin/stanford-jumpstart-help'] = array(
+    'title' => 'Get Help',
+    'page callback' => 'drupal_goto',
+    'page arguments' => array('admin/stanford-jumpstart'),
+    'access arguments' => array('access jumpstart help'),
+    'type' => MENU_NORMAL_ITEM,
+    'menu_name' => 'menu-admin-shortcuts',
+    'weight' => 10,
+  );
+
+  $items['admin/stanford-jumpstart/ready'] = array(
+    'title' => 'Ready to Launch?',
+    'page callback' => 'drupal_goto',
+    'page arguments' => array('admin/stanford-jumpstart/launch-checklist'),
+    'access arguments' => array('access jumpstart help'),
+    'type' => MENU_NORMAL_ITEM,
+    'menu_name' => 'menu-admin-shortcuts',
+    'plid' => 0, // set this to 0 so that the menu item doesnt get stuck under get help
+    'weight' => 20,
+  );
+
+  return $items;
+}
+
+/**
+ * Redirects to home. Duh.
+ * @return [type] [description]
+ */
+function stanford_jumpstart_shortcuts_go_home() {
+  drupal_goto("<front>");
+}
+
+/**
+ * Implements hook_preprocess_HOOK().
+ */
+function stanford_jumpstart_preprocess_link(&$vars) {
+  // Schtoopid features stores things I don't want it to.
+  if ($vars['path'] == 'admin/stanford/jumpstart/shortcuts/site-actions/clear-cache') {
+    $vars['options']['query'] = drupal_get_destination();
+  }
+}
+
+/**
+ * Clears all caches and returns the user to the destination page
+ */
+function stanford_jumpstart_shortcuts_clear_all_caches() {
+  drupal_flush_all_caches();
+  drupal_set_message('Site Cache Cleared.');
+
+  $destination = drupal_get_destination();
+  if ($destination['destination'] == current_path()) {
+    $destination['destination'] = "admin/content";
+  }
+
+  drupal_goto($destination['destination']);
+}
+
+

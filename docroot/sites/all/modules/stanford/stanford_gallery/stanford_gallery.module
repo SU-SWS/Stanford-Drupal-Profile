@@ -1,0 +1,103 @@
+<?php
+/**
+ * @file
+ * Code for the Stanford Gallery feature.
+ */
+
+include_once 'stanford_gallery.features.inc';
+
+/**
+ * *****************************************************************************
+ * FIELD FORMATTER
+ * *****************************************************************************
+ */
+
+/**
+ * Implements hook_field_formatter_info().
+ */
+function stanford_gallery_field_formatter_info() {
+  $formatters = array(
+    'stanford_gallery' => array(
+      'label' => t('Stanford Gallery'),
+      'field types' => array('field_collection'),
+      'settings' => array(),
+      'module' => 'stanford_gallery',
+      'description' => t('A colorbox gallery'),
+    ),
+  );
+  return $formatters;
+}
+
+/**
+ * Implements hook_field_formatter_settings_form().
+ */
+function stanford_gallery_field_formatter_settings_form($field, $instance, $view_mode, $form, &$form_state) {
+  $element = array();
+  $element['something']['#markup'] = "<p>" . t("no settings") . "</p>";
+  return $element;
+}
+
+/**
+ * Implements hook_field_formatter_settings_summary().
+ */
+function stanford_gallery_field_formatter_settings_summary($field, $instance, $view_mode) {
+  return '<br /> Colorbox Gallery';
+}
+
+/**
+ * Implements hook_field_formatter_view().
+ */
+function stanford_gallery_field_formatter_view($entity_type, $entity, $field, $instance, $langcode, $items, $display) {
+  $element = array();
+  $settings = $display['settings'];
+
+  $view_mode = !empty($entity->field_s_gallery_view_mode[LANGUAGE_NONE][0]['value']) ? $entity->field_s_gallery_view_mode[LANGUAGE_NONE][0]['value'] : 'gallery_large';
+
+  foreach ($items as $delta => $item) {
+    if ($field_collection = field_collection_field_get_entity($item)) {
+      $element[$delta]['entity'] = $field_collection->view($view_mode);
+      $element[$delta]['#theme_wrappers'] = array('field_collection_view');
+      $element[$delta]['#attributes']['class'][] = 'field-collection-view';
+      $element[$delta]['#attributes']['class'][] = 'clearfix';
+      $element[$delta]['#attributes']['class'][] = drupal_clean_css_identifier('view-mode-' . $view_mode);
+    }
+  }
+
+  if (!empty($items) || !empty($element['#suffix'])) {
+    $element['#attached']['css'][] = drupal_get_path('module', 'field_collection') . '/field_collection.theme.css';
+  }
+
+  // Add colorbox settings JS.
+  $element['#attached']['js'][] = drupal_get_path("module", "stanford_gallery") . "/js/stanford_gallery.js";
+
+  // Caption settings.
+  if (!empty($entity->field_s_gallery_show_capt[LANGUAGE_NONE][0]['value']) && is_array($items)) {
+    $captions = array();
+    foreach ($items as $index => $fc_info) {
+      $fc = entity_load('field_collection_item', array($fc_info['value']));
+
+      // Check to make sure we got the field collection.
+      if (!is_array($fc) || !isset($fc[$fc_info['value']])) {
+        continue;
+      }
+
+      $caption = isset($fc[$fc_info['value']]->field_s_image_caption[LANGUAGE_NONE][0]['value']) ? "<span class=\"caption\">" . strip_tags($fc[$fc_info['value']]->field_s_image_caption[LANGUAGE_NONE][0]['value']) . "</span>" : "";
+      $credit = isset($fc[$fc_info['value']]->field_s_image_credits[LANGUAGE_NONE][0]['value']) ? "<br /><span class=\"credits\">" . strip_tags($fc[$fc_info['value']]->field_s_image_credits[LANGUAGE_NONE][0]['value']) . "</span>" : "";
+      $captions[] = $caption . $credit;
+
+    }
+
+
+  }
+
+  // Add captions.
+  if (!empty($captions)) {
+    drupal_add_js(array("stanford_gallery" => array("captions" => $captions)), 'setting');
+  }
+
+  return $element;
+}
+
+
+
+

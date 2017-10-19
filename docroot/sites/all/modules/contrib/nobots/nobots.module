@@ -1,0 +1,25 @@
+<?php
+/**
+ * @file
+ * Code for the No Bots module.
+ */
+
+/**
+ * Implements hook_init().
+ */
+function nobots_init() {
+  drupal_add_http_header("X-Robots-Tag", "noindex,nofollow,noarchive");
+}
+
+/**
+ * Implements hook_help().
+ */
+function nobots_help($path, $arg) {
+  switch ($path) {
+    case 'admin/help#nobots':
+      $output = "<h3>" . t("About the No Bots Module") . "</h3>";
+      $output .= "<p>" . t("This module blocks (well-behaved) search engine robots from crawling, indexing, or archiving your site by setting a &quot;X-Robots-Tag: noindex,nofollow,noarchive&quot; HTTP header.") . "</p>";
+      $output .= "<p>" . t("Enable the module to block search engine robots. Disable the module to let them crawl your site.") . "</p>";
+      return $output;
+  }
+}

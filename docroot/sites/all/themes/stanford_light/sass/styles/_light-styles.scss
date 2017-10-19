@@ -1,0 +1,39 @@
+a:hover, 
+a:focus {
+    text-decoration: underline;
+}
+.header-bkg .navbar {
+    margin-bottom: 10px;
+}
+.header-bkg .site-main-menu {
+    border-top: 1px solid $clr-line;
+}
+.navbar .nav > li > a {
+    padding-bottom: .25em;
+    border-bottom: 5px solid transparent;
+}
+.navbar .nav > .active > a, 
+.navbar .nav > .active > a:hover, 
+.navbar .nav > .active > a:focus, 
+.navbar .nav > li > a:focus, 
+.navbar .nav > li > a:hover {
+    border-bottom: 5px solid $clr-menu-link-border;
+}
+@media (max-width: 767px) {
+    .navbar {
+        margin-top:0;
+    }
+}
+.main .menu li a:hover, 
+.main .menu li a:focus, 
+.main .menu li a.active, 
+.main .menu li a.active-trail, 
+.site-footer .menu li a:hover, 
+.site-footer .menu li a:focus, 
+.site-footer .menu li a.active, 
+.site-footer .menu li a.active-trail {
+    text-decoration: underline;
+}
+.well .caption {
+    color: darken( $clr-icons, 15% );
+}

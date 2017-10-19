@@ -1,0 +1,6 @@
+NewRelic AppName
+
+7.x-1.0-alpha1 2016-11-15
+-------------------------
+
+- Initial alpha release

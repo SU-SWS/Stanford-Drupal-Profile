@@ -1,0 +1,12 @@
+name = Stanford Publication Views List Reference
+description = This provides a list of publications with  links to the author
+core = 7.x
+package = Stanford
+version = 7.x-2.2
+project = stanford_publication_views_list_reference
+dependencies[] = ctools
+dependencies[] = stanford_person_reference
+dependencies[] = views
+features[ctools][] = views:views_default:3.0
+features[features_api][] = api:2
+features[views_view][] = stanford_publications_list_reference

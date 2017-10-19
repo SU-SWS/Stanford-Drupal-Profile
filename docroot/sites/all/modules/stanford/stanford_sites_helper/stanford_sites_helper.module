@@ -1,0 +1,288 @@
+<?php
+
+/**
+ * @file
+ * User interface tweaks and other modifications for the Stanford Sites platform
+ */
+
+/**
+ * Implements hook_permission().
+ */
+function stanford_sites_helper_permission() {
+  return array(
+    'import bundles' =>  array(
+      'title' => t('Import bundles'),
+      'description' => t('Provides the ability to import bundles using the Bundle Copy module import form.'),
+    ),
+  );
+}
+
+
+/**
+ * Implements hook_theme_registry_alter().
+ */
+function stanford_sites_helper_theme_registry_alter(&$theme_registry) {
+  $theme_registry['search_results']['theme paths'] = array(0 => drupal_get_path('module', 'stanford_sites_helper') . '/templates');
+  $theme_registry['search_results']['theme path'] = drupal_get_path('module', 'stanford_sites_helper') . '/templates';
+  $theme_registry['search_results']['path'] = drupal_get_path('module', 'stanford_sites_helper') . '/templates';
+  $theme_registry['search_results']['template'] = 'search-results';
+  $theme_registry['block__stanford_sites_helper__firststeps']['theme paths'] = array(0 => drupal_get_path('module', 'stanford_sites_helper') . '/templates');
+  $theme_registry['block__stanford_sites_helper__firststeps']['theme path'] = drupal_get_path('module', 'stanford_sites_helper') . '/templates';
+  $theme_registry['block__stanford_sites_helper__firststeps']['path'] = drupal_get_path('module', 'stanford_sites_helper') . '/templates';
+  $theme_registry['block__stanford_sites_helper__firststeps']['template'] = 'firststeps';
+  $theme_registry['block__stanford_sites_helper__firststeps']['type'] = 'module';
+}
+
+/**
+ * Returns a translatable string of help text for a search that returns no results.
+ */
+function stanford_sites_helper_search_noresults() {
+  $content = '<ul>';
+  $content .= '<li>' . t('Check if your spelling is correct.') . '</li>';
+  $content .= '<li>' . t('Simplify your search by using fewer words.') . '</li>';
+  $content .= '<li>' . t('Remove quotes around phrases to match each word individually: %stanfordquote will match less than %stanfordnoquote.', array('%stanfordquote' => '"stanford university"', '%stanfordnoquote' => 'stanford university')) . '</li>';
+  $content .= '<li>' . t('Consider loosening your query with <em>OR</em>: <em>stanford university</em> will match less than <em>stanford OR university</em>.') . '</li>';
+  $content .= '</ul>';
+  return $content;
+}
+
+/**
+ * Implements hook_block_info().
+ */
+function stanford_sites_helper_block_info() {
+  if (stanford_sites_helper_stanford_sites_hosted()) {
+    $blocks['helplinks']['info'] = t('Display a list of help links specific to Stanford Sites');
+    $blocks['helplinks']['properties']['administrative'] = 1;
+    $blocks['helplinks']['status'] = 1;
+    $blocks['helplinks']['region'] = 'help';
+    $blocks['helplinks']['visibility'] = BLOCK_VISIBILITY_LISTED;
+    $blocks['helplinks']['pages'] = "admin\nadmin/*";
+  }
+  $blocks['firststeps']['info'] = t('Stanford Sites Welcome Text');
+  $blocks['firststeps']['status'] = 1;
+  $blocks['firststeps']['weight'] = 10;
+  $blocks['firststeps']['region'] = 'content';
+  $blocks['firststeps']['visibility'] = BLOCK_VISIBILITY_LISTED;
+  $blocks['firststeps']['pages'] = "<front>";
+  return $blocks;
+}
+
+/**
+ * Implements hook_block_view().
+ */
+function stanford_sites_helper_block_view($delta) {
+  switch ($delta) {
+    case 'helplinks':
+      $block['subject'] = t('Get Help');
+      $block['content'] = t('Problems using this service? Submit a !service. <hr />', array('!service' => l(t('service request'), 'https://stanford.service-now.com/it_services?id=sc_cat_item&sys_id=c44652e04f13ae0054c23f828110c7d9')));
+      break;
+    case 'firststeps':
+      $block['subject'] = t('Quick Steps to Get Started');
+      $block['content'] = '.';
+      break;
+  }
+  return $block;
+}
+
+/**
+ * Implements hook_menu().
+ */
+function stanford_sites_helper_menu() {
+  $items['getting-started'] = array(
+    'title' => 'Getting Started',
+    'page callback' => 'theme',
+    'page arguments' => array('firststeps_template'),
+    'type' => MENU_NORMAL_ITEM,
+    'access callback' => 'user_access',
+    'access arguments' => array('administer site configuration'),
+  );
+  return $items;
+}
+
+/**
+ * Implements hook_menu_alter().
+ */
+function stanford_sites_helper_menu_alter(&$items) {
+
+  if (module_exists('bundle_copy')) {
+    $items['admin/structure/types/import']['access callback'] = "user_access";
+    $items['admin/structure/types/import']['access arguments'] = array("import bundles");
+    $items['admin/config/people/accounts/import']['access callback'] = "user_access";
+    $items['admin/config/people/accounts/import']['access arguments'] = array("import bundles");
+    $items['admin/structure/taxonomy/import']['access callback'] = "user_access";
+    $items['admin/structure/taxonomy/import']['access_arguments'] = array("import bundles");
+  }
+
+}
+/**
+ * Page callback.
+ */
+function stanford_sites_helper_theme($existing, $type, $theme, $path) {
+  return array(
+    'firststeps_template' => array(
+      'template' => 'templates/firststeps',
+    ),
+  );
+}
+
+/**
+ * Implements hook_backup_migrate_profiles_alter().
+ */
+function stanford_sites_helper_backup_migrate_profiles_alter(&$profiles) {
+  $profiles['default']->filters['sources']['files']['exclude_filepaths'] = 'backup_migrate
+styles
+css
+js
+ctools
+.htaccess
+tmp
+private';
+  $profiles['default']->filters['sources']['archive']['exclude_filepaths'] = 'public://backup_migrate
+public://styles
+public://css
+public://js
+public://ctools
+public://less
+sites/default/settings.php
+sites/default/files/tmp
+sites/default/files/private';
+}
+
+/**
+ * Implements hook_backup_migrate_profiles().
+ */
+function stanford_sites_helper_backup_migrate_profiles() {
+  //set this profile as default
+  variable_set('backup_migrate_profile_id', 'stanford_sites_default');
+
+  $out = array();
+
+  // Get the stanford_sites_default profile.
+  $out['stanford_sites_default'] = backup_migrate_crud_create_item('profile', array(
+    'profile_id' => NULL,
+    'machine_name' => 'stanford_sites_default',
+    'name' => 'Stanford Sites Profile',
+    'filename' => '[site:name]',
+    'append_timestamp' => 1,
+    'timestamp_format' => 'Y-m-d\\TH-i-s',
+    'filters' =>
+    array(
+      'encryption' => 'none',
+      'compression' => 'gzip',
+      'notify_success_enable' => false,
+      'notify_failure_enable' => false,
+      'sources' =>
+      array(
+        'db' =>
+        array(
+          'nodata_tables' =>
+          array(
+            0 => 'cache',
+            1 => 'cache_admin_menu',
+            2 => 'cache_browscap',
+            3 => 'cache_content',
+            4 => 'cache_filter',
+            5 => 'cache_calendar_ical',
+            6 => 'cache_location',
+            7 => 'cache_menu',
+            8 => 'cache_page',
+            9 => 'cache_reptag',
+            10 => 'cache_views',
+            11 => 'cache_views_data',
+            12 => 'cache_block',
+            13 => 'cache_update',
+            14 => 'cache_form',
+            15 => 'cache_bootstrap',
+            16 => 'cache_field',
+            17 => 'cache_image',
+            18 => 'cache_path',
+            19 => 'sessions',
+            20 => 'search_dataset',
+            21 => 'search_index',
+            22 => 'search_keywords_log',
+            23 => 'search_total',
+            24 => 'watchdog',
+            25 => 'accesslog',
+            26 => 'devel_queries',
+            27 => 'devel_times',
+          ),
+          'exclude_tables' =>
+          array(
+          ),
+          'utils_lock_tables' => false,
+        ),
+        'files' =>
+        array(
+          'exclude_filepaths' => 'backup_migrate
+  styles
+  css
+  js
+  ctools
+  .htaccess
+  tmp
+  private',
+        ),
+        'archive' =>
+        array(
+          'exclude_filepaths' => 'public://backup_migrate
+  public://styles
+  public://css
+  public://js
+  public://ctools
+  public://less
+  sites/default/settings.php
+  sites/default/files/tmp
+  sites/default/files/private',
+        ),
+      ),
+      'utils_disable_query_log' => true,
+      'utils_site_offline' => false,
+      'utils_description' => '',
+    ),
+    'type_name' => 'profile',
+  )
+  );
+
+  return $out;
+
+}
+
+/**
+ * Fix spell check as you type (scayt) autostart behavior.
+ * See http://drupal.org/node/817894 for reference.
+ */
+function stanford_sites_helper_wysiwyg_editor_settings_alter(&$settings, $context) {
+  if ($context['profile']->editor == 'ckeditor') {
+    $settings['scayt_autoStartup'] = FALSE;
+  }
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function stanford_sites_helper_form_user_pass_alter(&$form, &$form_state, $form_id) {
+  $message = t('If you are having difficulty resetting your password, please !service.', array('!service' => l(t('submit a service request'), 'https://stanford.service-now.com/it_services?id=sc_cat_item&sys_id=c44652e04f13ae0054c23f828110c7d9')));
+  $form['name']['#suffix'] = $message;
+}
+
+/**
+ * Checks to see if the current Drupal install is on one of the Stanford Sites
+ * hosting servers. Note: Arriving at a reliable test for this took some work;
+ * do not remove this function.
+ *
+ * This is a duplicate of the function stanford_sites_hosted() in the stanford installation profile.
+ *
+ * @return
+ *   TRUE if it is; FALSE if it isn't.
+ */
+function stanford_sites_helper_stanford_sites_hosted() {
+  // This directory only should exist on the sites-* servers.
+  $dir = "/etc/drupal-service";
+  // Check if it exists and is a directory.
+  if (file_exists($dir) && is_dir($dir)) {
+    return TRUE;
+  }
+  else {
+    return FALSE;
+  }
+}

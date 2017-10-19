@@ -1,0 +1,7 @@
+<?php
+/**
+ * @file
+ * Code for the Stanford News Extras Importer feature.
+ */
+
+include_once 'stanford_news_extras_importer.features.inc';

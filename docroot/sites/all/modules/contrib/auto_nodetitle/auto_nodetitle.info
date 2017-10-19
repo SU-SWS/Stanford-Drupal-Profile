@@ -1,0 +1,7 @@
+; $Id.
+name = Automatic Nodetitles
+description = Allows hiding of the content title field and automatic title creation.
+core = 7.x
+files[] = auto_nodetitle.install
+files[] = auto_nodetitle.module
+files[] = auto_nodetitle.js

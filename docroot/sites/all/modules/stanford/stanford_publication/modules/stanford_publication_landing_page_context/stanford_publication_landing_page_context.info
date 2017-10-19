@@ -1,0 +1,13 @@
+name = Stanford publication landing page context
+description = Context for the publication landing page, placing the publications views list exposed filter
+core = 7.x
+package = Stanford
+version = 7.x-2.2
+project = stanford_publication_landing_page_context
+dependencies[] = context
+dependencies[] = ctools
+dependencies[] = stanford_publication_views_list_reference
+dependencies[] = views
+features[context][] = stanford_publications_landing_page
+features[ctools][] = context:context:3
+features[features_api][] = api:2

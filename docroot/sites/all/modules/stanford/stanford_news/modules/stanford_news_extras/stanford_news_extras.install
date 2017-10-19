@@ -1,0 +1,105 @@
+<?php
+
+/**
+ * Implements hook_install().
+ */
+function stanford_news_extras_install() {
+
+  // Set the banner image fid.
+  stanford_news_extras_set_banner_image();
+
+  // Set the DS region block values.
+  stanford_news_extras_set_ds_region_blocks();
+
+  // Set the context for news extras.
+  stanford_news_extras_set_contexts();
+}
+
+/**
+ * Implements hook_uninstall().
+ */
+function stanford_news_extras_uninstall() {
+
+  // Remove the DS Blocks variables for news extras
+  $settings = variable_get('ds_extras_region_blocks', array());
+  unset($settings['banner']);
+  unset($settings['banner_overlay']);
+  variable_set('ds_extras_region_blocks', $settings);
+}
+
+/**
+ * Implements hook_update_N().
+ */
+function stanford_news_extras_update_7300(&$sandbox) {
+  stanford_news_extras_set_ds_region_blocks();
+}
+
+/**
+ * Implements hook_update_N().
+ */
+function stanford_news_extras_update_7301(&$sandbox) {
+  stanford_news_extras_set_banner_image();
+}
+
+/**
+ * Set the banner image fid.
+ */
+function stanford_news_extras_set_banner_image() {
+
+  // Get the default banner image
+  $filename = "stanford_news_extras_default_image.png";
+  $file_path = drupal_get_path('module', 'stanford_news_extras') . "/images/" . $filename ;
+  $image = file_get_contents($file_path);
+
+  //Create a database entry.
+  $file = file_save_data($image, "public://" . $filename, FILE_EXISTS_REPLACE);
+
+  // And save the file id for default_image_ft to use.
+  variable_set('stanford_news_banner', $file->fid);
+}
+
+/**
+ * Set the DS region block values.
+ */
+function stanford_news_extras_set_ds_region_blocks() {
+  $settings = variable_get('ds_extras_region_blocks', array());
+
+  if (!isset($settings['banner'])) {
+    $settings['banner'] = array(
+      'title' => 'Banner',
+      'info' => 'node_stanford_news_item_stanford_news_extras',
+      'label_display' => 'hidden',
+    );
+  }
+  else {
+    watchdog('stanford_news_extras', '%msg', array('%msg' => 'DS extras Banner block already in use'), WATCHDOG_NOTICE);
+
+  }
+
+  if (!isset($settings['banner_overlay'])) {
+    $settings['banner_overlay'] = array(
+      'title' => 'Banner Overlay',
+      'info' => 'node_stanford_news_item_stanford_news_extras',
+      'label_display' => 'hidden',
+    );
+  }
+  else {
+    watchdog('stanford_news_extras', '%msg', array('%msg' => 'DS extras Banner overlay block already in use'), WATCHDOG_NOTICE);
+  }
+
+  variable_set('ds_extras_region_blocks', $settings );
+}
+
+
+/**
+ * Set the context for news extras.
+ */
+function stanford_news_extras_set_contexts() {
+
+  $context_status = variable_get('context_status', array());
+
+  // Get the context for news extras.
+  $context_status['stanford_news_extras'] = FALSE;
+
+  variable_set('context_status', $context_status);
+}

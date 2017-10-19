@@ -1,0 +1,6 @@
+name = "WebAuth Extras"
+description = "Administration functions for the WebAuth Module for Drupal (WMD)"
+package = "Stanford"
+core = 7.x
+version = 7.x-1.0-alpha2
+dependencies[] = webauth

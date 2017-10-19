@@ -1,0 +1,31 @@
+#block-system-main div {
+  vertical-align: top;
+  background: #FFF;
+}
+
+#block-stanford-capx-data-browser-launch {
+  display: inline-block;
+  max-width: 27%;
+  border: solid 1px #CCC;
+  margin-left: 1%;
+  margin-top: 12px;
+  padding: 0 1%;
+  background: #FFF;
+  height: 580px;
+  max-height: 580px;
+  overflow-y: scroll;
+  -webkit-transition: all 0.2s ease;
+  -moz-transition:    all 0.2s ease;
+  -ms-transition:     all 0.2s ease;
+  -o-transition:      all 0.2s ease;
+}
+
+.is-floating {
+
+}
+
+#stanford-capx-mapper-form {
+  background: #FFF;
+  max-width: 69%;
+  display: inline-block;
+}

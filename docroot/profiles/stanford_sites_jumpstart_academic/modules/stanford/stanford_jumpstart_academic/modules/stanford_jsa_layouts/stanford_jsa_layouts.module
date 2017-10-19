@@ -1,0 +1,38 @@
+<?php
+/**
+ * @file
+ * Code for the Stanford Jumpstart Academic Layouts feature.
+ */
+
+include_once 'stanford_jsa_layouts.features.inc';
+
+/**
+ * Implements hook_menu_block_blocks().
+ */
+function stanford_jsa_layouts_menu_block_blocks() {
+  // The array key is the block delta used by menu block.
+  return array(
+    'stanford_jsa_layouts-1' => array(
+      'menu_name'   => 'main-menu',
+      'parent_mlid' => 0,
+      'title_link'  => 0,
+      'admin_title' => 'Main Menu - Secondary - 3 Depths',
+      'level'       => 2,
+      'follow'      => 0,
+      'depth'       => 3,
+      'expanded'    => 0,
+      'sort'        => 0,
+    ),
+    'stanford_jsa_layouts-2' => array(
+      'menu_name'   => 'main-menu',
+      'parent_mlid' => 0,
+      'title_link'  => 0,
+      'admin_title' => 'Main Menu - Primary - 1 Depth',
+      'level'       => 1,
+      'follow'      => 0,
+      'depth'       => 1,
+      'expanded'    => 1,
+      'sort'        => 0,
+    ),
+  );
+}

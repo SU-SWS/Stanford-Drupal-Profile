@@ -1,0 +1,233 @@
+<?php
+/**
+ * @file
+ * Contextual Block Classes Module adds the ability to add css classes based
+ * on a context.
+ *
+ */
+
+/**
+ * Implements hook_help().
+ */
+function cbc_help($path, $arg) {
+  switch ($path) {
+    // Main module help for the block module
+    /*
+     *case 'admin/help#block':
+     *  return '<p>' . t('Blocks are boxes of content rendered into an area, or region, of a web page. The default theme Bartik, for example, implements the regions "Sidebar first", "Sidebar second", "Featured", "Content", "Header", "Footer", etc., and a block may appear in any one of these areas. The <a href="@blocks">blocks administration page</a> provides a drag-and-drop interface for assigning a block to a region, and for controlling the order of blocks within regions.', array('@blocks' => url('admin/structure/block'))) . '</p>';
+     */
+    case 'admin/help#cbc':
+      return '<p>' . t('Contextual Block Class. ') . l(t('Stanford Web Services'), 'https://swsblog.stanford.edu') . '</p>';
+  }
+}
+
+/**
+ * Implements hook_form_alter().
+ */
+function cbc_form_alter(&$form, &$form_state, $form_id) {
+
+  // Only want block forms :)
+  if ($form_id !== 'block_admin_configure' && $form_id !== 'block_add_block_form') {
+    return;
+  }
+
+  // Check user for permissions.
+  if (!user_access('administer contextual block classes')) {
+    return;
+  }
+
+  // Get all the contexts.
+  $contexts = context_context_list();
+  $classes = cbc_get_block_classes();
+  $block_key = (isset($form['delta']['#value']) && !is_null($form['delta']['#value'])) ? $form['module']['#value'] . '-' . $form['delta']['#value'] : '';
+
+  // Set some weights.
+  $form['settings']['#weight'] = -10;
+
+  // Add the fieldset container.
+  $form['cbc'] = array(
+    '#tree' => TRUE,
+    '#title' => t('Contextual Block Class(es)'),
+    '#type' => 'fieldset',
+    '#collapsed' => TRUE,
+    '#collapsible' => TRUE,
+    '#description' => t('Contextualize the styling of this block by adding CSS classes.'),
+    '#weight' => -5,
+  );
+
+  // If there are no context available then we should display a message.
+  if (empty($contexts)) {
+    $context_url = l(t('create a context'), 'admin/structure/context/add');
+    $form['cbc']['no_contexts'] = array(
+      '#markup' => t('There are no contexts available. Please go ') . $context_url . t(' before you continue.'),
+    );
+  }
+
+  // Create the inputs.
+  foreach ($contexts as $context_name) {
+    $default_value = '';
+
+    // Check for default values.
+    if (isset($classes[$context_name][$block_key])) {
+      $default_value = implode(" ", $classes[$context_name][$block_key]);
+    }
+
+    // Add the input field.
+    $form['cbc'][$context_name] = array(
+      '#type' => 'textfield',
+      '#title' => t($context_name),
+      '#description' => 'Separate multiple classes by spaces. Do not add periods.',
+      '#default_value' => $default_value,
+    );
+  }
+
+  // Add a validation and submit callback.
+  $form['#validate'][] = 'cbc_block_form_validate';
+  $form['#submit'][] = 'cbc_block_form_submit';
+
+}
+
+/**
+ * Validate function for the block form.
+ * @param  [type] $form       [description]
+ * @param  [type] $form_state [description]
+ */
+function cbc_block_form_validate(&$form, &$form_state) {
+  // Nothing we want to validate yet.
+}
+
+/**
+ * Submit function for the block form.
+ * @param  [type] $form       [description]
+ * @param  [type] $form_state [description]
+ */
+function cbc_block_form_submit(&$form, &$form_state) {
+
+  // IF CBC is not set then we do not have any contexts.
+  if (!isset($form_state['values']['cbc'])) {
+    return;
+  }
+
+  $classes = cbc_get_block_classes();
+  $block_key = $form_state['values']['module'] . '-' . $form_state['values']['delta'];
+  $cbc_values = $form_state['values']['cbc'];
+
+  // Split up each context and class and break them down into array items.
+  foreach ($cbc_values as $context_name => $string) {
+    if (!empty($string)) {
+      $classes[$context_name][$block_key] = explode(" ", $string);
+    }
+    if (empty($string) && isset($classes[$context_name][$block_key])) {
+      unset($classes[$context_name][$block_key]);
+    }
+  }
+
+  cbc_set_block_classes($classes);
+}
+
+
+/**
+ * Implements hook_permission().
+ */
+function cbc_permission() {
+  return array(
+    'administer contextual block classes' => array(
+      'title' => t('Administer Contextual Block Classes'),
+      'description' => t('Allow users to admister the contextual block classes on block edit forms.'),
+    ),
+  );
+}
+
+/**
+ * This is the meat of the functionality. Grab all active contexts and add the
+ * css classes that belong to the block through the classes_array option.
+ * @param  [type] $vars [description]
+ */
+function cbc_preprocess_block(&$vars) {
+  // Get all of the contexts that have a match.
+  $contexts = context_active_contexts();
+  $cbc = cbc_get_block_classes();
+
+  // No need to go further if either are empty.
+  if (empty($contexts) || empty($cbc)) {
+    return;
+  }
+
+  // Check to see if this block has any settings.
+  $block_key = $vars['block']->module . '-' . $vars['block']->delta;
+  foreach ($contexts as $context_name => $context) {
+
+    // Get the blocks for this context only.
+    $cbcs = cbc_get_block_class($context_name);
+    // If no blocks just continue.
+    if (!$cbcs || empty($cbcs)) {
+      continue;
+    }
+
+    // If there is a setting for this block add the classes.
+    if (isset($cbcs[$block_key])) {
+      $vars['classes_array'] = array_merge($vars['classes_array'], $cbcs[$block_key]);
+    }
+
+  }
+
+}
+
+/**
+ * Save the block class variables into the variables table through variable set.
+ * @param  array  $classes a full array of context and block class settings.
+ * @return Boolean (true if successful)
+ */
+function cbc_set_block_classes($classes = array()) {
+  if (!is_array($classes)) {
+    return FALSE;
+  }
+
+  variable_set('contextual_block_class', $classes);
+
+  return TRUE;
+}
+
+
+/**
+ * Returns an array of block classes keyed by the context machine name.
+ * @return array and array of block classes
+ */
+function cbc_get_block_classes() {
+
+  static $drupal_static_fast;
+  if (!isset($drupal_static_fast)) {
+    $drupal_static_fast['contextual_block_class'] = &drupal_static(__FUNCTION__);
+  }
+
+  $contextual_block_class = &$drupal_static_fast['contextual_block_class'];
+
+  if (empty($contextual_block_class)) {
+    $contextual_block_class = variable_get('contextual_block_class', array());
+  }
+
+  return $contextual_block_class;
+
+}
+
+/**
+ * Returns an array of block classes keyed by block id.
+ * @param  string $context_name context machine name
+ * @return array               an array of blocks and classes.
+ */
+function cbc_get_block_class($context_name = '') {
+  $classes = cbc_get_block_classes();
+
+  if (!is_array($classes)) {
+    return FALSE;
+  }
+
+  if (isset($classes[$context_name])) {
+    return $classes[$context_name];
+  }
+
+  return FALSE;
+}
+
+
+

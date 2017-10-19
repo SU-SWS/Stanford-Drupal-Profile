@@ -1,0 +1,10 @@
+#block-system-main {
+  float: left;
+  width: 50%;
+}
+
+#block-stanford-capx-data-browser-launch {
+  float: right;
+  width: 50%;
+  overflow-y: scroll;
+}

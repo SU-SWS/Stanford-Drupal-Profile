@@ -1,0 +1,83 @@
+@charset "UTF-8";
+/* Jumpstart Theme Fixes -- All CSS here HAS been fixed in the themes */
+
+/* Fixed at OFW */
+.float-left,
+.float-right {
+	float:left;
+	margin-right:15px;
+	margin-bottom:15px;
+}
+.float-right {
+	float: right;
+	margin-left: 15px;
+	margin-right: 0;
+}
+.row-fluid .node .content .float-right {
+    margin-left: 15px;
+}
+
+/* Fixed at Wilbur */
+p a.more-link {border-bottom:0;}
+
+/* Fixed at Stanford Framework */
+#admin-shortcuts {padding: 8px 10px 3px 10px; color: white; font-family: lucida grande;}
+#sidebar-first .block-menu ul.menu li ul, #sidebar-first .block-menu-block ul.menu li ul { padding: 0 0 0 15px; }
+.navbar .nav > li > a {margin:0 0.5em 0 0;}
+@media (max-width:767px) {
+	.navbar .nav > li > a {margin:0;}
+}
+#sidebar-first .block-menu-block .content > .nav > li.expanded > ul, #sidebar-first .block-menu .content > .nav > li.expanded > ul { padding-bottom: 1em; }
+
+/* fix for views-row-lines height! remove the min-height. */
+.views-row-lines .views-row { min-height: inherit; overflow:hidden; }
+
+.banner-overlay > div { top: -135px; }
+
+/* Carousel styles - added to Stanford Framework */
+.view.carousel .carousel-caption.carousel-dark a.more-link, .view.carousel .carousel-caption.carousel-dark .more-link a { color: #9D9573;} /* color for SUFW more-link */
+.view.carousel .carousel-caption.carousel-dark a.more-link:hover, .view.carousel .carousel-caption.carousel-dark .more-link a:hover, 
+.view.carousel .carousel-caption.carousel-dark a.more-link:focus, .view.carousel .carousel-caption.carousel-dark .more-link a:focus { color: #cfccbb;} /* color for SUFW more-link hover */
+.view.carousel .carousel-indicators li {background-color: #FFFFFF; border: 1px solid #8c1515; }
+.view.carousel .carousel-indicators .active {background-color: #8c1515;}
+.view.carousel .carousel-indicators li:hover {cursor: pointer; background-color: #8c1515;}
+@media (min-width: 768px) and (max-width: 979px) { 
+.view.carousel .carousel-block .carousel-caption.carousel-light, .view.carousel .carousel-caption.carousel-light { background: #F2F1EB; } /* color for SUFW slide bkg */
+#main-content .carousel img { border: 15px solid #F2F1EB; } /* color for SUFW slide bkg */
+.view.carousel .carousel-caption.carousel-dark a.more-link, .view.carousel .carousel-caption.carousel-dark .more-link a { color: #736C51;} /* color for SUFW more-link (normal) */
+.view.carousel .carousel-caption.carousel-dark a.more-link:hover, .view.carousel .carousel-caption.carousel-dark .more-link a:hover, 
+.view.carousel .carousel-caption.carousel-dark a.more-link:focus, .view.carousel .carousel-caption.carousel-dark .more-link a:focus { color: #9D9573;} /* color for SUFW more-link hover (normal) */
+}
+@media (max-width: 630px) {
+.view.carousel .carousel-block .carousel-caption.carousel-light, .view.carousel .carousel-caption.carousel-light { background: #F2F1EB; } /* color for SUFW slide bkg */
+#main-content .carousel img { border: 15px solid #F2F1EB; } /* color for SUFW slide bkg */
+.view.carousel .carousel-caption.carousel-dark a.more-link, .view.carousel .carousel-caption.carousel-dark .more-link a { color: #736C51;} /* color for SUFW more-link (normal) */
+.view.carousel .carousel-caption.carousel-dark a.more-link:hover, .view.carousel .carousel-caption.carousel-dark .more-link a:hover, 
+.view.carousel .carousel-caption.carousel-dark a.more-link:focus, .view.carousel .carousel-caption.carousel-dark .more-link a:focus { color: #9D9573;} /* color for SUFW more-link hover (normal) */
+}
+
+/* Fixed 4/23/15 in SUFW 7.x-3.0-dev */
+@media (max-width: 979px) {
+    [class*="span"] .banner-overlay {
+        height: auto;
+    }
+}
+@media (max-width: 480px) {
+    .banner-overlay {
+        height: auto;
+    }
+}
+
+
+/* ---- NEEDS TO BE FIXED IN THEMES ---- */
+
+/* Open Framework */
+/* adjust views-grid-five mobile breakpoint */
+@media (max-width:350px) {
+	.views-grid-five .views-row { display:block; width:100%; margin-right:0;}
+}
+/* fix for menu contextual links */
+.region-navigation .block.contextual-links-region {
+    float: none;
+    position: inherit;
+}

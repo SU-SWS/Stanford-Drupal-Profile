@@ -1,0 +1,208 @@
+/* 1.GLOBAL */
+
+/* Content Specific Formatting --------------------------------- */
+body {font: 1em Arial, Helvetica, sans-serif; margin: 0px; padding: 0px; height: 100%; -webkit-text-size-adjust: 100%; word-wrap: break-word;}
+h1 {font-family: Arial, Helvetica, sans-serif; font-size: 1.5em; font-weight: normal; padding: 0px 0px 0.5em 0px;}
+h2 {font-family: Arial, Helvetica, sans-serif; font-size: 1.2em; margin: 1em 0em 0.4em 0em; line-height: 1.2em; letter-spacing: 0.05em;}
+h3 {font-family: Arial, Helvetica, sans-serif; font-size: 1.2em; margin: 1em 0em 0.4em 0em; line-height: 1.2em; letter-spacing: 0.04em;}
+h4 {font-family: Arial, Helvetica, sans-serif; font-size: 1.2em; margin: 1em 0em 0.4em 0em; line-height: 1.2em; letter-spacing: 0.03em;}
+h5 {font-family: Arial, Helvetica, sans-serif; font-size: 1.2em; margin: 1em 0em 0.4em 0em; line-height: 1.2em; letter-spacing: 0.02em;}
+
+a {text-decoration: none; border-bottom: 1px dotted #81785a; color: #565347;}
+a:focus {outline:1px #8a887d dotted; border: 0px;}
+a:hover {color: #820000;}
+
+p {font-size: 1em; line-height: 1.2em; margin: 0 0 1em 0;}
+blockquote {margin: 1.25em; padding: 1.25em 1.25em 0 1.25em;}
+em {padding: 0 3px 0 0;}
+hr {background: #eae9e6; color: #eae9e6; border: none; height: 1px; margin: 0; padding: 0;}
+img {border: none; outline: none;}
+
+dl {margin: .5em 0 .5em; padding: 0; line-height: 1.2em;}
+dl dt {margin: 0 0 .25em 0;}
+dl dd {margin: 0 0 .25em 1.5em;}
+ol {margin: .5em 0 .5em 1.5em; padding: 0; line-height: 1.2em;}
+ol li {margin: 0px 0px 0.25em 0.5em; padding: 0px;}
+ul {margin: .5em 0 .5em 1em; padding: 0; line-height: 1.2em;}
+ul li {margin: 0px 0px 0.25em 0.5em; padding: 0px;}
+
+table {margin: .5em 0; width: 100%; border: 0px;}
+thead th {color: #494949; font-weight: 700; border: 0px;}
+tbody {border: 0px;}
+th a:link, th a:visited {color: #7f7f7f;}
+td, th {padding: .25em;}
+
+pre, quote, code {margin: .25em 0; word-wrap: break-word;}
+
+/* Box--------------------------------- */
+.box {border:1px solid #eee3c1; padding: 5px; width: auto; margin: 0px 0px 0.5em 0px; background: #fff;}
+.color-box {border:1px solid #eee3c1; padding: 5px; width: auto; margin: 0px 0px 0.5em 0px; background: #f6f3e5;}
+.center-box {border:1px solid #eee3c1; padding: 5px; width: 80%; margin: 0px auto 0.5em auto; background: #fff;}
+.left-box {border:1px solid #eee3c1; padding: 5px; width: 40%; float: left; margin: 0px 0.25em 0.25em 0px; background: #fff;}
+.right-box {border:1px solid #eee3c1; padding: 5px; width: 40%; float: right; margin: 0px 0px 0.25em 0.25em; background: #fff;}
+
+/* 2.LAYOUT */
+
+#layout {background: none; background-repeat: no-repeat; padding: 0px;}
+#wrapper {position: relative; margin: 0px; padding: 0px 0px 34px 0px; width: auto; min-width: 320px;}
+body.wide #wrapper {margin: 0px; padding: 0px 0px 34px 0px; width: auto; min-width: 320px;}
+#container {clear: both; margin: 0px; padding: 0px;}
+body.nav #container, body.drawer #container {border-top: 0px;}
+#content {margin: 0px; position: static; padding: 0px; border-bottom: 0px;}
+body.nav #content {margin: 0px;}
+#top, #bottom {background: #fff; padding: 5px; margin: 0px;}
+#mission {margin: 0px; padding: 0px;}
+
+/* 1 column */
+#main {margin: 0px; padding: 5px; background: #fff; width: auto !important;}
+
+/* 3 columns */
+body.two-sidebars #main {float: none; margin: 0px; padding: 5px; border: 0px; position: static; width: auto; left: 0px;}
+body.two-sidebars.wide #main {padding: 5px; width: auto; position: static; left: 0px;}
+body.two-sidebars.news #main {padding: 5px; width: auto; left: 0px;}
+
+/* 2 columns - sidebar-first */
+body.sidebar-first #main {float: none; margin: 0px; padding: 5px; border: 0px; position: static; width: auto; left: 0px;}
+body.sidebar-first.wide #main {float: left; padding: 5px; width: auto; position: static; left: 0px;}
+body.sidebar-first.news #main {padding: 5px; width: auto; left: 0px;}
+body.sidebar-first #content #sidebar-second {display: none;}
+
+/* 2 columns - sidebar-second */
+body.sidebar-second #main {float: none; margin: 0px; padding: 5px; width: auto; border: 0px;}
+body.sidebar-second.wide #main {padding: 5px; width: auto; position: static; left: 0px;}
+body.sidebar-second.news #main {padding: 5px; width: auto;}
+body.sidebar-second #content #sidebar-first {display: none;}
+
+/* 3.SIDEBARS */
+.sidebar {clear: both; width: auto; margin: 0px; padding: 0px;}
+.sidebar ul {margin: .35em 0 0.5em 0; padding: 0;}
+.sidebar ul ul {margin-left: 0;}
+.sidebar ul li {line-height: 1.4em; background: transparent url("../images/raquo.gif") no-repeat 0px .4em; list-style-image: none; list-style-type: none; margin: .15em 0 .15em 0; padding: 0 0 .4em 1em;}
+.sidebar ul li a {color: #565347;}
+.sidebar dl {margin: 0 0 1.5em 0; padding: 0; line-height: 1.5em;}
+.sidebar dl dt {margin: 0 0 0.25em 0; font-size: 1.1em;}
+.sidebar dl dd {margin: 0px 0px 1em 0px;}
+.sidebar p {margin: 0px 0px 1em 0px;}
+.sidebar .block {margin: 0px; padding: 5px;}
+body.wide .sidebar .block {margin: 0px; padding: 5px;}
+
+#sidebar-first {display: none; float: none; margin: 0px; padding: 0px; font-size: 0.9em; position: static; left: 0px;}
+body.sidebar-first #sidebar-first {left: 0px}
+body.sidebar-first.borders #sidebar-first {left: 0px}
+body.sidebar-first.news #sidebar-first {left: 0px}
+body.sidebar-first.news.borders #sidebar-first {left: 0px}
+body.sidebar-first.wide #sidebar-first {left: 0px}
+body.sidebar-first.wide.borders #sidebar-first {left: 0px}
+
+body.two-sidebars #sidebar-first {left: 0px}
+body.two-sidebars.borders #sidebar-first {left: 0px}
+body.two-sidebars.news #sidebar-first {left: 0px}
+body.two-sidebars.news.borders #sidebar-first {left: 0px}
+body.two-sidebars.wide #sidebar-first {left: 0px}
+body.two-sidebars.wide.borders #sidebar-first {left: 0px}
+body.two-sidebars #sidebar-first, body.sidebar-first #sidebar-first {display: block;}
+#sidebar-first h2 {margin: 0px 0px 1em 0px; padding: 0px; font-size: 1.1em; font-weight: bold;}
+#sidebar-first h3 {font-size: 1.1em;}
+body.wide #sidebar-first {width: auto; margin: 0px; padding: 0px;}
+body.news #sidebar-first {width: auto; margin: 0px; padding: 0px;}
+
+#sidebar-second {display: none; float: none; margin: 0px; padding: 0px; font-size: 0.9em;}
+body.two-sidebars #sidebar-second, body.sidebar-second #sidebar-second {display: block;}
+#sidebar-second h2 {margin: 0px 0px 1em 0px; padding: 0px; font-size: 1.1em; font-weight: bold;}
+#sidebar-second h3 {font-size: 1.1em;}
+body.wide #sidebar-second {width: auto; margin: 0px; padding: 0px;}
+body.news #sidebar-second {width: auto; margin: 0px; padding: 0px;}
+
+/* 4.HEADER */
+#header {margin: 0px; padding: 10px; height: auto; width: auto; font-size: 0.9em;}
+#header #logo {float: left; margin: 0px 10px 0px 0px; padding: 0px;}
+#header #logo img {max-width: 80px; max-height: 50px;}
+#header #site {float: none; margin: 0px; padding: 0px;}
+#header #name a {font-size: 1.3em; line-height: 1.3em;}
+#header #slogan {font-size: 1.1em; line-height: 1.1em;}
+
+/* Header Search Box */
+#header #block-search-form {position: absolute; left: 0px; bottom: 0px; float: none; clear: both; width: 100%; background: #f6f3e5; height: 24px; margin: 0; padding: 5px;}
+#header #block-search-form input {width: 70%; color: #3f3c30; margin: 0px; padding: 2px; border: 0; outline: none; height: auto; float: left; border: 1px solid #c4bfa9; font-family:Arial, Helvetica, sans-serif; background: #fff;}
+#header #block-search-form input.form-submit {position: static; border: 0; background: url("../images/search_button.gif") no-repeat top left; height: 20px; width: 20px; text-indent: -9999px;  margin-left: 3px; margin-top: 1px; float: left; cursor: pointer; color: transparent; text-transform: capitalize;}
+
+/* Header Stanford Search Box */
+#header #cse-search-box {position: absolute; left: 0px; bottom: 0px; float: none; clear: both; width: 100%; background: #f6f3e5; height: 24px; margin: 0; padding: 5px;}
+#header #cse-search-box input {width: 70%; color: #3f3c30; margin: 0px; padding: 2px; border: 0; outline: none; height: auto; float: left; border: 1px solid #c4bfa9; font-family:Arial, Helvetica, sans-serif; background: #fff;}
+#header #cse-search-box input.form-submit {position: static; border: 0; background: url("../images/search_button.gif") no-repeat top left; height: 20px; width: 20px; text-indent: -9999px;  margin-left: 3px; margin-top: 1px; float: left; cursor: pointer; color: transparent; text-transform: capitalize;}
+
+/* 5.NAVIGATION */
+
+/* Navigation */
+#nav {font-size: 0.9em; clear: both; margin: 0px 0px 1em 0px; padding: 5px 5px 0px 5px; width: auto; background-image: none; position: relative; min-width: none;}
+body.wide #nav {margin: 0px 0px 1em 0px;}
+
+/* Expanded Nav */
+#nav ul {margin: 0px; padding: 2px 0px 5px 0px;}
+#nav ul li {float: none; background: none; list-style-type: none; margin: 0px; padding: 0px 1em 0px 0px;}
+#nav a {display: inline; border: 0px; outline: none; padding-bottom: 5px;}
+#nav ul li ul {margin: 0px; padding: 0px;}
+#nav ul li ul li {float: none; list-style-type: none; margin: 0px; padding: 0px 0px 0.25em 0px;}
+#nav h2 {display: none;}
+#nav ul li ul .leaf {display: block; float: none;}
+#nav li ul {display: block;}
+#nav li:hover ul {display: block; position: static; z-index: 9999; margin: 0px; padding: 0px;}
+#nav li:hover .leaf {display: block;}
+#nav li .leaf a {display: inline; font-size: 1em; border: none; padding: 0px 0px 0px 10px;}
+#nav li:hover .leaf a {display: inline; font-size: 1em; border: none; padding: 0px 0px 0px 10px;}
+
+/* 6.FOOTER */
+
+#footer {border-top: none; margin: 0px; padding: 5px 0px; position: relative; text-align: left; font-size: 0.9em;}
+#footer a {border-bottom: 1px dotted #81785a;}
+#footer ul, #footer ul.menu {text-align: left; margin: 0px; padding: 0px 5px 5px 5px;}
+#footer ul li, #footer ul.menu li {display: inline; background: none; border-right: none !important; margin: 0px; padding: 0px 1em 0px 0px;}
+#footer ul li.last, #footer ul.menu li.last {border: 0px;}
+#footer ul li a, #footer ul.menu li a {border-bottom: 1px dotted #81785a; margin: 0px; padding: 0px;}
+#footer ul li a:hover, #footer ul li a:active, #footer ul.menu li a:hover, #footer ul.menu li a:active {color: #820000;}
+#footer ul li a.active:hover, #footer ul li a.active:active, #footer ul.menu li a.active:hover, #footer ul.menu li a.active:active {color: #820000;}
+#footer_message {text-align: left; font-size: 0.9em; margin: 0px; padding: 2px 5px;}
+#footer_message a {border-bottom: 1px dotted #81785a;}
+#copyright {text-align: left; font-size: 0.9em; margin: 0px; padding: 2px 5px;}
+#copyright a {border-bottom: 1px dotted #81785a;}
+
+/* 7.PAGE ELEMENTS */
+
+/* Breadcrumb */
+.breadcrumb {font-size: 0.9em; line-height: 1.3em; height: 1.3em; padding: 0px 0px 2px 0px; margin: 0px 0px 1em 0px;}
+
+/* Admin Menu */
+body.admin-menu {margin-top: 60px !important;}
+#admin-menu ul a {border: none !important;}
+
+/* Rounded Corners */
+body.roundedcorners #header, body.roundedcorners #nav, body.roundedcorners #main, body.roundedcorners .block, body.roundedcorners #footer, body.roundedcorners #top, body.roundedcorners #bottom {-moz-border-radius: 0px; border-radius: 0px;}
+body.roundedcorners #nav ul {-moz-border-radius-bottomright: 0px 0px; border-bottom-right-radius: 0px 0px; -moz-border-radius-bottomleft: 0px 0px; border-bottom-left-radius: 0px 0px;}
+
+/* Color Palette 1 Default */
+body.color1 #nav {background: #ddd;}
+body.color1 #nav li:hover ul {background: #eee; -moz-box-shadow: 0px 0px 0px #565347; -webkit-box-shadow: 0px 0px 0px #565347; box-shadow: 0px 0px 0px #565347;}
+body.color1.borders #main {border: none;}
+
+/* Color Palette 2 Cardinal */
+body.color2 #nav {background: #820000;}
+body.color2 #nav li:hover ul {background: transparent; -moz-box-shadow: 0px 0px 0px #565347; -webkit-box-shadow: 0px 0x 0px #565347; box-shadow: 0px 0px 0px #565347;}
+body.color2 #nav ul li a {color: #fff;}
+body.color2 #nav ul li a:hover {text-decoration: underline;}
+body.color2 #nav ul li ul .leaf a {color: #fff;}
+body.color2 #nav ul li ul .leaf a:hover {color: #fff;}
+body.color2.borders #main {border: none;}
+
+/* Color Palette 3 Sandstone */
+body.color3 #nav {background: #ddcf99;}
+body.color3 #nav li:hover ul {background: transparent; -moz-box-shadow: 0px 0px 0px #565347; -webkit-box-shadow: 0px 0px 0px #565347; box-shadow: 0px 0px 0px #565347;}
+body.color3.borders #main {border: none;}
+
+/* Color Palette 4 Warm Gray */
+body.color4 #nav {background: #565347;}
+body.color4 #nav li:hover ul {background: transparent; -moz-box-shadow: 0px 0px 0px #565347; -webkit-box-shadow: 0px 0px 0px #565347; box-shadow: 0px 0px 0px #565347;}
+body.color4 #nav ul li a {color: #fff;}
+body.color4 #nav ul li a:hover {text-decoration: underline;}
+body.color4 #nav ul li ul .leaf a {color: #fff;}
+body.color4 #nav ul li ul .leaf a:hover {color: #fff;}
+body.color4.borders #main {border: none;}

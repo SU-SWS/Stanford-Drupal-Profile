@@ -1,0 +1,13 @@
+#footer ul, #footer ul.menu {margin-left: 22px;}
+
+/* Color Palette 1 Default */
+body.color1 .sidebar .block {background-color: #eee;}
+
+/* Color Palette 2 Cardinal */
+body.color2 .sidebar .block {background-color: #f6f3e5;}
+
+/* Color Palette 3 Sandstone */
+body.color3 .sidebar .block {background-color: #f6f3e5;}
+
+/* Color Palette 4 Warm Gray */
+body.color4 .sidebar .block {background-color: #e6e4db;}

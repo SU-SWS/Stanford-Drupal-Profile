@@ -1,0 +1,26 @@
+<?php
+/**
+ * @file
+ * Code for the Stanford Manage Content feature.
+ */
+
+include_once 'stanford_manage_content.features.inc';
+
+/**
+ * Implements hook_menu().
+ */
+function stanford_manage_content_menu() {
+
+  // Add manage content link to site actions menu.
+  $items['admin/stanford/jumpstart/shortcuts/site-actions/manage-content'] = array(
+    'title' => 'Manage Content',
+    'page callback' => 'drupal_goto',
+    'page arguments' => array('admin/manage'),
+    'access arguments' => array('administer nodes'),
+    'type' => MENU_NORMAL_ITEM,
+    'menu_name' => 'menu-admin-shortcuts',
+    'weight' => -90,
+  );
+
+  return $items;
+}

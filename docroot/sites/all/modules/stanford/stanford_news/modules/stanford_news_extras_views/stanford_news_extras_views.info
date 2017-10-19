@@ -1,0 +1,14 @@
+name = Stanford News Extras Views
+description = Views using the fields in the News Extras
+core = 7.x
+package = Stanford
+version = 7.x-3.3+8-dev
+project = stanford_news_extras_views
+dependencies[] = ctools
+dependencies[] = stanford_news
+dependencies[] = stanford_news_extras
+dependencies[] = views
+features[ctools][] = views:views_default:3.0
+features[features_api][] = api:2
+features[views_view][] = stanford_news_with_teaser
+project status url = https://github.com/SU-SWS/stanford_news.git

@@ -1,0 +1,102 @@
+<?php
+
+/**
+ * @file
+ * The install file for the simplesamlphp_auth module.
+ */
+
+/**
+ * Implements hook_install().
+ */
+function stanford_simplesamlphp_auth_install() {
+
+  user_role_revoke_permissions(DRUPAL_AUTHENTICATED_RID, array('change own password'));
+
+  // Disable the open registration to the site and store the original setting.
+  $original = variable_get('user_register', 1);
+  variable_set('user_register', 0);
+  variable_set('stanford_simplesamlphp_auth_user_register_original', $original);
+
+}
+
+/**
+ * Implements hook_uninstall().
+ */
+function stanford_simplesamlphp_auth_uninstall() {
+  // Restore the original user registration directive.
+  $original = variable_get('stanford_simplesamlphp_auth_user_register_original', 1);
+  variable_set('user_register', $original);
+  variable_del('stanford_simplesamlphp_auth_user_register_original');
+
+  // Remove the created system variables.
+  variable_del('stanford_simplesamlphp_auth_activate');
+  variable_del('stanford_simplesamlphp_auth_installdir');
+  variable_del('stanford_simplesamlphp_auth_logout_page');
+  variable_del('stanford_simplesamlphp_auth_mailattr');
+  variable_del('stanford_simplesamlphp_auth_unique_id');
+  variable_del('stanford_simplesamlphp_auth_user_name');
+  variable_del('stanford_simplesamlphp_auth_authsource');
+  variable_del('stanford_simplesamlphp_auth_rolepopulation');
+  variable_del('stanford_simplesamlphp_auth_roleevaleverytime');
+  variable_del('stanford_simplesamlphp_auth_debug');
+  variable_del('stanford_simplesamlphp_auth_registerusers');
+  variable_del('stanford_simplesamlphp_auth_allowsetdrupalpwd');
+  variable_del('stanford_simplesamlphp_auth_allowdefaultlogin');
+  variable_del('stanford_simplesamlphp_auth_allowdefaultloginroles');
+  variable_del('stanford_simplesamlphp_auth_allowdefaultloginusers');
+  variable_del('stanford_simplesamlphp_auth_login_link_display_name');
+  variable_del('stanford_simplesamlphp_auth_logoutgotourl');
+  variable_del('stanford_simplesamlphp_auth_autoenablesaml');
+}
+
+/**
+ * Implements hook_requirements().
+ */
+function stanford_simplesamlphp_auth_requirements($phase) {
+  $t = get_t();
+  $requirements = array();
+
+  if ($phase == 'runtime') {
+    if (!variable_get('stanford_simplesamlphp_auth_activate', 0)) {
+      $requirements['stanford_simplesamlphp_auth'] = array(
+        'severity'    => REQUIREMENT_WARNING,
+        'title'       => 'SimpleSAMLphp auth',
+        'value'       => $t('SimpleSAMLphp authentication is NOT activated'),
+        'description' => $t('It can be activated on the !admin_page.', array('!admin_page' => l($t('configuration page'), 'admin/config/stanford/stanford_ssp'))),
+      );
+    }
+
+    $basedir = variable_get('stanford_simplesamlphp_auth_installdir', '/usr/share/simplesamlphp');
+    if (!file_exists($basedir . '/lib/_autoload.php')) {
+      $requirements['stanford_simplesamlphp_auth'] = array(
+        'severity'    => REQUIREMENT_ERROR,
+        'title'       => 'SimpleSAMLphp authentication',
+        'value'       => $t('SimpleSAMLphp authentication is missing the required SimpleSAMLphp library.'),
+        'description' => $t('Please download and install the !simplesamlphp library.', array('!simplesamlphp' => l($t('SimpleSAMLphp'), 'https://simplesamlphp.org/download'))),
+      );
+    }
+    // SimpleSAMLphp is installed, lets autoload it.
+    else if (stanford_simplesamlphp_auth_autoload()) {
+      // If autoloading was successful we should have these variables.
+      global $stanford_simplesamlphp_auth_saml_config;
+      global $stanford_simplesamlphp_auth_saml_version;
+
+      if (!empty($stanford_simplesamlphp_auth_saml_version)) {
+        $ver = explode('.', $stanford_simplesamlphp_auth_saml_version);
+        $requirements['stanford_simplesamlphp_auth_version'] = array(
+          'title' => $t('SimpleSAMLphp authentication'),
+          'value' => $stanford_simplesamlphp_auth_saml_version,
+        );
+        if ($ver[0] < 1 || ($ver[0] == 1 && $ver[1] < 6)) {
+          $requirements['stanford_simplesamlphp_auth_version']['description'] = $t('Your version of SimpleSAMLphp is too old. The minimum version is 1.6.');
+          $requirements['stanford_simplesamlphp_auth_version']['severity'] = REQUIREMENT_ERROR;
+        }
+        else {
+          $requirements['stanford_simplesamlphp_auth_version']['severity'] = REQUIREMENT_OK;
+        }
+      }
+    }
+  }
+
+  return $requirements;
+}

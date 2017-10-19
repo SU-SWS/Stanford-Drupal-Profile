@@ -1,0 +1,7 @@
+<?php
+/**
+ * @file
+ * Code for the Stanford MetaTag NoBots feature.
+ */
+
+include_once 'stanford_metatag_nobots.features.inc';

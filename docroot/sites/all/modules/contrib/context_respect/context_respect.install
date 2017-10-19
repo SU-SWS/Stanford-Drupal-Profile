@@ -1,0 +1,29 @@
+<?php
+
+/**
+ * @file
+ * Context Respect install file.
+ */
+
+/*
+ * Implements hook_enable().
+ */
+function context_respect_enable() {
+  context_invalidate_cache();
+  drupal_set_message(t('Context Respect has been enabled. You can now set/ignore roles on blocks Context Respect- you may want to go !link now.', array('!link' => l('configure them', 'admin/structure/block'))), 'status');
+}
+
+/**
+ * Implements hook_disable().
+ */
+function context_respect_disable() {
+  context_invalidate_cache();
+}
+
+/**
+ * Implements hook_uninstall().
+ */
+function context_respect_uninstall() {
+  variable_del('context_respect_override_page');
+  variable_del('context_respect_override_role');
+}

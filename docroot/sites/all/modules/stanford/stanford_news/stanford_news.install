@@ -1,0 +1,59 @@
+<?php
+/**
+ * @file
+ */
+
+/**
+ * Implements hook_install().
+ */
+function stanford_news_install() {
+  
+  // Add the DS region blocks variables.
+  stanford_news_set_ds_region_blocks();
+}
+/**
+ * Implements hook_uninstall().
+ */
+function stanford_news_uninstall() {
+
+  // Remove the DS region blocks variables.
+  $settings = variable_get('ds_extras_region_blocks');
+  unset($settings['s_news_image']);
+  variable_set('ds_extras_region_blocks', $settings);
+}
+
+/**
+ * Enable new Stanford News Administration module.
+ */
+function stanford_news_update_7300($sandbox) {
+    if (!module_exists("stanford_news_administration")) {
+      module_enable(array("stanford_news_administration"));
+  }
+}
+
+/**
+ * Implements hook_update_N().
+ */
+function stanford_news_update_7301(&$sandbox) {
+  stanford_news_set_ds_region_blocks();
+}
+
+/**
+ * Set the DS region block values.
+ */
+function stanford_news_set_ds_region_blocks() {
+
+  // Add the DS region blocks variables.
+  $settings = variable_get('ds_extras_region_blocks', array());
+
+  if (!isset($settings['s_news_image'])) {
+    $settings['s_news_image'] = array(
+      'title' => t('News Image'),
+      'info' => 'node_stanford_news_item_full',
+    );
+  }
+  else {
+    watchdog('stanford_news', '%msg', array('%msg' => 'DS extras News Image already in use'), WATCHDOG_NOTICE);
+  }
+  variable_set('ds_extras_region_blocks', $settings );
+}

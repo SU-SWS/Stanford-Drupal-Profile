@@ -1,0 +1,167 @@
+<?php
+/**
+ * @file
+ * This file is essentially a copy/paste from the core image module & link module:
+ * image.module.
+ * Applied the patch and few changes suggested at:
+ * http://drupal.org/node/1570072
+ */
+
+/**
+ * Implements hook_field_formatter_info().
+ */
+function stanford_landing_page_fc_link_heading_formatter_field_formatter_info() {
+  $formatters = array(
+    'stanford_landing_page_fc_link_heading_formatter' => array(
+      'label' => t('Link Heading - Stanford Landing Page'),
+      'field types' => array('text'),
+      'settings' => array('html_tag' => '', 'link_field' => ''),
+      'module' => 'stanford_landing_page_fc_link_heading_formatter',
+      'description' => t('Create a linked title that links to the parent entity from a field collection.'),
+    ),
+  );
+  return $formatters;
+}
+
+/**
+ * Implements hook_field_formatter_settings_form().
+ */
+function stanford_landing_page_fc_link_heading_formatter_field_formatter_settings_form($field, $instance, $view_mode, $form, &$form_state) {
+  // Only work on field collection items.
+  if(!isset($field['bundles']['field_collection_item'])){
+    return;
+  }
+
+  $display = $instance['display'][$view_mode];
+  $settings = $display['settings'];
+
+  $tags = array(
+    'h2' => 'H2',
+    'h3' => 'H3',
+    'h4' => 'H4',
+    'h5' => 'H5',
+    'p' => 'p',
+  );
+
+  $element['html_tag'] = array(
+    '#title' => t('Html wrapper tag'),
+    '#type' => 'select',
+    '#default_value' => $settings['html_tag'],
+    '#empty_option' => t('None'),
+    '#options' => $tags,
+  );
+
+  $link_types = array(
+    'content' => t('Content'),
+    'field_s_lp_item_link' => t('field_s_lp_item_link'),
+  );
+
+  $element['link_field'] = array(
+    '#title' => t('Link text to'),
+    '#type' => 'select',
+    '#default_value' => $settings['link_field'],
+    '#empty_option' => t('Nothing'),
+    '#options' => $link_types,
+  );
+
+  return $element;
+}
+
+
+/**
+ * Implements hook_field_formatter_settings_summary().
+ */
+function stanford_landing_page_fc_link_heading_formatter_field_formatter_settings_summary($field, $instance, $view_mode) {
+  $display = $instance['display'][$view_mode];
+  $settings = $display['settings'];
+
+  $summary = '';
+
+  $link_types = array(
+    'content' => t('Content'),
+    'field_s_lp_item_link' => t('field_s_lp_item_link'),
+  );
+
+  $list = array(
+    'Heading tag: ' . (empty($settings['html_tag']) ? t("None") : $settings['html_tag']),
+    'Links to: ' . (empty($settings['link_field']) ? t("Nothing") : $link_types[$settings['link_field']]),
+  );
+
+  $summary .= theme('item_list', array('items' => $list));
+
+  return $summary;
+}
+
+/**
+ * Implements hook_field_formatter_view().
+ */
+function stanford_landing_page_fc_link_heading_formatter_field_formatter_view($entity_type, $entity, $field, $instance, $langcode, $items, $display) {
+  $element = array();
+  $settings = $display['settings'];
+
+  foreach ($items as $delta => $item) {
+    // Opening wrapper tag.
+    $output = (!empty($settings['html_tag'])) ? "<" . $settings['html_tag'] . ">" : "";
+
+    // The text to use for the link if there is a link.
+    $text = _text_sanitize($instance, $langcode, $item, 'value');
+
+    if (!empty($settings['link_field'])) {
+      $link = isset($entity->{$settings['link_field']}[$langcode][$delta]['url']) ? $entity->{$settings['link_field']}[$langcode][$delta]['url'] : NULL;
+      if (!empty($link)) {
+        $output .= l($item['value'], $link, array('attributes' => array('title' => $text)));
+      }
+      else {
+        $output .= $text;
+      }
+    }
+    else {
+      $output .= $text;
+    }
+
+    // Closing wrapper tag.
+    $output .= (!empty($settings['html_tag'])) ? "</" . $settings['html_tag'] . ">" : "";
+    $element[$delta] = array('#markup' => $output);
+  }
+
+  return $element;
+}
+
+/**
+ * [stanford_landing_page_fc_link_formatter_form_alter description]
+ * @param  [type] $form       [description]
+ * @param  [type] $form_state [description]
+ * @param  [type] $form_id    [description]
+ * @return [type]             [description]
+ */
+function stanford_landing_page_fc_link_heading_formatter_form_alter(&$form, &$form_state, $form_id) {
+
+  if ($form_id == 'field_ui_display_overview_form' && $form['#bundle'] !== 'field_landing_page_item'){
+
+    // Remove option from non field_landing_page_item items
+    foreach ($form['#fields'] as $k => $field_name) {
+      if (isset($form['fields'][$field_name]['format']['type']['#options']['stanford_landing_page_fc_link_heading_formatter'])) {
+        unset($form['fields'][$field_name]['format']['type']['#options']['stanford_landing_page_fc_link_heading_formatter']);
+      }
+    }
+
+    $form['#validate'][] = "stanford_landing_page_fc_link_heading_field_collection_formatter_validate";
+  }
+
+}
+
+/**
+ * [field_collection_formatter_validate description]
+ * @param  [type] $form       [description]
+ * @param  [type] $form_state [description]
+ * @return [type]             [description]
+ */
+function stanford_landing_page_fc_link_heading_field_collection_formatter_validate($form, &$form_state){
+  if(isset($form_state['values'])){
+    foreach($form_state['values']['fields'] as $field){
+      if(isset($field['type']) && $field['type'] == 'stanford_landing_page_fc_link_heading_formatter'){
+        form_set_error('field-ui-display-overview-form',t('This formatter is available only for field_landing_page_item field collection item'));
+      }
+    }
+  }
+}

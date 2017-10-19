@@ -1,0 +1,5 @@
+/* Fix the scrolling in the editor */
+body.cke_panel_frame {
+  overflow: auto;
+}
+

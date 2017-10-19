@@ -1,0 +1,17 @@
+WebAuth Extras 7.x-x.x xxxx-xx-xx
+---------------------------------
+
+WebAuth Extras 7.x-1.0-alpha2 2014-08-26
+----------------------------------------
+Changes since 1.0-alpha1:
+By jbickar:
+  - Added "drush webauth-write-htaccess" command
+  - Bug fixes
+
+WebAuth Extras 7.x-1.0-alpha1 2014-04-17
+----------------------------------------
+First functional release of WebAuth Extras
+
+Webauth Extras 7.x-1.0-dev
+=================
+by mrmarco: Added webauth-create-user (waau) function

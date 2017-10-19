@@ -1,0 +1,13 @@
+name = "Contextual Block Class"
+description = "Provides the ability to add classes to blocks through contexts."
+package = "Context"
+core = "7.x"
+dependencies[] = "context"
+files[] = "cbc.install"
+
+; Information added by Drupal.org packaging script on 2014-04-11
+version = "7.x-1.0"
+core = "7.x"
+project = "cbc"
+datestamp = "1397174653"
+

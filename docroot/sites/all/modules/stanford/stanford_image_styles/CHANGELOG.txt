@@ -1,0 +1,66 @@
+Stanford Image Styles x.x-x.x xxxx-xx-xx
+--------------------------------------
+7.x-4.1                       2017-05-18
+----------------------------------------
+- Bug fix when classes is a string vs array
+
+7.x-4.0                       2017-02-27
+----------------------------------------
+- Doubled image size and added dependency on hi-res contrib module
+- Added a preprocess function to apply a css class to html output
+- Add code climate and travis integrations
+
+7.x-3.4+20-dev                 2017-01-20
+----------------------------------------
+- Reverted full-width-banner-short to both scale and crop
+
+7.x-3.4+16-dev                 2016-11-29
+----------------------------------------
+- Removed the crop on full-width-banner-short
+
+7.x-3.4+13-dev                 2016-11-29
+----------------------------------------
+- added Header (Scale 850x400)
+- Updated full-width-banner-short to 3200 x 1000
+
+7.x-3.4+6-dev                 2016-09-16
+----------------------------------------
+- added sm-landscape-scaled	image style
+
+7.x-3.4                       2016-07-20
+----------------------------------------
+- SOE-482: Added sm-profile-scaled image style
+- SOE-482: Corrected height of sm-profile-scaled
+- SOE-811: Added banner-850x400
+
+7.x-3.3                       2015-10-19
+----------------------------------------
+- BASIC-1146: Added sm-scaled and icon scaled image styles
+- Added full-width-banner image style
+- Added two new image styles
+- Updating image style labels
+- Added full width short banner
+
+7.x-3.2                       2015-06-26
+----------------------------------------
+- Removed the junk from Features >= 7.x-2.4 that is not needed any longer.
+  See https://www.drupal.org/node/2308801
+
+7.x-3.1                       2014-10-23
+----------------------------------------
+Changes since 7.x-3.0:
+By cjwest:
+  - Added 12-col-banner-tall style
+  - Added icon-profile, scale 50x65
+  - Added 6-col-photo-landscape
+
+7.x-3.0                       2014-06-30
+----------------------------------------
+Changes since 7.x-3.0-alpha1:
+- large-scaled should be 270px wide with no width defined
+
+7.x-3.0-alpha1                      2014-03-11
+-----------------------------------------------
+- Jumpstart Product Compatible Version
+- Features 2.x Compatible
+- Restored a number of image styles view modes and sizes.

@@ -1,0 +1,69 @@
+<?php
+
+/**
+ * @file
+ * Installation routines for lightning_demo.
+ */
+
+/**
+ * Implements hook_install().
+ */
+function lightning_demo_install() {
+  // Set the Lightning site homepage.
+  variable_set('site_frontpage', 'home');
+
+  // Rebuild menu links.
+  variable_set('menu_rebuild_needed', TRUE);
+}
+
+/**
+ * Implements hook_enable().
+ */
+function lightning_demo_enable() {
+  $machine_names = _lightning_demo_migrations();
+  // Set up migration and import.
+  foreach ($machine_names as $instance) {
+    // Register the migration.
+    migrate_static_registration(array($instance));
+    $migration = Migration::getInstance($instance);
+    $migration->processImport();
+  }
+}
+
+/**
+ * Implements hook_disable().
+ */
+function lightning_demo_disable() {
+  $machine_names = _lightning_demo_migrations();
+  // Set up migration and rollback.
+  foreach ($machine_names as $instance) {
+    // Register the migration.
+    migrate_static_registration(array($instance));
+    $migration = Migration::getInstance($instance);
+    $migration->processRollback();
+  }
+}
+
+/**
+ * Implements hook_uninstall().
+ */
+function lightning_demo_uninstall() {
+  // Return the default homepage.
+  variable_set('site_frontpage', 'node');
+}
+
+/**
+ * Helper function to define migrations.
+ */
+function _lightning_demo_migrations() {
+  // Get list of modules implementing Migrate API.
+  migrate_get_module_apis();
+  // Define migrations.
+  return array(
+    'LightningDemoUsers',
+    'LightningDemoNodesArticle',
+    'LightningDemoFilesImage',
+    'LightningDemoHTMLFPP'
+  );
+}
+

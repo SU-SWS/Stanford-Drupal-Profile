@@ -1,0 +1,32 @@
+<?php
+/**
+ * @file
+ * Code for the Stanford News Extras feature.
+ */
+
+include_once 'stanford_news_extras.features.inc';
+
+/**
+ * Implementation of hook_form_alter()
+ */
+function stanford_news_extras_form_alter(&$form, &$form_state, $form_id) {
+
+  // Targeting the news item edit form
+  if ($form_id == "stanford_news_item_node_form") {
+    $form['title']['#description'] = t('This is the title for your news item. '
+      . 'Please keep this title under 70 characters');
+  }
+}
+
+/**
+ * Implementation of hook_block_view_alter()
+ */
+function stanford_news_extras_block_view_alter(&$data, $block) {
+  // Remove title on blocks.
+  if ($block->bid == 'ds_extras-banner') {
+    $data['title'] = '<none>';
+  }
+  else if ($block->bid == 'ds_extras-banner_overlay') {
+    $data['title'] = '<none>';
+  }
+}

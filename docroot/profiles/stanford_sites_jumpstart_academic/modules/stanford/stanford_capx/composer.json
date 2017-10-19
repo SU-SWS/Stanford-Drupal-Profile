@@ -1,0 +1,14 @@
+{
+    "name": "su-sws/stanford_capx",
+    "description": "Stanford Career Academic Profiles API integration Module",
+    "type": "stanford-module",
+    "license": "GPL-2.0+",
+    "authors": [
+        {
+            "name": "Shea McKinney",
+            "email": "sheamck@stanford.edu"
+        }
+    ],
+    "require": {},
+    "homepage": "https://github.com/SU-SWS/stanford_capx"
+}

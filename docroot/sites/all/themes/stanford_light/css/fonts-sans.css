@@ -1,0 +1,99 @@
+@import url(https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,300,600,700,400italic,300italic);
+body {
+  font-family: "Source Sans Pro", sans-serif;
+  font-weight: 300;
+  font-size: 16px;
+  line-height: 1.4em;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: "Source Sans Pro", sans-serif;
+  font-weight: 400;
+}
+
+h1 {
+  font-weight: 300;
+  letter-spacing: -0.04em;
+  font-size: 3em;
+  line-height: 1.3em;
+}
+
+h2 {
+  font-size: 1.8em;
+  letter-spacing: -0.02em;
+  line-height: 1.2em;
+  margin: 0.7em 0 0.5em;
+}
+
+h3 {
+  font-size: 1.3em;
+  font-weight: 600;
+  line-height: 1.3em;
+  margin: 0.9em 0 0.5em;
+}
+
+h4 {
+  font-size: 1.1em;
+  font-weight: 600;
+  line-height: 1.3em;
+  margin: 1em 0 .5em;
+}
+
+.site-name {
+  font-size: 3.5em;
+}
+
+.site-name a, .site-name a:hover {
+  font-weight: 300;
+  letter-spacing: -0.04em;
+}
+
+#site-slogan {
+  font-size: 1.3em;
+  font-weight: 400;
+}
+
+.summary {
+  font-size: 1.3em;
+}
+
+.descriptor {
+  font-size: .8em;
+}
+
+.credits {
+  font-size: .8em;
+  letter-spacing: 0.02em;
+}
+
+.caption {
+  font-size: .8em;
+}
+
+a {
+  font-weight: 600;
+}
+
+a.btn, .btn a {
+  font-weight: 400;
+  font-size: inherit;
+}
+
+a.more-link, .more-link a {
+  font-weight: 600;
+  font-size: 16px;
+}
+
+.block.well h2 {
+  font-size: 1.3em;
+  font-weight: 600;
+}
+
+#footer .block {
+  font-size: 14px;
+}
+
+.navbar .nav > li > a {
+  font-size: 1.2em;
+  font-weight: 600;
+}

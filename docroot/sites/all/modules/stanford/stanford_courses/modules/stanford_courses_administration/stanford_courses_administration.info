@@ -1,0 +1,14 @@
+name = Stanford Courses Administration
+description = Administration Views and Interfaces for Stanford courses.
+core = 7.x
+package = Stanford
+version = 7.x-4.0
+project = stanford_courses_administration
+dependencies[] = ctools
+dependencies[] = stanford_courses
+dependencies[] = stanford_image
+dependencies[] = views
+dependencies[] = views_bulk_operations
+features[ctools][] = views:views_default:3.0
+features[features_api][] = api:2
+features[views_view][] = courses_manage

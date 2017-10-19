@@ -1,0 +1,31 @@
+<?php
+/**
+ * @file
+ * Code for the Stanford Course Views feature.
+ */
+
+include_once 'stanford_course_views.features.inc';
+
+function stanford_course_views_views_pre_build(&$view) {
+  // We want to provide a link to the search view when there are no results
+
+  if (($view->name == "courses_reference") || ($view->name == "courses")){
+    if (($view->current_display == "current_courses_page") ||
+      ($view->current_display == "search_page") ||
+      ($view->current_display == "upcoming_block")){
+      if (!empty($view->empty["area"]->options["content"])) {
+        $pattern = "/\[hook_views_pre_build:.*\]/";
+        $subject = $view->empty["area"]->options["content"];
+        $matches = array();
+        preg_match($pattern, $subject, $matches);
+        if (!empty($matches)){
+          $parts = explode(":", $matches[0]);
+          $url = str_replace("]","",$parts[1]);
+          $a = l("Search courses", $url, array('attributes' => array('class' => array('btn'))));
+          $subject = preg_replace($pattern, $a, $subject);
+          $view->empty["area"]->options["content"] = $subject;
+        }
+      }
+    }
+  }
+}

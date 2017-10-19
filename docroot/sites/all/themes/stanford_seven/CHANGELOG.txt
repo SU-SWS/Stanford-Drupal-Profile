@@ -1,0 +1,17 @@
+Stanford Seven x.x-x.x xxxx-xx-xx
+---------------------------------
+
+Stanford Seven 7.x-1.1 2013-10-03
+-----------------------------------------
+Changes since 1.0:
+  -Removed Jumpstart specific CSS
+  
+Stanford Seven 7.x-1.0 2013-10-01
+-----------------------------------------
+Changes since 1.0-beta1:
+  -Added admin shortcuts styles
+  -Added new theme regions
+
+Stanford Seven 7.x-1.0-beta1
+----------------------------
+Initial release

@@ -1,0 +1,18 @@
+Stanford Jumpstart Home
+-------------------------------------------------------------------
+
+7.x-1.2                                                   2014-11-27
+--------------------------------------------------------------------
+  - BASIC-1304: Updated variable instantiation to match order for SUFW theme orders
+  - BASIC-1304: Fixed bad variable name
+
+7.x-1.1                                                  2014-11-27
+-------------------------------------------------------------------
+  - Added another watchdog log message and set a form_id var to avoid pass by reference error
+  - Added debug watchdog calls
+  - Moved context hooks to .context.inc where it should be.
+
+7.x-1.0                                                   2014-11-05
+--------------------------------------------------------------------
+  - Initial release
+

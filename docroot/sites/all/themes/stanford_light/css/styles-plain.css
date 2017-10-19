@@ -1,0 +1,156 @@
+body {
+  color: #333333;
+  background: white;
+}
+
+.header {
+  background: white;
+}
+
+.site-main-menu {
+  background: white;
+  border-bottom: 1px solid transparent;
+}
+
+.main {
+  background: white;
+}
+
+.bodybg .main {
+  background: transparent;
+}
+
+.site-footer {
+  background: white;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  color: #333333;
+}
+
+h1 {
+  color: #333333;
+}
+
+h2, h2 a, h2 a:hover, h2 a:focus {
+  color: #333333;
+}
+
+h2 a:hover, h2 a:focus {
+  text-decoration: underline;
+}
+
+.site-name a, .site-name a:hover {
+  color: #333333;
+}
+
+#site-slogan {
+  color: #333333;
+}
+
+.caption {
+  color: #888888;
+}
+
+a {
+  color: #8c1515;
+}
+
+a:hover, a:focus {
+  color: #333333;
+}
+
+a.btn, .btn a {
+  background: #8c1515;
+  color: white;
+}
+
+a.btn:hover, a.btn:focus, .btn a:hover, .btn a:focus {
+  background: #333333;
+  color: white;
+}
+
+a.more-link, .more-link a {
+  color: #8c1515;
+}
+
+a.more-link:hover, a.more-link:focus, .more-link a:hover, .more-link a:focus {
+  color: #333333;
+}
+
+a.edit-link:hover, a.edit-link:focus, .edit-link a:hover, .edit-link a:focus {
+  background: #333333;
+  color: white;
+}
+
+.well {
+  background: #e9e9e9;
+}
+
+.navbar .nav > li > a {
+  color: #888888;
+  background: transparent;
+}
+
+.navbar .nav > .active > a, .navbar .nav > .active > a:hover, .navbar .nav > .active > a:focus, .navbar .nav > li > a:focus, .navbar .nav > li > a:hover {
+  color: #333333;
+  background: transparent;
+}
+
+.sidebar .nav li a:hover, .sidebar .nav li a:focus, .sidebar .nav li a.active {
+  color: #333333;
+}
+
+.dropdown-menu {
+  background: white;
+  border: 1px solid transparent;
+}
+
+.navbar .nav li.dropdown.open > .dropdown-toggle, .navbar .nav li.dropdown.active > .dropdown-toggle, .navbar .nav li.dropdown.open.active > .dropdown-toggle {
+  background: transparent;
+  color: #888888;
+}
+
+.navbar .nav li.dropdown.open > .dropdown-toggle:hover, .navbar .nav li.dropdown.open > .dropdown-toggle:focus, .navbar .nav li.dropdown.active > .dropdown-toggle:hover, .navbar .nav li.dropdown.active > .dropdown-toggle:focus, .navbar .nav li.dropdown.open.active > .dropdown-toggle:hover, .navbar .nav li.dropdown.open.active > .dropdown-toggle:focus {
+  color: #333333;
+  background: transparent;
+}
+
+.navbar .nav li.dropdown.open > .dropdown-toggle .caret, .navbar .nav li.dropdown.active > .dropdown-toggle .caret, .navbar .nav li.dropdown.open.active > .dropdown-toggle .caret {
+  border-bottom-color: #888888;
+  border-top-color: #888888;
+}
+
+.dropdown-menu > li > a:hover, .dropdown-menu > li > a:focus, .dropdown-submenu:hover > a, .dropdown-submenu:focus > a {
+  color: white;
+  background: #333333;
+}
+
+.bodybg .sidebar .region, .bodybg .content-wrapper {
+  background-color: white;
+}
+
+.bodybg .sidebar .region {
+  opacity: 1;
+}
+
+.borders .sidebar .region, .borders .content-wrapper, .bodybg.borders .breadcrumb {
+  border: 1px solid white;
+}
+
+.roundedcorners .well {
+  border-radius: 5px;
+}
+
+.breadcrumb {
+  background-color: white;
+  border-radius: 0;
+}
+
+.bean-stanford-social-media-connect a {
+  opacity: 0.75;
+}
+
+.site-footer {
+  border-top: 1px solid transparent;
+}

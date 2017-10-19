@@ -1,0 +1,39 @@
+<?php
+
+/**
+ * @file
+ * Installation file for Feeds JSONPath Parser module.
+ */
+
+/**
+ * Implements hook_requirements().
+ */
+function feeds_jsonpath_parser_requirements($phase) {
+  $requirements = array();
+
+  if ($phase !== 'runtime' && $phase !== 'install') {
+    return $requirements;
+  }
+
+  drupal_load('module', 'feeds_jsonpath_parser');
+
+  $t = get_t();
+  $requirements['feeds_jsonpath_parser']['title'] = $t('JSONPath library');
+  $requirements['feeds_jsonpath_parser']['severity'] = REQUIREMENT_OK;
+  $requirements['feeds_jsonpath_parser']['value'] = $t('Installed');
+
+  if (!feeds_jsonpath_parser_library_path()) {
+    $requirements['feeds_jsonpath_parser']['severity'] = REQUIREMENT_ERROR;
+    $requirements['feeds_jsonpath_parser']['description'] = $t('The <a href="@jsonpath">JSONPath</a> plugin is missing. Download <a href="@download">this file</a> and place in sites/all/libraries/jsonpath.', array(
+      '@jsonpath' => 'http://goessner.net/articles/JsonPath/',
+      '@download' => 'http://jsonpath.googlecode.com/svn/trunk/src/php/jsonpath.php',
+    ));
+    $requirements['feeds_jsonpath_parser']['value'] = $t('Not installed');
+  }
+
+  if ($phase === 'install') {
+    unset($requirements['feeds_jsonpath_parser']['value']);
+  }
+
+  return $requirements;
+}

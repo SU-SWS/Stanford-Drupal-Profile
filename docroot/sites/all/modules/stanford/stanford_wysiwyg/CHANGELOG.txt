@@ -1,0 +1,25 @@
+Stanford WYSIWYG x.x-x.x xxxx-xx-xx
+-----------------------------------
+
+Stanford WYSIWYG 7.x-2.4 2015-06-26
+-----------------------------------
+- Switching to using stanford_easy_wysiwyg_css module for adding CSS files
+
+
+Stanford WYSIWYG 7.x-2.3 2014-10-23
+-----------------------------------
+Changes since 7.x-2.2:
+By jbickar:
+  - Fixed an incompatibility with the latest release of the Open Framework theme
+
+Stanford WYSIWYG 7.x-2.2 2014-07-16
+-----------------------------------
+- Removed "name" and "target" attributes as allowed in <a> elements
+
+Stanford WYSIWYG 7.x-2.1 2014-07-16
+-----------------------------------
+- Fixed a bug where the WYSIWYG profile was not assigned to the Content Editor Text Format
+
+Stanford WYSIWYG 7.x-2.0-alpha1 2014-03-11
+------------------------------------------
+- Features 2.x Compatible version

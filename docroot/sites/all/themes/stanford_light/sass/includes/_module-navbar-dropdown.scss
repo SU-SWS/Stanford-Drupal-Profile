@@ -1,0 +1,26 @@
+.dropdown-menu {
+    @include border-radius(0);
+    background: $clr-light;
+    border: 0;
+}
+.navbar .nav > li > .dropdown-menu:before {
+    display: none;
+}
+.navbar .nav > li > .dropdown-menu:after {
+    display: none;
+}
+.navbar .nav li.dropdown.open > .dropdown-toggle, .navbar .nav li.dropdown.active > .dropdown-toggle, .navbar .nav li.dropdown.open.active > .dropdown-toggle {
+    background: transparent;
+    color: $clr-dark;
+}
+.nav-tabs .open .dropdown-toggle, .nav-pills .open .dropdown-toggle, .nav > li.dropdown.open.active > a:hover, .nav > li.dropdown.open.active > a:focus {
+    border-color: transparent;
+}
+.navbar .nav li.dropdown.open > .dropdown-toggle .caret, .navbar .nav li.dropdown.active > .dropdown-toggle .caret, .navbar .nav li.dropdown.open.active > .dropdown-toggle .caret {
+    border-bottom-color: $clr-dark;
+    border-top-color: $clr-dark;
+}
+.dropdown-menu > li > a:hover, .dropdown-menu > li > a:focus, .dropdown-submenu:hover > a, .dropdown-submenu:focus > a {
+    background: $clr-dark;
+    color: $clr-light;
+}

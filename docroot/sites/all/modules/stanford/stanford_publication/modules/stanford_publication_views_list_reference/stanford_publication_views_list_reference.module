@@ -1,0 +1,7 @@
+<?php
+/**
+ * @file
+ * Code for the Stanford Publication Views List Reference feature.
+ */
+
+include_once 'stanford_publication_views_list_reference.features.inc';

@@ -1,0 +1,8 @@
+name = Stanford Landing Page Node Convert
+description = Stanford landing page node convert will provide a button on stanford_page types that allow a convert to the stanford_landing_page type.
+core = 7.x
+version = 7.x-1.4+3-dev
+package = Stanford
+project = stanford_landing_page_node_convert
+dependencies[] = stanford_page
+dependencies[] = node_convert

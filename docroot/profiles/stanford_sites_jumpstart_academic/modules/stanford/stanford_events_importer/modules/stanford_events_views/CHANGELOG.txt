@@ -1,0 +1,18 @@
+Stanford Events Views x.x-x.x xxxx-xx-xx
+--------------------------------------
+
+Stanford Events Views 7.x-3.0-alpha9 2014-10-23
+-----------------------------------------------
+(Note: skipped a few alpha versions to get all submodules to match up with parent stanford_events_importer module)
+Changes since 7.x-3.0-alpha6:
+By cjwest:
+  - Added a view of upcoming events at /events (disabled by default)
+  - Changed the sort order to updated date in manage events view
+By jbickar:
+  - Sentence-case the "more" links
+
+Stanford Events Views 7.x-3.0-alpha6
+------------------------------------
+By cjwest: Updates to the Manage Events View
+
+Initial Release 2014-03-11

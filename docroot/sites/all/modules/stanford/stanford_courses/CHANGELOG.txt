@@ -1,0 +1,148 @@
+Stanford Courses x.x-x.x, xxxx-xx-xx
+------------------------------------
+
+7.x-4.0                   2016-08-30
+------------------------------------
+- Removed field collection throttle functionality
+- Removed field collection sub target code in favor of new helper module
+- Added dependency on new stanford_feeds_helper module
+- Added upgrade paths for new XML schema version
+- New contrib version dependencies for feeds and field_collection
+
+7.x-3.10                  2016-05-30
+------------------------------------
+- Multiple bug fixes around the course tagging
+- Multiple result index bug fixes
+- Added field collection throttle
+-
+
+7.x-3.9                   2016-02-17
+------------------------------------
+- mapping of tags to human readable things
+- added field collection additions on introsems course section
+
+
+7.x-3.8                   2015-11-10
+------------------------------------
+- Offset list date by two weeks so no overlap.
+
+7.x-3.7                   2015-10-19
+------------------------------------
+
+- ECON-125: Pad out return array for field_multiple_values as tamper does not respect associative array key index alone
+- VPSADEV-146: Added the author filter back in
+- VPSADEV-146: fix to avoid overridden feature
+- Reverted VBO stuff in manage view
+- VPSADEV-146: Added author to exposed filters of manage view
+- Updating hook_help to remove references to the Course Section content type
+- Added new feeds tamper plugin: Array keyword filter
+- Support stanford_courses_minimal
+- Update README.md
+
+
+7.x-3.6                   2015-06-26
+------------------------------------
+- Removed foreign keys from feature
+- Updated explorecourses link field
+- Added documentation for XML
+- Added field_s_course_ec_tag field
+- Removed debug output
+- Corrected field naming conventions
+- Add Feeds importer and Feeds Tamper plugin to map ExploreCourses Tags
+- Re-order field definition code.
+
+7.x-3.5                   2015-03-19
+------------------------------------
+
+- BASIC-1200: change combined search field to display results by any word
+- Reverted faculty courses view block
+- BASIC-1239: removed stanford_courses_default
+- BASIC-1200 Added contains any word to filter
+- Changed name label of the non-reference field view
+- Removed stanford_course_default view
+- Label changes to search page views
+- Added no results functionality to views
+- Added stanford_courses_default view, updated and disabled courses view
+- Set dependency on field_group >= 1.3
+- Set dependency on field_collection >= 1.0-beta7
+- Set dependency on feeds >= 2.0-alpha8
+- Set dependency on features >= 2.0
+- Added grading and units to the content type and to be pulled in through the feed
+- Removed project path from .info files
+
+
+Stanford Courses 7.x-3.4, 2015-02-10
+------------------------------------
+Changes since 7.x-3.3:
+By cjwest, in stanford_courses_person_reference_views:
+  - Refactor of the courses_person_reference_view
+  - Added block for exposed filter in search display
+  - Edit link, caching, Keyword search, enable displays
+  - No result texts, reorder sort
+By sheamck, in stanford_courses:
+  - Fixed "Parameter 2 to stanford_courses_feeds_presave() expected to be a reference, value given" bug
+
+Stanford Courses 7.x-3.3, 2014-10-23
+------------------------------------
+Changes since 7.x-3.2:
+By cjwest:
+  - On manage courses, added Code exposed filter, re-ordered exposed filters
+  - Added edit buttons to courses on views
+  - Updated no results text
+  - Added sort by updated date, removed new content, removed modify content (manage courses)
+  - Replaced exposed filter title with combined filter
+  - Removed ability to add a course to a menu
+  - Removed no results text for the faculty (person) block
+By sheamck:
+  - Added row to courses manage view
+  - Fixed single value field cardinality bug
+By jbickar:
+  - Updated exposed filter to include current year and one previous
+
+Stanford Courses 7.x-3.2, 2014-07-17
+------------------------------------
+By sheamck: Bug fix with SimpleXML errors on invalid XML
+
+Stanford Courses 7.x-3.1, 2014-07-2
+--------------------------------------------
+- Added field group to requirements
+- fixes for upgrade path from 1.x -> 2.x -> 3.x
+- fixes for upgrade path from 1.x -> 3.x
+
+
+Stanford Courses 7.x-3.0, 2014-06-30
+--------------------------------------------
+- Added subject, apply to filters
+- Removed superflous manage content header from course views
+- Actually Cut a stable release number. Bye Bye Alpha
+
+
+Stanford Courses 7.x-3.0-alpha3, 2014-05-16
+--------------------------------------------
+  -  Added truncate function that clears out the values for instructor and term on the field collection so that they are no additive and have duplicates.
+  - Merge pull request #27 from SU-SWS/7.x-3.x-instructors
+  - Change the instructor filter to contains
+  - Added dependency versions to .info file
+  - Added instructor column and exposed filter
+  - Small formatting fixes
+  - Rebuilt with dynamic processing field
+  - removed instructors exposed filter
+  - Added field collection group advanced
+  - Moved body instance from node display to content type feature
+  - Moved field_s_course_co_person from reference feature to content type feature
+  - Added instructor to course views
+  - Moved instructor to FC, added import xpathpasers
+  - Updated view with description and instructor
+  - Added instructor and body fields
+  - Removed program and level from fields
+  - Added field bases for level and program
+  - VBO Improvements
+
+Stanford Courses 7.x-3.0-alpha2, 2014-03-31
+--------------------------------------------
+Minor change to base field for section to prevent Feature from installing in
+  an overridden state
+
+Stanford Courses 7.x-3.0-alpha1, 2014-03-11
+--------------------------------------------
+- Initial Version 3 Release.

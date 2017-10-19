@@ -1,0 +1,47 @@
+/**
+ * @file
+ * A place to put css specifically for the shortcuts menu.
+ */
+
+#admin-shortcuts {
+  position: relative;
+  z-index: 555;
+}
+
+#admin-shortcuts .content li,
+#admin-shortcuts .content a {
+  vertical-align: middle;
+}
+#admin-shortcuts .content a.home {
+  background-image: url("../img/home.png");
+  color: transparent;
+  display: inline-block;
+  font-size: 0;
+  height: 25px;
+  padding: 0;
+  width: 30px;
+}
+#admin-shortcuts .content a.home:hover {
+  background-image: url("../img/home.png");
+}
+#admin-shortcuts .content li.expanded > a:after{
+  background-image: url("../../../images/expanded-arrow.png");
+  background-position: center center;
+  background-repeat: no-repeat;
+  content: "";
+  display: inline-block;
+  height: 5px;
+  margin-left: 5px;
+  padding-bottom: 2px;
+  width: 13px;
+}
+#admin-shortcuts .content li.expanded ul {
+  padding: 10px;
+}
+#admin-shortcuts .content .expanded > ul {
+  -webkit-border-radius: 0px 0px 10px 10px;
+  -moz-border-radius: 0px 0px 10px 10px;
+  border-radius: 0px 0px 10px 10px;
+  border-width: 1px;
+  border-top-width: 0px;
+}

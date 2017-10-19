@@ -1,0 +1,6 @@
+name = Stanford Site Actions
+description = Site Action Menu Items for Jumpstart
+core = 7.x
+package = Stanford Sites Jumpstart
+version = 7.x-4.5
+dependencies[] = stanford_jumpstart_shortcuts

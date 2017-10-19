@@ -1,0 +1,10 @@
+name = Stanford Helper
+description = A collection of generic and non specific helper functions.
+core = 7.x
+package = Stanford
+version = 7.x-1.0
+project = stanford_helper
+dependencies[] = block
+; stylesheets[all][] = css/stanford_module.css
+; scripts[] = js/stanford_module.js
+project status url = https://github.com/SU-SWS/stanford_helper

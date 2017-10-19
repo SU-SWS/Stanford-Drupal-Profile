@@ -1,0 +1,51 @@
+<?php
+/**
+ * @file
+ * Installation Functions
+ */
+
+
+/**
+ * Implements hook_install().
+ */
+function cbc_install() {
+  variable_set('contextual_block_class', array());
+
+  // variable_set('contextual_block_class', array(
+  //   'blue' => array (
+  //     'block-1' => array(
+  //       'blue', 'hello', 'world', 'purple-monkey-diswasher',
+  //       )
+  //     )
+  //   )
+  // );
+
+}
+
+/**
+ * Implements hook_uninstall().
+ */
+function cbc_uninstall() {
+  variable_del('contextual_block_class');
+}
+
+
+/**
+ * Implements hook_enable().
+ */
+function cbc_enable() {
+  /*
+   *mymodule_cache_rebuild();
+   */
+  /* Your code here */
+}
+
+/**
+ * Implements hook_disable().
+ */
+function cbc_disable() {
+  /*
+   *mymodule_cache_rebuild();
+   */
+  /* Your code here */
+}

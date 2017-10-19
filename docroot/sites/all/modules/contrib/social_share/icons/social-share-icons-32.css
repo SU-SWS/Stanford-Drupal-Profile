@@ -1,0 +1,113 @@
+div.social-share span,
+div.social-share a {
+  float: left;
+  margin-right: 4px;
+}
+
+div.social-share span {
+  margin-top: 4px;
+}
+
+a.social-share-delicious {
+  display: block;
+  height: 32px;
+  width: 32px;
+  text-indent: -9999px;
+  background: transparent url(iconpack-32.png) no-repeat 0 0;
+}
+
+a.social-share-digg {
+  display: block;
+  height: 32px;
+  width: 32px;
+  text-indent: -9999px;
+  background: transparent url(iconpack-32.png) no-repeat -32px 0;
+}
+
+a.social-share-facebook {
+  display: block;
+  height: 32px;
+  width: 32px;
+  text-indent: -9999px;
+  background: transparent url(iconpack-32.png) no-repeat -64px 0;
+}
+
+a.social-share-googleplus {
+  display: block;
+  height: 32px;
+  width: 32px;
+  text-indent: -9999px;
+  background: transparent url(iconpack-32.png) no-repeat -96px 0;
+}
+
+a.social-share-hyves {
+  display: block;
+  height: 32px;
+  width: 32px;
+  text-indent: -9999px;
+  background: transparent url(iconpack-32.png) no-repeat -128px 0;
+}
+
+a.social-share-linkedin {
+  display: block;
+  height: 32px;
+  width: 32px;
+  text-indent: -9999px;
+  background: transparent url(iconpack-32.png) no-repeat -160px 0;
+}
+
+a.social-share-msnlive {
+  display: block;
+  height: 32px;
+  width: 32px;
+  text-indent: -9999px;
+  background: transparent url(iconpack-32.png) no-repeat -192px 0;
+}
+
+a.social-share-myspace {
+  display: block;
+  height: 32px;
+  width: 32px;
+  text-indent: -9999px;
+  background: transparent url(iconpack-32.png) no-repeat -224px 0;
+}
+
+a.social-share-orkut {
+  display: block;
+  height: 32px;
+  width: 32px;
+  text-indent: -9999px;
+  background: transparent url(iconpack-32.png) no-repeat -256px 0;
+}
+
+a.social-share-reddit {
+  display: block;
+  height: 32px;
+  width: 32px;
+  text-indent: -9999px;
+  background: transparent url(iconpack-32.png) no-repeat -288px 0;
+}
+
+a.social-share-stumbleupon {
+  display: block;
+  height: 32px;
+  width: 32px;
+  text-indent: -9999px;
+  background: transparent url(iconpack-32.png) no-repeat -320px 0;
+}
+
+a.social-share-twitter {
+  display: block;
+  height: 32px;
+  width: 32px;
+  text-indent: -9999px;
+  background: transparent url(iconpack-32.png) no-repeat -352px 0;
+}
+
+a.social-share-yahoo {
+  display: block;
+  height: 32px;
+  width: 32px;
+  text-indent: -9999px;
+  background: transparent url(iconpack-32.png) no-repeat -384px 0;
+}

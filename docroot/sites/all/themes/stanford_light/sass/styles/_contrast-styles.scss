@@ -1,0 +1,141 @@
+a:hover, 
+a:focus {
+    text-decoration: underline;
+}
+.header-bkg .site-main-menu {
+    padding-top: 0px;
+}
+.site-name a, 
+.site-name a:hover, 
+.site-name a:active {
+    color: $clr-page-bkg;
+}
+.site-login, 
+.site-login a {
+    color: $clr-page-bkg;
+}
+.site-login a:hover, 
+.site-login a:active {
+    text-decoration: underline;
+}
+#site-slogan {
+    color: $clr-page-bkg;
+}
+.site-main-menu {
+    border-bottom: 0;
+}
+@media (min-width: 768px) {
+    .navbar {
+        margin-bottom: 0;
+    }
+}
+.navbar .nav > li > a {
+    padding: 0.5em 1em;
+    margin-right: 0.25em;
+}
+.navbar .nav > .active > a, 
+.navbar .nav > .active > a:hover, 
+.navbar .nav > .active > a:focus, 
+.navbar .nav > li > a:focus, 
+.navbar .nav > li > a:hover {
+    color: $clr-link;
+}
+.roundedcorners .navbar .nav > li > a {
+    border-radius: 5px 5px 0 0;
+}
+@media (max-width: 767px) {
+    .navbar .btn-navbar {
+        border: 1px solid transparent;
+    }
+    .navbar .btn-navbar:hover, 
+    .navbar .btn-navbar:focus, 
+    .navbar .btn-navbar:active, 
+    .navbar .btn-navbar.active, 
+    .navbar .btn-navbar.disabled, 
+    .navbar .btn-navbar[disabled] {
+        background: #232220;
+        border: 1px solid $clr-page-bkg;
+    }
+    .roundedcorners .navbar .nav > li > a {
+        border-radius: 5px;
+        margin-right: 0;
+    }
+}
+.main .menu li a:hover, 
+.main .menu li a:focus, 
+.main .menu li a.active {
+    text-decoration: underline;
+}
+.well {
+    color: $clr-page-bkg;
+}
+.well .caption {
+    color: darken( $clr-page-bkg, 15% );
+}
+.well h2, .well h3, .well h4, .well h5, .well h6, 
+.well h2 a, .well h3 a, .well h4 a, .well h5 a, .well h6 a, 
+.well h2 a:hover, .well h3 a:hover, .well h4 a:hover, .well h5 a:hover, .well h6 a:hover, 
+.well h2 a:focus, .well h3 a:focus, .well h4 a:focus, .well h5 a:focus, .well h6 a:focus {
+    color: $clr-page-bkg;
+}
+.well h2 a:hover, .well h3 a:hover, .well h4 a:hover, .well h5 a:hover, .well h6 a:hover, 
+.well h2 a:focus, .well h3 a:focus, .well h4 a:focus, .well h5 a:focus, .well h6 a:focus {
+    text-decoration: underline;
+}
+.well a, 
+.well .menu li a {
+    color: #b3995d;
+}
+.well a:hover, 
+.well a:focus, 
+.well .menu li a:hover, 
+.well .menu li a:focus, 
+.well .menu li a.active, 
+.site-footer .menu li a:hover, 
+.site-footer .menu li a:focus, 
+.site-footer .menu li a.active {
+    color: $clr-page-bkg;
+    text-decoration: underline;
+}
+.site-footer {
+    color: $clr-page-bkg;
+}
+.site-footer .block h2 {
+    color: $clr-page-bkg;
+}
+.site-footer a {
+    color: #b3995d;
+}
+.site-footer a:hover, 
+.site-footer a:focus, 
+.site-footer a.active {
+    color: $clr-page-bkg;
+    text-decoration: underline;
+}
+.dropdown-menu {
+    background: $clr-page-bkg;
+}
+.dropdown-menu > li > a:hover, 
+.dropdown-menu > li > a:focus, 
+.dropdown-submenu:hover > a, 
+.dropdown-submenu:focus > a {
+    color: $clr-page-bkg;
+    background: $clr-header-bkg;
+}
+.navbar .nav li.dropdown.open > .dropdown-toggle:hover, 
+.navbar .nav li.dropdown.open > .dropdown-toggle:focus, 
+.navbar .nav li.dropdown.active > .dropdown-toggle:hover, 
+.navbar .nav li.dropdown.active > .dropdown-toggle:focus, 
+.navbar .nav li.dropdown.open.active > .dropdown-toggle:hover, 
+.navbar .nav li.dropdown.open.active > .dropdown-toggle:focus {
+    color: $clr-link;
+}
+.navbar .nav li.dropdown.open > .dropdown-toggle:hover .caret, 
+.navbar .nav li.dropdown.active > .dropdown-toggle:hover .caret, 
+.navbar .nav li.dropdown.open.active > .dropdown-toggle:hover .caret, 
+.navbar .nav li.dropdown.open > .dropdown-toggle:focus .caret, 
+.navbar .nav li.dropdown.active > .dropdown-toggle:focus .caret, 
+.navbar .nav li.dropdown.open.active > .dropdown-toggle:focus .caret {
+    border-bottom-color: $clr-link;
+    border-top-color: $clr-link;
+}

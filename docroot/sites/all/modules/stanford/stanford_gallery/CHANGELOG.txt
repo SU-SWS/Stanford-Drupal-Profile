@@ -1,0 +1,15 @@
+stanford_gallery 7.x-2.2 2016-08-30
+-----------------------------------
+- Accessibility fix in CSS for caption contrast
+
+stanford_gallery, 2015-11-10
+----------------------------
+- Added hook to not show title on node view
+- Updated css styles
+
+stanford_gallery, 2015-06-26
+-----------------------
+- Stanford compliant field and content name spaces
+- Body display set to Default
+- files in a subdirectory
+- CSS injector rule added manually to css from .info file

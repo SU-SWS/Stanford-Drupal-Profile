@@ -1,0 +1,9 @@
+name = Stanford Landing Page FC Link Heading Formatter
+description = Provides an additional formatter for text fields on field collection item, to allow linking to a field on the field collection.
+core = 7.x
+version = 7.x-1.4+3-dev
+dependencies[] = link
+dependencies[] = field_collection
+package = Fields
+
+

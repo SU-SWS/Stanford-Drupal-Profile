@@ -1,0 +1,66 @@
+<?php
+/**
+ * @file
+ * Installation and update functionality
+ * @author Shea McKinney <sheamck@stanford.edu>
+ */
+
+
+
+
+/**
+ * Implements hook_install().
+ */
+function stanford_date_timepicker_install() {
+}
+
+/**
+ * Implements hook_uninstall().
+ */
+function stanford_date_timepicker_uninstall() {
+
+  variable_del('stanford_date_timepicker_activation_class');
+  variable_del('stanford_date_timepicker_default_date_format');
+  variable_del('stanford_date_timepicker_default_time_format');
+  variable_del('stanford_date_timepicker_default_separator');
+  variable_del('stanford_date_timepicker_minute_increment');
+
+}
+
+/**
+ * Implements hook_enable().
+ */
+function stanford_date_timepicker_enable() {
+
+}
+
+/**
+ * Implements hook_disable().
+ */
+function stanford_date_timepicker_disable() {
+
+}
+
+/**
+ * Implements hook_requirements().
+ */
+function stanford_date_timepicker_requirements($phase) {
+  $requirements = array();
+  $t = get_t();
+  if ($phase == 'runtime') {
+    $requirements['jquery-ui-timepicker'] = array(
+      'title' => $t('jquery-ui-timepicker-addon.js'),
+    );
+    // Verify that the recurly js library is present.
+    if (($path = libraries_get_path('jquery-ui-timepicker')) && file_exists($path . '/jquery-ui-timepicker-addon.js')) {
+      $requirements['jquery-ui-timepicker']['value'] = $t('The required jquery-ui-timepicker library is installed.');
+      $requirements['jquery-ui-timepicker']['severity'] = REQUIREMENT_OK;
+    }
+    else {
+      $requirements['jquery-ui-timepicker']['value'] = $t('The required jquery-ui-timepicker library is missing. Download the jquery-ui-timepicker library from <a href="https://github.com/trentrichardson/jQuery-Timepicker-Addon">https://github.com/trentrichardson/jQuery-Timepicker-Addon</a> and place it in libraries so that "jquery-ui-timepicker-addon.js" is located at sites/all/libraries/jquery-ui-timepicker/jquery-ui-timepicker-addon.js');
+      $requirements['jquery-ui-timepicker']['severity'] = REQUIREMENT_ERROR;
+    }
+  }
+  return $requirements;
+}
+

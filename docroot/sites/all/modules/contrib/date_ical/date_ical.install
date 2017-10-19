@@ -1,0 +1,59 @@
+<?php
+
+/**
+ * @file
+ * Install, update and uninstall functions for the date_ical module.
+ *
+ */
+/**
+ * Implements hook_requirements().
+ */
+function date_ical_requirements($phase) {
+  $requirements = array();
+  
+  // Ensure translations don't break at install time.
+  $t = get_t();
+  
+  if ($phase == 'runtime') {
+    if (!function_exists('libraries_detect')) {
+      $requirements['date_ical'] = array(
+        'title' => $t('Date iCal'),
+        'value' => $t('Libraries module is not installed.'),
+        'description' => $t('Date iCal 2.x and above require the Libraries module. Please install it from !here.',
+          array('!here' => l('here', 'http://www.drupal.org/project/libraries'))
+        ),
+        'severity' => REQUIREMENT_ERROR,
+      );
+      // Return immediately, since we can't even attempt to determine if iCalcreator is installed.
+      return $requirements;
+    }
+    
+    $library = libraries_detect('iCalcreator');
+    if ($library && !empty($library['installed'])) {
+      $requirements['date_ical'] = array(
+        'title' => $t('Date iCal'),
+        'value' => $t('iCalcreator library is installed, version: @version found', array('@version' => $library['version'])),
+        'severity' => REQUIREMENT_OK,
+      );
+    }
+    else {
+      $requirements['date_ical'] = array(
+        'title' => $t('Date iCal'),
+        'value' => $t('iCalcreator library could not be found, check the installation instructions for the Date iCal module.'),
+        'description' => $t('The error message was: @error<br>!error_message',
+          array('@error' => $library['error'], '!error_message' => $library['error message'])
+        ),
+        'severity' => REQUIREMENT_ERROR,
+      );
+    }
+  }
+  
+  return $requirements;
+}
+
+/**
+ * Implementation of hook_enable().
+ */
+function date_ical_enable() {
+  cache_clear_all('plugins:feeds:plugins', 'cache');
+}

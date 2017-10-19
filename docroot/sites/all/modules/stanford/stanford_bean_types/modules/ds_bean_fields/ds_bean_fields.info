@@ -1,0 +1,12 @@
+name = DS Bean Fields
+description = Provides better integration between BEANs and Display Suite.
+core = 7.x
+package = Stanford
+version = 7.x-3.0
+project = ds_bean_fields
+dependencies[] = bean
+dependencies[] = ds
+dependencies[] = ds_extras
+; stylesheets[all][] = css/stanford_module.css
+; scripts[] = js/stanford_module.js
+files[] = ds_bean_fields.install

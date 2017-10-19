@@ -1,0 +1,104 @@
+body {
+    font-family: $font-body;
+    font-weight: 300;
+    font-size: 16px;
+    line-height: 1.4em;
+}
+h1, h2, h3, h4, h5, h6 {
+    font-family: $font-header;
+    font-weight: 400;
+}
+h1 {
+    font-weight: 300;
+    letter-spacing: -0.04em;
+    font-size: 3em;
+    line-height: 1.3em;
+}
+h2 {
+    font-size: 1.8em;
+    letter-spacing: -0.02em;
+    line-height: 1.2em;
+    margin: 0.7em 0 0.5em;
+}
+h3 {
+    font-size: 1.3em;
+    font-weight: 600;
+    line-height: 1.3em;
+    margin: 0.9em 0 0.5em;
+}
+h4 {
+    font-size: 1.1em;
+    font-weight: 600;
+    line-height: 1.3em;
+    margin: 1em 0 .5em;
+}
+h5 {
+}
+h6 {
+}
+strong {
+}
+.site-name {
+    font-size: 3.5em;
+}
+.site-name a, .site-name a:hover {
+    font-weight: 300;
+    letter-spacing: -0.04em;
+}
+#site-slogan {
+    font-size: 1.3em;
+    font-weight: 400;
+}
+.summary {
+    font-size: 1.3em;
+}
+.descriptor {
+    font-size: .8em;
+}
+.credits {
+    font-size: .8em;
+    letter-spacing: 0.02em;
+}
+.caption {
+    font-size: .8em;
+}
+.quote {
+}
+a {
+    font-weight: 600;
+}
+a:hover, a:focus {
+}
+a.btn, .btn a {
+    font-weight: 400;
+    font-size: inherit;
+}
+a.btn:hover, a.btn:focus, .btn a:hover, .btn a:focus {
+}
+a.more-link, .more-link a {
+    font-weight: 600;
+    font-size: 16px;
+}
+a.more-link:hover, a.more-link:focus, .more-link a:hover, .more-link a:focus {
+}
+a.edit-link, .edit-link a {
+}
+a.edit-link:hover, a.edit-link:focus, .edit-link a:hover, .edit-link a:focus {
+}
+.block {
+}
+.block h2 {
+}
+.block.well {
+}
+.block.well h2 {
+    font-size: 1.3em;
+    font-weight: 600;
+}
+#footer .block {
+    font-size: 14px;
+}
+.navbar .nav > li > a {
+    font-size: 1.2em;
+    font-weight: 600;
+}

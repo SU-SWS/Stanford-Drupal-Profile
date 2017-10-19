@@ -1,0 +1,128 @@
+<?php
+
+/**
+ * Implements hook_theme().
+ */
+function multiple_selects_theme() {
+  return array(
+    'multiple_selects_none' => array(
+      'variables' => array('instance' => NULL, 'option' => NULL),
+    ),
+  );
+}
+
+/**
+ * Returns HTML for the label for the empty value for options that are not required.
+ *
+ * The default theme will display N/A for a radio list and '- None -' for a select.
+ *
+ * @param $variables
+ *   An associative array containing:
+ *   - instance: An array representing the widget requesting the options.
+ *
+ * @ingroup themeable
+ */
+function theme_multiple_selects_none($variables) {
+  $instance = $variables['instance'];
+  $option = $variables['option'];
+  $output = ($option == 'option_none' ? t('- None -') : t('- Select a value -'));
+  return $output;
+}
+
+/**
+ * Implements hook_field_widget_info().
+ *
+ * Field type modules willing to use those widgets should:
+ * - Use hook_field_widget_info_alter() to append their field own types to the
+ *   list of types supported by the widgets,
+ */
+function multiple_selects_field_widget_info() {
+  return array(
+    'multiple_selects' => array(
+      'label' => t('Multiple Selects list'),
+      'field types' => array('entityreference', 'node_reference', 'user_reference', 'taxonomy_term_reference', 'list_integer', 'list_float', 'list_text'),
+    ),
+  );
+}
+
+/**
+ * Implements hook_field_widget_form().
+ */
+function multiple_selects_field_widget_form(&$form, &$form_state, $field, $instance, $langcode, $items, $delta, $element) {
+  
+  // Abstract over the actual field columns, to allow different field types to
+  // reuse those widgets.
+  $value_key = key($field['columns']);
+  $type = "select";
+  $multiple = 1;
+  $required = $element['#required'];
+  $has_value = isset($items[0][$value_key]);
+  $properties = _options_properties($type, $multiple, $required, $has_value);
+
+  // Prepare the list of options.
+  $options = _multiple_selects_get_options($field, $instance, $properties, NULL, NULL);
+  
+  $widget = $element;
+
+  $widget += array(
+    '#type' => 'select',
+    '#default_value' => isset($items[$delta][$value_key]) ? $items[$delta][$value_key] : NULL,
+    '#options' => $options,
+    '#element_validate' => array('multiple_selects_widget_validate'),
+    '#value_key' => $value_key,
+    '#properties' => $properties,
+  );
+  $element[$value_key] = $widget;
+
+  return $element;
+}
+
+/**
+ * Form element validation handler for options element.
+ */
+function multiple_selects_widget_validate($element, &$form_state) {
+  
+  $value_key = $element['#value_key'];
+  $properties = $element['#properties'];
+  $value = $element['#value'];
+
+  if ($element['#required'] && $element['#value'] == '_none') {
+    form_error($element, t('!name field is required.', array('!name' => $element['#title'])));
+  }
+  
+  if ($properties['empty_option']) {
+    if ($value == '_none') {
+      form_set_value($element, NULL, $form_state);
+    }    
+  }
+  
+}
+
+/**
+ * Implements hook_field_widget_error().
+ */
+function multiple_selects_field_widget_error($element, $error, $form, &$form_state) {
+  form_error($element, $error['message']);
+}
+
+/**
+ * Collects the options for a field.
+ */
+function _multiple_selects_get_options($field, $instance, $properties, $entity_type, $entity) {
+  // Get the list of options.
+  $options = (array) module_invoke($field['module'], 'options_list', $field, $instance, $entity_type, $entity);
+
+  // Sanitize the options.
+  _options_prepare_options($options, $properties);
+
+  if (!$properties['optgroups']) {
+    $options = options_array_flatten($options);
+  }
+
+  if ($properties['empty_option']) {
+    $label = theme('multiple_selects_none', array('instance' => $instance, 'option' => $properties['empty_option']));
+    $options = array('_none' => $label) + $options;
+  }
+
+  return $options;
+}

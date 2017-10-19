@@ -1,0 +1,4 @@
+Stanford Event And Deadlines Calendar x.x-x.x xxxx-xx-xx
+--------------------------------------
+
+Initial Release 2014-03-11

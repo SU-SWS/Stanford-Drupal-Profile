@@ -1,0 +1,174 @@
+<?php
+/**
+ * @file
+ * Code for the WebAuth Extras module.
+ */
+
+/**
+ * Implements hook_menu().
+ */
+function webauth_extras_menu() {
+  $items['admin/config/webauth/adduser'] = array(
+    'title' => 'Add WebAuth User',
+    'type' => MENU_LOCAL_TASK,
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('webauth_extras_waau_config_form'),
+    'access arguments' => array('administer site configuration'),
+  );
+  return $items;
+}
+
+/**
+ * Configuration form for Add WebAuth User functionality.
+ */
+function webauth_extras_waau_config_form($form, &$form_state) {
+  $form['add'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Add a WebAuth User'),
+  );
+  $form['add']['sunetid'] = array(
+    '#type' => 'textfield',
+    '#title' => t('SUNetID'),
+    '#description' => t('Enter the SUNetID of the user you wish to add.'),
+    '#required' => TRUE,
+  );
+  $form['add']['name']  = array(
+    '#type' => 'textfield',
+    '#title' => t('Name'),
+    '#description' => t('If you wish to specify the user\'s preferred name (instead of sunetid@stanford.edu), enter it here.'),
+  );
+  $form['add']['email']  = array(
+    '#type' => 'textfield',
+    '#title' => t('Email Address'),
+    '#description' => t('If you wish to specify an alternate email address (instead of sunetid@stanford.edu), enter it here.'),
+  );
+  $form['add']['makeadmin']  = array(
+    '#type' => 'checkbox',
+    '#title' => t('Make This User an Administrator'),
+    '#description' => t('Check this box to grant this user the "administrator" role.'),
+  );
+  $form['add']['submit'] = array(
+    '#type' => 'submit',
+    '#value' => t('Add WebAuth User'),
+  );
+  return $form;
+}
+
+/**
+ * Submit function for Add WebAuth User form.
+ */
+function webauth_extras_waau_config_form_submit($form, &$form_state) {
+  $sunetid = $form_state['values']['sunetid'];
+  $name = $form_state['values']['name'];
+  $email = $form_state['values']['email'];
+  $makeadmin = $form_state['values']['makeadmin'];
+  $form_state['rebuild'] = TRUE;
+  return webauth_extras_add_user($sunetid, $name, $email, $makeadmin);
+  
+}
+
+/**
+ * Validation function for Add WebAuth User form
+ */
+function webauth_extras_waau_config_form_validate($form, &$form_state) {
+ // dpm($form_state);
+  $sunet = strtolower(trim($form_state['values']['sunetid']));
+
+  // Make sure there isn't an entry in the authmap table
+  // Authmap entries use the SUNetID@stanford.edu format
+  $authname = $sunet . '@stanford.edu';
+
+  // user_get_authmaps returns 0 if there are no authmaps,
+  // or a keyed array if there are authmap entries
+  $authmaps = user_get_authmaps($authname);
+
+  if ((($authmaps) !== 0) && ($authmaps['webauth'] == $authname)) {
+    form_set_error('sunetid', 'Could not create user. Authname ' . $authname . ' already exists. Has the user already been created with a different username but the same SUNetID?');
+  }
+
+  // If no name is specified, use the default name (sunetid + @stanford.edu)
+  $name = trim($form_state['values']['name']);
+  if (empty($name)) {
+    $name  = $authname;
+  }
+
+  // Check that there is no user with the same name
+  if (user_load_by_name($name)) {
+    form_set_error('name', 'Could not create user. Username ' . $name . ' already exists.');
+  }
+
+  // set the name value to our trimmed version, or sunetid@stanford.edu if none was given
+  $form_state['values']['name'] = $name;
+
+  // If no email was specified, we'll use the default (sunetid + @stanford.edu)
+  $default_email = $sunet . '@stanford.edu';
+
+  $email = strtolower(trim($form_state['values']['email']));
+
+  if (!empty($email) && !valid_email_address($email)) {
+    form_set_error('email', t('The e-mail address %email is not valid.', array('%email' => $email)));
+  }
+
+  if (empty($email)) {
+    $email = $default_email;
+  }
+
+  // Check that there is no user with the same email
+  // Drupal will let us create the user with a duplicate email, but
+  // the user will run into issues when making changes to their profile
+  if (user_load_by_mail($email)) {
+    form_set_error('email', 'Could not create user. Email ' . $email . ' already in use.');
+  }
+
+  // set the email value to our trimmed version, or sunetid@stanford.edu if none was given
+  $form_state['values']['email'] = $email;
+
+}
+/**
+ * Add a WMD user.
+ * @param string $sunet the SUNetID of the user
+ * @param string $name the user name
+ * @param string $email the email address
+ * @param boolean $makeadmin make the user an administrator
+ * @return the uid of the user if created; FALSE otherwise
+ */
+function webauth_extras_add_user($sunet = '', $name = '', $email = '', $makeadmin = FALSE) {
+  $sunet = strtolower(trim($sunet));
+  $authname = $sunet . '@stanford.edu';
+
+
+  $account = new stdClass;
+  $account->is_new = TRUE;
+  $account->name = $name;
+  $account->pass = user_password();
+  $account->mail = $email;
+  $account->init = $sunet . '@stanford.edu';
+  $account->status = TRUE;
+
+  $sunet_role = user_role_load_by_name('SUNet User');
+
+  $roles = array(DRUPAL_AUTHENTICATED_RID => TRUE, $sunet_role->rid => TRUE);
+
+  // Make the user an admin if the make-admin flag was set
+  if ($makeadmin) {
+    //$admin_role = user_role_load_by_name('administrator');
+    $admin_rid = variable_get('user_admin_role', user_role_load_by_name('administrator')->rid);
+    $roles[$admin_rid] = TRUE;
+  }
+
+  $account->roles = $roles;
+  $account->timezone = variable_get('date_default_timezone', '');
+  $account = user_save($account);
+
+  user_set_authmaps($account, array('authname_webauth' => $authname));
+
+  watchdog('WebAuth','Created user: %user', array('%user' => $name));
+  $message = t('Successfully created WebAuth account for %user', array('%user' => $name));
+  drupal_set_message($message);
+  if(isset($account->uid)){
+    return $account->uid;
+  }
+  else {
+    return FALSE;
+  }
+}

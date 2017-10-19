@@ -1,0 +1,20 @@
+name = Workbench Access
+description = Extensible editorial access for the Workbench suite.
+package = Workbench
+core = 7.x
+configure = admin/config/workbench/access
+
+files[] = includes/workbench_access_handler_field_edit_node.inc
+files[] = includes/workbench_access_handler_field_section.inc
+files[] = includes/workbench_access_handler_filter_access.inc
+files[] = includes/workbench_access_handler_sort_section.inc
+files[] = modules/taxonomy.workbench_access.inc
+files[] = modules/menu.workbench_access.inc
+files[] = tests/workbench_access.test
+
+; Information added by Drupal.org packaging script on 2015-10-11
+version = "7.x-1.4"
+core = "7.x"
+project = "workbench_access"
+datestamp = "1444584240"
+

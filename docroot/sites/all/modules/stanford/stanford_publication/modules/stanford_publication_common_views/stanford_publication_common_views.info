@@ -1,0 +1,12 @@
+name = Stanford Publication Common Views
+description = Views that are common to all features. Views that do not have a dependency or conflict with another module'
+core = 7.x
+package = Stanford
+version = 7.x-2.2
+project = stanford_publication_common_views
+dependencies[] = stanford_publication
+dependencies[] = views
+features[ctools][] = views:views_default:3.0
+features[features_api][] = api:2
+features[views_view][] = publications_common
+features_exclude[dependencies][ctools] = ctools

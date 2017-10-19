@@ -1,0 +1,222 @@
+body {
+  color: #fbfbf9;
+  background: #2e2d29;
+}
+
+.header {
+  background: #282724;
+}
+
+.site-main-menu {
+  background: #282724;
+  border-bottom: 1px solid #232220;
+}
+
+.main {
+  background: #2e2d29;
+}
+
+.bodybg .main {
+  background: transparent;
+}
+
+.site-footer {
+  background: #282724;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  color: #fbfbf9;
+}
+
+h1 {
+  color: #fbfbf9;
+}
+
+h2, h2 a, h2 a:hover, h2 a:focus {
+  color: #fbfbf9;
+}
+
+h2 a:hover, h2 a:focus {
+  text-decoration: underline;
+}
+
+.site-name a, .site-name a:hover {
+  color: #fbfbf9;
+}
+
+#site-slogan {
+  color: #fbfbf9;
+}
+
+.caption {
+  color: #94938e;
+}
+
+a {
+  color: #b3995d;
+}
+
+a:hover, a:focus {
+  color: #fbfbf9;
+}
+
+a.btn, .btn a {
+  background: #b3995d;
+  color: #fbfbf9;
+}
+
+a.btn:hover, a.btn:focus, .btn a:hover, .btn a:focus {
+  background: #232220;
+  color: #fbfbf9;
+}
+
+a.more-link, .more-link a {
+  color: #b3995d;
+}
+
+a.more-link:hover, a.more-link:focus, .more-link a:hover, .more-link a:focus {
+  color: #fbfbf9;
+}
+
+a.edit-link:hover, a.edit-link:focus, .edit-link a:hover, .edit-link a:focus {
+  background: #232220;
+  color: #fbfbf9;
+}
+
+.well {
+  background: #232220;
+}
+
+.navbar .nav > li > a {
+  color: #b3995d;
+  background: transparent;
+}
+
+.navbar .nav > .active > a, .navbar .nav > .active > a:hover, .navbar .nav > .active > a:focus, .navbar .nav > li > a:focus, .navbar .nav > li > a:hover {
+  color: #fbfbf9;
+  background: transparent;
+}
+
+.sidebar .nav li a:hover, .sidebar .nav li a:focus, .sidebar .nav li a.active {
+  color: #fbfbf9;
+}
+
+.dropdown-menu {
+  background: #282724;
+  border: 1px solid #232220;
+}
+
+.navbar .nav li.dropdown.open > .dropdown-toggle, .navbar .nav li.dropdown.active > .dropdown-toggle, .navbar .nav li.dropdown.open.active > .dropdown-toggle {
+  background: transparent;
+  color: #b3995d;
+}
+
+.navbar .nav li.dropdown.open > .dropdown-toggle:hover, .navbar .nav li.dropdown.open > .dropdown-toggle:focus, .navbar .nav li.dropdown.active > .dropdown-toggle:hover, .navbar .nav li.dropdown.active > .dropdown-toggle:focus, .navbar .nav li.dropdown.open.active > .dropdown-toggle:hover, .navbar .nav li.dropdown.open.active > .dropdown-toggle:focus {
+  color: #fbfbf9;
+  background: transparent;
+}
+
+.navbar .nav li.dropdown.open > .dropdown-toggle .caret, .navbar .nav li.dropdown.active > .dropdown-toggle .caret, .navbar .nav li.dropdown.open.active > .dropdown-toggle .caret {
+  border-bottom-color: #b3995d;
+  border-top-color: #b3995d;
+}
+
+.dropdown-menu > li > a:hover, .dropdown-menu > li > a:focus, .dropdown-submenu:hover > a, .dropdown-submenu:focus > a {
+  color: #282724;
+  background: #fbfbf9;
+}
+
+.bodybg .sidebar .region, .bodybg .content-wrapper {
+  background-color: #2e2d29;
+}
+
+.bodybg .sidebar .region {
+  opacity: 1;
+}
+
+.borders .sidebar .region, .borders .content-wrapper, .bodybg.borders .breadcrumb {
+  border: 1px solid #282724;
+}
+
+.roundedcorners .well {
+  border-radius: 5px;
+}
+
+.breadcrumb {
+  background-color: #2e2d29;
+  border-radius: 0;
+}
+
+.bean-stanford-social-media-connect a {
+  opacity: 0.75;
+}
+
+.site-footer {
+  border-top: 1px solid #232220;
+}
+
+.header-bkg .navbar {
+  margin-bottom: 10px;
+}
+
+.header-bkg .site-main-menu {
+  border-top: 1px solid #232220;
+}
+
+.navbar .nav > li > a {
+  padding-bottom: .25em;
+  border-bottom: 5px solid transparent;
+}
+
+.navbar .nav > .active > a,
+.navbar .nav > .active > a:hover,
+.navbar .nav > .active > a:focus,
+.navbar .nav > li > a:focus,
+.navbar .nav > li > a:hover {
+  border-bottom: 5px solid #b3995d;
+}
+
+a.btn,
+.btn a {
+  border: 1px solid transparent;
+}
+
+a.btn:hover,
+a.btn:focus,
+.btn a:hover,
+.btn a:focus {
+  border: 1px solid #fbfbf9;
+}
+
+@media (max-width: 767px) {
+  .navbar .btn-navbar {
+    background: #b3995d;
+    border: 1px solid transparent;
+  }
+
+  .navbar .btn-navbar:hover,
+  .navbar .btn-navbar:focus,
+  .navbar .btn-navbar:active,
+  .navbar .btn-navbar.active,
+  .navbar .btn-navbar.disabled,
+  .navbar .btn-navbar[disabled] {
+    background: #232220;
+    border: 1px solid #fbfbf9;
+  }
+}
+.nav > li > a:hover,
+.nav > li > a:focus {
+  color: #232220;
+}
+
+.dropdown-menu {
+  background: #fbfbf9;
+}
+
+.dropdown-menu > li > a:hover,
+.dropdown-menu > li > a:focus,
+.dropdown-submenu:hover > a,
+.dropdown-submenu:focus > a {
+  color: #fbfbf9;
+  background: #282724;
+}

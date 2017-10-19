@@ -1,0 +1,66 @@
+<?php
+/**
+ * @file
+ * Stanford AFS Quota Check installation file. Contains installation hooks.
+ */
+
+/**
+ * Implements hook_requirements.
+ * Performs a runtime check for file storage usage. Information can be
+ * seen at admin/reports/status/
+ */
+
+function stanford_afs_quota_requirements($phase) {
+  $requirements = array();
+
+  switch ($phase) {
+    case 'runtime':
+      $t = get_t();
+      $usage = _stanford_afs_quota_get_usage();
+      $last_check = date('Y-m-d g:ia', variable_get('stanford_afs_quota_afsquota_ts', 0));
+      $type = _stanford_afs_quota_get_quota_bool() ? REQUIREMENT_WARNING : REQUIREMENT_INFO;
+
+      $requirements['afsquotastorage'] = array(
+        'title' => 'File Storage Limit',
+        'value' => $t('As of @lastcheck your account is using @usage% of your total file storage.', array('@lastcheck' => $last_check, '@usage' => $usage)) . ' ' . l(t('Check again.'), 'admin/config/stanford-sites-helper/filequota/check') . $t(' Or,') . ' ' . l(t('request more storage.'), 'https://stanford.service-now.com/it_services?id=sc_cat_item&sys_id=c44652e04f13ae0054c23f828110c7d9'),
+        'severity' => $type,
+      );
+
+      break;
+  }
+  return $requirements;
+}
+/**
+ * Implements hook_install
+ * Sets default variables for use in system.
+ */
+function stanford_afs_quota_install() {
+
+  // Variable to store whether threshold has been reached.
+  variable_set('stanford_afs_quota_afsquota_threshold_bool', 0);
+  // Variable to store which roles can see the warning message.
+  variable_set('stanford_afs_quota_afsquota_roles', array(
+    'administrator'
+  ));
+  // Last time limit was checked.
+  variable_set('stanford_afs_quota_afsquota_ts', 0);
+  // Keep track of what the user is at.
+  variable_set('stanford_afs_quota_afsquota_current', 0);
+  // Have we sent warning email already checker.
+  variable_del('stanford_afs_quota_afsquota_sent_email', 0);
+
+}
+/**
+ * Implements hook_uninstall
+ * Removes variables from DB.
+ */
+function stanford_afs_quota_uninstall() {
+
+  // Remove the vars...
+  variable_del('stanford_afs_quota_afsquota_threshold_bool');
+  variable_del('stanford_afs_quota_afsquota_roles');
+  variable_del('stanford_afs_quota_afsquota_ts');
+  variable_del('stanford_afs_quota_afsquota_current');
+  variable_del('stanford_afs_quota_afsquota_sent_email');
+
+}

@@ -1,0 +1,175 @@
+<?php
+/**
+ * @file
+ * Allow bean fields to use advanced display suite stuff
+ *
+ * Pretty much copy paste from: https://github.com/generoi/ds_contrib
+ * Thanks for the code.
+ */
+
+
+/**
+ * Implements hook_field_extra_fields().
+ */
+function ds_bean_fields_field_extra_fields_alter(&$info) {
+  // Remove the default Bean field from the display UI.
+  if (module_exists('bean')) {
+    foreach (bean_get_types() as $type) {
+      unset($info['bean'][$type->type]['display']['title']);
+    }
+  }
+}
+
+
+/**
+ * Implements hook_ds_fields_info().
+ */
+function ds_bean_fields_ds_fields_info($entity_type) {
+
+  // Allow bean titles to be formatted like fields.
+  if (module_exists('bean')) {
+    $fields['bean']['title'] = array(
+      'title' => t('Title'),
+      'field_type' => DS_FIELD_TYPE_FUNCTION,
+      'function' => 'ds_render_field',
+      'properties' => array(
+        'entity_render_key' => 'title',
+        'settings' => array(
+          'link' => array('type' => 'select', 'options' => array('no', 'yes')),
+          'wrapper' => array('type' => 'textfield', 'description' => t('Eg: h1, h2, p')),
+          'class' => array('type' => 'textfield', 'description' => t('Put a class on the wrapper. Eg: block-title')),
+        ),
+        'default' => array('wrapper' => 'h2', 'link' => 0, 'class' => ''),
+      ),
+    );
+  }
+
+  if (isset($fields[$entity_type])) {
+    return array($entity_type => $fields[$entity_type]);
+  }
+
+}
+
+
+/**
+ * Render a title prefixed/suffixed and optionally lowercased.
+ * @see ds_bean_fields_ds_fields_info().
+ */
+function ds_bean_fields_render_title_prefix($field) {
+  $settings = isset($field['formatter_settings']) ? $field['formatter_settings'] : $field['properties']['default'];
+  $title = $field['entity']->{$field['properties']['entity_render_key']};
+  if ($settings['lowercase']) {
+    $title = drupal_strtolower($title);
+  }
+  if (!empty($settings['trim']) && is_numeric($settings['trim_length'])) {
+    if (drupal_strlen($title) > $settings['trim_length']) {
+      $title = drupal_substr($title, 0, $settings['trim_length']) . $settings['trim_suffix'];
+    }
+  }
+  $title = t($settings['prefix']) . $title . t($settings['postfix']);
+  if (!empty($settings['hyphenate'])) {
+    $title = ds_bean_fields_hyphenate($title, $field['entity']->language);
+  }
+  return _ds_bean_fields_render_html($field, $title);
+}
+
+/**
+ * Implements hook_ds_fields_info_alter().
+ */
+function ds_bean_fields_ds_fields_info_alter(&$fields, $entity_type) {
+  if ($entity_type == 'ds_views') {
+    // Override ds_vd_render_title_field so we can output the field formatter
+    // settings.
+    $fields['title']['function'] = 'ds_bean_fields_vd_render_title_field';
+  }
+}
+
+/**
+ * Function overriding ds_vd_render_title_field() so that it
+ * rendereds the field using custom formatters.
+ * @see ds_vd_render_title_field().
+ */
+function ds_bean_fields_vd_render_title_field($field) {
+  ds_vd_render_title_field($field);
+  if (isset($field['formatter_settings']['ft']['func'])) {
+    // Construct a custom render array acceptable by the ds theme functions,
+    // eg. theme_ds_field_export().
+    $vars = array(
+      'label_hidden' => TRUE,
+      'ds-config' => $field['formatter_settings']['ft'],
+      'items' => array(
+        array('#markup' => $field['entity']->get_title()),
+      ),
+      'element' => array(
+        '#entity_type' => 'ds_views',
+        '#object' => $field['entity'],
+        '#label_display' => '',
+      ),
+      'item_attributes' => array(''),
+      'content_attributes' => '',
+      'title_attributes' => '',
+      'classes' => '',
+      'attributes' => '',
+    );
+    $output = $field['formatter_settings']['ft']['func']($vars);
+    $field['entity']->ds_vd['title'] = $output;
+  }
+}
+
+/**
+ * Render cusom HTML inside the formatted field structure.
+ */
+function _ds_bean_fields_render_html($field, $html) {
+  $field['properties']['entity_render_key'] = 'ds_bean_fields_key';
+  $field['entity']->ds_bean_fields_key = 'ds_bean_fields_PLACEHOLDER';
+  if (!isset($field['properties']['default']['link'])) {
+    $field['properties']['default']['link'] = 0;
+  }
+  $output = ds_render_field($field);
+  return str_replace('ds_bean_fields_PLACEHOLDER', $html, $output);
+}
+
+/**
+ * Hyphenate a text string.
+ */
+function ds_bean_fields_hyphenate($text, $langcode = NULL) {
+  $pattern = &drupal_static(__FUNCTION__);
+  if (!isset($langcode)) {
+    $langcode = i18n_langcode();
+  }
+  // Return early if there is not title.
+  if ($text == '<none>' || empty($text)) {
+    return $text;
+  }
+
+  if (!isset($pattern[$langcode])) {
+    $pattern = array();
+    $path = libraries_get_path('phpHyphenator');
+    $pattern_path = $path . '/patterns/' . $langcode . '.php';
+    $lib_path = $path . '/hyphenation.php';
+
+    // There's no translation available.
+    if (file_exists($lib_path) === FALSE || file_exists($pattern_path) === FALSE) {
+      return $text;
+    }
+    else {
+      require_once $lib_path;
+    }
+
+    // Cache the patttern conversion as it's quite expensive to calculate.
+    if ($cached = cache_get('phphyphenator_' . $langcode, 'cache')) {
+      $pattern[$langcode] = $cached->data;
+    }
+    // Not cached, get it.
+    else {
+      require_once $pattern_path;
+      $pattern[$langcode] = phphyphenator_convert_patterns($patterns);
+      cache_set('phphyphenator_' . $langcode, $pattern[$langcode], 'cache');
+    }
+  }
+
+  return phphyphenator_hyphenation($text, $pattern[$langcode]);
+}
+
+
+

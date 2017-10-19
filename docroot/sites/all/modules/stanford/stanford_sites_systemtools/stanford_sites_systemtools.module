@@ -1,0 +1,86 @@
+<?php
+
+/**
+ * @file
+ * Code for the Stanford Sites System Tools module.
+ */
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function stanford_sites_systemtools_form_features_export_form_alter(&$form, &$form_state, $form_id) {
+  // allow this only if stanford_sites_allow_features_generate = TRUE
+  if(!variable_get('stanford_sites_allow_features_generate')) {
+    unset($form['advanced']['generate_path']);
+    unset($form['advanced']['generate']);
+  }
+}
+
+/**
+ * Implements hook_form_alter().
+ */
+function stanford_sites_systemtools_form_alter(&$form, $form_state, $form_id) {
+  // Once enabled this module cannot be disabled (unless you get to the database or use Drush)
+  // So evil.
+  // Drush is run through the cli so we don't act if that's the interface being used
+  if (($form_id == 'system_modules') &&   (php_sapi_name() != 'cli')) {
+    unset($form['modules']['Stanford']['stanford_sites_systemtools']['enable']);
+    unset($form['modules']['Administration']['erus']['enable']);
+    if(!empty($form['modules']['Administration']['erus']['description']['#markup'])) {
+      $form['modules']['Administration']['erus']['description']['#markup'] .= t(' <strong>This module cannot be enabled in the Stanford Sites environment</strong>.');
+    }
+    unset($form['modules']['Core']['php']['enable']);
+    if(!empty($form['modules']['Core']['php']['description']['#markup'])) {
+      $form['modules']['Core']['php']['description']['#markup'] .= t(' <strong>This module cannot be enabled in the Stanford Sites environment</strong>.');
+    }
+    unset($form['modules']['Core']['update']['enable']);
+    if(!empty($form['modules']['Core']['update']['description']['#markup'])) {
+      $form['modules']['Core']['update']['description']['#markup'] .= t(' <strong>This module cannot be enabled in the Stanford Sites environment</strong>.');
+    }
+  }
+
+  // Disable file directory path and temp directory changes. These are set during installation
+  // and should not be changed.
+
+  if ($form_id == 'system_file_system_settings') {
+    $form['file_public_path']['#access'] = FALSE;
+    $form['file_private_path']['#access'] = FALSE;
+    $form['file_temporary_path']['#access'] = FALSE;
+  }
+
+  // Add validation function to Backup and Migrate destinations form
+  if ($form_id == 'backup_migrate_crud_edit_form') {
+    $form['#validate'][] = 'stanford_sites_systemtools_bam_validate';
+  }
+}
+
+/*
+ * Blocks users from creating a destination directory outside of their
+ * Drupal directory.
+ */
+function stanford_sites_systemtools_bam_validate($form, &$form_state) {
+  $location = $form_state['values']['location'];
+  $directory_is_above = preg_match('/^\./', $location);
+  if ($directory_is_above == 1) {
+    form_set_error('location', t('You may not choose a destination outside of your Drupal directory.'));
+  }
+  $directory_is_absolute = preg_match('/^\//', $location);
+  if ($directory_is_absolute == 1) {
+    form_set_error('location', t('You must enter a relative path for your destination directory.'));
+  }
+  $directory_has_dots = preg_match('/\.\./', $location);
+  if ($directory_has_dots == 1) {
+    form_set_error('location', t('You may not choose a destination outside of your Drupal directory.'));
+  }
+}
+
+/**
+ * Implements hook_module_implements_alter().
+ */
+function stanford_sites_systemtools_module_implements_alter(&$implementations, $hook) {
+  if($hook == "form_alter") {
+    unset($implementations['stanford_sites_systemtools']);
+    $implementations_new = array('stanford_sites_systemtools' => FALSE);
+    $implementations = array_merge($implementations_new, $implementations);
+  }
+}

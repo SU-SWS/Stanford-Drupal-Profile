@@ -1,0 +1,13 @@
+#breadcrumb {
+    padding: 0 1% 0 0;
+    @include box-sizing(border-box);
+    @media (max-width: 767px) {
+        padding: 0;
+    }
+}
+.breadcrumb {
+    padding: 8px 10px;
+}
+.roundedcorners .breadcrumb {
+    border-radius: 5px;
+}

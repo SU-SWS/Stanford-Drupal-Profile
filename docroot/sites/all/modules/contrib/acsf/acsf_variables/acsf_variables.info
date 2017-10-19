@@ -1,0 +1,13 @@
+name = ACSF Variables
+description = Stores sensitive variables in a single place for easy scrubbing.
+core = 7.x
+package = Acquia Cloud Site Factory
+
+dependencies[] = acsf
+
+; Information added by Drupal.org packaging script on 2017-08-30
+version = "7.x-1.40"
+core = "7.x"
+project = "acsf"
+datestamp = "1504093450"
+

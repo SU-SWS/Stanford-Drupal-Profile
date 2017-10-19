@@ -1,0 +1,29 @@
+<?php
+/**
+ * @file
+ * Installation file
+ */
+
+/**
+ * Implements hook_install().
+ */
+function stanford_jumpstart_academic_install() {
+}
+
+/**
+ * Implements hook_enable().
+ */
+function stanford_jumpstart_academic_enable() {
+}
+
+/**
+ * Implements hook_disable().
+ */
+function stanford_jumpstart_academic_disable() {
+}
+
+/**
+ * Implements hook_uninstall().
+ */
+function stanford_jumpstart_academic_uninstall() {
+}

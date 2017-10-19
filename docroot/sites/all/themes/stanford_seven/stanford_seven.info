@@ -1,0 +1,24 @@
+name = Stanford Seven
+base theme = seven
+description = A simple administration theme based on Drupal's Seven theme. Adds an extra sidebar and several other block regions to allow for contextual help text and more customized dashboards and administrative pages. Provided by <a href="http://webservices.stanford.edu">Stanford Web Services</a>.
+core = 7.x
+version = 7.x-1.1
+
+stylesheets[all][] = css/stanford_seven.css
+
+scripts[] = js/stanford_seven.js
+
+settings[shortcut_module_link] = 1
+
+regions[admin_shortcuts] = Admin Shortcuts (Authenticated Users Only)
+regions[help] = Help
+regions[page_top] = Page top
+regions[main_top] = Main top
+regions[content_top] = Content top
+regions[content] = Content
+regions[content_bottom] = Content bottom
+regions[main_bottom] = Main bottom
+regions[page_bottom] = Page bottom
+regions[sidebar_second] = Second sidebar
+regions[sidebar_first] = First sidebar
+regions_hidden[] = sidebar_first

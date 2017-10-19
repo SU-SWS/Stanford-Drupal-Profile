@@ -1,0 +1,202 @@
+body {
+  color: #333333;
+  background: #fbfbf9;
+}
+
+.header {
+  background: #f8f7f2;
+}
+
+.site-main-menu {
+  background: #f8f7f2;
+  border-bottom: 1px solid #e9e6df;
+}
+
+.main {
+  background: #fbfbf9;
+}
+
+.bodybg .main {
+  background: transparent;
+}
+
+.site-footer {
+  background: #f8f7f2;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  color: #333333;
+}
+
+h1 {
+  color: #333333;
+}
+
+h2, h2 a, h2 a:hover, h2 a:focus {
+  color: #333333;
+}
+
+h2 a:hover, h2 a:focus {
+  text-decoration: underline;
+}
+
+.site-name a, .site-name a:hover {
+  color: #333333;
+}
+
+#site-slogan {
+  color: #333333;
+}
+
+.caption {
+  color: #928b81;
+}
+
+a {
+  color: #8c1515;
+}
+
+a:hover, a:focus {
+  color: #333333;
+}
+
+a.btn, .btn a {
+  background: #8c1515;
+  color: #fbfbf9;
+}
+
+a.btn:hover, a.btn:focus, .btn a:hover, .btn a:focus {
+  background: #333333;
+  color: #fbfbf9;
+}
+
+a.more-link, .more-link a {
+  color: #8c1515;
+}
+
+a.more-link:hover, a.more-link:focus, .more-link a:hover, .more-link a:focus {
+  color: #333333;
+}
+
+a.edit-link:hover, a.edit-link:focus, .edit-link a:hover, .edit-link a:focus {
+  background: #333333;
+  color: #fbfbf9;
+}
+
+.well {
+  background: #e9e6df;
+}
+
+.navbar .nav > li > a {
+  color: #8c1515;
+  background: transparent;
+}
+
+.navbar .nav > .active > a, .navbar .nav > .active > a:hover, .navbar .nav > .active > a:focus, .navbar .nav > li > a:focus, .navbar .nav > li > a:hover {
+  color: #333333;
+  background: transparent;
+}
+
+.sidebar .nav li a:hover, .sidebar .nav li a:focus, .sidebar .nav li a.active {
+  color: #333333;
+}
+
+.dropdown-menu {
+  background: #f8f7f2;
+  border: 1px solid #e9e6df;
+}
+
+.navbar .nav li.dropdown.open > .dropdown-toggle, .navbar .nav li.dropdown.active > .dropdown-toggle, .navbar .nav li.dropdown.open.active > .dropdown-toggle {
+  background: transparent;
+  color: #8c1515;
+}
+
+.navbar .nav li.dropdown.open > .dropdown-toggle:hover, .navbar .nav li.dropdown.open > .dropdown-toggle:focus, .navbar .nav li.dropdown.active > .dropdown-toggle:hover, .navbar .nav li.dropdown.active > .dropdown-toggle:focus, .navbar .nav li.dropdown.open.active > .dropdown-toggle:hover, .navbar .nav li.dropdown.open.active > .dropdown-toggle:focus {
+  color: #333333;
+  background: transparent;
+}
+
+.navbar .nav li.dropdown.open > .dropdown-toggle .caret, .navbar .nav li.dropdown.active > .dropdown-toggle .caret, .navbar .nav li.dropdown.open.active > .dropdown-toggle .caret {
+  border-bottom-color: #8c1515;
+  border-top-color: #8c1515;
+}
+
+.dropdown-menu > li > a:hover, .dropdown-menu > li > a:focus, .dropdown-submenu:hover > a, .dropdown-submenu:focus > a {
+  color: #f8f7f2;
+  background: #333333;
+}
+
+.bodybg .sidebar .region, .bodybg .content-wrapper {
+  background-color: #fbfbf9;
+}
+
+.bodybg .sidebar .region {
+  opacity: 1;
+}
+
+.borders .sidebar .region, .borders .content-wrapper, .bodybg.borders .breadcrumb {
+  border: 1px solid #f8f7f2;
+}
+
+.roundedcorners .well {
+  border-radius: 5px;
+}
+
+.breadcrumb {
+  background-color: #fbfbf9;
+  border-radius: 0;
+}
+
+.bean-stanford-social-media-connect a {
+  opacity: 0.75;
+}
+
+.site-footer {
+  border-top: 1px solid #e9e6df;
+}
+
+a:hover,
+a:focus {
+  text-decoration: underline;
+}
+
+.header-bkg .navbar {
+  margin-bottom: 10px;
+}
+
+.header-bkg .site-main-menu {
+  border-top: 1px solid #e9e6df;
+}
+
+.navbar .nav > li > a {
+  padding-bottom: .25em;
+  border-bottom: 5px solid transparent;
+}
+
+.navbar .nav > .active > a,
+.navbar .nav > .active > a:hover,
+.navbar .nav > .active > a:focus,
+.navbar .nav > li > a:focus,
+.navbar .nav > li > a:hover {
+  border-bottom: 5px solid #e9e6df;
+}
+
+@media (max-width: 767px) {
+  .navbar {
+    margin-top: 0;
+  }
+}
+.main .menu li a:hover,
+.main .menu li a:focus,
+.main .menu li a.active,
+.main .menu li a.active-trail,
+.site-footer .menu li a:hover,
+.site-footer .menu li a:focus,
+.site-footer .menu li a.active,
+.site-footer .menu li a.active-trail {
+  text-decoration: underline;
+}
+
+.well .caption {
+  color: #6a655c;
+}

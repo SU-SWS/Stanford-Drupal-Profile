@@ -1,0 +1,322 @@
+<?php
+
+/**
+ * @file
+ *   Install file for Workbench Access.
+ */
+
+/**
+ * Implements hook_schema().
+ */
+function workbench_access_schema() {
+
+  $schema['workbench_access'] = array(
+    'description' => 'Defines the active sections for hierarchical access controls.',
+    'fields' => array(
+      'access_id' => array(
+        'description' => 'The section identifier, which may be non-numeric.',
+        'type' => 'varchar',
+        'length' => '80',
+        'not null' => TRUE,
+        'default' => '',
+      ),
+      'access_scheme' => array(
+        'description' => 'The module responsbile for this access system.',
+        'type' => 'varchar',
+        'length' => '40',
+        'not null' => TRUE,
+        'default' => '',
+      ),
+      'access_type' => array(
+        'description' => 'The access type (e.g. taxonomy).',
+        'type' => 'varchar',
+        'length' => '40',
+        'not null' => TRUE,
+        'default' => '',
+      ),
+      'access_type_id' => array(
+        'description' => 'The primary key for the access type (e.g. a vocabulary id).',
+        'type' => 'varchar',
+        'length' => '255',
+        'not null' => TRUE,
+        'default' => '',
+      ),
+    ),
+    'primary key' => array('access_id', 'access_scheme'),
+  );
+
+  $schema['workbench_access_user'] = array(
+    'description' => 'Maps user access to sections',
+    'fields' => array(
+      'uid' => array(
+        'description' => 'The user identifier. Foreign key to {users}.',
+        'type' => 'int',
+        'not null' => TRUE,
+      ),
+      'access_id' => array(
+        'description' => 'The section identifier. Foreign key to {workbench_access}.',
+        'type' => 'varchar',
+        'length' => '80',
+        'not null' => TRUE,
+        'default' => '',
+      ),
+      'access_scheme' => array(
+        'description' => 'The module responsbile for this access system.',
+        'type' => 'varchar',
+        'length' => '40',
+        'not null' => TRUE,
+        'default' => '',
+      ),
+    ),
+    'primary key' => array('uid', 'access_id', 'access_scheme'),
+    'foreign keys' => array(
+      'section_id' => array('workbench_access' => array('access_id', 'access_scheme')),
+      'uid' => array('users' => 'uid'),
+    ),
+  );
+
+  $schema['workbench_access_role'] = array(
+    'description' => 'Maps role access to sections',
+    'fields' => array(
+      'rid' => array(
+        'description' => 'The role identifier. Foreign key to {role}.',
+        'type' => 'int',
+        'not null' => TRUE,
+      ),
+      'access_id' => array(
+        'description' => 'The section identifier. Foreign key to {workbench_access}.',
+        'type' => 'varchar',
+        'length' => '80',
+        'not null' => TRUE,
+        'default' => '',
+      ),
+      'access_scheme' => array(
+        'description' => 'The module responsbile for this access system.',
+        'type' => 'varchar',
+        'length' => '40',
+        'not null' => TRUE,
+        'default' => '',
+      ),
+    ),
+    'primary key' => array('rid', 'access_id', 'access_scheme'),
+    'foreign keys' => array(
+      'section_id' => array('workbench_access' => array('access_id', 'access_scheme')),
+      'rid' => array('role' => 'rid'),
+    ),
+  );
+
+  $schema['workbench_access_node'] = array(
+    'description' => 'Maps sections to nodes',
+    'fields' => array(
+      'nid' => array(
+        'description' => 'The node identifier. Foreign key to {node}.',
+        'type' => 'int',
+        'not null' => TRUE,
+      ),
+      'access_id' => array(
+        'description' => 'The section identifier. Foreign key to {workbench_access}.',
+        'type' => 'varchar',
+        'length' => '80',
+        'not null' => TRUE,
+        'default' => '',
+      ),
+      'access_scheme' => array(
+        'description' => 'The module responsbile for this access system.',
+        'type' => 'varchar',
+        'length' => '40',
+        'not null' => TRUE,
+        'default' => '',
+      ),
+    ),
+    'primary key' => array('nid', 'access_id', 'access_scheme'),
+    'foreign keys' => array(
+      'section_id' => array('workbench_access' => array('access_id', 'access_scheme')),
+      'uid' => array('node' => 'nid'),
+    ),
+  );
+
+  return $schema;
+}
+
+/**
+ * Implements hook_enable().
+ *
+ * Check the module configuration requirements.
+ */
+function workbench_access_enable() {
+  // If Workbench Access has not been configured, direct the user to configuration.
+  if (!variable_get('workbench_access', FALSE)) {
+    $message = workbench_access_configuration_needed_message();
+    drupal_set_message($message, 'warning', $repeat = FALSE);
+  }
+}
+
+/**
+ * Implements hook_requirements() to check if workbench_access is configured.
+ *
+ * @param $phase
+ */
+function workbench_access_requirements($phase) {
+  $requirements = array();
+
+  if ($phase == 'runtime') {
+    $tree = workbench_access_get_active_tree();
+    $roles = workbench_access_get_roles('access workbench access by role');
+    $types = workbench_access_check_access_fields();
+    $description = array();
+    workbench_access_load_include();
+    $modules = module_implements('workbench_access_info');
+    if (empty($modules) && !module_exists('taxonomy') && !module_exists('menu')) {
+      $description[] = t('No modules are enabled that support access hierarchies. Menu and Taxonomy are two options.');
+    }
+    // If this variable has not been set, workbench access is not fully configured.
+    if (!variable_get('workbench_access', FALSE)) {
+      $description[] = workbench_access_configuration_needed_message();
+    }
+    // If no sections, then nothing works.
+    if (empty($tree['active'])) {
+      $description[] = workbench_access_sections_needed_message();
+    }
+    if (empty($roles)) {
+      $description[] = t('At least one role must be have the <a href="!url">Allow all members of this role to be assigned to Workbench Access sections</a> permission', array('!url' => url('admin/people/permissions', array('fragment' => 'module-workbench_access'))));
+    }
+    if (!empty($types)) {
+      $items = array();
+      foreach ($types as $type) {
+        $items[] = check_plain(node_type_get_name($type));
+      }
+      $description[] = t('The following content types are not properly configured for access control: !types', array('!types' => theme('item_list', array('items' => $items))));
+    }
+    if (empty($description)) {
+      $requirements['workbench_access'] = array(
+        'title' => t('Workbench Access'),
+        'value' => t('Configured'),
+        'severity' => REQUIREMENT_OK,
+        'description' => t('Workbench Access is configured properly, using %scheme as the access scheme.', array('%scheme' => variable_get('workbench_access'))),
+      );
+    }
+    else {
+      $requirements['workbench_access'] = array(
+        'title' => t('Workbench Access'),
+        'value' => t('Not configured'),
+        'severity' => REQUIREMENT_ERROR,
+        'description' => theme('item_list', array('items' => $description)),
+      );
+    }
+  }
+
+  return $requirements;
+}
+
+/**
+ * Remove our vocabulary and variables.
+ */
+function workbench_access_uninstall() {
+  if (module_exists('taxonomy')) {
+    $vocabulary = taxonomy_vocabulary_machine_name_load('workbench_access');
+    if (isset($vocabulary->vid)) {
+      taxonomy_vocabulary_delete($vocabulary->vid);
+    }
+  }
+
+  variable_del('workbench_access');
+  db_delete('variable')
+    ->condition('name', 'workbench_access_%', 'LIKE')
+    ->execute();
+}
+
+/**
+ * Allow for multiple term selection.
+ *
+ * NOTE: This update only affects sites on the pre-drupal.org release.
+ */
+function workbench_access_update_7000() {
+  $taxonomy = variable_get('workbench_access_taxonomy', 0);
+  if (!is_array($taxonomy)) {
+    if (empty($taxonomy)) {
+      variable_set('workbench_access_taxonomy', array());
+    }
+    else {
+      variable_set('workbench_access_taxonomy', array($taxonomy));
+    }
+  }
+  return t('Access rules have been corrected.');
+}
+
+/**
+ * Add the role-based storage table.
+ *
+ * NOTE: This update only affects sites on the pre-drupal.org release.
+ */
+function workbench_access_update_7001() {
+  if (db_table_exists('workbench_access_role')) {
+    return t('Update is not required.');
+  }
+  $schema = array(
+    'description' => 'Maps role access to sections',
+    'fields' => array(
+      'rid' => array(
+        'description' => 'The role identifier. Foreign key to {role}.',
+        'type' => 'int',
+        'not null' => TRUE,
+      ),
+      'access_id' => array(
+        'description' => 'The section identifier. Foreign key to {workbench_access}.',
+        'type' => 'varchar',
+        'length' => '80',
+        'not null' => TRUE,
+        'default' => '',
+      ),
+      'access_scheme' => array(
+        'description' => 'The module responsbile for this access system.',
+        'type' => 'varchar',
+        'length' => '40',
+        'not null' => TRUE,
+        'default' => '',
+      ),
+    ),
+    'primary key' => array('rid', 'access_id', 'access_scheme'),
+    'foreign keys' => array(
+      'section_id' => array('workbench_access' => array('access_id', 'access_scheme')),
+      'rid' => array('role' => 'rid'),
+    ),
+  );
+  db_create_table('workbench_access_role', $schema);
+  return t('Added the workbench_access_role table');
+}
+
+/**
+ * Use vocabulary machine names instead of ids.
+ *
+ * NOTE: This update only affects sites on the pre-drupal.org release.
+ */
+function workbench_access_update_7002() {
+  if (!module_exists('taxonomy')) {
+    return t('No update is required.');
+  }
+  $vocabularies = taxonomy_get_vocabularies();
+  foreach ($vocabularies as $vid => $vocabulary) {
+    db_update('workbench_access')
+      ->fields(array('access_type_id' => $vocabulary->machine_name))
+      ->condition('access_type_id', $vocabulary->vid)
+      ->execute();
+  }
+}
+
+/**
+ * Use vocabulary machine names, part two.
+ *
+ * NOTE: This update only affects sites on the pre-drupal.org release.
+ */
+function workbench_access_update_7003() {
+  $taxonomy = variable_get('workbench_access_taxonomy', array());
+  if (!module_exists('taxonomy')) {
+    return t('No update is required.');
+  }
+  $new = array();
+  $vocabularies = taxonomy_get_vocabularies();
+  foreach ($taxonomy as $vid) {
+    $new[] = $vocabularies[$vid]->machine_name;
+  }
+  variable_set('workbench_access_taxonomy', $new);
+}

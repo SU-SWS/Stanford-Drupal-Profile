@@ -1,0 +1,35 @@
+<?php
+/**
+ * @file
+ * Code for the Stanford Jumpstart Login feature.
+ */
+
+include_once 'stanford_jumpstart_login.features.inc';
+
+/**
+ * Implements hook_context_load_alter().
+ */
+function stanford_jumpstart_login_context_load_alter(&$context) {
+  // Get the chosen authentication scheme.
+  $auth_scheme = variable_get('stanford_sites_auth_method', 'webauth');
+  // If we're using WMD, hide the stanford_ssp login block by blanking out the reactions.
+  // Setting $context->disabled to TRUE does not work reliably.
+  if (($auth_scheme == 'webauth') && module_exists('webauth')) {
+    if ($context->name == 'stanford-simplesamlphp-login') {
+      $context->reactions = array();
+    }
+  }
+  // If we're using simplesaml_php, hide the WMD login block by blanking out the reactions.
+  // Setting $context->disabled to TRUE does not work reliably.
+  elseif (($auth_scheme == 'simplesamlphp') && module_exists('stanford_ssp')) {
+    if ($context->name == 'stanford-webauth-login') {
+      $context->reactions = array();
+    }
+  }
+  // If we get this far, don't display nothin'.
+  else {
+    if (($context->name == 'stanford-webauth-login') || ($context->name == 'stanford-simplesamlphp-login')) {
+      $context->reactions = array();
+    }
+  }
+}

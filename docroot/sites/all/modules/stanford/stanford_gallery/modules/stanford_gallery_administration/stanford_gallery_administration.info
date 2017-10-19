@@ -1,0 +1,12 @@
+name = Stanford Gallery Administration
+description = Administration views for Stanford Gallery content types
+core = 7.x
+package = Stanford
+version = 7.x-2.2
+project = stanford_gallery_administration
+dependencies[] = stanford_gallery
+dependencies[] = views
+features[ctools][] = views:views_default:3.0
+features[features_api][] = api:2
+features[views_view][] = stanford_gallery_manage
+features_exclude[dependencies][ctools] = ctools

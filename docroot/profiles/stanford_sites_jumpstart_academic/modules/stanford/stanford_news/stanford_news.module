@@ -1,0 +1,7 @@
+<?php
+/**
+ * @file
+ * Code for the Stanford News Item feature.
+ */
+
+include_once 'stanford_news.features.inc';

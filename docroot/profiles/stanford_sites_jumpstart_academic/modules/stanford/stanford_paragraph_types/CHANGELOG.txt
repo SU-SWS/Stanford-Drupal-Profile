@@ -1,0 +1,17 @@
+Stanford Paragraph Types
+-------------------------------
+7.x-1.1              2017-06-19
+-------------------------------
+- HSDO-923: Added color and texture options to teaser card paragraph type.
+- HSDO-939: New paragraph type "Section Header" which is an <h2> wrapped text field.
+- HSDO-932: Provided the ability to limit optinos in the Dynamic pagagraph type
+  based on roles. The field is either limited or disabled if editing.
+- HSDO-952: Changed some styling with the callout text paragraph type
+- HSDO-954: Section Header Style changes
+- HSDO-934: Changed texture options.
+- HSDO-970: Added some styling since stanford_story_page will no longer use a
+  custom page template. We want to make sure some paragraphs are centered on the page.
+
+7.x-1.0              2017-06-19
+-------------------------------
+- Initial Release

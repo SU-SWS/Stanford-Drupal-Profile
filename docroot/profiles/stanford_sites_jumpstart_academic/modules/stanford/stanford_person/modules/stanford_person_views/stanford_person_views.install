@@ -1,0 +1,248 @@
+<?php
+/**
+ * @file Install
+ */
+
+/**
+ * 1. Handle the changes to the type field that goes from list to taxonomy by
+ * removing all fields and filters from the views but only if they exist in the
+ * database. Also, play nice and add new fields.
+ *
+ * 2. Field update change. Remove list based field_s_person_type and replace with
+ * a taxonomy term field called field_s_person_affiliation.
+ *
+ * 3. Check the views in the feature for the field_s_person_type field and remove it
+ * 4. Add the new affiliation field to the views.
+ *
+ */
+function stanford_person_views_update_7500(&$sandbox) {
+
+  // 4. Check the views in the feature for the field_s_person_type field and
+  // remove it.
+
+  // Views included in the feature.
+  $list = array(
+    'stanford_person_manage',
+    'stanford_person_faculty',
+    'stanford_person_people',
+    'stanford_person_staff',
+    'stanford_person_student',
+  );
+
+  // Loop through all the included views in the feature and try to find the old
+  // field_s_person_type field and remove it from the view.
+  foreach ($list as $view_name) {
+
+    // Try to load the view.
+    $view = views_get_view($view_name);
+    if (!is_object($view)) {
+      continue;
+    }
+
+    // Remove from all places the field could be.
+    foreach ($view->display as &$display) {
+      unset($display->display_options['style_options']['columns']['field_s_person_type']);
+      unset($display->display_options['sorts']['field_s_person_type']);
+      unset($display->display_options['arguments']['field_s_person_type']);
+      unset($display->display_options['fields']['field_s_person_type']);
+      unset($display->display_options['filters']['field_s_person_type']);
+    }
+
+    $view->save();
+  }
+
+  // 5. Add the field back in.
+
+  $db_views_query = db_select("views_view", "vv")
+    ->fields("vv", array('name'))
+    ->execute()
+    ->fetchAllAssoc('name');
+
+  $db_views = array_keys($db_views_query);
+
+  // Add fields to manage person views.
+  stanford_person_views_update_7500_add_update_manage_person_view($sandbox, $db_views);
+
+  // Add filter to faculty view.
+  stanford_person_views_update_7500_add_filter_to_faculty($sandbox, $db_views);
+
+  // Add filter to staff view.
+  stanford_person_views_update_7500_add_filter_to_staff($sandbox, $db_views);
+
+  // Add filter to student view.
+  stanford_person_views_update_7500_add_filter_to_student($sandbox, $db_views);
+
+}
+
+/**
+ * [stanford_person_views_update_7500_add_update_manage_person_view description]
+ * @param  [type] &$sandbox [description]
+ * @return [type]           [description]
+ */
+function stanford_person_views_update_7500_add_update_manage_person_view(&$sandbox, $db_views) {
+
+  $view = views_get_view("stanford_person_manage");
+
+  // If the view is not in the database let the feature handle the change.
+  if (!in_array("stanford_person_manage", $db_views)) {
+    return;
+  }
+
+  $view->set_display("page");
+
+  // Add filter to the view.
+  $view->add_item(
+    $view->current_display,
+    'filter',
+    'field_data_field_s_person_affiliation',
+    'field_s_person_affiliation_tid',
+    array(
+      'type' => "select",
+      'vocabulary' => 'stanford_affiliation',
+      'group' => 1,
+      'exposed' => TRUE,
+      'expose' => array(
+        'operator_id' => 'field_s_person_affiliation_tid_op',
+        'label' => t('Affiliation'),
+        'operator' => 'field_s_person_affiliation_tid_op',
+        'identifier' => 'field_s_person_affiliation_tid',
+        'remember_roles' => array(
+          2 => '2',
+        ),
+      ),
+    ),
+    'field_s_person_affiliation_tid'
+  );
+
+  // Add field to the view.
+  $view->add_item(
+    $view->current_display,
+    'field',
+    'field_data_field_s_person_affiliation',
+    'field_s_person_affiliation',
+    array(
+      'element_label_colon' => FALSE,
+      'type' => "taxonomy_term_reference_plain",
+      'delta_offset' => 0,
+    ),
+    'field_s_person_affiliation'
+  );
+
+  $view->save();
+}
+
+/**
+ * Adds a faculty filter based on term id to the view.
+ * @return [type] [description]
+ */
+function stanford_person_views_update_7500_add_filter_to_faculty(&$sandbox, $db_views) {
+  $vocab = taxonomy_vocabulary_machine_name_load("stanford_affiliation");
+  $terms = taxonomy_get_term_by_name("Faculty", $vocab->machine_name);
+
+  if (!$vocab || !$terms) {
+    throw new DrupalUpdateException("Could not run stanford person views updates. Missing vocabulary or term");
+  }
+
+  $term = array_pop($terms);
+
+  $view = views_get_view("stanford_person_faculty");
+  // If the view is not in the database let the feature handle the change.
+  if (!in_array("stanford_person_faculty", $db_views)) {
+    return;
+  }
+
+  $view->set_display("page");
+  $view->add_item(
+    $view->current_display,
+    'filter',
+    'field_data_field_s_person_affiliation',
+    'field_s_person_affiliation_tid',
+    array(
+      'value' => array(
+        (int) $term->tid => (string) $term->tid
+      ),
+      'type' => "select",
+      'vocabulary' => 'stanford_affiliation',
+    ),
+    'field_s_person_affiliation_tid'
+  );
+
+  $view->save();
+}
+
+/**
+ * Adds a staff filter based on term id to the view.
+ * @return [type] [description]
+ */
+function stanford_person_views_update_7500_add_filter_to_staff(&$sandbox, $db_views) {
+  $vocab = taxonomy_vocabulary_machine_name_load("stanford_affiliation");
+  $terms = taxonomy_get_term_by_name("Staff", $vocab->machine_name);
+
+  if (!$vocab || !$terms) {
+    throw new DrupalUpdateException("Could not run stanford person views updates. Missing vocabulary or term");
+  }
+
+  $term = array_pop($terms);
+
+  $view = views_get_view("stanford_person_staff");
+  // If the view is not in the database let the feature handle the change.
+  if (!in_array("stanford_person_staff", $db_views)) {
+    return;
+  }
+  $view->set_display("page");
+  $view->add_item(
+    $view->current_display,
+    'filter',
+    'field_data_field_s_person_affiliation',
+    'field_s_person_affiliation_tid',
+    array(
+      'value' => array(
+        (int) $term->tid => (string) $term->tid
+      ),
+      'type' => "select",
+      'vocabulary' => 'stanford_affiliation',
+    ),
+    'field_s_person_affiliation_tid'
+  );
+
+  $view->save();
+}
+
+/**
+ * Adds a student filter based on term id to the view.
+ * @return [type] [description]
+ */
+function stanford_person_views_update_7500_add_filter_to_student(&$sandbox, $db_views) {
+  $vocab = taxonomy_vocabulary_machine_name_load("stanford_affiliation");
+  $terms = taxonomy_get_term_by_name("Student", $vocab->machine_name);
+
+  if (!$vocab || !$terms) {
+    throw new DrupalUpdateException("Could not run stanford person views updates. Missing vocabulary or term");
+  }
+
+  $term = array_pop($terms);
+
+  $view = views_get_view("stanford_person_student");
+  // If the view is not in the database let the feature handle the change.
+  if (!in_array("stanford_person_student", $db_views)) {
+    return;
+  }
+
+  $view->set_display("page");
+  $view->add_item(
+    $view->current_display,
+    'filter',
+    'field_data_field_s_person_affiliation',
+    'field_s_person_affiliation_tid',
+    array(
+      'value' => array(
+        (int) $term->tid => (string) $term->tid
+      ),
+      'type' => "select",
+      'vocabulary' => 'stanford_affiliation',
+    ),
+    'field_s_person_affiliation_tid'
+  );
+
+  $view->save();
+}

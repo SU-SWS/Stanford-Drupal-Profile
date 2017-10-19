@@ -1,0 +1,21 @@
+.main .menu, .site-footer .menu {
+    margin: 0;
+}
+.main .menu li, .site-footer .menu li {
+    list-style-type: none;
+    list-style-image: none;
+    margin: 0;
+    padding: 0;
+}
+.main .menu li a, .site-footer .menu li a {
+    padding: 0.25em 0;
+}
+.main .content > .menu > li > a, .site-footer .content > .menu > li > a {
+    font-weight: 600;
+}
+.main .menu li a:hover, .main .menu li a:focus, .main .menu li a.active, .main .menu li a.active-trail, .site-footer .menu li a:hover, .site-footer .menu li a:focus, .site-footer .menu li a.active, .site-footer .menu li a.active-trail {
+    background: transparent;
+}
+.main .menu li ul, .site-footer .menu li ul {
+    padding-left: 1em;
+}
