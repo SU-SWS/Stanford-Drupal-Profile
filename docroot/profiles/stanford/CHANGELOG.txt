@@ -1,6 +1,11 @@
 Stanford Profile 7.x-x.x xxxx-xx-xx
 -----------------------------------
 
+Stanford Profile 7.x-2.6 2017-09-26
+-----------------------------------
+- Various module updates in .make files
+- Fixed bug where stanford_page was installing in an overridden state
+
 Stanford Profile 7.x-2.5 2017-03-01
 -----------------------------------
 - Various module updates in .make files
