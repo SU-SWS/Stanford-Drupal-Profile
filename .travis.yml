@@ -63,7 +63,7 @@ env:
     - DEPLOYER_BRANCH=""
     - DRUPAL_PROFILE_BRANCH=""
     - SCRIPTS_BRANCH="test-chrome-update"
-    - CLICKY_BRANCH="stanford-page-features-overridden"
+    - CLICKY_BRANCH="5.x"
     - SCRIPTS_BRANCH=""
 
 language: php
