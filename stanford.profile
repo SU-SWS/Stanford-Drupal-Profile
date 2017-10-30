@@ -11,6 +11,12 @@ function stanford_install_tasks($install_state) {
     'type' => 'normal',
     'run' => INSTALL_TASK_RUN_IF_NOT_COMPLETED,
   );
+  $tasks['stanford_install_finished'] = array(
+    'display_name' => st('Clean up before finishing'),
+    'display' => FALSE,
+    'type' => 'normal',
+    'run' => INSTALL_TASK_RUN_IF_NOT_COMPLETED,
+  );
 
   return $tasks;
 }
@@ -292,4 +298,14 @@ function stanford_sites_add_webauth_user($sunet, $name = '', $email = '') {
   else {
     watchdog('Stanford Profile', 'Could not create duplicate user: %user', array('%user' => $name));
   }
+}
+
+/**
+ * Final installation task.
+ */
+function stanford_install_finished() {
+  module_enable(array('stanford_page'));
+  features_revert_module('stanford_page');
+  drupal_flush_all_caches();
+  watchdog("stanford", "Finished reverting stanford_page and flushing caches.");
 }
