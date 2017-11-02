@@ -2,13 +2,13 @@
 ### Wildcard for ACSF: Stanford & Cardinal
 ###
 ### Examples:
-### @acsf.[stack].[sitename]
-### @acsf.[dev|test].[stack].[sitename]
+### @acsf.[stack].[acsf_site_name]
+### @acsf.[dev|test].[stack].[acsf_site_name]
 ###
-### @acsf.cardinal.sheatest
-### @acsf.dev.cardinal.sheatest
-### @acsf.stanford.jsa2071012
-### @acsf.test.stanford.jsa2071012
+### @acsf.cardinald7.sheatest
+### @acsf.dev.cardinald7.sheatest
+### @acsf.cardinalsites.jsa2071012
+### @acsf.test.cardinalsites.jsa2071012
 
 // Fron the top of the Acquia exports.
 if (!isset($drush_major_version)) {
@@ -60,18 +60,23 @@ else {
   $site = $parts[3];
 }
 
+$stack_id = array(
+  "cardinalsites" => "01",
+  "cardinald7" => "02",
+);
+
 // Sanitize for drush rysnc. eg: @alias:%files/
 $site = array_shift(explode(":", $site));
 
 // Define the alias.
 $aliases[$stack . "." . $site] = array(
-  'root' => '/var/www/html/' . $stack . '.01live/docroot',
+  'root' => '/var/www/html/' . $stack . '.' . $stack_id[$stack] . 'live/docroot',
   'ac-site' => $stack,
-  'ac-env' => '01live',
+  'ac-env' => $stack_id[$stack] . 'live',
   'ac-realm' => 'enterprise-g1',
-  'uri' => $site . '.stanford.acsitefactory.com',
-  'remote-host' => $stack . '01live.ssh.enterprise-g1.acquia-sites.com',
-  'remote-user' => $stack . '.01live',
+  'uri' => $site . '.cardinalsites.acsitefactory.com',
+  'remote-host' => $stack . $stack_id[$stack] . 'live.ssh.enterprise-g1.acquia-sites.com',
+  'remote-user' => $stack . '.' . $stack_id[$stack] . 'live',
   'path-aliases' => array(
     '%drush-script' => 'drush' . $drush_major_version,
   ),
@@ -79,13 +84,13 @@ $aliases[$stack . "." . $site] = array(
 
 // Stage / Test Environment.
 $aliases["test." . $stack . "." . $site] = array(
-  'root' => '/var/www/html/' . $stack . '.01test/docroot',
+  'root' => '/var/www/html/' . $stack . '.' . $stack_id[$stack] . 'test/docroot',
   'ac-site' => $stack,
-  'ac-env' => '01test',
+  'ac-env' => $stack_id[$stack] . 'test',
   'ac-realm' => 'enterprise-g1',
-  'uri' => $site . '.test-stanford.acsitefactory.com',
-  'remote-host' => $stack . '01test.ssh.enterprise-g1.acquia-sites.com',
-  'remote-user' => $stack . '.01test',
+  'uri' => $site . '.test-cardinalsites.acsitefactory.com',
+  'remote-host' => $stack . $stack_id[$stack] . 'test.ssh.enterprise-g1.acquia-sites.com',
+  'remote-user' => $stack . '.' . $stack_id[$stack] . 'test',
   'path-aliases' => array(
     '%drush-script' => 'drush' . $drush_major_version,
   )
@@ -93,13 +98,13 @@ $aliases["test." . $stack . "." . $site] = array(
 
 // Development Environment.
 $aliases["dev." . $stack . "." . $site] = array(
-  'root' => '/var/www/html/' . $stack . '.01dev/docroot',
+  'root' => '/var/www/html/' . $stack . '.' . $stack_id[$stack] . 'dev/docroot',
   'ac-site' => $stack,
-  'ac-env' => '01dev',
+  'ac-env' => $stack_id[$stack] . 'dev',
   'ac-realm' => 'enterprise-g1',
-  'uri' => $site . '.dev-stanford.acsitefactory.com',
-  'remote-host' => $stack . '01dev.ssh.enterprise-g1.acquia-sites.com',
-  'remote-user' => $stack . '.01dev',
+  'uri' => $site . '.dev-cardinalsites.acsitefactory.com',
+  'remote-host' => $stack . $stack_id[$stack] . 'dev.ssh.enterprise-g1.acquia-sites.com',
+  'remote-user' => $stack . '.' . $stack_id[$stack] . 'dev',
   'path-aliases' => array(
     '%drush-script' => 'drush' . $drush_major_version,
   )
