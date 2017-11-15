@@ -176,6 +176,19 @@ if (file_exists('/var/www/site-php')) {
     // on non-Acquia environments since AH_SITE_ENVIRONMENT won't be set in that
     // case.
     $conf['migrate_drush_path'] = '/usr/local/bin/drush';
+    // simplesamlphp lives in a different directory on different environments
+    switch ($_ENV['AH_SITE_ENVIRONMENT'])
+    {
+      case '02dev':
+        $conf['stanford_simplesamlphp_auth_installdir'] = '/var/www/html/cardinald7.02dev/simplesamlphp';
+        break;
+      case '02test':
+        $conf['stanford_simplesamlphp_auth_installdir'] = '/var/www/html/cardinald7.02test/simplesamlphp';
+        break;
+      case '02prod':
+        $conf['stanford_simplesamlphp_auth_installdir'] = '/var/www/html/cardinald7.02live/simplesamlphp';
+        break;
+    }
   }
 
   if (!empty($site_settings['conf'])) {
