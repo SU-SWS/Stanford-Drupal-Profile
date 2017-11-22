@@ -21,7 +21,7 @@ libraries[icalcreator][directory_name] = "iCalcreator"
 libraries[icalcreator][destination] = "libraries"
 
 libraries[jquery_cycle][download][type] = "get"
-libraries[jquery_cycle][download][url] = "http://malsup.github.com/jquery.cycle.all.js"
+libraries[jquery_cycle][download][url] = "http://malsup.github.io/jquery.cycle.all.js"
 libraries[jquery_cycle][directory_name] = "jquery.cycle"
 libraries[jquery_cycle][destination] = "libraries"
 
