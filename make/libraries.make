@@ -21,9 +21,10 @@ libraries[icalcreator][directory_name] = "iCalcreator"
 libraries[icalcreator][destination] = "libraries"
 
 libraries[jquery_cycle][download][type] = "get"
-libraries[jquery_cycle][download][url] = "http://malsup.github.io/jquery.cycle.all.js"
-libraries[jquery_cycle][directory_name] = "jquery.cycle"
+libraries[jquery_cycle][download][url] = "http://malsup.com/jquery/cycle/release/jquery.cycle.zip?v2.99"
+libraries[jquery_cycle][download][subtree] = "src"
 libraries[jquery_cycle][destination] = "libraries"
+libraries[jquery_cycle][directory_name] = "jquery.cycle"
 
 libraries[jqueryuitimepicker][download][type] = "get"
 libraries[jqueryuitimepicker][download][url] = "https://github.com/trentrichardson/jQuery-Timepicker-Addon/archive/master.zip"
@@ -51,4 +52,3 @@ libraries[proj4js][download][type] = "get"
 libraries[proj4js][download][url] = http://download.osgeo.org/proj4js/proj4js-1.1.0.zip
 libraries[proj4js][directory_name] = proj4js
 libraries[proj4js][destination] = "libraries"
-
