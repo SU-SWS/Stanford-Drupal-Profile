@@ -1,5 +1,9 @@
 ACSF CardinalD7
 
+Version 0.0.6                                                        2017-11-29
+-------------------------------------------------------------------------------
+- Force HTTPS
+
 Version 0.0.5                                                        2017-11-21
 -------------------------------------------------------------------------------
 - Sets the path to the simplesamlphp installation on a per-environment basis.
