@@ -17,6 +17,7 @@ do
   ##########################
   # Rotate out old backups #
   ##########################
+  # TODO loop this.
   mv $backupdir/$sitedirname-dbdump.4.sql $backupdir/$sitedirname-dbdump.5.sql
   mv $backupdir/$sitedirname-dbdump.3.sql $backupdir/$sitedirname-dbdump.4.sql
   mv $backupdir/$sitedirname-dbdump.2.sql $backupdir/$sitedirname-dbdump.3.sql
