@@ -1855,7 +1855,7 @@ function stanford_capx_entity_form_add_vt(&$form, &$form_state, $entity_type, $e
         ),
       );
     $form['capx_vertical_tab']['update']['#markup'] = "<p>" . l(t('Update this profile from CAP'), $path, $options) . "<br />";
-    $form['capx_vertical_tab']['update']['#markup'] .= t("Clicking on the above button will update this profile with date from the CAP API wether or not sync is enabled or disabled") . "</p>";
+    $form['capx_vertical_tab']['update']['#markup'] .= t("Clicking on the above button will update this profile with date from the CAP API whether or not sync is enabled or disabled") . "</p>";
   }
 
   $status = empty($capx_info['sync']) ? t('Not receiving updates from CAP.') : t('Receiving updates from CAP.');
@@ -2155,7 +2155,7 @@ function stanford_capx_config_settings_form_submit($form, &$form_state) {
 }
 
 /**
- * Validates wether or not a path is acceptible.
+ * Validates whether or not a path is acceptible.
  *
  * @param string $path
  *   The path being looked up.

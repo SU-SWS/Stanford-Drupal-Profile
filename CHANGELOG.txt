@@ -1,5 +1,15 @@
 ACSF CardinalD7
 
+Version 0.0.8                                                        2017-11-30
+-------------------------------------------------------------------------------
+- Update stanford_capx to 7.x-2.2-alpha2 for PHP compatibility.
+- Sanitize HTTPS related redirect.
+
+
+Version 0.0.7                                                        2017-11-29
+-------------------------------------------------------------------------------
+- Hotfix for drush alias access.
+
 Version 0.0.6                                                        2017-11-29
 -------------------------------------------------------------------------------
 - Force HTTPS

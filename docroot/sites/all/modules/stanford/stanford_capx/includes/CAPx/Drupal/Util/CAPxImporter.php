@@ -170,7 +170,7 @@ class CAPxImporter {
       return;
     }
 
-    // Track wether this is a multiple entity importer or not. The checks differ
+    // Track whether this is a multiple entity importer or not. The checks differ
     // for these types.
     $mapper = $importer->getMapper();
     $multiple = $mapper->isMultiple();
