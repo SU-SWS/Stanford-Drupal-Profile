@@ -1,5 +1,9 @@
 # Stanford Sites Jumpstart Lab
 ----------------------------------------
+7.x-5.0-alpha5                                    2017-12-22
+------------------------------------------------------------
+- Version increment based on module updates in deployer.
+
 7.x-5.0-alpha4                                    2017-10-11
 ------------------------------------------------------------
 - Version increment based on module updates in deployer.
