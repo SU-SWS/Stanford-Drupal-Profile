@@ -1,0 +1,466 @@
+<?php
+/**
+ * @file
+ * - Disables PHP block visibility permission and gives status error if a role
+ *   has this permission.
+ * - Disables the PHP module.
+ * - Hides the PHP and paranoia modules from the modules page.
+ * - Prevents user/1 editing which could give access to abitrary contrib module
+ *   php execution.
+ */
+
+/**
+ * Implements hook_menu_alter().
+ *
+ * Disable specific menu paths.
+ */
+function paranoia_menu_alter(&$items) {
+  $hidden_paths = module_invoke_all('paranoia_hide_paths');
+  foreach ($hidden_paths as $path) {
+    if (isset($items[$path])) {
+      $items[$path]['access callback'] = FALSE;
+    }
+  }
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ *
+ * Hide Paranoia and PHP modules from module admin form.
+ */
+function paranoia_form_system_modules_alter(&$form, &$form_state) {
+  $hidden_modules = module_invoke_all('paranoia_hide_modules');
+  foreach ($hidden_modules as $module => $package) {
+    // Unset instead of using #access because #access => FALSE shows an empty
+    // table row.
+    if (isset($form['modules'][$module])) {
+      unset($form['modules'][$module]);
+    }
+    // Adds support for module_filter.
+    if (isset($form['modules'][$package][$module])) {
+      unset($form['modules'][$package][$module]);
+    }
+  }
+  // Invoke custom validation function to disable banned modules on submit.
+  $form['#validate'][] = 'paranoia_module_validate';
+}
+
+/**
+ * Custom validation function to make sure no banned modules were enabled.
+ */
+function paranoia_module_validate($form, &$form_state) {
+  paranoia_remove_disabled_modules();
+}
+
+/**
+ * Disables modules based on the list in hook_paranoia_disable_modules().
+ */
+function paranoia_remove_disabled_modules() {
+  $disabled_modules = module_invoke_all('paranoia_disable_modules');
+  foreach ($disabled_modules as $module) {
+    if (module_exists($module)) {
+      drupal_set_message(t('The module %module has been disabled as it is not allowed on this site.',
+        array('%module' => $module)));
+      module_disable(array($module));
+    }
+  }
+}
+
+/**
+ * Implements hook_user_update().
+ */
+function paranoia_user_update(&$edit, $account, $category) {
+  // If they are changing their password.
+  if (isset($account->pass) && isset($account->original) &&
+    isset($account->original->pass) &&
+    $account->original->pass != $account->pass) {
+    // Confirm a db based session destruction is going to work.
+    if (variable_get('session_inc', 'includes/session.inc') == 'includes/session.inc') {
+      // Destroy all sessions.
+      db_delete('sessions')
+        ->condition('uid', $account->uid, '=')
+        ->condition('sid', session_id(), '!=')
+        ->execute();
+    }
+    else {
+      // If db deletion of sessions won't work, log that problem.
+      watchdog('paranoia', 'Tried deleting sessions after a password change, but sessions are stored in an unknown place. See <a href="https://www.drupal.org/node/2294061">this issue</a> for details.', array(), WATCHDOG_CRITICAL);
+    }
+  }
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function paranoia_form_user_profile_form_alter(&$form, &$form_state) {
+  if ($form_state['user']->uid === '1') {
+    global $user;
+    // Allow user/1 to edit own details.
+    if ($user->uid != 1) {
+      drupal_set_message(t('You must login as this user (user/1) to modify the name, email address, and password for this account.'), 'warning');
+      $form['account']['name']['#access'] = FALSE;
+      $form['account']['mail']['#access'] = FALSE;
+      $form['account']['pass']['#access'] = FALSE;
+      $form['account']['current_pass']['#access'] = FALSE;
+    }
+  }
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ *
+ * Hides permissions considered risky by hook_paranoia_hide_permissions().
+ */
+function paranoia_form_user_admin_permissions_alter(&$form, &$form_state) {
+  $banned_permissions = module_invoke_all('paranoia_hide_permissions');
+  foreach ($banned_permissions as $permission) {
+    if (isset($form['permission'][$permission])) {
+      $form['permission'][$permission]['#markup'] .= ' ' . t('<strong>Disabled by paranoia module.<strong>');
+    }
+    foreach ($form['checkboxes'] as $index => $elements) {
+      if (isset($elements['#options'][$permission])) {
+        $form['checkboxes'][$index][$permission]['#access'] = FALSE;
+      }
+    }
+  }
+  $form['#validate'][] = 'paranoia_permissions_validate';
+  $form['#submit'][] = 'paranoia_permissions_submit';
+}
+
+/**
+ * Form validation prevents granting permissions to untrusted roles.
+ *
+ * @see paranoia_form_user_admin_permissions_alter()
+ */
+function paranoia_permissions_validate($form, &$form_state) {
+  $permissions = module_invoke_all('permission');
+  foreach ($permissions as $machine_name => $attributes) {
+    if (!empty($attributes['restrict access'])) {
+      if (!empty($form_state['values'][1][$machine_name])) {
+        form_set_error('1][' . $machine_name, t('The permission %name can affect site security and should not be granted to anonymous users.', array('%name' => $attributes['title'])));
+      }
+      if (!empty($form_state['values'][2][$machine_name])) {
+        form_set_error('2][' . $machine_name, t('The permission %name can affect site security and should not be granted to authenticated users.', array('%name' => $attributes['title'])));
+      }
+    }
+  }
+}
+
+/**
+ * Helper function to remove all risky permissions from any role.
+ *
+ * Separated out from paranoia_permissions_submit so that there is
+ * clearly no dependency on a form or form state.
+ */
+function _paranoia_remove_risky_permissions() {
+  $banned_permissions = module_invoke_all('paranoia_hide_permissions');
+  foreach ($banned_permissions as $permission) {
+    db_query("DELETE FROM {role_permission} WHERE permission = :permission", array(':permission' => $permission));
+  }
+}
+
+/**
+ * Remove extremely-risky permissions from any role.
+ */
+function paranoia_permissions_submit($form, &$form_state) {
+  _paranoia_remove_risky_permissions();
+}
+
+/**
+ * Implements hook_paranoia_disable_modules().
+ */
+function paranoia_paranoia_disable_modules() {
+  return array(
+    'php',
+    'computed_field',
+    'ds_format',
+    'skinr_ui',
+    'skinr_context_ui',
+  );
+}
+
+/**
+ * Implements hook_paranoia_hide_permissions().
+ *
+ * On behalf of Drupal Core.
+ */
+function paranoia_paranoia_hide_permissions() {
+  return array(
+    'use PHP for settings',
+    'use text format php_code',
+  );
+}
+
+/**
+ * Implements hook_paranoia_hide().
+ */
+function paranoia_paranoia_hide_modules() {
+  return array(
+    'computed_field' => 'Fields',
+    'ds_format' => 'Display Suite',
+    'php' => 'Core',
+    'paranoia' => 'Other',
+    'skinr_ui' => 'Skinr',
+    'skinr_context_ui' => 'Skinr',
+  );
+}
+
+/**
+ * Implements hook_paranoia_hide_permissions().
+ *
+ * On behalf of cck.module.
+ */
+function cck_paranoia_hide_permissions() {
+  return array('Use PHP input for field settings (dangerous - grant with care)');
+}
+
+/**
+ * Implements hook_paranoia_hide_permissions().
+ *
+ * On behalf of devel.module.
+ */
+function devel_paranoia_hide_permissions() {
+  return array('execute php code');
+}
+
+/**
+ * Implements hook_paranoia_hide_permissions().
+ *
+ * On behalf of googleanalytics.module.
+ */
+function googleanalytics_paranoia_hide_permissions() {
+  return array('use PHP for tracking visibility');
+}
+
+/**
+ * Implements hook_paranoia_hide_permissions().
+ *
+ * On behalf of bueditor.module.
+ */
+function bueditor_paranoia_hide_permissions() {
+  return array('administer bueditor');
+}
+
+/**
+ * Implements hook_paranoia_hide_permissions().
+ *
+ * On behalf of auto_nodetitle.module.
+ */
+function auto_nodetitle_paranoia_hide_permissions() {
+  return array('use PHP for title patterns');
+}
+
+/**
+ * Implements hook_paranoia_hide_permissions().
+ *
+ * On behalf of service_links.module.
+ */
+function service_links_paranoia_hide_permissions() {
+  return array('use PHP for service visibility');
+}
+
+/**
+ * Implements hook_paranoia_hide_permissions().
+ *
+ * On behalf of auto_username.module.
+ */
+function auto_username_paranoia_hide_permissions() {
+  return array('use PHP for username patterns');
+}
+
+/**
+ * Implements hook_paranoia_hide_permissions().
+ *
+ * On behalf of visual_website_optimizer.module.
+ */
+function visual_website_optimizer_paranoia_hide_permissions() {
+  return array('use PHP for filtering condition');
+}
+
+/**
+ * Implements hook_paranoia_hide_permissions().
+ *
+ * On behalf of live_person.module.
+ */
+function live_person_paranoia_hide_permissions() {
+  return array('use PHP for live person visibility');
+}
+
+/**
+ * Implements hook_paranoia_hide_permissions().
+ *
+ * On behalf of auto_entitylabel.module.
+ */
+function auto_entitylabel_paranoia_hide_permissions() {
+  return array('use PHP for label patterns');
+}
+
+/**
+ * Implements hook_paranoia_hide_permissions().
+ *
+ * On behalf of ctools.module.
+ */
+function ctools_paranoia_hide_permissions() {
+  return array('use ctools import');
+}
+
+/**
+ * Implements hook_paranoia_hide_permissions().
+ *
+ * On behalf of custom_breadcrumbs.module.
+ */
+function custom_breadcrumbs_paranoia_hide_permissions() {
+  return array('use php in custom breadcrumbs');
+}
+
+/**
+ * Implements hook_paranoia_hide_paths().
+ *
+ * On behalf of devel.module
+ */
+function devel_paranoia_hide_paths() {
+  return array('devel/php');
+}
+
+/**
+ * Implements hook_paranoia_hide_paths().
+ *
+ * On behalf of views.module
+ */
+function views_paranoia_hide_paths() {
+  return array('admin/structure/views/import');
+}
+
+/**
+ * Implements hook_form_alter().
+ *
+ * Hides forms that allow php arrays for importing to avoid RCE.
+ * http://heine.familiedeelstra.com/security/unserialize
+ */
+function paranoia_form_alter(&$form, &$form_state, $form_id) {
+  $forms_to_disable = module_invoke_all('paranoia_risky_forms');
+  $forms_to_disable = drupal_map_assoc($forms_to_disable);
+  if (array_key_exists($form_id, $forms_to_disable)) {
+    $form['#access'] = FALSE;
+    $form['#validate'][] = 'paranoia_form_validate_always_fail';
+    $message = t(variable_get('paranoia_form_disabled_message', 'This form is disabled for security reasons. See <a href="https://www.drupal.org/node/2313945">details</a> on why this form is disabled.'));
+    drupal_set_message($message, 'error');
+  }
+
+  if ($form_id == "views_ui_config_item_form") {
+    // Block VBO's "Execute arbitrary PHP script" operation.
+    $form['options']['vbo_operations']['action::views_bulk_operations_script_action']['selected']['#default_value'] = FALSE;
+    $form['options']['vbo_operations']['action::views_bulk_operations_script_action']['selected']['#disabled'] = TRUE;
+    // Block Draggable Views's "Prepare arguments with PHP code" option.
+    unset($form['options']['draggableviews_setting_arguments']['#options']['php']);
+  }
+
+  // Disable Automatic Nodetitles's "Evaluate PHP in pattern" setting.
+  if ($form_id == "node_type_form") {
+    $form['auto_nodetitle']['ant_php']['#default_value'] = FALSE;
+    $form['auto_nodetitle']['ant_php']['#disabled'] = TRUE;
+  }
+
+  // Disable Custom Breadcrumbs's ability to use PHP to determine breadcrumb visibility.
+  if ($form_id == "custom_breadcrumbs_form") {
+    unset($form['visibility_php']);
+  }
+}
+
+/**
+ * Form validation that will always throw an error to prevent submits.
+ */
+function paranoia_form_validate_always_fail() {
+  $message = t(variable_get('paranoia_form_disabled_message', 'This form is disabled for security reasons. See <a href="https://www.drupal.org/node/2313945">details</a> on why this form is disabled.'));
+  drupal_set_message($message, 'error');
+}
+
+/**
+ * Implements paranoia_risky_forms().
+ *
+ * On behalf of backup_migrate module.
+ */
+function backup_migrate_paranoia_risky_forms() {
+  return array('backup_migrate_crud_import_form');
+}
+
+/**
+ * Implements paranoia_risky_forms().
+ *
+ * On behalf of bundle_copy module.
+ */
+function bundle_copy_paranoia_risky_forms() {
+  return array('bundle_copy_import');
+}
+
+/**
+ * Implements paranoia_risky_forms().
+ *
+ * On behalf of ctools module.
+ */
+function ctools_paranoia_risky_forms() {
+  return array('ctools_export_ui_edit_item_wizard_form');
+}
+
+/**
+ * Implements paranoia_risky_forms().
+ *
+ * On behalf of devel module.
+ */
+function devel_paranoia_risky_forms() {
+  return array('devel_execute_block_form');
+}
+
+/**
+ * Implements paranoia_risky_forms().
+ *
+ * On behalf of feeds_ui module.
+ */
+function feeds_ui_paranoia_risky_forms() {
+  return array('feeds_ui_importer_import');
+}
+
+/**
+ * Implements paranoia_risky_forms().
+ *
+ * On behalf of flag module.
+ */
+function flag_paranoia_risky_forms() {
+  return array('flag_import_form');
+}
+
+/**
+ * Implements paranoia_risky_forms().
+ *
+ * On behalf of page_manager module.
+ */
+function page_manager_paranoia_risky_forms() {
+  return array('page_manager_page_import_subtask');
+}
+
+/**
+ * Implements paranoia_risky_forms().
+ *
+ * On behalf of relation_ui module.
+ */
+function relation_ui_paranoia_risky_forms() {
+  return array('relation_ui_type_import');
+}
+
+/**
+ * Implements paranoia_risky_forms().
+ *
+ * On behalf of rules_admin module.
+ */
+function rules_admin_paranoia_risky_forms() {
+  return array('rules_ui_import_form');
+}
+
+/**
+ * Implements paranoia_risky_forms().
+ *
+ * On behalf of views module.
+ */
+function views_paranoia_risky_forms() {
+  return array('views_ui_import_page');
+}
