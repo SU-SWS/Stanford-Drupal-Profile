@@ -1,6 +1,7 @@
 #!/bin/bash
 # Run `bash daily.sh`
 set -Ee
+source includes/common.inc
 
 # ###################################################
 # VARIABLES
@@ -20,7 +21,7 @@ BACKUPDIR="/mnt/gfs/home/$STACK/$AH_SITE_ENVIRONMENT/backups/on-demand"
 DOCROOT="/var/www/html/$STACK.$AH_SITE_ENVIRONMENT/docroot"
 SITELISTPATH="/mnt/files/$STACK$AH_SITE_ENVIRONMENT/files-private/sites.json"
 TODAYSDATE=$(date +%Y%m%d)
-NUMBEROFBACKUPSTOKEEP=5
+NUMBEROFBACKUPSTOKEEP=7
 
 # $SITELISTPATH holds information about all the sites. We manipulate it with
 # grep to get a list of all *.stanford.edu sites.
@@ -111,6 +112,7 @@ bak_make() {
   if [ -d $DOCROOT/$FILEPUBLICPATH ]
   then
     cd $DOCROOT/$FILEPUBLICPATH
+    # TODO: tar -cfz
     tar -cf $SITEDIRNAME-files.0.tar ./*
     mv $SITEDIRNAME-files.0.tar $BACKUPDIR/$SITEDIRNAME-files.0.tar
     gzip $BACKUPDIR/$SITEDIRNAME-files.0.tar
@@ -118,26 +120,6 @@ bak_make() {
 
   # Back up the database.
   drush --uri=https://$SITE --root=$DOCROOT sql-dump > $BACKUPDIR/$SITEDIRNAME-dbdump.0.sql
-}
-
-# Log failed backups.
-#
-# @param $1 Site URI
-# @param $2 Timestamp
-bak_log_fail() {
-  SITE=$1
-  STAMP=$2
-  echo "$SITE Failed to backup on $STAMP"
-}
-
-# Log successful backup.
-#
-# @param $1 Site URI
-# @param $2 Timestamp
-bak_log_success() {
-  SITE=$1
-  STAMP=$2
-  echo "$SITE successfully backed up on $STAMP"
 }
 
 # ###################################################
