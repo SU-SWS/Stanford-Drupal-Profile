@@ -7,10 +7,10 @@ $baseDir = dirname($vendorDir);
 
 return array(
     'Symfony\\Component\\Yaml\\' => array($vendorDir . '/symfony/yaml'),
-    'React\\Promise\\' => array($vendorDir . '/react/promise/src'),
+    'Psr\\Http\\Message\\' => array($vendorDir . '/psr/http-message/src'),
     'GuzzleHttp\\Subscriber\\Oauth\\' => array($vendorDir . '/guzzlehttp/oauth-subscriber/src'),
-    'GuzzleHttp\\Stream\\' => array($vendorDir . '/guzzlehttp/streams/src'),
-    'GuzzleHttp\\Ring\\' => array($vendorDir . '/guzzlehttp/ringphp/src'),
+    'GuzzleHttp\\Psr7\\' => array($vendorDir . '/guzzlehttp/psr7/src'),
+    'GuzzleHttp\\Promise\\' => array($vendorDir . '/guzzlehttp/promises/src'),
     'GuzzleHttp\\' => array($vendorDir . '/guzzlehttp/guzzle/src'),
     'Doctrine\\Instantiator\\' => array($vendorDir . '/doctrine/instantiator/src/Doctrine/Instantiator'),
 );

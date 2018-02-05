@@ -100,8 +100,7 @@ class PHPUnit_Util_XML
             @chdir(dirname($filename));
         }
 
-        $document = new DOMDocument;
-        $document->preserveWhiteSpace = false;
+        $document  = new DOMDocument;
 
         $internal  = libxml_use_internal_errors(true);
         $message   = '';
@@ -158,7 +157,7 @@ class PHPUnit_Util_XML
     public static function nodeToText(DOMNode $node)
     {
         if ($node->childNodes->length == 1) {
-            return $node->textContent;
+            return $node->nodeValue;
         }
 
         $result = '';
@@ -201,13 +200,7 @@ class PHPUnit_Util_XML
                 $variable = array();
 
                 foreach ($element->getElementsByTagName('element') as $element) {
-                    $item = $element->childNodes->item(0);
-
-                    if ($item instanceof DOMText) {
-                        $item = $element->childNodes->item(1);
-                    }
-
-                    $value = self::xmlToVariable($item);
+                    $value = self::xmlToVariable($element->childNodes->item(1));
 
                     if ($element->hasAttribute('key')) {
                         $variable[(string) $element->getAttribute('key')] = $value;
@@ -238,13 +231,13 @@ class PHPUnit_Util_XML
                 break;
 
             case 'boolean':
-                $variable = $element->textContent == 'true' ? true : false;
+                $variable = $element->nodeValue == 'true' ? true : false;
                 break;
 
             case 'integer':
             case 'double':
             case 'string':
-                $variable = $element->textContent;
+                $variable = $element->nodeValue;
 
                 settype($variable, $element->tagName);
                 break;

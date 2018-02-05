@@ -8,8 +8,6 @@
  * file that was distributed with this source code.
  */
 
-use SebastianBergmann\Exporter\Exporter;
-
 /**
  * Stubs a method by raising a user-defined exception.
  *
@@ -31,11 +29,9 @@ class PHPUnit_Framework_MockObject_Stub_Exception implements PHPUnit_Framework_M
 
     public function toString()
     {
-        $exporter = new Exporter;
-
         return sprintf(
             'raise user-specified exception %s',
-            $exporter->export($this->exception)
+            PHPUnit_Util_Type::export($this->exception)
         );
     }
 }

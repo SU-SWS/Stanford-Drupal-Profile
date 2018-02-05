@@ -1,15 +1,15 @@
 Stanford CAPx x.x-x.x, xxxx-xx-xx
 ---------------------------------
 
-php54, 2015-10-19
----------------------------------
-- Guzzle downgraded to 5.3 to support PHP 5.4
+Stanford CAPx 7.x-2.2-alpha2, 2017-11-29
+----------------------------------------
+- Bug Fix: CAPx Curl 60 error and new pem file
 
-Stanford CAPx 7.x-2.2-alpha1-php54, 2017-01-23
+Stanford CAPx 7.x-2.2-alpha1, 2017-01-23
 ---------------------------------
-- Bug fixes from 7.x-2.1-php54
+- Bug fixes from 2.1
 
-Stanford CAPx 7.x-2.1-php54, 2017-01-16
+Stanford CAPx 7.x-2.1, 2017-01-16
 ---------------------------------
 - Tamper data
   You can now alter the data before it gets saved to your entity directly
@@ -29,7 +29,7 @@ Stanford CAPx 7.x-2.1-php54, 2017-01-16
 - Orphan processing logic enhancements
 - Minor bug fixes
 
-Stanford CAPx 7.x-2.0-php54, 2016-05-27
+Stanford CAPx 7.x-2.0, 2016-05-27
 ---------------------------------
 - Entity relationships!
 - Multiple entity creation (IE: Publications).
@@ -76,12 +76,6 @@ Stanford CAPx 7.x-1.2, 2015-09-10
 - Fixed a bug where updated profile images were being updated but the automatic thumnails (imagecache) were not.
 - Changed the Jira project the issue collector module goes in to so that goes straight into the backlog.
 - And a number of other smaller bug fixes and performance improvements.
-- Support for auto_nodetitle
-- Create random password and set more default values for user creation
-- Removed filename salting and added timestamp check
-- Added Protection for bad json responses
-- No more duplication of files
-- Importer checks timestamps before downloading files
 
 Stanford CAPx 7.x-1.1, 2015-03-06
 ---------------------------------

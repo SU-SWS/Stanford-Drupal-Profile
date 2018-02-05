@@ -249,21 +249,7 @@ include dirname(__FILE__) . '/acsf.settings.php';
  *   );
  * @endcode
  */
-$databases = array (
-  'default' => 
-  array (
-    'default' => 
-    array (
-      'database' => 'acsf_cardinal',
-      'username' => 'root',
-      'password' => 'root',
-      'host' => 'localhost',
-      'port' => '',
-      'driver' => 'mysql',
-      'prefix' => '',
-    ),
-  ),
-);
+
 
 /**
  * Access control for update.php script.

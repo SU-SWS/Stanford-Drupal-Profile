@@ -1,5 +1,4 @@
 #[CAPX Auto Nodetitle](https://github.com/SU-SWS/stanford_capx/tree/7.x-1.x/modules/capx_auto_nodetitle)
-##### Version: 7.x-2.2-alpha2-php54
 
 Maintainers: [jbickar](https://github.com/jbickar), [sherakama](https://github.com/sherakama)
 [Changelog.txt](CHANGELOG.txt)

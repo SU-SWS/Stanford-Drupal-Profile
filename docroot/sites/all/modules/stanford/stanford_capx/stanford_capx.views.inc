@@ -367,7 +367,7 @@ function stanford_capx_views_data() {
 
   $data['capx_profiles']['orphaned'] = array(
     'title' => t('Orphaned Status'),
-    'help' => t('A boolean value to wether or not the profile has been orphaned.'),
+    'help' => t('A boolean value to whether or not the profile has been orphaned.'),
     'argument' => array(
       'handler' => 'views_handler_argument_boolean',
     ),
@@ -385,7 +385,7 @@ function stanford_capx_views_data() {
 
   $data['capx_profiles']['sync'] = array(
     'title' => t('Sync Status'),
-    'help' => t('A boolean value to wether or not the profile is receiving update.'),
+    'help' => t('A boolean value to whether or not the profile is receiving update.'),
     'argument' => array(
       'handler' => 'views_handler_argument_boolean',
     ),

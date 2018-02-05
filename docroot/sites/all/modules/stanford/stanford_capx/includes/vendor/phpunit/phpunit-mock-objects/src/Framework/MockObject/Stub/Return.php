@@ -8,8 +8,6 @@
  * file that was distributed with this source code.
  */
 
-use SebastianBergmann\Exporter\Exporter;
-
 /**
  * Stubs a method by returning a user-defined value.
  *
@@ -31,11 +29,9 @@ class PHPUnit_Framework_MockObject_Stub_Return implements PHPUnit_Framework_Mock
 
     public function toString()
     {
-        $exporter = new Exporter;
-
         return sprintf(
             'return user-specified value %s',
-            $exporter->export($this->value)
+            PHPUnit_Util_Type::export($this->value)
         );
     }
 }

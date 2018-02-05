@@ -1,6 +1,6 @@
 name = CAPx Tamper
 core = 7.x
-version = 7.x-2.2-alpha2-php54
+version = 7.x-2.2-alpha2
 package = Stanford CAPx
 project = capx_tamper
 

@@ -78,7 +78,7 @@ class Orgs {
    * Gets and syncs the Organization data from the CAP API.
    *
    * @param bool $batch
-   *   boolean value on wether or not to use batch api.
+   *   boolean value on whether or not to use batch api.
    */
   public static function syncOrganizations($batch = FALSE) {
 

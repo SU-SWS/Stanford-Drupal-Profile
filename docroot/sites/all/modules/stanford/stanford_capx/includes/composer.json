@@ -1,6 +1,6 @@
 {
     "require": {
-        "guzzlehttp/guzzle": "5.*",
+        "guzzlehttp/guzzle": "6.*",
         "guzzlehttp/oauth-subscriber": "*",
         "peekmo/jsonpath": "dev-master",
         "phpunit/phpunit": "~4.7"

@@ -64,17 +64,14 @@ class UserProcessor extends EntityProcessor {
     // Because this is a new user and the init value is not available to be
     // mapped to look in the entity and see if we can clone the mail value to
     // init.
-    if (isset($entity->mail)) {
-      $email_value = $entity->mail->value();
-      if (!empty($email_value)) {
-        db_update("users")
-          ->fields(array(
-            "init" => $entity->mail->value()
-            )
+    if (isset($entity->mail) && !empty($entity->mail->value())) {
+      db_update("users")
+        ->fields(array(
+          "init" => $entity->mail->value()
           )
-          ->condition("mail", $entity->mail->value())
-          ->execute();
-      }
+        )
+        ->condition("mail", $entity->mail->value())
+        ->execute();
     }
 
     drupal_alter('capx_post_entity_create', $entity, $data);

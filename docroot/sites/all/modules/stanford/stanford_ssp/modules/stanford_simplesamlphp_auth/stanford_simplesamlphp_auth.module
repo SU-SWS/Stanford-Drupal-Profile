@@ -139,41 +139,46 @@ function stanford_simplesamlphp_auth_user_login(&$edit, $account) {
  */
 function stanford_simplesamlphp_auth_validate_user_ability_to_login($user) {
 
-  // Get users that are allowed default login.
-  $allowed_default_login_users = variable_get('stanford_simplesamlphp_auth_allowdefaultloginusers', '');
-  $allowed_uids = explode(",", $allowed_default_login_users);
-  $user_allowed_default_login = FALSE;
-  $allowed_default_login_roles = variable_get('stanford_simplesamlphp_auth_allowdefaultloginroles', array());
+  // Deny by default.
+  $user_allowed_login = FALSE;
 
-  // Check if user is allowed default login.
-  if (variable_get('stanford_simplesamlphp_auth_allowdefaultlogin', TRUE)) {
+  // Get SAML info if available.
+  $saml = stanford_simplesamlphp_auth_get_saml_info();
+  $is_saml = (isset($saml['instance']) && !empty($saml['instance']));
+
+  // Check if local user is allowed default login and not a saml user
+  if (variable_get('stanford_simplesamlphp_auth_allowdefaultlogin', TRUE) && !$is_saml) {
+
+    // Get users that are allowed default login.
+    $allowed_default_login_users = variable_get('stanford_simplesamlphp_auth_allowdefaultloginusers', '');
+    $allowed_uids = explode(",", $allowed_default_login_users);
+    $allowed_default_login_roles = variable_get('stanford_simplesamlphp_auth_allowdefaultloginroles', array());
+
     // Check whether the site is using these settings.
     if (empty($allowed_default_login_users) && empty($allowed_default_login_roles)) {
-      $user_allowed_default_login = TRUE;
+      $user_allowed_login = TRUE;
     }
     // Check if the uid is allowed.
     elseif (in_array($user->uid, $allowed_uids)) {
-      $user_allowed_default_login = TRUE;
+      $user_allowed_login = TRUE;
     }
     // Check whether all local accounts can log in.
     elseif (empty($allowed_default_login_users)) {
       // Check whether the user has any of the allowed roles.
       $user_allowed_default_login_roles = array_intersect_key($user->roles, $allowed_default_login_roles);
       if (!empty($user_allowed_default_login_roles)) {
-        $user_allowed_default_login = TRUE;
+        $user_allowed_login = TRUE;
       }
     }
   }
 
   // Allow other modules to allow or deny.
-  $saml = stanford_simplesamlphp_auth_get_saml_info();
-  $other_checks = TRUE;
-  if (!empty($saml['instance'])) {
-    $other_checks = stanford_simplesamlphp_auth_allow_user_by_attribute();
+  if ($is_saml) {
+    $user_allowed_login = stanford_simplesamlphp_auth_allow_user_by_attribute();
   }
 
-  // If either returns true.
-  return ($user_allowed_default_login && $other_checks);
+  // Yes or no.
+  return $user_allowed_login;
 }
 
 /**
