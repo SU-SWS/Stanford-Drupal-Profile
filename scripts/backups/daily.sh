@@ -112,10 +112,8 @@ bak_make() {
   if [ -d $DOCROOT/$FILEPUBLICPATH ]
   then
     cd $DOCROOT/$FILEPUBLICPATH
-    # TODO: tar -cfz
-    tar -cf $SITEDIRNAME-files.0.tar ./*
-    mv $SITEDIRNAME-files.0.tar $BACKUPDIR/$SITEDIRNAME-files.0.tar
-    gzip $BACKUPDIR/$SITEDIRNAME-files.0.tar
+    tar -czf $SITEDIRNAME-files.0.tar.gz ./*
+    mv $SITEDIRNAME-files.0.tar.gz $BACKUPDIR/$SITEDIRNAME-files.0.tar.gz
   fi
 
   # Back up the database.
