@@ -31,8 +31,6 @@ NUMBEROFBACKUPSTOKEEP=12
 SITES=`grep -o -P "[\w_-]*(\.$STACKDOMAIN)?.stanford.edu" $SITELISTPATH`
 
 bak_rotate() {
-  # Copy selected backup assets into a YYYYMMDD directory
-  cp $WEEKLYBACKUPDIR/*.0.tar.gz $MONTHLYBACKUPDIR/$TODAYSDATE/
 
   # Rotate out the old
   NUMBEROFBACKUPSTOKEEP=$1
@@ -59,9 +57,8 @@ bak_rotate() {
   # Remove the oldest backup. We start counting at 0 therefore we can just use the total.
   rm -f $MONTHLYBACKUPDIR/monthly-archive.$NUMBEROFBACKUPSTOKEEP.tar.gz
 
-  # Create a tarball and put it at backups/on-demand/weekly/weekly-archive.0.tar.gz
-  cd $MONTHLYBACKUPDIR
-  tar -czf $MONTHLYBACKUPDIR/monthly-archive.0.tar.gz $TODAYSDATE/*
+  # Copy the most recent weekly backup into the monthly directory.
+  cp $WEEKLYBACKUPDIR/weekly-archive.0.tar.gz $MONTHLYBACKUPDIR/monthly-archive.0.tar.gz
 
 }
 
