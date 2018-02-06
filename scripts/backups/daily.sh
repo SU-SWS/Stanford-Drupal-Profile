@@ -17,7 +17,7 @@ source includes/common.inc
 
 STACK="cardinald7"
 STACKDOMAIN="cardinalsites"
-BACKUPDIR="/mnt/gfs/home/$STACK/$AH_SITE_ENVIRONMENT/backups/on-demand"
+BACKUPDIR="/mnt/gfs/home/$STACK/$AH_SITE_ENVIRONMENT/backups/on-demand/daily"
 DOCROOT="/var/www/html/$STACK.$AH_SITE_ENVIRONMENT/docroot"
 SITELISTPATH="/mnt/files/$STACK$AH_SITE_ENVIRONMENT/files-private/sites.json"
 TODAYSDATE=$(date +%Y%m%d)
@@ -123,6 +123,9 @@ bak_make() {
 # ###################################################
 # INIT • EXEC • START • GO
 # ###################################################
+
+# Ensure that our $BACKUPDIR exists.
+mkdir -p $BACKUPDIR
 
 # Loop through each site and perform backup operations.
 for SITE in ${SITES[@]}
