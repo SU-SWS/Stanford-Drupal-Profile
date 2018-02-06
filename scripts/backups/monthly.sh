@@ -1,5 +1,5 @@
 #!/bin/bash
-# Run `bash weekly.sh`
+# Run `bash monthly.sh`
 set -Ee
 source includes/common.inc
 
