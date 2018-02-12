@@ -26,10 +26,6 @@ SITELISTPATH="/mnt/files/$STACK$AH_SITE_ENVIRONMENT/files-private/sites.json"
 TODAYSDATE=$(date +%Y%m%d)
 NUMBEROFBACKUPSTOKEEP=12
 
-# $SITELISTPATH holds information about all the sites. We manipulate it with
-# grep to get a list of all *.stanford.edu sites.
-SITES=`grep -o -P "[\w_-]*(\.$STACKDOMAIN)?.stanford.edu" $SITELISTPATH`
-
 bak_rotate() {
 
   # Rotate out the old
