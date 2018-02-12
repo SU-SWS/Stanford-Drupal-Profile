@@ -25,14 +25,9 @@ SITELISTPATH="/mnt/files/$STACK$AH_SITE_ENVIRONMENT/files-private/sites.json"
 TODAYSDATE=$(date +%Y%m%d)
 NUMBEROFBACKUPSTOKEEP=5
 
-# $SITELISTPATH holds information about all the sites. We manipulate it with
-# grep to get a list of all *.stanford.edu sites.
-SITES=`grep -o -P "[\w_-]*(\.$STACKDOMAIN)?.stanford.edu" $SITELISTPATH`
-
 bak_rotate() {
   # Copy selected backup assets into a YYYYMMDD directory
-  cp $DAILYBACKUPDIR/*.0.sql $WEEKLYBACKUPDIR/$TODAYSDATE/
-  cp $DAILYBACKUPDIR/*.0.tar.gz $WEEKLYBACKUPDIR/$TODAYSDATE/
+  cp -a $DAILYBACKUPDIR/daily-archive-0 $WEEKLYBACKUPDIR/$TODAYSDATE/
 
   # Rotate out the old
   NUMBEROFBACKUPSTOKEEP=$1
