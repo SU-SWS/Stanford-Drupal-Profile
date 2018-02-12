@@ -67,21 +67,13 @@ bak_rotate() {
   do
     OLDER=$i
     NEWER=$[$i-1]
-    NEWERPATHDB=$BACKUPDIR/$SITEDIRNAME-dbdump.$NEWER.sql
-    OLDERPATHDB=$BACKUPDIR/$SITEDIRNAME-dbdump.$OLDER.sql
-    NEWERPATHFL=$BACKUPDIR/$SITEDIRNAME-files.$NEWER.tar.gz
-    OLDERPATHFL=$BACKUPDIR/$SITEDIRNAME-files.$OLDER.tar.gz
+    NEWERPATH=$BACKUPDIR/daily-archive-$NEWER
+    OLDERPATH=$BACKUPDIR/daily-archive-$OLDER
 
-    # DB.
-    if [ -f $NEWERPATHDB ]
+    # Moveit.
+    if [ -d $NEWERPATH ]
     then
-      mv $NEWERPATHDB $OLDERPATHDB
-    fi
-
-    # Files.
-    if [ -f $NEWERPATHFL ]
-    then
-      mv $NEWERPATHFL $OLDERPATHFL
+      mv $NEWERPATH $OLDERPATH
     fi
 
     # Iterate.
@@ -89,8 +81,7 @@ bak_rotate() {
   done
 
   # Remove the oldest backup. We start counting at 0 so we can use the total.
-  rm -f $BACKUPDIR/$SITEDIRNAME-dbdump.$NUMBEROFBACKUPSTOKEEP.sql
-  rm -f $BACKUPDIR/$SITEDIRNAME-files.$NUMBEROFBACKUPSTOKEEP.tar.gz
+  rm -fr $BACKUPDIR/daily-archive-$NUMBEROFBACKUPSTOKEEP
 }
 
 # Create a new backup of files and db.
@@ -113,19 +104,27 @@ bak_make() {
   then
     cd $DOCROOT/$FILEPUBLICPATH
     tar -czf $SITEDIRNAME-files.0.tar.gz ./*
-    mv $SITEDIRNAME-files.0.tar.gz $BACKUPDIR/$SITEDIRNAME-files.0.tar.gz
+    mv $SITEDIRNAME-files.0.tar.gz $BACKUPDIR/daily-archive-0/$SITEDIRNAME-files.0.tar.gz
   fi
 
   # Back up the database.
-  drush --uri=https://$SITE --root=$DOCROOT sql-dump > $BACKUPDIR/$SITEDIRNAME-dbdump.0.sql
+  drush --uri=https://$SITE --root=$DOCROOT sql-dump > $BACKUPDIR/daily-archive-0/$SITEDIRNAME-dbdump.0.sql
 }
 
 # ###################################################
 # INIT • EXEC • START • GO
 # ###################################################
 
+# Rotate backups.
+{ #try
+  bak_rotate $NUMBEROFBACKUPSTOKEEP $BACKUPDIR $SITEDIRNAME &&
+  bak_log_success "Daily archive" $TODAYSDATE
+}  || { #catch
+  bak_log_fail "Daily archive" $TODAYSDATE
+}
+
 # Ensure that our $BACKUPDIR exists.
-mkdir -p $BACKUPDIR
+mkdir -p $BACKUPDIR/daily-archive-0
 
 # Loop through each site and perform backup operations.
 for SITE in ${SITES[@]}
@@ -145,7 +144,6 @@ do
   FILEPUBLICPATH=$(drush --uri=https://$SITE --root=$DOCROOT --format=list vget file_public_path)
 
   { # try
-    bak_rotate $NUMBEROFBACKUPSTOKEEP $BACKUPDIR $SITEDIRNAME &&
     bak_make $BACKUPDIR $SITEDIRNAME $DOCROOT $FILEPUBLICPATH $SITE &&
     bak_log_success $SITE $TODAYSDATE
   } || { # catch
