@@ -25,6 +25,10 @@ SITELISTPATH="/mnt/files/$STACK$AH_SITE_ENVIRONMENT/files-private/sites.json"
 TODAYSDATE=$(date +%Y%m%d)
 NUMBEROFBACKUPSTOKEEP=5
 
+# Rotate the backup logs.
+#
+# @param $1 Number of backups to keep
+# @param $2 Backup directory path
 bak_rotate() {
   # Copy selected backup assets into a YYYYMMDD directory
   cp -a $DAILYBACKUPDIR/daily-archive-0 $WEEKLYBACKUPDIR/$TODAYSDATE/
@@ -69,10 +73,17 @@ mkdir -p $WEEKLYBACKUPDIR/$TODAYSDATE
 
 { # try
   bak_rotate $NUMBEROFBACKUPSTOKEEP $WEEKLYBACKUPDIR &&
-  bak_log_success "Weekly archive" $TODAYSDATE
+  rotate_log_success "Weekly archive" $TODAYSDATE
 } || { # catch
-  bak_log_fail "Weekly archive" $TODAYSDATE
+  rotate_log_fail "Weekly archive" $TODAYSDATE
 }
 
 # Clean up.
-rm -fr $WEEKLYBACKUPDIR/$TODAYSDATE
+if [ ! -z $TODAYSDATE ] && [ -d $WEEKLYBACKUPDIR/$TODAYSDATE ]
+then
+  rm -fr $WEEKLYBACKUPDIR/$TODAYSDATE
+  rotate_cleanup_success "Weekly archive" $TODAYSDATE
+else
+  NOW=$(date +%Y%m%d)
+  rotate_cleanup_fail "Weekly archive" $NOW
+fi

@@ -55,12 +55,10 @@ validate_uri() {
 #
 # @param $1 Number of backups to keep
 # @param $2 Backup directory path
-# @param $3 Site directory name
 bak_rotate() {
 
   NUMBEROFBACKUPSTOKEEP=$1
   BACKUPDIR=$2
-  SITEDIRNAME=$3
 
   i=$1
   while [ $i -gt -1 ]
@@ -117,10 +115,10 @@ bak_make() {
 
 # Rotate backups.
 { #try
-  bak_rotate $NUMBEROFBACKUPSTOKEEP $BACKUPDIR $SITEDIRNAME &&
-  bak_log_success "Daily archive" $TODAYSDATE
+  bak_rotate $NUMBEROFBACKUPSTOKEEP $BACKUPDIR &&
+  rotate_log_success "Daily archive" $TODAYSDATE
 }  || { #catch
-  bak_log_fail "Daily archive" $TODAYSDATE
+  rotate_log_fail "Daily archive" $TODAYSDATE
 }
 
 # Ensure that our $BACKUPDIR exists.

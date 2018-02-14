@@ -26,6 +26,10 @@ SITELISTPATH="/mnt/files/$STACK$AH_SITE_ENVIRONMENT/files-private/sites.json"
 TODAYSDATE=$(date +%Y%m%d)
 NUMBEROFBACKUPSTOKEEP=12
 
+# Rotate the backup logs.
+#
+# @param $1 Number of backups to keep
+# @param $2 Backup directory path
 bak_rotate() {
 
   # Rotate out the old
@@ -73,4 +77,11 @@ mkdir -p $MONTHLYBACKUPDIR/$TODAYSDATE
 }
 
 # Clean up.
-rm -fr $MONTHLYBACKUPDIR/$TODAYSDATE
+if [ ! -z $TODAYSDATE ] && [ -d $MONTHLYBACKUPDIR/$TODAYSDATE ]
+then
+  rm -fr $MONTHLYBACKUPDIR/$TODAYSDATE
+  rotate_cleanup_success "Monthly archive" $TODAYSDATE
+else
+  NOW=$(date +%Y%m%d)
+  rotate_cleanup_fail "Monthly archive" $NOW
+fi
