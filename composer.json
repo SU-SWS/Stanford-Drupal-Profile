@@ -136,7 +136,9 @@
     "preserve-paths": [
       "docroot/profiles",
       "docroot/sites/all/modules/custom",
+      "docroot/sites/all/modules/stanford",
       "docroot/sites/all/themes/custom",
+      "docroot/sites/all/themes/stanford",
       "docroot/sites/all/translations",
       "docroot/sites/all/drush",
       "docroot/sites/default",
