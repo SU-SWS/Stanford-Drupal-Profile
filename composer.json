@@ -83,6 +83,7 @@
       "cp lando/example.env .env",
       "cp lando/example.lando.yml .lando.yml",
       "cp lando/config/local.settings.php docroot/sites/default/local.settings.php",
+      "cp lando/config/drushrc.php docroot/sites/default/drushrc.php",
       "echo You may now edit the above files or simply run lando start"
     ]
   },

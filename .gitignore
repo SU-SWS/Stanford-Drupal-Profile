@@ -17,8 +17,9 @@ docroot/sites/*/private
 /docroot/INSTALL*.txt
 /docroot/CHANGELOG.txt
 
-# Ignore configuration files that may contain sensitive information.
+# Ignore local configuration files.
 /docroot/sites/*/local.settings.php
+/docroot/sites/default/drushrc.php
 
 # Compiled source #
 ###################
