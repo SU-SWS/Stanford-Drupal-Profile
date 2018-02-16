@@ -1,0 +1,54 @@
+name: socorro
+recipe: drupal7
+config:
+  webroot: docroot
+  xdebug: false
+  php: '7.1'
+  drush: composer
+services:
+  appserver:
+    ssl: true
+    via: apache
+  database:
+    creds:
+      user: drupal
+      password: drupal
+      database: drupal
+tooling:
+  composer:
+    service: appserver
+    description: Run composer commands
+    cmd:
+      - composer
+      - --ansi
+  php:
+    service: appserver
+  mysql:
+    user: root
+    service: database
+    description: Drop into a MySQL shell
+  git:
+    service: appserver
+# Site install command
+  si:
+    description: "Install an installation profile"
+    service: appserver
+    cmd: drush si
+events:
+  # Run some commands after `lando db-import`
+  post-db-import:
+    # Run `drush sqlsan` on the appserver service
+    - appserver: drush sqlsan
+  # Run some commands before `lando si`
+  pre-si:
+    - echo "Beginning site install."
+    - appserver: sh $LANDO_MOUNT/scripts/lando/db-settings.sh
+    - appserver: cd $LANDO_WEBROOT
+  # Run some commands after `lando si`
+  post-si:
+    - echo "Finishing site install"
+  # Run some commands after `lando start`
+  post-start:
+    - echo "Welcome back. Lando missed you!"
+    # - "sh scripts/lando/db-settings.sh"
+    # - appserver: drush si stanford_sites_jumpstart

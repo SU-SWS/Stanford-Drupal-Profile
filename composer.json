@@ -1,0 +1,152 @@
+{
+  "name": "su-sws/acsf-cardinald7",
+  "description": "Project consolidation for Drupal 7 Stanford Sites on ACSF",
+  "type": "project",
+  "license": "proprietary",
+  "repositories": [
+    {
+      "type": "composer",
+      "url": "https://packages.drupal.org/7"
+    },
+    {
+        "type": "composer",
+        "url": "https://asset-packagist.org"
+    }
+  ],
+  "require": {
+    "php": ">=5.2.5",
+    "ext-gd": "*",
+    "ext-xml": "*",
+    "ext-json": "*",
+    "ext-openssl": "*",
+    "ext-curl": "*",
+    "ext-pdo": "*",
+    "ext-pdo_mysql": "*",
+    "composer/installers": "^1.2",
+    "drupal-composer/preserve-paths": "^0.1",
+    "davidbarratt/custom-installer": "~1.0",
+    "oomphinc/composer-installers-extender": "v1.1.2",
+    "cweagans/composer-patches": "^1.6",
+    "drupal/composer_autoloader": "^1.0",
+    "drush/drush": "~8.0",
+    "omega8cc/drush-registry-rebuild": "dev-7.x-2.x",
+    "webflo/drupal-finder": "^1.0.0",
+    "webmozart/path-util": "^2.3",
+    "wikimedia/composer-merge-plugin": "^1.4.1",
+    "hirak/prestissimo": "^0.3",
+
+    "drupal/drupal": "~7.0",
+    "drupal/acsf": "~1.43",
+    "drupal/newrelic_appname": "~1.0-alpha1",
+    "drupal/paranoia": "~1.7"
+  },
+  "conflict": {
+    "drupal/core": "8.*"
+  },
+  "minimum-stability": "dev",
+  "prefer-stable": true,
+  "autoload": {
+    "classmap": [
+      "scripts/composer/ScriptHandler.php"
+    ]
+  },
+  "scripts": {
+    "pre-install-cmd": [
+      "DrupalProject\\composer\\ScriptHandler::checkComposerVersion"
+    ],
+    "pre-update-cmd": [
+      "DrupalProject\\composer\\ScriptHandler::checkComposerVersion"
+    ],
+    "post-install-cmd": [
+      "DrupalProject\\composer\\ScriptHandler::createRequiredFiles",
+      "@composer clean-gits"
+    ],
+    "post-update-cmd": [
+      "DrupalProject\\composer\\ScriptHandler::createRequiredFiles",
+      "@composer clean-gits"
+    ],
+    "post-create-project-cmd": [
+      "DrupalProject\\composer\\ScriptHandler::removeInternalFiles"
+    ],
+    "nuke": [
+      "rm -rf vendor composer.lock docroot/sites/all/libraries docroot/sites/all/modules docroot/sites/all/themes",
+      "@composer clearcache --ansi",
+      "@composer install --ansi"
+    ],
+    "clean-gits": [
+      "find docroot/sites/all/modules/contrib | grep /.git | xargs rm -rf",
+      "find docroot/sites/all/themes/contrib | grep /.git | xargs rm -rf",
+      "find docroot/sites/all/libraries | grep /.git | xargs rm -rf",
+      "find docroot/sites/all/drush | grep /.git | xargs rm -rf"
+    ],
+    "init-lando": [
+      "cp lando/example.env .env",
+      "cp lando/example.lando.yml .lando.yml",
+      "cp lando/config/local.settings.php docroot/sites/default/local.settings.php",
+      "echo You may now edit the above files or simply run lando start"
+    ]
+  },
+  "extra": {
+    "enable-patching": true,
+    "patches": {
+      "cweagans/composer-patches": {
+        "Call the preserve paths hooks" : "https://github.com/SebCorbin/composer-patches/commit/1cb9bacba51f8bba0c5f3f322c3bb61e4ceae974.patch"
+      }
+    },
+    "merge-plugin": {
+      "require": [
+        "docroot/profiles/stanford_sites_jumpstart/composer.json"
+      ],
+      "merge-extra": true,
+      "merge-extra-deep": true,
+      "merge-scripts": true,
+      "replace": false,
+      "ignore-duplicates": true
+    },
+    "installer-types": [
+      "component"
+    ],
+    "installer-paths": {
+      "docroot/": ["type:drupal-core"],
+      "docroot/profiles/{$name}/": ["type:drupal-profile"],
+      "docroot/sites/all/drush/{$name}/": ["type:drupal-drush"],
+      "docroot/sites/all/modules/contrib/{$name}/": ["type:drupal-module"],
+      "docroot/sites/all/themes/contrib/{$name}/": ["type:drupal-theme"],
+      "docroot/sites/all/libraries/{$name}/": [
+        "type:component",
+        "type:drupal-library"
+      ]
+    },
+    "custom-installer": {
+      "docroot/sites/all/modules/custom/{$name}/": [
+        "type:drupal-custom-module"
+      ],
+      "docroot/sites/all/themes/custom/{$name}/": [
+        "type:drupal-custom-theme"
+      ],
+      "docroot/profiles/{$name}/": [
+        "type:drupal-custom-profile"
+      ],
+      "docroot/sites/all/libraries/{$name}/": [
+        "type:component",
+        "type:drupal-library"
+      ]
+    },
+    "preserve-paths": [
+      "docroot/profiles",
+      "docroot/sites/all/modules/custom",
+      "docroot/sites/all/themes/custom",
+      "docroot/sites/all/translations",
+      "docroot/sites/all/drush",
+      "docroot/sites/default",
+      "docroot/simplesaml"
+    ]
+  },
+  "config": {
+    "sort-packages": true,
+    "bin-dir": "vendor/bin/",
+    "preferred-install": "dist",
+    "component-dir": "docroot/sites/all/libraries",
+    "component-baseurl": "docroot/sites/all/libraries"
+  }
+}

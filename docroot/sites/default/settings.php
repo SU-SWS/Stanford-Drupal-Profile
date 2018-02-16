@@ -4,7 +4,6 @@
 include dirname(__FILE__) . '/acsf.settings.php';
 // ===== Added by acsf-init, please do not delete. Section end. =====
 
-
 /**
  * @file
  * Drupal site-specific configuration file.
@@ -160,7 +159,7 @@ include dirname(__FILE__) . '/acsf.settings.php';
  *   These settings are available as of MySQL 5.5.14, and are defaults in
  *   MySQL 5.7.7 and up.
  * - The PHP MySQL driver must support the utf8mb4 charset (libmysqlclient
-     5.5.3 and up, as well as mysqlnd 5.0.9 and up).
+ *   5.5.3 and up, as well as mysqlnd 5.0.9 and up).
  * - The MySQL server must support the utf8mb4 charset (5.5.3 and up).
  *
  * You can optionally set prefixes for some or all database table names
@@ -621,3 +620,7 @@ $conf['404_fast_html'] = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML+RDFa 1.0//EN"
  * Remove the leading hash sign to enable.
  */
 # $conf['theme_debug'] = TRUE;
+
+if (file_exists("local.settings.php")) {
+  include_once "local.settings.php";
+}
