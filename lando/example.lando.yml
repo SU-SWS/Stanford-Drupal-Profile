@@ -1,4 +1,4 @@
-name: socorro
+name: cardinald7
 recipe: drupal7
 config:
   webroot: docroot
