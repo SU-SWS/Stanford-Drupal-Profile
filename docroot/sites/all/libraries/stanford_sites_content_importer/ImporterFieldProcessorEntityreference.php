@@ -1,28 +1,38 @@
 <?php
 /**
  * @file
+ * A class to process Entity Reference fields.
  */
 
 /**
- *
+ * Importer Field Processor for Entity Reference fields.
  */
 class ImporterFieldProcessorEntityreference extends ImporterFieldProcessor {
 
   /**
-   * [process description]
-   * @param  [type] $entity      [description]
-   * @param  [type] $entity_type [description]
-   * @param  [type] $field_name  [description]
-   * @return [type]              [description]
+   * Process a date time field.
+   *
+   * Make any neccessary chagnes to this field before saving it.
+   *
+   * @param object $entity
+   *   The entity to be saved.
+   * @param string $entity_type
+   *   The type of entity in $entity.
+   * @param string $field_name
+   *   The field on $entity that is being processed.
    */
   public function process(&$entity, $entity_type, $field_name) {
-    $values = $entity->{$field_name}[LANGUAGE_NONE];
+
+    // Only if the values are present.
+    $values = isset($entity->{$field_name}[LANGUAGE_NONE]) ? $entity->{$field_name}[LANGUAGE_NONE] : NULL;
 
     // Nothing to do...
     if (empty($values)) {
       return;
     }
 
+    // Lopp through each of the values and attempt to find the reference by
+    // UUID.
     foreach ($values as $index => $info) {
 
       // UUID module on the server overtakes this and serves up UUIDs. This is

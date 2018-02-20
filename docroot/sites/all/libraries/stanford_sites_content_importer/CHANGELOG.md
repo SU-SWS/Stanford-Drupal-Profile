@@ -1,6 +1,18 @@
 # Stanford Sites Content Importer
 -------------------------------------------
 
+7.x-2.0 2016-11-29
+------------------
+- Address John's feelings about spelling
+- Add code climate to enforce coding standards
+- Change process_field_file_create_item() to public
+
+7.x-1.1+14-dev 2016-02-18
+--------------------------
+- Updated documentation
+- Create .codeclimate.yml
+- Rawurlencode those requests for files or the request will fail
+
 7.x-1.1 2015-03-19
 --------------------------
 - Added entityreference field processor to handle UUID badness from server

@@ -1,7 +1,7 @@
+#[Stanford Sites Content Importer](https://github.com/SU-SWS/stanford_sites_content_importer)
+##### Version: 7.x-2.0-dev
+
 # Stanford Webservices Content Importer
-
-@version 7.x-1.0
-
 @author <sheamck@stanford.edu> Shea McKinney
 
 ##What does this do?
@@ -71,17 +71,17 @@ http://sites.stanford.edu/jsa-content
     $endpoint = 'https://mysite.com/endpointname';
 
     $importer = new SitesContentImporter();
-    $importer->set_endpoint($endpoint);
-    $importer->add_import_content_type($content_types);
-    $importer->add_uuid_restrictions($restrict);
-    $importer->importer_content_nodes_recent_by_type();
+    $importer->setEndpoint($endpoint);
+    $importer->addImportContentType($content_types);
+    $importer->addUuidRestrictions($restrict);
+    $importer->importerContentNodesRecentByType();
 
 **Vocabularies:**
 
     $endpoint = 'https://mysite.com/endpointname';
     $importer = new SitesContentImporter();
-    $importer->set_endpoint($endpoint);
-    $importer->import_vocabulary_trees();
+    $importer->setEndpoint($endpoint);
+    $importer->importVocabularyTrees();
 
 **Beans:**
 
@@ -95,18 +95,18 @@ http://sites.stanford.edu/jsa-content
     $endpoint = 'https://mysite.com/endpointname';
 
     $importer = new SitesContentImporter();
-    $importer->set_endpoint($endpoint);
-    $importer->set_bean_uuids($uuids);
-    $importer->import_content_beans();
+    $importer->setEndpoint($endpoint);
+    $importer->setBeanUuids($uuids);
+    $importer->importContentBeans();
 
 **Nodes By Views & Filters**
 
-    $filters = array('sites_products' => array('37'));
+    $filters = array('tid_raw' => array('37'));
     $view_importer = new SitesContentImporterViews();
-    $view_importer->set_endpoint($endpoint);
-    $view_importer->set_resource('content');
-    $view_importer->set_filters($filters);
-    $view_importer->import_content_by_views_and_filters();
+    $view_importer->setEndpoint($endpoint);
+    $view_importer->setResource('content');
+    $view_importer->setFilters($filters);
+    $view_importer->importContentByViewsAndFilters();
 
 
 ##Extending
@@ -120,12 +120,10 @@ ImporterFieldProcessorFieldDateSelect
 
 You can also register a field or property processor to run by using either:
 
-    $importer->add_property_processor(array('property_name' => 'PHPClass'));
-    $importer->add_field_processor(array('field_name' => 'PHPClass'));
+    $importer->addPropertyProcessor(array('property_name' => 'PHPClass'));
+    $importer->addFieldProcessor(array('field_name' => 'PHPClass'));
 
 PHPClass needs to be a field or property processor that extends ImporterFieldProcessor and has the process() method.
 
     require_once "ImporterPropertyProcessorTrimAlias.php";
-    $view_importer->add_property_processor(array('url_alias' => 'ImporterPropertyProcessorTrimAlias'));
-
-
+    $view_importer->addPropertyProcessor(array('url_alias' => 'ImporterPropertyProcessorTrimAlias'));

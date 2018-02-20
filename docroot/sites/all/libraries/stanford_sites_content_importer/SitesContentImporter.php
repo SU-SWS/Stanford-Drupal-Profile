@@ -1,7 +1,8 @@
 <?php
 /**
  * @file
- * Sites Content Importer
+ * Sites Content Importer.
+ *
  * Saves content from a Drupal services REST server.
  *
  * @author Shea McKinney <sheamck@stanford.edu>
@@ -32,7 +33,7 @@ include_once "SitesContentImporterViews.php";
 
 
 /**
- * Content Importer class
+ * Content Importer class.
  */
 class SitesContentImporter {
 
@@ -40,228 +41,297 @@ class SitesContentImporter {
   protected $resource;
   protected $arguments;
   protected $method;
-  protected $process_storage = array();
-  protected $bean_uuids = array();
-  protected $content_types = array();
+  protected $processStorage = array();
+  protected $beanUuids = array();
+  protected $contentTypes = array();
   protected $restrictions = array();
-  protected $restricted_vocabularies = array();
-  protected $response_format_type = ".json";
+  protected $restrictedVocabularies = array();
+  protected $responseFormatType = ".json";
   protected $registry = array('property' => array(), 'field' => array());
 
   /**
-   * [__construct description]
-   * @return {[type]} [description]
+   * Constructor.
+   *
+   * Nothing fancy here.
    */
   public function __construct() {
     // Nothing to see here.
   }
 
   /**
-   * [get_response_format_type description]
-   * @return [type] [description]
+   * Returns response format type.
+   *
+   * The type of format you wish to receive from the content server. This can
+   * be .json or .xml typically.
+   *
+   * @return string
+   *   The format type. eg: .json.
    */
-  public function get_response_format_type() {
-    return $this->response_format_type;
+  public function getResponseFormatType() {
+    return $this->responseFormatType;
   }
 
   /**
-   * [set_response_format_type description]
-   * @param string $type [description]
+   * Set the desired response format type from the content server.
+   *
+   * @param string $type
+   *   The type of response document you wish to return.
+   *
+   * @return bool
+   *   FALSE if not valid.
    */
-  public function set_response_format_type($type = ".json") {
+  public function setResponseFormatType($type = ".json") {
     if (!is_string($type)) {
       return FALSE;
     }
-    $this->response_format_type = $type;
+    $this->responseFormatType = $type;
   }
 
   /**
-   * [set_endpoint description]
-   * @param [type] $endpoint [description]
+   * Set the endpoint of the content server in which to interact with.
+   *
+   * @param string $endpoint
+   *   A url for the endpoint of the content server.
+   *   eg: https://sites.stanford.edu/jsa-content/jsa-install.
    */
-  public function set_endpoint($endpoint) {
+  public function setEndpoint($endpoint) {
     $this->endpoint = $endpoint;
   }
 
   /**
-   * [get_endpoint description]
-   * @return [type] [description]
+   * Return the endpoint of the content server.
+   *
+   * @return string
+   *   The url of the content server endpoint.
    */
-  public function get_endpoint() {
+  public function getEndpoint() {
     return $this->endpoint;
   }
 
   /**
-   * [set_storage description]
-   * @param [type] $key   [description]
-   * @param [type] $value [description]
+   * Arbitrary data storage set method.
+   *
+   * @param string $key
+   *   The associated key with the value store.
+   * @param mixed $value
+   *   The data to store at $key.
    */
-  protected function set_storage($key, $value) {
-    $this->process_storage[$key] = $value;
+  protected function setStorage($key, $value) {
+    $this->processStorage[$key] = $value;
   }
 
   /**
-   * [get_storage description]
-   * @param  [type] $key [description]
-   * @return [type]      [description]
+   * Get data out of the arbitrary data store.
+   *
+   * @param string $key
+   *   The index key for the data you wish to return.
+   *
+   * @return mixed
+   *   The value of $key
    */
-  public function get_storage($key) {
+  public function getStorage($key) {
 
     if ($key == "all") {
-      return $this->process_storage;
+      return $this->processStorage;
     }
 
-    if (isset($this->process_storage[$key])) {
-      return $this->process_storage[$key];
+    if (isset($this->processStorage[$key])) {
+      return $this->processStorage[$key];
     }
 
     return array();
   }
 
   /**
-   * [add_import_content_type description]
-   * @param string $type [description]
+   * Add a content type to the types that are going to be imported.
+   *
+   * When importing by content type you can add any number of types you wish to
+   * import. The most recent 20 items of each type will be imported.
+   *
+   * @param string $type
+   *   The content type bundle name.
    */
-  public function add_import_content_type($type = '') {
+  public function addImportContentType($type = '') {
 
     if (is_array($type)) {
       $type = array_flip($type);
-      $this->content_types = array_merge($this->content_types, $type);
+      $this->contentTypes = array_merge($this->contentTypes, $type);
     }
     else {
-      $this->content_type[$type] = $type;
+      $this->contentType[$type] = $type;
     }
 
   }
 
   /**
-   * [remove_import_content_type description]
-   * @param  string $type [description]
-   * @return [type]       [description]
+   * Remove a content type from being imported.
+   *
+   * @param string $type
+   *   The bundle name of the content type.
    */
-  public function remove_import_content_type($type = '') {
-    unset($this->content_types[$type]);
+  public function removeImportContentType($type = '') {
+    unset($this->contentTypes[$type]);
   }
 
   /**
-   * [get_import_content_types description]
-   * @return [type] [description]
+   * Return all of the content types that are to be imported.
+   *
+   * Content types are set with setImportContentType.
+   *
+   * @return arrary
+   *   An array of bundle names.
    */
-  public function get_import_content_types() {
-    return $this->content_types;
+  public function getImportContentTypes() {
+    return $this->contentTypes;
   }
 
   /**
-   * [add_uuid_restrictions description]
-   * @param array $uuids [description]
+   * Add a restriction on an item by uuid.
+   *
+   * Setting a restriction will prevent an entity from being saved even if it
+   * shows up in the service endpoint.
+   *
+   * @param array $uuids
+   *   An array of uuids.
    */
-  public function add_uuid_restrictions($uuids = array()) {
-    $restrictions = $this->get_uuid_restrictions();
+  public function addUuidRestrictions($uuids = array()) {
+    $restrictions = $this->getUuidRestrictions();
 
     if (!is_array($uuids)) {
       return FALSE;
     }
 
     $restrictions = array_merge($restrictions, $uuids);
-    $this->set_uuid_restrictions($restrictions);
+    $this->setUuidRestrictions($restrictions);
     return $restrictions;
   }
 
   /**
-   * [get_uuid_restrictions description]
-   * @return [type] [description]
+   * Return an array of UUIDs.
+   *
+   * The restricted UUIDs are entities that should not be saved.
+   *
+   * @return array
+   *   An array of uuid strings.
    */
-  public function get_uuid_restrictions() {
+  public function getUuidRestrictions() {
     return $this->restrictions;
   }
 
   /**
-   * [set_uuid_restrictions description]
-   * @param [type] $uuids [description]
+   * Set a restriction on items by uuid.
+   *
+   * Setting a restriction will prevent an entity from being saved even if it
+   * shows up in the service endpoint.
+   *
+   * @param array $uuids
+   *   An array of uuids.
    */
-  protected function set_uuid_restrictions($uuids) {
+  protected function setUuidRestrictions($uuids) {
     $this->restrictions = $uuids;
   }
 
   /**
    * Returns a boolean value on wether a UUID is in the restricted list.
-   * @param  [type]  $uuid [description]
-   * @return boolean       [description]
+   *
+   * @param string $uuid
+   *   The UUID of the imported item to import.
+   *
+   * @return bool
+   *   True if is a restricted entity.
    */
-  protected function is_restricted_uuid($uuid) {
-    $restrictions = $this->get_uuid_restrictions();
+  protected function isRestrictedUuid($uuid) {
+    $restrictions = $this->getUuidRestrictions();
     return in_array($uuid, $restrictions);
   }
 
   /**
-   * [get_property_registry description]
-   * @return [type] [description]
+   * Get a property out of the registry.
+   *
+   * @return string
+   *   A property value.
    */
-  protected function get_property_registry() {
+  protected function getPropertyRegistry() {
     return $this->registry['property'];
   }
 
   /**
-   * [get_field_registry description]
-   * @return [type] [description]
+   * Returns the field key from the registry.
+   *
+   * Not really sure what this is for.
+   *
+   * @return mixed
+   *   Something from $this->registry['field'].
    */
-  protected function get_field_registry() {
+  protected function getFieldRegistry() {
     return $this->registry['field'];
   }
 
   /**
-   * Sets the processor registry
-   * @param [type] $type  [description]
-   * @param [type] $value [description]
+   * Sets the processor registry.
+   *
+   * @param string $type
+   *   Either a field or a property.
+   * @param string $value
+   *   The processor class.
    */
-  protected function set_registry($type, $value) {
+  protected function setRegistry($type, $value) {
     $this->registry[$type] = $value;
   }
 
   /**
-   * register a property processor class.
-   * @param array 'key' => 'value' where key is the name of the property and
-   * value is the name of the php class to process it.
-   * eg: array(
-   * 'status' => 'myPropertyProcessorStatus'
-   * 'author' => 'myPropertyProcessorAuthor'
-   * );
+   * Register a property processor class.
+   *
+   * @param array $values
+   *   Array with 'key' => 'value' where key is the name of the property and
+   *   value is the name of the php class to process it.
+   *   eg: array(
+   *     'status' => 'myPropertyProcessorStatus'
+   *     'author' => 'myPropertyProcessorAuthor'
+   *   );.
    */
-  public function add_property_processor($values = array()) {
-    $prop_reg = $this->get_property_registry();
+  public function addPropertyProcessor($values = array()) {
+    $prop_reg = $this->getPropertyRegistry();
     foreach ($values as $property => $processor) {
       $prop_reg[$property][] = $processor;
     }
-    $this->set_registry('property', $prop_reg);
+    $this->setRegistry('property', $prop_reg);
   }
 
   /**
-   * register a field processor class.
-   * @param array 'key' => 'value' where key is the name of the field and
-   * value is the name of the php class to process it.
-   * eg: array(
-   * 'field_something_that' => 'myFieldProcessorThing'
-   * 'field_other_field' => 'myOtherFieldProcessorThingy'
-   * );
+   * Register a field processor class.
+   *
+   * @param array $values
+   *   Array with 'key' => 'value' where key is the name of the field and
+   *   value is the name of the php class to process it.
+   *   eg:
+   *   array(
+   *     'field_something_that' => 'myFieldProcessorThing'
+   *     'field_other_field' => 'myOtherFieldProcessorThingy'
+   *   );.
    */
-  public function add_field_processor($values = array()) {
-    $field_reg = $this->get_field_registry();
+  public function addFieldProcessor($values = array()) {
+    $field_reg = $this->getFieldRegistry();
     foreach ($values as $field => $processor) {
       $field_reg[$field][] = $processor;
     }
-    $this->set_registry('field', $field_reg);
+    $this->setRegistry('field', $field_reg);
   }
 
-
   /**
-   * [process_fields description]
-   * @param  [type] $entity      [description]
-   * @param  [type] $entity_type [description]
-   * @return [type]              [description]
+   * The main process function.
+   *
+   * Go through all of the fields on the entity that is being saved and run
+   * the field processors on them.
+   *
+   * @param object $entity
+   *   The entity object to be saved.
+   * @param string $entity_type
+   *   The type of entity that is passed in $entity.
    */
-  public function process_fields(&$entity, $entity_type) {
+  public function processFields(&$entity, $entity_type) {
     $fields = field_info_field_map();
-    $field_reg = $this->get_field_registry();
+    $field_reg = $this->getFieldRegistry();
 
     foreach ($fields as $field_name => $field_info) {
       if (isset($entity->{$field_name})) {
@@ -273,10 +343,10 @@ class SitesContentImporter {
         if (class_exists($class_name)) {
           try {
             $field_processor = new $class_name();
-            $field_processor->set_endpoint($this->get_endpoint());
+            $field_processor->setEndpoint($this->getEndpoint());
             $field_processor->process($entity, $entity_type, $field_name);
           }
-          catch(Exception $e) {
+          catch (Exception $e) {
             // No worries. Just continue.
             continue;
           }
@@ -290,7 +360,7 @@ class SitesContentImporter {
             }
 
             $field_processor = new $processor_name();
-            $field_processor->set_endpoint($this->get_endpoint());
+            $field_processor->setEndpoint($this->getEndpoint());
             $field_processor->process($entity, $entity_type, $field_name);
 
           }
@@ -303,19 +373,23 @@ class SitesContentImporter {
   }
 
   /**
+   * Process all properties on an entity.
+   *
    * This function processes properties of entities that
    * are not attached fields and are not picked up by the process_fields
    * methos. Example would be the uid field on node entities.
-   * @param  [type] $entity      [description]
-   * @param  [type] $entity_type [description]
-   * @return [type]              [description]
+   *
+   * @param object $entity
+   *   The entity object to be saved.
+   * @param string $entity_type
+   *   The type of entity in $entity.
    */
-  public function process_properties(&$entity, $entity_type) {
-    $prop_reg = $this->get_property_registry();
+  public function processProperties(&$entity, $entity_type) {
+    $prop_reg = $this->getPropertyRegistry();
 
     foreach ($entity as $property => $value) {
 
-      // skip fields.
+      // Skip fields.
       if (strpos($property, 'field_') === 0) {
         continue;
       }
@@ -325,14 +399,14 @@ class SitesContentImporter {
       if (class_exists($class_name)) {
         try {
           $property_processor = new $class_name();
-          $property_processor->set_endpoint($this->get_endpoint());
+          $property_processor->setEndpoint($this->getEndpoint());
           $property_processor->process($entity, $entity_type, $property);
         }
-        catch(Exception $e) {
+        catch (Exception $e) {
           // No worries. Just carry on.
         }
       }
-      else if (isset($prop_reg[$property])) {
+      elseif (isset($prop_reg[$property])) {
         // If there are registered field processors then loop through them.
         foreach ($prop_reg[$property] as $processor_name) {
 
@@ -341,7 +415,7 @@ class SitesContentImporter {
           }
 
           $property_processor = new $processor_name();
-          $property_processor->set_endpoint($this->get_endpoint());
+          $property_processor->setEndpoint($this->getEndpoint());
           $property_processor->process($entity, $entity_type, $property);
 
         }
@@ -354,20 +428,24 @@ class SitesContentImporter {
   }
 
   /**
+   * Run all custom field processors.
+   *
    * This function allows authors to declare custom field processors with the
    * pattern ImporterFieldProcessorCustom[FieldName]
-   * @param  [type] $entity      [description]
-   * @param  [type] $entity_type [description]
-   * @return [type]              [description]
+   *
+   * @param object $entity
+   *   The entity object to be saved.
+   * @param string $entity_type
+   *   The type of entity in $entity.
    */
-  public function process_fields_custom(&$entity, $entity_type) {
+  public function processFieldsCustom(&$entity, $entity_type) {
 
     foreach ($entity as $field_name => $field_data) {
 
-        // skip properties.
-        if (strpos($field_name, 'field_') !== 0 && $field_name !== "body") {
-            continue;
-        }
+      // Skip properties.
+      if (strpos($field_name, 'field_') !== 0 && $field_name !== "body") {
+        continue;
+      }
 
       if (isset($entity->{$field_name})) {
         $class_name = "ImporterFieldProcessorCustom";
@@ -378,10 +456,10 @@ class SitesContentImporter {
         if (class_exists($class_name)) {
           try {
             $field_processor = new $class_name();
-            $field_processor->set_endpoint($this->get_endpoint());
+            $field_processor->setEndpoint($this->getEndpoint());
             $field_processor->process($entity, $entity_type, $field_name);
           }
-          catch(Exception $e) {
+          catch (Exception $e) {
             // No worries. Just continue.
             continue;
           }
@@ -394,17 +472,21 @@ class SitesContentImporter {
   }
 
   /**
+   * Run all custom property processors.
+   *
    * This function processes properties of entities that
    * are not attached fields and are not picked up by the process_fields
    * methos. Example would be the uid field on node entities.
-   * @param  [type] $entity      [description]
-   * @param  [type] $entity_type [description]
-   * @return [type]              [description]
+   *
+   * @param object $entity
+   *   The entity object to be saved.
+   * @param string $entity_type
+   *   The entity_type in $entity.
    */
-  public function process_properties_custom(&$entity, $entity_type) {
+  public function processPropertiesCustom(&$entity, $entity_type) {
     foreach ($entity as $property => $value) {
 
-      // skip fields.
+      // Skip fields.
       if (strpos($property, 'field_') === 0 || $property == "body") {
         continue;
       }
@@ -414,10 +496,10 @@ class SitesContentImporter {
       if (class_exists($class_name)) {
         try {
           $property_processor = new $class_name();
-          $property_processor->set_endpoint($this->get_endpoint());
+          $property_processor->setEndpoint($this->getEndpoint());
           $property_processor->process($entity, $entity_type, $property);
         }
-        catch(Exception $e) {
+        catch (Exception $e) {
           // No worries. Just carry on.
         }
       }
@@ -430,11 +512,15 @@ class SitesContentImporter {
 
   /**
    * Saves field collection entities.
+   *
    * This function should be called just before the host entity is saved and
    * no sooner or there will be errors on the host entity as it gets saved
    * with the field collection entity.
+   *
+   * @return array
+   *   A key -> value map of field collection uuids and entity objects.
    */
-  protected function save_field_collections() {
+  protected function saveFieldCollections() {
     $field_collections = &drupal_static('ImporterFieldProcessorFieldCollection', array());
     $uuid_map = array();
     foreach ($field_collections as $k => $fc) {
@@ -451,31 +537,37 @@ class SitesContentImporter {
   }
 
   /**
-   * [set_bean_uuids description]
-   * @param [type] $uuids [description]
+   * Set the UUIDs of the beans to be imported.
+   *
+   * @param array $uuids
+   *   An array of UUIDs.
    */
-  public function set_bean_uuids($uuids) {
-    $this->bean_uuids = $uuids;
+  public function setBeanUuids($uuids) {
+    $this->beanUuids = $uuids;
   }
 
   /**
-   * [get_bean_uuids description]
-   * @return [type] [description]
+   * Get the array of BEAN UUIDs to import.
+   *
+   * @return array
+   *   An array of UUID strings.
    */
-  public function get_bean_uuids() {
-    return $this->bean_uuids;
+  public function getBeanUuids() {
+    return $this->beanUuids;
   }
 
   /**
    * Imports and processess beans.
-   * @return array an array of imported beans.
+   *
+   * @return array
+   *   An array of imported beans.
    */
-  public function import_content_beans() {
+  public function importContentBeans() {
 
     // Endpoint will almost always be the hardcoded one.
-    $endpoint = $this->get_endpoint();
-    $bean_uuids = $this->get_bean_uuids();
-    $response_format_type = $this->get_response_format_type();
+    $endpoint = $this->getEndpoint();
+    $bean_uuids = $this->getBeanUuids();
+    $response_format_type = $this->getResponseFormatType();
 
     // Get and save beans.
     $beans = array();
@@ -490,7 +582,7 @@ class SitesContentImporter {
       $bean = ($bean_result->code == "200") ? drupal_json_decode($bean_result->data) : FALSE;
 
       if (!$bean) {
-        watchdog('SitesContentImporter', 'Could not fetch BEAN: ' . $uuid, array(), WATCHDOG_NOTICE);
+        watchdog('SitesContentImporter', 'Could not fetch BEAN: %s', array("%s" => $uuid), WATCHDOG_NOTICE);
         if (function_exists('drush_log')) {
           drush_log('Could not fetch BEAN: ' . $uuid, 'error');
         }
@@ -512,16 +604,16 @@ class SitesContentImporter {
       // Instantiate the bean and process all of the fields.
       $bean = new Bean($bean);
 
-      $this->process_fields($bean, 'bean');
-      $this->process_fields_custom($bean, 'bean');
+      $this->processFields($bean, 'bean');
+      $this->processFieldsCustom($bean, 'bean');
 
       // Process non field properties.
-      $this->process_properties($bean, 'bean');
-      $this->process_properties_custom($bean, 'bean');
+      $this->processProperties($bean, 'bean');
+      $this->processPropertiesCustom($bean, 'bean');
 
       // Field Collections are awful things and can only be saved right before the entity that they are attached to is
       // saved. We stored them for later saving and must do that now.
-      $this->save_field_collections();
+      $this->saveFieldCollections();
 
       // Now we can save Mr. Bean.
       $bean->save();
@@ -532,47 +624,64 @@ class SitesContentImporter {
   }
 
   /**
-   * [add_restricted_vocabularies description]
-   * @param array $restrictions [description]
+   * Add restrictions to the vocabulary import.
+   *
+   * Even though some vocabularies are available on the content server we may
+   * not want to save them locally. Use this function to set which ones you
+   * wish to skip saving.
+   *
+   * @param array $restrictions
+   *   An array of taxonomy vocabulary machine names.
    */
-  public function add_restricted_vocabularies($restrictions = array()) {
+  public function addRestrictedVocabularies($restrictions = array()) {
     if (!is_array($restrictions)) {
       throw new Exception("Restriction parameter is not an array");
     }
-    $this->restricted_vocabularies = array_merge($this->restricted_vocabularies, $restrictions);
+    $this->restrictedVocabularies = array_merge($this->restrictedVocabularies, $restrictions);
   }
 
   /**
-   * Returns the array of restricted vocabulary machine names
-   * @return [type] [description]
+   * Returns the array of restricted vocabulary machine names.
+   *
+   * @return array
+   *   An array of vocabulary machine names.
    */
-  public function get_restricted_vocabularies() {
-    return $this->restricted_vocabularies;
+  public function getRestrictedVocabularies() {
+    return $this->restrictedVocabularies;
   }
 
   /**
    * Tests to see if a machine name is in the restricted vocabularies.
-   * @param  [string]  $machine_name [the machine name to test against]
-   * @return boolean true if restricted
+   *
+   * @param string $machine_name
+   *   The machine name to test against.
+   *
+   * @return bool
+   *   True if restricted
    */
-  public function is_restricted_vocabulary($machine_name) {
-    $restrictions = $this->get_restricted_vocabularies();
+  public function isRestrictedVocabulary($machine_name) {
+    $restrictions = $this->getRestrictedVocabularies();
     return in_array($machine_name, $restrictions);
   }
 
   /**
-   * [import_vocabulary_trees description]
-   * @return [type] [description]
+   * Import all of the taxonomy terms from a vocabulary.
+   *
+   * Fetches and saves the terms from a taxonomy vocabulary on the content
+   * server.
+   *
+   * @return bool
+   *   True if successful.
    */
-  public function import_vocabulary_trees() {
-    $endpoint = $this->get_endpoint();
-    $response_format_type = $this->get_response_format_type();
+  public function importVocabularyTrees() {
+    $endpoint = $this->getEndpoint();
+    $response_format_type = $this->getResponseFormatType();
 
     // Vocabularies.
     try {
       $vocabularies_result = drupal_http_request($endpoint . "/taxonomy_vocabulary" . $response_format_type);
     }
-    catch(Exception $e) {
+    catch (Exception $e) {
       watchdog('SitesContentImporter', 'Could Not Fetch Vocabularies', array(), WATCHDOG_ERROR);
       if (function_exists('drush_log')) {
         drush_log('Could Not Fetch Vocabularies', 'error');
@@ -596,8 +705,8 @@ class SitesContentImporter {
     foreach ($vocabularies as $index => $vocab) {
       $vocab = (object) $vocab;
 
-      if ($this->is_restricted_vocabulary($vocab->machine_name)) {
-        watchdog('SitesContentImporter', 'Did not import restricted vocabulary: ' . $vocab->machine_name, array(), WATCHDOG_NOTICE);
+      if ($this->isRestrictedVocabulary($vocab->machine_name)) {
+        watchdog('SitesContentImporter', 'Did not import restricted vocabulary: %s', array("%s" => $vocab->machine_name), WATCHDOG_NOTICE);
         if (function_exists('drush_log')) {
           drush_log('Did not import restricted vocabulary: ' . $vocab->machine_name, 'ok');
         }
@@ -612,7 +721,7 @@ class SitesContentImporter {
         $tree = ($tree_result->code == "200") ? drupal_json_decode($tree_result->data) : FALSE;
       }
       catch (Exception $e) {
-        watchdog('SitesContentImporter', 'Tree was either empty or returned error: ' . $vocab->machine_name, array(), WATCHDOG_NOTICE);
+        watchdog('SitesContentImporter', 'Tree was either empty or returned error: %s', array("%s" => $vocab->machine_name), WATCHDOG_NOTICE);
         if (function_exists('drush_log')) {
           drush_log('Tree was either empty or returned error: ' . $vocab->machine_name, 'error');
         }
@@ -645,13 +754,15 @@ class SitesContentImporter {
   }
 
   /**
-   * [importer_content_nodes_recent_by_type description]
-   * @return [type] [description]
+   * Fetch and save content by content type.
+   *
+   * Requests and saves the most recent content by content type. Due to a bug
+   * in the services module only the last 20 items can be fetched.
    */
-  public function importer_content_nodes_recent_by_type() {
-    $endpoint = $this->get_endpoint();
-    $types = $this->get_import_content_types();
-    $response_format_type = $this->get_response_format_type();
+  public function importerContentNodesRecentByType() {
+    $endpoint = $this->getEndpoint();
+    $types = $this->getImportContentTypes();
+    $response_format_type = $this->getResponseFormatType();
     $requests = array();
     $ids = array();
 
@@ -659,7 +770,6 @@ class SitesContentImporter {
       try {
         // Can't seem to get the pagesize variable to work. So for now we only get 20 of each.
         // Because of this we will want two pages of stanford_page types. The page param works so we can use that to get more.
-
         if ($machine_name == "stanford_page") {
           $requests[$machine_name]        = drupal_http_request($endpoint . "/node" . $response_format_type . "?page=0&pagesize=20&fields=nid,uuid&parameters[type]=" . $machine_name);
           $requests[$machine_name . "_2"] = drupal_http_request($endpoint . "/node" . $response_format_type . "?page=1&pagesize=20&fields=nid,uuid&parameters[type]=" . $machine_name);
@@ -670,8 +780,8 @@ class SitesContentImporter {
         }
 
       }
-      catch(Exception $e) {
-        watchdog('SitesContentImporter', 'Could not fetch content type: ' . $machine_name, array(), WATCHDOG_NOTICE);
+      catch (Exception $e) {
+        watchdog('SitesContentImporter', 'Could not fetch content type: %s', array("%s" => $machine_name), WATCHDOG_NOTICE);
         if (function_exists('drush_log')) {
           drush_log('Could not fetch content type: ' . $machine_name, 'error');
         }
@@ -688,29 +798,31 @@ class SitesContentImporter {
       }
     }
 
-    $this->importer_process_nodes_by_uuids($ids);
-
+    $this->importerProcessNodesByUuids($ids);
   }
 
   /**
-   * [importer_process_nodes_by_uuids description]
-   * @param  $ids
-   *         $ids[uuid] = $id_array;
+   * Process the nodes fetched from the content server.
    *
-   * @return [type] [description]
+   * Loop through all of the nodes fetched from importerContentNodesRecentByType
+   * and process them.
+   *
+   * @param array $ids
+   *   Array in the form of: $ids[uuid] = $id_array;.
    */
-  public function importer_process_nodes_by_uuids($ids) {
+  public function importerProcessNodesByUuids($ids) {
+
     // Now we get all the node information.
     // @todo: Stop hammering the server with requests and make this better.
 
-    $endpoint = $this->get_endpoint();
-    $types = $this->get_import_content_types();
-    $response_format_type = $this->get_response_format_type();
+    $endpoint = $this->getEndpoint();
+    $types = $this->getImportContentTypes();
+    $response_format_type = $this->getResponseFormatType();
 
     foreach ($ids as $uuid => $other_ids) {
 
-      if ($this->is_restricted_uuid($uuid)) {
-        watchdog('SitesContentImporter', 'Did not import restricted UUID: ' . $uuid, array(), WATCHDOG_NOTICE);
+      if ($this->isRestrictedUuid($uuid)) {
+        watchdog('SitesContentImporter', 'Did not import restricted UUID: %s', array("%s" => $uuid), WATCHDOG_NOTICE);
         if (function_exists('drush_log')) {
           drush_log('Did not import restricted UUID: ' . $uuid, 'ok');
         }
@@ -720,8 +832,8 @@ class SitesContentImporter {
       try {
         $node_request = drupal_http_request($endpoint . "/node/" . $uuid . $response_format_type);
       }
-      catch(Exception $e) {
-        watchdog('SitesContentImporter', 'Could not fetch node information for: ' . $uuid, array(), WATCHDOG_NOTICE);
+      catch (Exception $e) {
+        watchdog('SitesContentImporter', 'Could not fetch node information for: %s', array("%s" => $uuid), WATCHDOG_NOTICE);
         if (function_exists('drush_log')) {
           drush_log('Could not fetch node information for: ' . $uuid, 'error');
         }
@@ -729,7 +841,7 @@ class SitesContentImporter {
       }
 
       if ($node_request->code !== "200") {
-        watchdog('SitesContentImporter', 'Could not fetch node information for: ' . $uuid, array(), WATCHDOG_NOTICE);
+        watchdog('SitesContentImporter', 'Could not fetch node information for: %s', array("%s" => $uuid), WATCHDOG_NOTICE);
         if (function_exists('drush_log')) {
           drush_log('Could not fetch node information for: ' . $uuid, 'error');
         }
@@ -741,20 +853,13 @@ class SitesContentImporter {
       unset($node['vid']);
       $node = (object) $node;
 
-      // Do a quick check here to ensure that the node type we are going to process is of the types we
-      // requested from the server. Somehow types we don't want are sneaking in.
-      // if (!array_key_exists($node->type, $types)) {
-      //  // Do no process the node as it is not a valid type.
-      //  continue;
-      // }
-
       // Process the fields.
-      $this->process_fields($node, 'node');
-      $this->process_fields_custom($node, 'node');
+      $this->processFields($node, 'node');
+      $this->processFieldsCustom($node, 'node');
 
       // Process non field properties.
-      $this->process_properties($node, 'node');
-      $this->process_properties_custom($node, 'node');
+      $this->processProperties($node, 'node');
+      $this->processPropertiesCustom($node, 'node');
 
       // Alter node to save the alias.
       $alias = FALSE;
@@ -779,7 +884,4 @@ class SitesContentImporter {
     }
   }
 
-
 }
-
-

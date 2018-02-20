@@ -1,19 +1,25 @@
 <?php
 /**
  * @file
+ * A class to process taxonomy term fields.
  */
 
-/**
- *
- */
+ /**
+  * Importer Field Processor for taxonomy term field.
+  */
 class ImporterFieldProcessorTaxonomyTermReference extends ImporterFieldProcessor {
 
   /**
-   * [process description]
-   * @param  [type] $entity      [description]
-   * @param  [type] $entity_type [description]
-   * @param  [type] $field_name  [description]
-   * @return [type]              [description]
+   * Process a field.
+   *
+   * Make any neccessary changes to a field before saving it.
+   *
+   * @param object $entity
+   *   The entity to be saved.
+   * @param string $entity_type
+   *   The type of entity in $entity.
+   * @param string $field_name
+   *   The field on $entity that is being processed.
    */
   public function process(&$entity, $entity_type, $field_name) {
 
@@ -25,9 +31,9 @@ class ImporterFieldProcessorTaxonomyTermReference extends ImporterFieldProcessor
 
           if (!$term) {
             try {
-              $term = $this->taxonomy_term_reference_field_create_item($uuid);
+              $term = $this->taxonomyTermReferenceFieldCreateItem($uuid);
             }
-            catch(Exception $e) {
+            catch (Exception $e) {
               unset($entity->{$field_name}[$lang][$key]);
               continue;
             }
@@ -35,7 +41,6 @@ class ImporterFieldProcessorTaxonomyTermReference extends ImporterFieldProcessor
           else {
             $term = array_pop($term);
           }
-
 
           // If still no term just unset it and continue.
           if (!$term) {
@@ -52,21 +57,25 @@ class ImporterFieldProcessorTaxonomyTermReference extends ImporterFieldProcessor
   }
 
   /**
-   * [taxonomy_term_reference_field_create_item description]
-   * @param  [type] $uuid [description]
-   * @return [type]       [description]
+   * Fetch and save the taxonomy term item from the content server.
+   *
+   * @param string $uuid
+   *   The UUID of the taxonomy term item that is to be saved.
+   *
+   * @return object
+   *   The fully saved taxonomy term object.
    */
-  private function taxonomy_term_reference_field_create_item($uuid) {
-    $endpoint = $this->get_endpoint();
+  private function taxonomyTermReferenceFieldCreateItem($uuid) {
+    $endpoint = $this->getEndpoint();
     try {
       $term_response = drupal_http_request($endpoint . '/taxonomy_term/' . $uuid . '.json');
     }
-    catch(Exception $e) {
-      return false;
+    catch (Exception $e) {
+      return FALSE;
     }
 
     if ($term_response->code !== "200") {
-      return false;
+      return FALSE;
     }
 
     $term_obj = drupal_json_decode($term_response->data);
@@ -80,6 +89,5 @@ class ImporterFieldProcessorTaxonomyTermReference extends ImporterFieldProcessor
 
     return $term_obj;
   }
-
 
 }

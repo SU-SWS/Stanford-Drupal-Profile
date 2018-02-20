@@ -1,19 +1,25 @@
 <?php
 /**
  * @file
+ * A class to process text fields.
  */
 
-/**
- *
- */
+ /**
+  * Importer Field Processor for text field.
+  */
 class ImporterFieldProcessorText extends ImporterFieldProcessor {
 
   /**
-   * [process description]
-   * @param  [type] $entity      [description]
-   * @param  [type] $entity_type [description]
-   * @param  [type] $field_name  [description]
-   * @return [type]              [description]
+   * Process a field.
+   *
+   * Make any neccessary changes to a field before saving it.
+   *
+   * @param object $entity
+   *   The entity to be saved.
+   * @param string $entity_type
+   *   The type of entity in $entity.
+   * @param string $field_name
+   *   The field on $entity that is being processed.
    */
   public function process(&$entity, $entity_type, $field_name) {
 

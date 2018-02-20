@@ -1,19 +1,25 @@
 <?php
 /**
  * @file
+ * A class to process the UID property.
  */
 
-/**
- *
- */
+ /**
+  * Importer Property Processor for the UID property.
+  */
 class ImporterPropertyProcessorUid extends ImporterFieldProcessor {
 
   /**
-   * [process description]
-   * @param  [type] $entity      [description]
-   * @param  [type] $entity_type [description]
-   * @param  [type] $field_name  [description]
-   * @return [type]              [description]
+   * Process a property.
+   *
+   * Make any neccessary changes to a peroperty before saving it.
+   *
+   * @param object $entity
+   *   The entity to be saved.
+   * @param string $entity_type
+   *   The type of entity in $entity.
+   * @param string $property
+   *   The property on $entity that is being processed.
    */
   public function process(&$entity, $entity_type, $property) {
 

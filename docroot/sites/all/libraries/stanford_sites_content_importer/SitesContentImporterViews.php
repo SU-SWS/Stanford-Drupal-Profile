@@ -1,7 +1,16 @@
 <?php
 /**
  * @file
- * @author  Shea McKinney <sheamck@stanford.edu>
+ * Content Import by Views Resource.
+ *
+ * Contains a class file that allows for fetching and receiving content from
+ * the view based services resource.
+ *
+ * @author Shea McKinney <sheamck@stanford.edu>
+ */
+
+/**
+ * Sites content importer class that can import by the view endpoint.
  */
 class SitesContentImporterViews extends SitesContentImporter {
 
@@ -9,29 +18,22 @@ class SitesContentImporterViews extends SitesContentImporter {
   protected $resource;
 
   /**
-   * [__construct description]
+   * Imports Nodes by the filtered view endpoint.
    */
-  public function __construct() {
+  public function importContentByViewsAndFilters() {
 
-  }
-
-  /**
-   * Imports Nodes by the filter
-   */
-  public function import_content_by_views_and_filters() {
-
-    $endpoint = $this->get_endpoint();
-    $filters = $this->get_filters();
-    $resource = $this->get_resource();
+    $endpoint = $this->getEndpoint();
+    $filters = $this->getFilters();
+    $resource = $this->getResource();
     $ids = array();
 
-    $filters = $this->prepare_filters();
+    $filters = $this->prepareFilters();
 
     try {
       $response = drupal_http_request($endpoint . "/" . $resource . ".json?" . $filters);
     }
-    catch(Exception $e) {
-      watchdog('SitesContentImporterViews', 'Could not fetch: ' . $resource, array(), WATCHDOG_NOTICE);
+    catch (Exception $e) {
+      watchdog('SitesContentImporterViews', 'Could not fetch: %s', array("%s" => $resource), WATCHDOG_NOTICE);
       if (function_exists('drush_log')) {
         drush_log('Could not fetch: ' . $resource, 'error');
       }
@@ -39,7 +41,7 @@ class SitesContentImporterViews extends SitesContentImporter {
     }
 
     if ($response->code !== "200") {
-      watchdog('SitesContentImporterViews', $resource->code . ' | Could not fetch: ' . $resource, array(), WATCHDOG_NOTICE);
+      watchdog('SitesContentImporterViews', '%code | Could not fetch: %resource', array("%code" => $resource->code, "%resource" => $resource), WATCHDOG_NOTICE);
       if (function_exists('drush_log')) {
         drush_log($resource->code . ' | Could not fetch: ' . $resource, 'error');
       }
@@ -48,7 +50,7 @@ class SitesContentImporterViews extends SitesContentImporter {
     $data = drupal_json_decode($response->data);
 
     if (!array($data) || count($data) < 1) {
-       watchdog('SitesContentImporterViews', 'No content available', array(), WATCHDOG_NOTICE);
+      watchdog('SitesContentImporterViews', 'No content available', array(), WATCHDOG_NOTICE);
       if (function_exists('drush_log')) {
         drush_log('No content available for import by views.', 'warning');
       }
@@ -59,32 +61,41 @@ class SitesContentImporterViews extends SitesContentImporter {
       $ids[$id_array['node_uuid']] = $id_array;
     }
 
-    $this->importer_process_nodes_by_uuids($ids);
+    $this->importerProcessNodesByUuids($ids);
 
   }
 
   /**
-   * [set_filters description]
-   * @param array $filters [description]
+   * Set the filter parameters for the request to the service endpoint.
+   *
+   * @param array $filters
+   *   A key -> value array of filters to use as request parameters.
    */
-  public function set_filters($filters = array()) {
+  public function setFilters($filters = array()) {
     $this->filters = $filters;
   }
 
   /**
-   * [get_filters description]
-   * @return [type] [description]
+   * Return the array of key value filters.
+   *
+   * The filters are sent along with the request to the service endpoint so that
+   * the response only contains the content that the user is looking for.
+   *
+   * @return array
+   *   An array of key -> values.
    */
-  public function get_filters() {
+  public function getFilters() {
     return $this->filters;
   }
 
   /**
-   * [prepare_filters description]
-   * @return [type] [description]
+   * Changes the filter array in to a url string.
+   *
+   * @return string
+   *   A url stafe string of query parameters.
    */
-  public function prepare_filters() {
-    $filters = $this->get_filters();
+  public function prepareFilters() {
+    $filters = $this->getFilters();
     $filter_string = '';
 
     foreach ($filters as $field_name => $values) {
@@ -102,17 +113,19 @@ class SitesContentImporterViews extends SitesContentImporter {
   }
 
   /**
-   * [set_resource description]
+   * Set the endpoint resource for the request.
    */
-  public function set_resource($resource) {
+  public function setResource($resource) {
     $this->resource = $resource;
   }
 
   /**
-   * [get_resource description]
-   * @return [type] [description]
+   * Get the endpoint resource for the request.
+   *
+   * @return string
+   *   The name of the services endpoint resource.
    */
-  public function get_resource() {
+  public function getResource() {
     return $this->resource;
   }
 

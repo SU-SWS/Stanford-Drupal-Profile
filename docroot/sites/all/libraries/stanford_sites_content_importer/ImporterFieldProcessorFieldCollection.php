@@ -1,57 +1,70 @@
 <?php
 /**
- *@file
+ * @file
+ * A class to process Entity Reference fields.
  */
 
-/**
- * ImporterFieldProcessorFieldCollection
- * Processess field collections.
- */
+ /**
+  * Importer Field Processor for Entity Reference fields.
+  */
 class ImporterFieldProcessorFieldCollection extends ImporterFieldProcessor {
 
 
   /**
-   * [process description]
-   * @param  [type] $entity      [description]
-   * @param  [type] $entity_type [description]
-   * @param  [type] $field_name  [description]
-   * @return [type]              [description]
+   * Process a field collection field.
+   *
+   * Make any neccessary chagnes to this field before saving it.
+   *
+   * @param object $entity
+   *   The entity to be saved.
+   * @param string $entity_type
+   *   The type of entity in $entity.
+   * @param string $field_name
+   *   The field on $entity that is being processed.
    */
   public function process(&$entity, $entity_type, $field_name) {
-    $this->process_field_field_collection($entity, $entity_type, $field_name);
+    $this->processFieldFieldCollection($entity, $entity_type, $field_name);
   }
 
   /**
-   * [set_storage description]
-   * @param [type] $key   [description]
-   * @param [type] $value [description]
+   * Override of setStorage method.
+   *
+   * @param mixed $key
+   *   The associative array key for the stored value.
+   * @param mixed $value
+   *   The value for the $key.
    */
-  public function set_storage($key, $value) {
-    parent::set_storage($key, $value);
+  public function setStorage($key, $value) {
+    parent::setStorage($key, $value);
 
     if ($key == "field_collections") {
       $static_values = &drupal_static('ImporterFieldProcessorFieldCollection', array());
-      $static_values = $this->get_storage($key);
+      $static_values = $this->getStorage($key);
     }
 
     if ($key == "field_collections_patch_later") {
       $static_values = &drupal_static('ImporterFieldProcessorFieldCollectionPatchLater', array());
-      $static_values = $this->get_storage($key);
+      $static_values = $this->getStorage($key);
     }
-
-
   }
 
   /**
-   * [process_field_field_collection_item description]
-   * @param  [type] $entity      [description]
-   * @param  [type] $entity_type [description]
-   * @param  [type] $field       [description]
-   * @return [type]              [description]
+   * Process a field collection field.
+   *
+   * Field collections are entities themselves and the field has references to
+   * those ids. They can change upon save and extra care is needed to preserve
+   * them.
+   *
+   * @param object $entity
+   *   The entity to be saved.
+   * @param string $entity_type
+   *   The type of entity in $entity.
+   * @param string $field_name
+   *   The field on $entity that is being processed.
    */
-  protected function process_field_field_collection(&$entity, $entity_type, $field_name) {
+  protected function processFieldFieldCollection(&$entity, $entity_type, $field_name) {
     $field = $entity->{$field_name};
-    $uuids = $this->get_storage('field_collections');
+    $uuids = $this->getStorage('field_collections');
 
     // Load into the array of tracked ids the new ones.
     foreach ($field as $lang => $values) {
@@ -75,10 +88,10 @@ class ImporterFieldProcessorFieldCollection extends ImporterFieldProcessor {
       }
       else {
         try {
-          $field_collection = $this->process_field_field_collection_item_create_item($uuid, $entity, $entity_type);
+          $field_collection = $this->processFieldFieldCollectionItemCreateItem($uuid, $entity, $entity_type);
           $uuids[$uuid] = $field_collection;
         }
-        catch(Exception $e) {
+        catch (Exception $e) {
           watchdog('ImporterFieldProcessorFieldCollection', $e->getMessage(), array(), WATCHDOG_NOTICE);
           if (function_exists('drush_log')) {
             drush_log($e->getMessage(), 'error');
@@ -91,7 +104,7 @@ class ImporterFieldProcessorFieldCollection extends ImporterFieldProcessor {
     }
 
     // Store processed fcs.
-    $this->set_storage('field_collections', $uuids);
+    $this->setStorage('field_collections', $uuids);
 
     // Prepare fields on the entity so it can be saved with the field collections.
     foreach ($entity->{$field_name} as $lang => $values) {
@@ -105,14 +118,24 @@ class ImporterFieldProcessorFieldCollection extends ImporterFieldProcessor {
   }
 
   /**
-   * [process_field_field_collection_item_create_item description]
-   * @param  [type] $uuid [description]
-   * @return [type]       [description]
+   * Process the field collection item entity.
+   *
+   * The field data will contain a reference to a field collection item so we
+   * will need to fetch it from the server before being able to save it and
+   * apply the new value to the field.
+   *
+   * @param string $uuid
+   *   The UUID of the field collection entity to be imported and saved.
+   * @param object $host
+   *   The host entity which contains the field collection field.
+   * @param string $host_type
+   *   The host type entity name.
    */
-  protected function process_field_field_collection_item_create_item($uuid, &$host, $host_type) {
-    $create_field_collections = $this->get_storage('create_field_collections');
+  protected function processFieldFieldCollectionItemCreateItem($uuid, &$host, $host_type) {
 
-    $endpoint = $this->get_endpoint();
+    // Get any field collections out of storage.
+    $create_field_collections = $this->getStorage('create_field_collections');
+    $endpoint = $this->getEndpoint();
 
     // Ask nicely for content.
     $result = drupal_http_request($endpoint . "/field_collection_item/" . $uuid, array('headers' => array('Accept' => 'application/json')));
@@ -120,7 +143,7 @@ class ImporterFieldProcessorFieldCollection extends ImporterFieldProcessor {
 
     // Die if no content.
     if (!$data) {
-      throw new Exception("Could Not Fetch Field Colelction Item: " . $uuid);
+      throw new Exception("Could Not Fetch Field Collection Item: " . $uuid);
     }
 
     // Remove previous id.
@@ -132,18 +155,17 @@ class ImporterFieldProcessorFieldCollection extends ImporterFieldProcessor {
 
     // Because FCs can have fields we need to process this as well.
     $importer = new SitesContentImporter();
-    $importer->set_endpoint($endpoint);
-    $importer->process_fields($fc, 'field_collection_item');
+    $importer->setEndpoint($endpoint);
+    $importer->processFields($fc, 'field_collection_item');
 
     // Cant do this yet.
     // $fc->save();
 
     // Store for later.
     $create_field_collections[] = $fc;
-    $this->set_storage('create_field_collections', $create_field_collections);
+    $this->setStorage('create_field_collections', $create_field_collections);
 
     return $fc;
   }
-
 
 }
