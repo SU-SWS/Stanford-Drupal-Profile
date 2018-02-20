@@ -1,0 +1,200 @@
+Stanford Profile 7.x-x.x xxxx-xx-xx
+-----------------------------------
+
+Stanford Profile 7.x-2.6 2017-09-26
+-----------------------------------
+- Various module updates in .make files
+- Fixed bug where stanford_page was installing in an overridden state
+
+Stanford Profile 7.x-2.5 2017-03-01
+-----------------------------------
+- Various module updates in .make files
+- Enable stanford_date_formats and stanford_page by default
+- CodeClimate and TravisCI integration
+
+Stanford Profile 7.x-2.4 2016-07-20
+-----------------------------------
+- Various module updates in .make files
+
+Stanford Profile 7.x-2.3 2016-04-15
+-----------------------------------
+- Add patch for field_collection
+- Add stanford_s3fs_if module
+- Update Field Collection
+- Updated DOMPDF library to v0.6.2
+- Updated stanford_framework theme to 7.x-3.2-dev+8
+- Updated version of anchorage_helper to 1.0
+
+Stanford Profile 7.x-2.2+13-dev 2016-02-18
+-----------------------------------
+- Adding patch for simplesamlphp_auth
+- Changed release for CAPX to the php54 supported version
+- group and personal sites should get stanford_basic
+- Update pathauto to 1.3
+- Updated core drupal-7.41
+
+Stanford Profile 7.x-2.2 2015-09-08
+-----------------------------------
+Changes since 7.x-2.1:
+- Security updates and bug fixes in .make files
+
+Stanford Profile 7.x-2.1 2015-08-18
+-----------------------------------
+Changes since 7.x-2.0:
+By jbickar:
+  - Updates to s3fs configuration during install time for Amazon hosting
+By sherakama and jbickar:
+  - Various module updates in .make files
+
+Stanford Profile 7.x-2.0 2015-07-13
+-----------------------------------
+Changes since 7.x-1.3:
+By jbickar:
+  - Reorganization of modules into sites/all/modules/contrib and sites/all/modules/stanford
+  - Reorganization of .make files to separate functionality (modules, themes, libraries, patches)
+  - Support for SimpleSAML PHP authentication module
+  - Support for Amazon S3 file system module
+  - Update version of OpenLayers library from external CDN
+  - Enable stanford_afs_quota module if installed on Stanford Sites
+  - Many, many contrib and stanford module updates
+
+Stanford Profile 7.x-1.3 2014-11-27
+-----------------------------------
+Changes since 7.x-1.2:
+By jbickar:
+  - Updating .make file to pull -dev versions of contrib via git commit hash
+  - updating module versions in .make file
+
+Stanford Profile 7.x-1.2 2014-10-23
+-----------------------------------
+Changes since 7.x-1.1:
+By jbickar:
+  - Place search form in search_box region in stanford_light
+  - Set Pathauto to reduce paths to numbers and letters
+
+Stanford Profile 7.x-1.1 2014-08-28
+-----------------------------------
+By jbickar:
+  -Set stanford_light as default theme for group and personal sites.
+  -Other default theme tweaks
+
+Stanford Profile 7.x-1.1-beta4 2014-03-11
+-----------------------------------------
+  -Moved make file into subdir
+  -Changing modules from fserver to githubs
+  -Fixing DL url
+  -Updated Module Versions
+  -Enable Jordan by default
+
+Stanford Profile 7.x-1.1-beta3 2013-09-03
+-----------------------------------------
+Changes since 1.1-beta2:
+  -Set OpenLayers module to use externally hosted JS library
+  -Updated .make file to match module versions on Stanford Sites as of August 2013
+
+Stanford Profile 7.x-1.1-beta2 2013-06-27
+-----------------------------------------
+Changes since 1.1-beta1:
+  -Enabling additional modules at install time
+  -Disable poormanscron functionality
+  -Additional modules and libraries
+  -Updated various module, theme, and library versions
+  -Changed default themes for individuals, groups, and departments
+
+Stanford Profile 7.x-1.1-beta1 2013-01-15
+-----------------------------------------
+Changes since 1.0-beta4:
+  -removed WebAuth option from install_configure_form
+  -enable Webauth Module for Drupal (WMD) by default
+  -add requester's preferred name, preferred email, and SUNetID to install_configure_form
+  -create WMD user at install time, and assign "SUNet User" and "administrator" roles to that user
+  -hide local Drupal login block by default
+
+Stanford Profile 7.x-1.0-beta4 2012-09-17
+-----------------------------------------
+Changes since -beta3:
+  -Fixed stanford_sites_helper install error
+  -Added Stanford favicon for Seven admin theme
+  -Updated pathauto default settings
+
+Stanford Profile 7.x-1.0-beta3 2012-07-16
+-----------------------------------------
+Changes since -beta2:
+  -Changed method by which the profile checks for the
+    hosting environment
+
+Stanford Profile 7.x-1.0-beta2 2012-07-12
+-----------------------------------------
+Changes since -beta1
+  -Added a number of new modules
+  -Updated contrib and Drupal core versions
+  -Updates to modules enabled at install time
+  -Set default error reporting to go to log only
+  -Removed function to adjust authenticated user role rid
+  -Set path for private file uploads
+
+Stanford Profile 7.x-1.0-beta1 2012-06-18
+-----------------------------------------
+Changes since -alpha11
+  -Added private upload directory, enabling the use of private files
+  -Fixed https://github.com/SU-SWS/Stanford-Drupal-Profile/issues/28
+
+Stanford Profile 7.x-1.0-alpha11 2012-06-14
+------------------------------------------
+Changes since -alpha10
+  -Fixed bug where temp directory was not being created at install time
+
+Stanford Profile 7.x-1.0-alpha10 2012-05-09
+------------------------------------------
+Changes since -alpha9
+  -fixed code to check if installation is being run on Stanford Sites hosting
+    -drush sets $_SERVER['SERVER_NAME'] to "", which is why it was failing
+  -added biblio and content_access to .make file
+
+Stanford Profile 7.x-1.0-alpha9 2012-04-20
+------------------------------------------
+Changes since -alpha8
+  -fixed code to check if installation is being run on Stanford Sites hosting
+  -updated .make file with additional modules
+  -added CKEditor library
+  -configured WYSIWYG CKEditor profile for Filtered HTML text format
+  -updated allowed HTML tags for Filtered HTML text format
+
+Stanford Profile 7.x-1.0-alpha8 2012-04-13
+------------------------------------------
+Changes since -alpha7:
+  -removed "Powered by Drupal" block
+  -changed allowed tags for Filtered HTML input format
+  -added hidden fields to install_configure form for drush site-install
+    to be able to pass information from the site request form to Drupal
+  -moved several tasks into the .profile file so that they could run later in
+    the install process
+
+Stanford Profile 7.x-1.0-alpha7 2012-04-06
+------------------------------------------
+-Fixed implementation of module_disable().
+
+Stanford Profile 7.x-1.0-alpha6 2012-04-05
+-----------------------------------------
+- Default modules
+- Enabled stanford_sites_helper
+- Disabled Semantic Views (fixes #16)
+
+Stanford Profile 7.x-1.0-alpha5 2012-03-28
+------------------------------------------
+No functional changes
+  nominal release to reflect change in github
+  repository location
+
+Stanford Profile 7.x-1.0-alpha4 2012-03-15
+------------------------------------------
+Changes since -alpha1:
+-Disable user-configurable time zones
+-Only allow administrators to create accounts
+-Added Stanford Modern theme
+
+Stanford Profile 7.x-1.0-alpha1 2012-03-15
+------------------------------------------
+Stable but feature-incomplete release
+Installs cleanly on local development environment
+
