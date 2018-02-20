@@ -1,5 +1,6 @@
 @import url(https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,300,600,400italic,300italic);
 @import url(https://fonts.googleapis.com/css?family=Crimson+Text:600,700,400italic,400);
+/* line 1, ../sass/fonts/_serif-styles.scss */
 body {
   font-family: "Source Sans Pro", sans-serif;
   font-weight: 300;
@@ -7,18 +8,27 @@ body {
   line-height: 1.4em;
 }
 
+/* line 7, ../sass/fonts/_serif-styles.scss */
 h1, h2, h3, h4, h5, h6 {
   font-family: "Crimson Text", serif;
   font-weight: 600;
 }
 
+/* line 11, ../sass/fonts/_serif-styles.scss */
 h1 {
   font-weight: 400;
   letter-spacing: -0.04em;
   font-size: 3em;
   line-height: 1.3em;
 }
+@media (max-width: 480px) {
+  /* line 11, ../sass/fonts/_serif-styles.scss */
+  h1 {
+    font-size: 2.5em;
+  }
+}
 
+/* line 20, ../sass/fonts/_serif-styles.scss */
 h2 {
   font-size: 1.9em;
   letter-spacing: -0.02em;
@@ -26,6 +36,7 @@ h2 {
   margin: 0.7em 0 0.5em;
 }
 
+/* line 26, ../sass/fonts/_serif-styles.scss */
 h3 {
   font-size: 1.4em;
   font-weight: 600;
@@ -33,6 +44,7 @@ h3 {
   margin: 0.9em 0 0.5em;
 }
 
+/* line 32, ../sass/fonts/_serif-styles.scss */
 h4 {
   font-size: 1.2em;
   font-weight: 600;
@@ -40,43 +52,78 @@ h4 {
   margin: 1em 0 .5em;
 }
 
-.site-name {
+/* line 46, ../sass/fonts/_serif-styles.scss */
+.site-name,
+#site-title-first-line,
+#site-title-second-line {
   font-family: "Crimson Text", serif;
   font-size: 3.5em;
 }
 
-.site-name a, .site-name a:hover {
+/* line 52, ../sass/fonts/_serif-styles.scss */
+.site-name a, .site-name a:hover,
+#site-title-first-line a, #site-title-first-line a:hover,
+#site-title-second-line a, #site-title-second-line a:hover {
   font-weight: 300;
   letter-spacing: -0.04em;
 }
 
+/* line 56, ../sass/fonts/_serif-styles.scss */
 #site-slogan {
   font-family: "Crimson Text", serif;
   font-size: 1.5em;
   font-weight: 400;
 }
 
+/* line 61, ../sass/fonts/_serif-styles.scss */
 .summary {
   font-size: 1.3em;
 }
 
+/* line 64, ../sass/fonts/_serif-styles.scss */
 .descriptor {
   font-size: .8em;
 }
 
+/* line 67, ../sass/fonts/_serif-styles.scss */
 .credits {
   font-size: .8em;
   letter-spacing: 0.02em;
 }
 
+/* line 71, ../sass/fonts/_serif-styles.scss */
 .caption {
   font-size: .8em;
 }
 
+/* line 76, ../sass/fonts/_serif-styles.scss */
+.big-text {
+  font-family: "Crimson Text", serif;
+  letter-spacing: -0.01em;
+}
+
+/* line 80, ../sass/fonts/_serif-styles.scss */
+.infotext {
+  font-family: "Crimson Text", serif;
+  letter-spacing: -0.02em;
+}
+
+/* line 84, ../sass/fonts/_serif-styles.scss */
+.banner-overlay p {
+  font-size: 16px;
+}
+
+/* line 87, ../sass/fonts/_serif-styles.scss */
 a {
   font-weight: 600;
 }
 
+/* line 92, ../sass/fonts/_serif-styles.scss */
+.normal-link h2, .normal-link h3, h2.normal-link, h3.normal-link {
+  font-size: 16px;
+}
+
+/* line 95, ../sass/fonts/_serif-styles.scss */
 a.btn, .btn a {
   font-family: "Crimson Text", serif;
   font-weight: 400;
@@ -84,6 +131,7 @@ a.btn, .btn a {
   font-size: 1.1em;
 }
 
+/* line 103, ../sass/fonts/_serif-styles.scss */
 a.more-link, .more-link a {
   font-family: "Crimson Text", serif;
   font-weight: 600;
@@ -91,15 +139,18 @@ a.more-link, .more-link a {
   letter-spacing: -0.02em;
 }
 
+/* line 121, ../sass/fonts/_serif-styles.scss */
 .block.well h2 {
   font-size: 1.4em;
   font-weight: 600;
 }
 
+/* line 125, ../sass/fonts/_serif-styles.scss */
 #footer .block {
   font-size: 14px;
 }
 
+/* line 128, ../sass/fonts/_serif-styles.scss */
 .navbar .nav > li > a {
   font-family: "Crimson Text", serif;
   font-size: 1.3em;

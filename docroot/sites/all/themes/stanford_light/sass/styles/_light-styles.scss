@@ -1,6 +1,13 @@
 a:hover, 
-a:focus {
+a:focus,
+.normal-link a:hover, .normal-link a:focus,
+.normal-link h2 a:hover, .normal-link h2 a:focus,
+.normal-link h3 a:hover, .normal-link h3 a:focus {
     text-decoration: underline;
+}
+.header-bkg a.element-invisible.element-focusable {
+    color: $clr-text;
+    background: $clr-page-bkg;
 }
 .header-bkg .navbar {
     margin-bottom: 10px;
@@ -11,23 +18,27 @@ a:focus {
 .navbar .nav > li > a {
     padding-bottom: .25em;
     border-bottom: 5px solid transparent;
+    @media (max-width: 767px) {
+        border-bottom: 0;
+        padding: 0.25em 0.5em;
+    }
 }
 .navbar .nav > .active > a, 
 .navbar .nav > .active > a:hover, 
 .navbar .nav > .active > a:focus, 
 .navbar .nav > li > a:focus, 
-.navbar .nav > li > a:hover {
+.navbar .nav > li > a:hover, 
+.navbar .nav > .active-trail > a {
     border-bottom: 5px solid $clr-menu-link-border;
+    @media (max-width: 767px) {
+        border-bottom: 0;
+    }
 }
 @media (max-width: 767px) {
     .navbar {
         margin-top:0;
     }
 }
-.main .menu li a:hover, 
-.main .menu li a:focus, 
-.main .menu li a.active, 
-.main .menu li a.active-trail, 
 .site-footer .menu li a:hover, 
 .site-footer .menu li a:focus, 
 .site-footer .menu li a.active, 
@@ -36,4 +47,15 @@ a:focus {
 }
 .well .caption {
     color: darken( $clr-icons, 15% );
+}
+.header-bkg.header-bkg-style-frontbleed .site-main-menu {
+    .navbar .nav > .active > a, 
+    .navbar .nav > .active > a:hover, 
+    .navbar .nav > .active > a:focus, 
+    .navbar .nav > li > a:focus, 
+    .navbar .nav > li > a:hover,
+    .navbar .nav > .active-trail > a {
+        color: $clr-menu-text-hvr;
+        background: $clr-menu-link-border;
+    }
 }

@@ -16,7 +16,7 @@
     <?php endif; ?>
     <!-- /#admin-shortcuts -->
     <?php if ($logo || $site_name || $site_slogan || ($page[ 'header']) || ($page[ 'search_box']) || ($page[ 'site_login'])): ?>
-    <div id="header" class="clearfix header" role="banner" <?php if ($header_bkg): ?>style="background-image: url('<?php print file_create_url(theme_get_setting('header_bkg_path')); ?>');"<?php endif; ?>>
+    <div id="header" class="clearfix header" role="banner" <?php if ($header_bkg): ?>style="background-image: url('<?php print file_create_url($header_bkg_path); ?>');"<?php endif; ?>>
         <div class="container">
             <div class="row">
                 <div class="header-section <?php if (($page['search_box']) || ($page['site_login'])): print 'span8'; else: print 'span12'; endif; ?>">

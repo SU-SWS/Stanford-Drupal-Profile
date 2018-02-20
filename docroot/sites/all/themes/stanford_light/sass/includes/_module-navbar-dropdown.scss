@@ -3,6 +3,11 @@
     background: $clr-light;
     border: 0;
 }
+.dropdown-menu > li > a {
+    white-space: inherit;
+    line-height: 1.4em;
+    padding: 0.5em 1em;
+}
 .navbar .nav > li > .dropdown-menu:before {
     display: none;
 }

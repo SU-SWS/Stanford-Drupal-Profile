@@ -1,6 +1,11 @@
 Stanford MetaTag NoBots x.x-x.x xxxx-xx-xx
 ------------------------------------------
 
+
+Stanford MetaTag NoBots 7.x-3.1+4-dev 2016-06-08
+-------------------------------------------------
+- Update Readme
+
 Stanford MetaTag NoBots 7.x-3.1 2015-06-12
 -------------------------------------------------
 - Remove context condition useragent and replace with sitewide

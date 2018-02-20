@@ -94,7 +94,8 @@
     },
     "merge-plugin": {
       "require": [
-        "docroot/profiles/stanford_sites_jumpstart/composer.json"
+        "docroot/profiles/stanford_sites_jumpstart/composer.json",
+        "docroot/profiles/Stanford-Drupal-Profile/composer.json"
       ],
       "merge-extra": true,
       "merge-extra-deep": true,

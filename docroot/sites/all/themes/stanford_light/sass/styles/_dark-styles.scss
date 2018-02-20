@@ -1,3 +1,26 @@
+/* Stanford Framework Specific */
+#header #logo {
+    border-right: 1px solid $clr-header-text;
+}
+
+#site-name a, 
+#site-name a:hover, 
+#site-name a, 
+#site-name a:focus, 
+#site-title-first-line a, 
+#site-title-first-line a:hover, 
+#site-title-first-line a:focus, 
+#site-title-second-line a, 
+#site-title-second-line a:hover, 
+#site-title-second-line a:focus {
+    color: $clr-header-text;
+}
+
+/* General */
+.header-bkg a.element-invisible.element-focusable {
+    color: $clr-text;
+    background: $clr-page-bkg;
+}
 .header-bkg .navbar {
     margin-bottom: 10px;
 }
@@ -12,7 +35,8 @@
 .navbar .nav > .active > a:hover, 
 .navbar .nav > .active > a:focus, 
 .navbar .nav > li > a:focus, 
-.navbar .nav > li > a:hover {
+.navbar .nav > li > a:hover,
+.navbar .nav > .active-trail > a {
     border-bottom: 5px solid $clr-menu-link-border;
 }
 a.btn, 
@@ -46,11 +70,77 @@ a.btn:focus,
 }
 .dropdown-menu {
     background: $clr-text;
+    border-color: $clr-text;
 }
 .dropdown-menu > li > a:hover, 
 .dropdown-menu > li > a:focus, 
 .dropdown-submenu:hover > a, 
-.dropdown-submenu:focus > a {
+.dropdown-submenu:focus > a,
+.dropdown-menu > .active > a, .dropdown-menu > .active > a:hover, .dropdown-menu > .active > a:focus {
     color: $clr-text;
     background: $clr-header-bkg;
+}
+.header-bkg.header-bkg-style-frontbleed .site-main-menu {
+    .navbar .nav > .active > a, 
+    .navbar .nav > .active > a:hover, 
+    .navbar .nav > .active > a:focus, 
+    .navbar .nav > li > a:focus, 
+    .navbar .nav > li > a:hover,
+    .navbar .nav > .active-trail > a {
+        color: $clr-header-bkg;
+        background: $clr-menu-text-hvr;
+    }
+}
+th, td {
+    border-color: $clr-text;
+}
+th {
+    background: $clr-text;
+    color: $clr-well-bkg;
+}
+td.active {
+    background: rgba($clr-text, 0.2);
+}
+th a {
+    color: shade($clr-link, 30%);
+}
+th a:hover, th a:focus {
+    color: $clr-page-bkg;
+    text-decoration: underline;
+}
+.date-stacked {
+    background: tint($clr-well-bkg, 20%);
+    .date-month, .date-day {
+        color: $clr-text;
+    }
+}
+.calendar-calendar tr td.today a, 
+.calendar-calendar tr td.today a:hover,
+.calendar-calendar tr td.has-events a:hover {
+    background: $clr-text; 
+    color: $clr-page-bkg;
+}
+.calendar-calendar .mini td.has-events {
+    background: $clr-link;
+}
+.calendar-calendar td.mini a {
+    color: $clr-page-bkg;
+}
+.view-stanford-events-calendar .date-nav-wrapper .date-nav .pager li.date-prev a, .view-stanford-events-calendar .date-nav-wrapper .date-nav .pager li.date-next a {
+    background: tint($clr-page-bkg, 20%); 
+}
+#block-search-form input.search-query {
+    color: $clr-page-bkg; 
+}
+.front.header-bkg.header-bkg-style-frontbleed.header-bkg-text-light .main {
+    color: $clr-text; /* text color */
+}
+.front.header-bkg.header-bkg-style-frontbleed.header-bkg-text-light .main a {
+    color: $clr-link; /* link color */
+}
+.sidebar .block-menu .content > .menu > li > a,
+.sidebar .block-menu-block .menu-block-wrapper > .menu > li > a,
+.sidebar .block-menu .content > .menu > li.last > a,
+.sidebar .block-menu-block .menu-block-wrapper > .menu > li.last > a  {
+    border-color: shade($clr-text, 70%);
 }

@@ -1,7 +1,7 @@
 body {
     font-family: $font-header;
     font-weight: 300;
-    font-size: 15px;
+    font-size: $base-font-size;
     line-height: 1.6em;
 }
 h1, h2, h3, h4, h5, h6 {
@@ -13,6 +13,9 @@ h1 {
     letter-spacing: -0.04em;
     font-size: 2.5em;
     line-height: 1.4em;
+    @media (max-width: 480px) {
+        font-size: 2em;
+    }
 }
 h2 {
     font-size: 1.5em;
@@ -38,11 +41,15 @@ h6 {
 strong {
     font-weight: 500;
 }
-.site-name {
+.site-name, 
+#site-title-first-line, 
+#site-title-second-line {
     font-family: $font-header;
     font-size: 3.5em;
 }
-.site-name a, .site-name a:hover {
+.site-name a, .site-name a:hover,
+#site-title-first-line a, #site-title-first-line a:hover,
+#site-title-second-line a, #site-title-second-line a:hover {
     font-weight: 400;
     letter-spacing: -0.04em;
 }
@@ -69,10 +76,16 @@ strong {
 }
 .quote {
 }
+.banner-overlay p {
+    font-size: $base-font-size;
+}
 a {
     font-weight: 400;
 }
 a:hover, a:focus {
+}
+.normal-link h2, .normal-link h3, h2.normal-link, h3.normal-link {
+    font-size: $base-font-size;
 }
 a.btn, .btn a {
     font-family: $font-header;

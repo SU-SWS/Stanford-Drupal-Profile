@@ -1,7 +1,7 @@
 body {
     font-family: $font-body;
     font-weight: 300;
-    font-size: 16px;
+    font-size: $base-font-size;
     line-height: 1.4em;
 }
 h1, h2, h3, h4, h5, h6 {
@@ -13,6 +13,9 @@ h1 {
     letter-spacing: -0.04em;
     font-size: 3em;
     line-height: 1.3em;
+    @media (max-width: 480px) {
+        font-size: 2.5em;
+    }
 }
 h2 {
     font-size: 1.8em;
@@ -38,10 +41,14 @@ h6 {
 }
 strong {
 }
-.site-name {
+.site-name, 
+#site-title-first-line, 
+#site-title-second-line {
     font-size: 3.5em;
 }
-.site-name a, .site-name a:hover {
+.site-name a, .site-name a:hover,
+#site-title-first-line a, #site-title-first-line a:hover,
+#site-title-second-line a, #site-title-second-line a:hover {
     font-weight: 300;
     letter-spacing: -0.04em;
 }
@@ -64,10 +71,16 @@ strong {
 }
 .quote {
 }
+.banner-overlay p {
+    font-size: $base-font-size;
+}
 a {
     font-weight: 600;
 }
 a:hover, a:focus {
+}
+.normal-link h2, .normal-link h3, h2.normal-link, h3.normal-link {
+    font-size: $base-font-size;
 }
 a.btn, .btn a {
     font-weight: 400;
@@ -77,7 +90,7 @@ a.btn:hover, a.btn:focus, .btn a:hover, .btn a:focus {
 }
 a.more-link, .more-link a {
     font-weight: 600;
-    font-size: 16px;
+    font-size: $base-font-size;
 }
 a.more-link:hover, a.more-link:focus, .more-link a:hover, .more-link a:focus {
 }

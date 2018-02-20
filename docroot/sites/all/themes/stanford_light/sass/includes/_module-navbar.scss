@@ -24,12 +24,17 @@
         margin-top: 10px;
     }
     #main-nav {
-        margin-top: 20px;
+        margin: 0.5em 0;
+        padding: 1em;
     }
     .navbar .nav > li > a {
         margin-right: 0;
-        margin-bottom: 0.5em;
+        margin-bottom: 0.25em;
         @include border-radius(0);
+        padding: 0.25em 0.5em;
+    }
+    .navbar .nav > li.last > a {
+        margin-bottom: 0;
     }
     .navbar .btn-navbar {
         background-image: none;

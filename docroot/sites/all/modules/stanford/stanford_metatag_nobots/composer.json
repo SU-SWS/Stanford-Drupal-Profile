@@ -1,0 +1,14 @@
+{
+  "name": "su-sws/stanford_metatag_nobots",
+  "description": "stanford_metatag_nobots for blocking robots",
+  "type": "drupal-custom-module",
+  "homepage": "https://github.com/SU-SWS/stanford_metatag_nobots",
+  "authors": [],
+  "license": "GPL-2.0+",
+  "minimum-stability": "dev",
+  "require": {},
+  "suggest": {
+        "drupal/nobots": "metatag_nobots is deprecated in favor of just nobots"
+    },
+  "abandoned": "drupal/nobots"
+}

@@ -16,9 +16,7 @@ class context_reaction_http_header extends context_reaction {
     
     // Get set values from the context for these hooks  
     foreach ($items_from_hook as $header => $item) {
-      if (isset($values['http_header'][$header])) {
-        $items_from_hook[$header]['#default_value'] = $values['http_header'][$header];
-      }
+      $items_from_hook[$header]['#default_value'] = $values['http_header'][$header];
     }
     
     $items['http_header'] = array_merge($items['http_header'], $items_from_hook);
