@@ -1,0 +1,6 @@
+name: Install All Block Classes
+machine_name: jse-install-blocks
+description: Install all of the block classes found in the JSE install package.
+tasks:
+  - \Stanford\JumpstartEngineering\Install\Block\JSEBlockClasses
+  - \Stanford\JumpstartEngineering\Install\Block\JSEContextualBlockClasses

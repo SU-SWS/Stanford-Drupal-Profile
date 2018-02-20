@@ -1,0 +1,9 @@
+linters:
+  SingleLinePerSelector:
+    enabled: true
+    exclude:
+      - '**.css'
+  EmptyLineBetweenBlocks:
+    enabled: true
+    exclude:
+      - '**.css'

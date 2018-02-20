@@ -1,0 +1,27 @@
+diff --git a/stanford_date_timepicker.info b/stanford_date_timepicker.info
+index a9a93dd..4a2d2aa 100755
+--- a/stanford_date_timepicker.info
++++ b/stanford_date_timepicker.info
+@@ -1,7 +1,8 @@
+ core = "7.x"
+ name = "Stanford Date Time Picker"
+-version = 7.x-1.1
+ description = "Adds a new timepicker option for datetime fields, providing a better ui for the timepicker."
+ package = "Stanford"
+ dependencies[] = libraries
+ dependencies[] = date_popup
++
++configure = admin/config/date/stanford-datetimepicker
+diff --git a/stanford_date_timepicker.module b/stanford_date_timepicker.module
+index c032869..af029b5 100755
+--- a/stanford_date_timepicker.module
++++ b/stanford_date_timepicker.module
+@@ -40,7 +40,7 @@ function stanford_date_timepicker_permission() {
+  * Implements hook_menu().
+  */
+ function stanford_date_timepicker_menu() {
+-  $items['admin/config/stanford-datetimepicker'] = array(
++  $items['admin/config/date/stanford-datetimepicker'] = array(
+     'title' => 'Stanford Date Timepicker Configuration',
+     'page callback' => 'drupal_get_form',
+     'page arguments' => array('stanford_date_timepicker_config_form'),

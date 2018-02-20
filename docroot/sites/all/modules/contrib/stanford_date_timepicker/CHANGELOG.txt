@@ -1,0 +1,22 @@
+Stanford Date Timepicker 7.x-xx-xxxx xxxx-xx-xx
+------------------------------------------------
+
+7.x-1.1 | 2014-11-27
+------------------------------------------------
+- Avoiding version soup with Drupal/Github
+
+7.x-1.0 | 2014-11-27
+------------------------------------------------
+- Update stanford_date_timepicker.make to set library version
+- Update and rename README.txt to README.md
+- Field ajax doesn't work on date changing | Mirrors Date element_process function
+- 2293637 | Undefined index: func in stanford_date_timepicker_js_alter
+
+7.x-1.0-alpha2 | 2014-05-16
+------------------------------------------------
+- Issue #2261405 | Undefined index and vdel typo
+
+7.x-1.0-alpha1 | 2014-03-11
+------------------------------------------------
+- Initial Feature release
+- https://drupal.org/project/stanford_date_timepicker

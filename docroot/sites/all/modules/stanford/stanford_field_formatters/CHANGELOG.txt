@@ -1,0 +1,18 @@
+Stanford Field Formatters x.x-x.x, xxxx-xx-xx
+---------------------------------------------
+7.x-1.2                   2017-12-07
+------------------------------------
+- HSDO-1066 moved exteranl css to render array
+- changed filename for css file
+- moved empty option into form array instead of option
+- added "none" option if not required
+- fixed but with widget form settings
+
+
+7.x-1.1                   2017-05-11
+------------------------------------
+- Font awesome field type
+
+7.x-1.0                   2015-06-26
+------------------------------------
+- Initial release

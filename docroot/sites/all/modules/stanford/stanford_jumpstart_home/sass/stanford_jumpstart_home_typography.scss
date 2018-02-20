@@ -1,0 +1,330 @@
+body #footer,
+body #fullwidth-bottom,
+body #fullwidth-top,
+body #main,
+body #main-menu {
+  font-size: 20px;
+  line-height: 1.4em;
+}
+
+.big-text-styles {
+  .navbar .nav > li > a {
+    font-size: 20px;
+  }
+
+  h1 {
+    font-size: 2.4em;
+    font-weight: 400;
+    letter-spacing: -.5px;
+    line-height: 1.2em;
+  }
+
+  h2 {
+    font-size: 1.6em;
+    line-height: 1.2em;
+    font-weight: 600;
+  }
+
+  h3 {
+    font-size: 1.2em;
+    line-height: 1.2em;
+    margin: 1.2em 0 0.5em;
+  }
+
+  h4 {
+    font-size: 1em;
+    line-height: 1.2em;
+    margin: 1.2em 0 0.5em;
+  }
+
+  .more-link a,
+  a.more-link {
+    font-size: 20px;
+    font-weight: 400;
+  }
+
+  .normal-link h2,
+  .normal-link h3,
+  h2.normal-link,
+  h3.normal-link {
+    font-size: 20px;
+  }
+
+  li {
+    margin-bottom: 0.6em;
+  }
+
+  @media (max-width: 980px) {
+    h1 {
+      font-size: 2em;
+    }
+  }
+
+  @media (max-width: 767px) {
+    .main {
+      padding-top: 16px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    h1 {
+      font-size: 1.7em;
+    }
+
+    h2 {
+      font-size: 1.3em;
+    }
+
+    h3 {
+      font-size: 1.1em;
+    }
+
+    h4 {
+      font-weight: 400;
+    }
+  }
+
+  // MASTHEAD
+  .site-name a,
+  .site-name a:hover {
+    letter-spacing: -0.5px;
+  }
+
+  #site-name,
+  #site-title-first-line,
+  #site-title-line3,
+  #site-title-second-line {
+    letter-spacing: -.5px;
+  }
+
+  // MAIN NAVIGATION
+
+  .navbar .btn-navbar {
+    padding: 12px;
+  }
+
+  .dropdown-menu {
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+  }
+
+  @media (max-width: 767px) {
+    .navbar .btn-navbar {
+      margin-top: 6px;
+      margin-left: 6px;
+    }
+  }
+
+  // SUBNAV
+
+  .sidebar {
+    margin-top: 0.8em;
+  }
+
+  .sidebar .block-menu h2,
+  .sidebar .block-menu-block h2 {
+    font-size: 1.1em;
+    line-height: 1.3em;
+  }
+
+  .sidebar .block-menu-block a {
+    font-weight: 400;
+  }
+
+  @media (max-width: 767px) {
+    .site-sidebar-first .block,
+    .site-sidebar-second .block {
+      width: 100%;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .sidebar {
+      margin-bottom: 0;
+    }
+  }
+
+  // FOOTER
+
+  #footer #footer-content .block {
+    font-size: 0.8em;
+    line-height: 1.4em;
+  }
+
+  @media (max-width: 767px) {
+    #block-bean-jumpstart-footer-contact-block {
+      margin-bottom: 1.4em;
+    }
+
+    #block-bean-jumpstart-footer-social-media-0 {
+      margin-bottom: 1.3em;
+    }
+
+    #block-bean-optional-footer-block {
+      margin-bottom: 0.5em;
+    }
+  }
+
+  // BANNERS
+
+  .banner-overlay p {
+    font-size: 1em;
+  }
+
+  .banner-overlay h2,
+  .banner-overlay h3,
+  .banner-overlay h4 {
+    margin-bottom: 0.3em;
+  }
+
+  .span6 .banner-overlay h2 {
+    font-size: 1.4em;
+  }
+
+  .span6 .banner-overlay .more-link a,
+  .span6 .banner-overlay a.more-link,
+  .span6 .banner-overlay p {
+    font-size: 0.9em;
+  }
+
+  // CAROUSEL
+
+  .view.carousel .carousel-caption.carousel-position-left,
+  .view.carousel .carousel-caption.carousel-position-right {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .carousel .carousel-caption {
+    position: static;
+    background-color: rgba(0, 0, 0, 1);
+  }
+
+  .view.carousel .carousel-caption.carousel-light {
+    background-color: rgba(255, 255, 255, 1);
+  }
+
+  @media (max-width: 979px) and (min-width: 768px) {
+    .view.carousel .carousel-caption.carousel-dark {
+      background: #000;
+    }
+  }
+
+  @media (max-width: 630px) {
+    .view.carousel .carousel-caption.carousel-dark {
+      background: #000;
+    }
+  }
+
+  @media (max-width: 979px) and (min-width: 768px) {
+    .view.carousel .carousel-caption.carousel-dark,
+    .view.carousel .carousel-caption.carousel-dark .more-link a:focus,
+    .view.carousel .carousel-caption.carousel-dark .more-link a:hover,
+    .view.carousel .carousel-caption.carousel-dark .slide-caption a,
+    .view.carousel .carousel-caption.carousel-dark a.more-link:focus,
+    .view.carousel .carousel-caption.carousel-dark a.more-link:hover,
+    .view.carousel .carousel-caption.carousel-dark h2 a {
+      color: #fff;
+    }
+  }
+
+  @media (max-width: 630px) {
+    .view.carousel .carousel-caption.carousel-dark,
+    .view.carousel .carousel-caption.carousel-dark .more-link a:focus,
+    .view.carousel .carousel-caption.carousel-dark .more-link a:hover,
+    .view.carousel .carousel-caption.carousel-dark .slide-caption a,
+    .view.carousel .carousel-caption.carousel-dark a.more-link:focus,
+    .view.carousel .carousel-caption.carousel-dark a.more-link:hover,
+    .view.carousel .carousel-caption.carousel-dark h2 a {
+      color: #fff;
+    }
+  }
+
+  // WELL BLOCKS
+
+  .well .more-link a,
+  .well a.more-link {
+    font-size: 20px;
+    font-weight: 400;
+  }
+
+  .well .descriptor {
+    font-size: 0.8em;
+    margin: 0.2em 0 0;
+  }
+
+  .well h2 {
+    font-size: 1.5em;
+  }
+
+  // VIEWS AND POSTCARDS
+
+  .view .postcard-left,
+  .view .postcard-left-wrap,
+  .view .postcard-right,
+  .view .postcard-right-wrap {
+    margin-bottom: 0;
+  }
+
+  .view .postcard-left h3,
+  .view .postcard-left-wrap h3,
+  .view .postcard-right h3,
+  .view .postcard-right h3 {
+    margin-bottom: 0.8em;
+  }
+
+  .well .view .postcard-left h3,
+  .well .view .postcard-left-wrap h3,
+  .well .view .postcard-right h3,
+  .well .view .postcard-right-wrap h3 {
+    margin: 0.2em 0 0.3em;
+  }
+
+  .views-row-lines .views-row {
+    margin-bottom: 1.5em;
+    padding-bottom: 1.3em;
+    padding-right: 1.3em;
+  }
+
+  .views-row-lines .views-row-1 {
+    padding-top: 1.5em;
+    padding-right: 1.3em;
+  }
+
+  // MISC CLASSES
+
+  .descriptor {
+    letter-spacing: 0.2px;
+    text-transform: none;
+    line-height: 1.2em;
+    font-size: 1em;
+    margin-bottom: 8px;
+  }
+
+  .descriptor a {
+    font-weight: 400;
+  }
+
+  .caption p {
+    line-height: 1.2em;
+    margin-bottom: 0;
+  }
+
+  .credits {
+    margin-top: 0;
+  }
+
+  .big-text {
+    letter-spacing: 0;
+    font-size: 2.3em;
+  }
+
+  .summary {
+    font-size: 1.5em;
+  }
+
+  @media (max-width: 767px) {
+    .summary {
+      font-size: 1.2em;
+    }
+  }
+}

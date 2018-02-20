@@ -1,0 +1,10 @@
+name = Stanford Sites Jumpstart
+description = Provides custom functionality for the Stanford Sites Jumpstart service
+core = 7.x
+package = Stanford Sites Jumpstart
+version = 7.x-5.x
+project = stanford_jumpstart
+project status url = https://github.com/SU-SWS/stanford_jumpstart
+;Moving css to preprocess_html hook to control load order
+;stylesheets[all][] = css/jumpstart.css
+stylesheets[all][] = css/jumpstart-theme-fixes.css

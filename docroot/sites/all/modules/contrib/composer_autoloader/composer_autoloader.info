@@ -1,0 +1,11 @@
+name = Composer Autoloader
+description = Load the Composer Autoloader.
+core = 7.x
+package = Composer
+
+; Information added by Drupal.org packaging script on 2017-07-01
+version = "7.x-1.2"
+core = "7.x"
+project = "composer_autoloader"
+datestamp = "1498877946"
+

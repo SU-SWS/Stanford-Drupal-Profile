@@ -1,0 +1,9 @@
+name: JSE Install Menu
+machine_name: jse-install-menu
+description: Install JSE specific menu items.
+tasks:
+  - \Stanford\JumpstartEngineering\Install\Menu\JSEAdminShortcutMenuItems
+  - \Stanford\JumpstartEngineering\Install\Menu\JSEMenuItems
+  - \Stanford\JumpstartEngineering\Install\Menu\JSEMenuPositionRules
+  - \Stanford\JumpstartEngineering\Install\Menu\JSEMenuRedirects
+  - \Stanford\JumpstartEngineering\Install\Menu\JSEPrivateMenuItems

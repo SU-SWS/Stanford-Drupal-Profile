@@ -1,0 +1,8 @@
+name: Yummy Recipe
+machine_name: yummy_recipe
+description: Fires off a bunch of tasks in a row
+tasks:
+  - \Drupal\Standard\Install\TaskOne
+  - \Stanford\Jumpstart\Install\TaskTwo
+  - \Stanford\Jumpstart\Install\TaskThree
+  - \Stanford\Jumpstart\Hopper\TaskFour

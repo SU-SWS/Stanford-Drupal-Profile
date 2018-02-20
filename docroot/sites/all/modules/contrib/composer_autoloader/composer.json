@@ -1,0 +1,14 @@
+{
+  "name": "drupal/composer_autoloader",
+  "type": "drupal-module",
+  "description": "Simple module to load the Composer autoload.php file.",
+  "homepage": "https://www.drupal.org/project/composer_autoloader",
+  "license": "GPL-2.0+",
+  "support": {
+      "issues": "http://drupal.org/project/issues/composer_autoloader"
+  },
+  "conflict": {
+    "drupal/composer_manager": "*",
+    "drupal/composer_autoload": "*"
+  }
+}

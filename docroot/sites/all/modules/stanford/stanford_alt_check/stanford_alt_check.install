@@ -1,0 +1,155 @@
+<?php
+
+/**
+ * @file
+ * Stanford_alt_Check install hooks.
+ */
+
+/**
+ * Implements hook_schema().
+ */
+function stanford_alt_check_schema() {
+  $schema['stanford_alt_check'] = array(
+    // Example (partial) specification for table "node".
+    'description' => 'The base table for all images.',
+    'fields' => array(
+      'uri' => array(
+        'description' => 'URL of the thumbnail image.',
+        'type' => 'varchar',
+        'length' => 1000,
+        'not null' => TRUE,
+        'default' => '',
+      ),
+      'alt_text' => array(
+        'description' => 'The current {node_revision}.vid version identifier.',
+        'type' => 'varchar',
+        'length' => 512,
+        'not null' => TRUE,
+        'default' => '',
+      ),
+      'entity_id' => array(
+        'description' => 'The entity id.',
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+      'entity_type' => array(
+        'description' => 'The type of entity.',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+        'default' => '',
+      ),
+      'entity_field' => array(
+        'description' => 'The field on which the image is in.',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+        'default' => '',
+      ),
+      'entity_field_wysiwyg' => array(
+        'description' => 'True if the field is a wysiwyg field.',
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+      'host_title' => array(
+        'description' => 'The title of the primary host entity.',
+        'type' => 'varchar',
+        'length' => 512,
+        'not null' => TRUE,
+        'default' => '',
+      ),
+      'host_type' => array(
+        'description' => 'The type of the host.',
+        'type' => 'varchar',
+        'length' => 255,
+        'default' => '',
+        'not null' => TRUE,
+      ),
+      'host_bundle' => array(
+        'description' => 'The bundle of the host.',
+        'type' => 'varchar',
+        'length' => 255,
+        'default' => '',
+        'not null' => TRUE,
+      ),
+      'host_changed' => array(
+        'description' => 'Timestamp of the last time the entity was updated',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+      'host_published' => array(
+        'description' => 'If the entity is published.',
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 1,
+      ),
+      'image_meta' => array(
+        'description' => 'Meta data about the image: delta, position etc.',
+        'type' => 'blob',
+      ),
+    ),
+  );
+  return $schema;
+}
+
+/**
+ * Implements hook_install().
+ */
+function stanford_alt_check_install() {
+  $queue = DrupalQueue::get('stanford_alt_check');
+  foreach (entity_get_info() as $type => $definition) {
+    if ($definition['fieldable']) {
+
+      // Use EFQ so we dont have to use entity_load() and run out of memory.
+      $field_query = new EntityFieldQuery();
+      $field_query->entityCondition('entity_type', $type);
+      $results = $field_query->execute();
+      if ($results) {
+        foreach (array_keys($results[$type]) as $entity_id) {
+          $queue->createItem(array($entity_id, $type));
+        }
+      }
+    }
+  }
+}
+
+/**
+ * Create the table.
+ */
+function stanford_alt_check_update_7101() {
+  if (!db_table_exists('stanford_alt_check')) {
+    $schema = stanford_alt_check_schema();
+    db_create_table('stanford_alt_check', $schema['stanford_alt_check']);
+
+    stanford_alt_check_install();
+  }
+}
+
+/**
+ * Adds host_type and host_bundle to table.
+ */
+function stanford_alt_check_update_7102() {
+  if (!db_field_exists('stanford_alt_check', 'host_type')) {
+    $type = array(
+      'type' => 'varchar',
+      'length' => 255,
+      'not null' => TRUE,
+      'default' => '',
+    );
+    db_add_field('stanford_alt_check', 'host_type', $type);
+  }
+  if (!db_field_exists('stanford_alt_check', 'host_bundle')) {
+    $bundle = array(
+      'type' => 'varchar',
+      'length' => 255,
+      'not null' => TRUE,
+      'default' => '',
+    );
+    db_add_field('stanford_alt_check', 'host_bundle', $bundle);
+  }
+  stanford_alt_check_install();
+}

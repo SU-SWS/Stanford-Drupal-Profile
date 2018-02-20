@@ -1,0 +1,1107 @@
+/* General */
+/* line 3, ../../sass/stanford_light/styles/_styles.scss */
+body {
+  color: #3f3c30;
+  background: #fbfbf9;
+}
+
+/* line 8, ../../sass/stanford_light/styles/_styles.scss */
+.header {
+  background: #d5d0c0;
+}
+
+/* line 12, ../../sass/stanford_light/styles/_styles.scss */
+.site-main-menu {
+  background: #d5d0c0;
+  border-bottom: 1px solid #d5d0c0;
+}
+
+/* line 17, ../../sass/stanford_light/styles/_styles.scss */
+.main {
+  background: #fbfbf9;
+}
+
+/* line 21, ../../sass/stanford_light/styles/_styles.scss */
+.bodybg .main {
+  background: transparent;
+}
+
+/* line 25, ../../sass/stanford_light/styles/_styles.scss */
+.site-footer {
+  background: #5e3032;
+}
+
+/* line 29, ../../sass/stanford_light/styles/_styles.scss */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  color: #3f3c30;
+}
+
+/* line 38, ../../sass/stanford_light/styles/_styles.scss */
+h1 {
+  color: #3f3c30;
+}
+
+/* line 42, ../../sass/stanford_light/styles/_styles.scss */
+h2,
+h2 a,
+h2 a:hover,
+h2 a:focus {
+  color: #3f3c30;
+}
+
+/* line 49, ../../sass/stanford_light/styles/_styles.scss */
+h2 a:hover,
+h2 a:focus {
+  text-decoration: underline;
+}
+
+/* Site Title and Slogan */
+/* line 57, ../../sass/stanford_light/styles/_styles.scss */
+#header #logo {
+  border-right: 1px solid #3f3c30;
+}
+
+@media (max-width: 480px) {
+  /* line 62, ../../sass/stanford_light/styles/_styles.scss */
+  #header.organization #logo.logo-mobile #site-title-line4 a {
+    border-bottom: 1px solid #3f3c30;
+  }
+}
+/* line 67, ../../sass/stanford_light/styles/_styles.scss */
+#site-name a,
+#site-name a:hover,
+#site-name a:focus,
+#site-title-first-line a,
+#site-title-first-line a:hover,
+#site-title-first-line a:focus,
+#site-title-second-line a,
+#site-title-second-line a:hover,
+#site-title-second-line a:focus,
+#site-title-line3 a,
+#site-title-line3 a:hover,
+#site-title-line3 a:focus,
+#site-title-line4 a,
+#site-title-line4 a:hover,
+#site-title-line4 a:focus,
+#site-title-line5 a,
+#site-title-line5 a:hover,
+#site-title-line5 a:focus {
+  color: #3f3c30;
+}
+
+/* line 88, ../../sass/stanford_light/styles/_styles.scss */
+#site-name,
+#site-title-first-line,
+#site-title-second-line,
+#site-title-line3,
+#site-title-line4,
+#site-title-line5 {
+  color: #3f3c30;
+}
+
+/* line 97, ../../sass/stanford_light/styles/_styles.scss */
+#site-slogan {
+  color: #3f3c30;
+}
+
+/* Content */
+/* line 106, ../../sass/stanford_light/styles/_styles.scss */
+.descriptor {
+  color: #3f3c30;
+}
+
+/* line 110, ../../sass/stanford_light/styles/_styles.scss */
+.descriptor-btn a,
+a.descriptor-btn {
+  color: #3f3c30;
+  background-color: #d5d0c0;
+}
+
+/* line 116, ../../sass/stanford_light/styles/_styles.scss */
+.descriptor-btn a:hover,
+a.descriptor-btn:hover,
+.descriptor-btn a:focus,
+a.descriptor-btn:focus {
+  background-color: #3f3c30;
+  color: #fbfbf9;
+  text-decoration: none;
+}
+
+/* line 127, ../../sass/stanford_light/styles/_styles.scss */
+.caption {
+  color: #8a887d;
+}
+
+/* line 133, ../../sass/stanford_light/styles/_styles.scss */
+a,
+.normal-link a {
+  color: #8f7029;
+}
+
+/* line 138, ../../sass/stanford_light/styles/_styles.scss */
+a:hover,
+a:focus,
+.normal-link a:hover,
+.normal-link a:focus {
+  color: #3f3c30;
+}
+
+/* line 145, ../../sass/stanford_light/styles/_styles.scss */
+a.btn,
+.btn a,
+.site-footer a.btn,
+.site-footer .btn a {
+  background: #5e3032;
+  color: #fbfbf9;
+}
+/* line 152, ../../sass/stanford_light/styles/_styles.scss */
+a.btn:hover, a.btn:focus,
+.btn a:hover,
+.btn a:focus,
+.site-footer a.btn:hover,
+.site-footer a.btn:focus,
+.site-footer .btn a:hover,
+.site-footer .btn a:focus {
+  color: #fbfbf9;
+}
+
+/* line 158, ../../sass/stanford_light/styles/_styles.scss */
+a.btn:hover,
+a.btn:focus,
+.btn a:hover,
+.btn a:focus {
+  background: #3f3c30;
+  color: #fbfbf9;
+}
+
+/* line 166, ../../sass/stanford_light/styles/_styles.scss */
+a.more-link,
+.more-link a {
+  color: #8f7029;
+}
+
+/* line 171, ../../sass/stanford_light/styles/_styles.scss */
+a.more-link:hover,
+a.more-link:focus,
+.more-link a:hover,
+.more-link a:focus {
+  color: #3f3c30;
+}
+
+/* line 181, ../../sass/stanford_light/styles/_styles.scss */
+a.edit-link:hover,
+a.edit-link:focus,
+.edit-link a:hover,
+.edit-link a:focus {
+  background: #3f3c30;
+  color: #fbfbf9;
+  text-decoration: none;
+}
+
+/* line 190, ../../sass/stanford_light/styles/_styles.scss */
+th,
+td {
+  border: 1px solid #d5d0c0;
+}
+
+/* line 195, ../../sass/stanford_light/styles/_styles.scss */
+th {
+  background: #d5d0c0;
+}
+
+/* line 199, ../../sass/stanford_light/styles/_styles.scss */
+td.active {
+  background: rgba(213, 208, 192, 0.5);
+}
+
+/* line 203, ../../sass/stanford_light/styles/_styles.scss */
+.main .border-simple-nowidth img,
+.main .border-simple img {
+  background-color: #d5d0c0;
+}
+
+/* line 208, ../../sass/stanford_light/styles/_styles.scss */
+.main .well .border-simple-nowidth img,
+.main .well .border-simple img {
+  background-color: #eae8e0;
+}
+
+/* line 213, ../../sass/stanford_light/styles/_styles.scss */
+.main .border-underline img,
+.main .border-hairline img,
+.main .border-bottom img {
+  border-color: #d5d0c0;
+}
+
+/* line 219, ../../sass/stanford_light/styles/_styles.scss */
+.well {
+  background: #d5d0c0;
+}
+
+/* line 225, ../../sass/stanford_light/styles/_styles.scss */
+.tile-link {
+  margin-bottom: 1em;
+  background: #5e3032;
+}
+
+/* line 230, ../../sass/stanford_light/styles/_styles.scss */
+.tile-link h2 {
+  margin: 0;
+}
+
+/* line 234, ../../sass/stanford_light/styles/_styles.scss */
+.tile-link h2 a {
+  display: block;
+  padding: 0.5em 0.75em;
+  color: #fbfbf9;
+}
+
+/* line 240, ../../sass/stanford_light/styles/_styles.scss */
+.tile-link h2 a:hover,
+.tile-link h2 a:focus {
+  color: #fbfbf9;
+  text-decoration: none;
+}
+
+/* line 246, ../../sass/stanford_light/styles/_styles.scss */
+.tile-link:hover,
+.tile-link:focus {
+  cursor: pointer;
+  opacity: 0.8;
+}
+
+/* line 252, ../../sass/stanford_light/styles/_styles.scss */
+.content-body .tile-link .field.field-name-tile-display-image,
+.content-body .tile-link .field.field-name-tile-display-title,
+.content-body .tile-link .field.field-name-field-s-lp-item-image {
+  margin-bottom: 0;
+}
+
+/* line 258, ../../sass/stanford_light/styles/_styles.scss */
+.banner-overlay > div {
+  background: #d5d0c0;
+  background: rgba(213, 208, 192, 0.8);
+}
+
+/* line 263, ../../sass/stanford_light/styles/_styles.scss */
+.banner-overlay h2,
+.banner-overlay p,
+.banner-overlay-caption {
+  color: #3f3c30;
+}
+
+/* Start menu styles ---------- */
+/* menu links by default */
+/* line 275, ../../sass/stanford_light/styles/_styles.scss */
+.navbar .nav > li > a {
+  color: #3f3c30;
+  background: transparent;
+}
+
+/* menu links in active states */
+/* line 283, ../../sass/stanford_light/styles/_styles.scss */
+.navbar .nav > li > a:hover,
+.navbar .nav > li > a:focus,
+.navbar .nav > .active > a,
+.navbar .nav > .active > a:hover,
+.navbar .nav > .active > a:focus,
+.navbar .nav > .active-trail > a,
+.navbar .nav > .active-trail > a:hover,
+.navbar .nav > .active-trail > a:focus {
+  color: #5e3032;
+  background: transparent;
+}
+@media (max-width: 767px) {
+  /* line 283, ../../sass/stanford_light/styles/_styles.scss */
+  .navbar .nav > li > a:hover,
+  .navbar .nav > li > a:focus,
+  .navbar .nav > .active > a,
+  .navbar .nav > .active > a:hover,
+  .navbar .nav > .active > a:focus,
+  .navbar .nav > .active-trail > a,
+  .navbar .nav > .active-trail > a:hover,
+  .navbar .nav > .active-trail > a:focus {
+    color: #d5d0c0;
+    background: #5e3032;
+  }
+}
+
+/* dropdown arrow color by default */
+/* line 302, ../../sass/stanford_light/styles/_styles.scss */
+.navbar .nav li.dropdown > .dropdown-toggle .caret {
+  border-bottom-color: #3f3c30;
+  border-top-color: #3f3c30;
+}
+
+/* overriding Bootstrap dropdown arrow default state */
+/* line 310, ../../sass/stanford_light/styles/_styles.scss */
+.navbar .nav li.dropdown > a:hover .caret,
+.navbar .nav li.dropdown > a:focus .caret {
+  border-bottom-color: #5e3032;
+  border-top-color: #5e3032;
+}
+@media (max-width: 767px) {
+  /* line 310, ../../sass/stanford_light/styles/_styles.scss */
+  .navbar .nav li.dropdown > a:hover .caret,
+  .navbar .nav li.dropdown > a:focus .caret {
+    border-bottom-color: #d5d0c0;
+    border-top-color: #d5d0c0;
+  }
+}
+
+/* dropdown menu items when open */
+/* line 323, ../../sass/stanford_light/styles/_styles.scss */
+.navbar .nav li.dropdown.open > .dropdown-toggle,
+.navbar .nav li.dropdown.active > .dropdown-toggle,
+.navbar .nav li.dropdown.open.active > .dropdown-toggle {
+  color: #3f3c30;
+  background: transparent;
+  /* color of the dropdown arrow */
+}
+@media (max-width: 767px) {
+  /* line 323, ../../sass/stanford_light/styles/_styles.scss */
+  .navbar .nav li.dropdown.open > .dropdown-toggle,
+  .navbar .nav li.dropdown.active > .dropdown-toggle,
+  .navbar .nav li.dropdown.open.active > .dropdown-toggle {
+    color: #d5d0c0;
+    background: #5e3032;
+  }
+}
+/* line 333, ../../sass/stanford_light/styles/_styles.scss */
+.navbar .nav li.dropdown.open > .dropdown-toggle .caret,
+.navbar .nav li.dropdown.active > .dropdown-toggle .caret,
+.navbar .nav li.dropdown.open.active > .dropdown-toggle .caret {
+  border-bottom-color: #3f3c30;
+  border-top-color: #3f3c30;
+}
+@media (max-width: 767px) {
+  /* line 333, ../../sass/stanford_light/styles/_styles.scss */
+  .navbar .nav li.dropdown.open > .dropdown-toggle .caret,
+  .navbar .nav li.dropdown.active > .dropdown-toggle .caret,
+  .navbar .nav li.dropdown.open.active > .dropdown-toggle .caret {
+    border-bottom-color: #d5d0c0;
+    border-top-color: #d5d0c0;
+  }
+}
+
+/* dropdown menu items when open and active */
+/* line 346, ../../sass/stanford_light/styles/_styles.scss */
+.navbar .nav li.dropdown.open > .dropdown-toggle:hover,
+.navbar .nav li.dropdown.open > .dropdown-toggle:focus,
+.navbar .nav li.dropdown.active > .dropdown-toggle:hover,
+.navbar .nav li.dropdown.active > .dropdown-toggle:focus,
+.navbar .nav li.dropdown.open.active > .dropdown-toggle:hover,
+.navbar .nav li.dropdown.open.active > .dropdown-toggle:focus,
+.navbar .nav li.active-trail.dropdown > .dropdown-toggle,
+.navbar .nav li.active-trail.dropdown > .dropdown-toggle:hover,
+.navbar .nav li.active-trail.dropdown > .dropdown-toggle:focus {
+  color: #5e3032;
+  background: transparent;
+  /* color of the dropdown arrow on hover */
+}
+@media (max-width: 767px) {
+  /* line 346, ../../sass/stanford_light/styles/_styles.scss */
+  .navbar .nav li.dropdown.open > .dropdown-toggle:hover,
+  .navbar .nav li.dropdown.open > .dropdown-toggle:focus,
+  .navbar .nav li.dropdown.active > .dropdown-toggle:hover,
+  .navbar .nav li.dropdown.active > .dropdown-toggle:focus,
+  .navbar .nav li.dropdown.open.active > .dropdown-toggle:hover,
+  .navbar .nav li.dropdown.open.active > .dropdown-toggle:focus,
+  .navbar .nav li.active-trail.dropdown > .dropdown-toggle,
+  .navbar .nav li.active-trail.dropdown > .dropdown-toggle:hover,
+  .navbar .nav li.active-trail.dropdown > .dropdown-toggle:focus {
+    color: #d5d0c0;
+    background: #5e3032;
+  }
+}
+/* line 362, ../../sass/stanford_light/styles/_styles.scss */
+.navbar .nav li.dropdown.open > .dropdown-toggle:hover .caret,
+.navbar .nav li.dropdown.open > .dropdown-toggle:focus .caret,
+.navbar .nav li.dropdown.active > .dropdown-toggle:hover .caret,
+.navbar .nav li.dropdown.active > .dropdown-toggle:focus .caret,
+.navbar .nav li.dropdown.open.active > .dropdown-toggle:hover .caret,
+.navbar .nav li.dropdown.open.active > .dropdown-toggle:focus .caret,
+.navbar .nav li.active-trail.dropdown > .dropdown-toggle .caret,
+.navbar .nav li.active-trail.dropdown > .dropdown-toggle:hover .caret,
+.navbar .nav li.active-trail.dropdown > .dropdown-toggle:focus .caret {
+  border-bottom-color: #5e3032;
+  border-top-color: #5e3032;
+}
+@media (max-width: 767px) {
+  /* line 362, ../../sass/stanford_light/styles/_styles.scss */
+  .navbar .nav li.dropdown.open > .dropdown-toggle:hover .caret,
+  .navbar .nav li.dropdown.open > .dropdown-toggle:focus .caret,
+  .navbar .nav li.dropdown.active > .dropdown-toggle:hover .caret,
+  .navbar .nav li.dropdown.active > .dropdown-toggle:focus .caret,
+  .navbar .nav li.dropdown.open.active > .dropdown-toggle:hover .caret,
+  .navbar .nav li.dropdown.open.active > .dropdown-toggle:focus .caret,
+  .navbar .nav li.active-trail.dropdown > .dropdown-toggle .caret,
+  .navbar .nav li.active-trail.dropdown > .dropdown-toggle:hover .caret,
+  .navbar .nav li.active-trail.dropdown > .dropdown-toggle:focus .caret {
+    border-bottom-color: #d5d0c0;
+    border-top-color: #d5d0c0;
+  }
+}
+
+/* dropdown menu container */
+/* line 375, ../../sass/stanford_light/styles/_styles.scss */
+.dropdown-menu {
+  background: #d5d0c0;
+  border: 1px solid #d5d0c0;
+  right: 1em;
+  padding: 0;
+}
+
+/* dropdown menu nested links - overriding Bootstrap */
+/* line 385, ../../sass/stanford_light/styles/_styles.scss */
+.nav-collapse .dropdown-menu a {
+  color: #3f3c30;
+  padding: 0.5em;
+  -moz-border-radius: 0;
+  -webkit-border-radius: 0;
+  border-radius: 0;
+  font-weight: 400;
+}
+@media (max-width: 767px) {
+  /* line 385, ../../sass/stanford_light/styles/_styles.scss */
+  .nav-collapse .dropdown-menu a {
+    color: #d5d0c0;
+  }
+}
+
+/* dropdown menu nested links - hover/active states */
+/* line 398, ../../sass/stanford_light/styles/_styles.scss */
+.nav-collapse .dropdown-menu > li > a:hover,
+.nav-collapse .dropdown-menu > li > a:focus,
+.nav-collapse .dropdown-menu > .active > a,
+.nav-collapse .dropdown-menu > .active > a:hover,
+.nav-collapse .dropdown-menu > .active > a:focus,
+.nav-collapse .dropdown-menu > .active-trail > a,
+.nav-collapse .dropdown-menu > .active-trail > a:hover,
+.nav-collapse .dropdown-menu > .active-trail > a:focus {
+  color: #d5d0c0;
+  background: #3f3c30;
+}
+@media (max-width: 767px) {
+  /* line 398, ../../sass/stanford_light/styles/_styles.scss */
+  .nav-collapse .dropdown-menu > li > a:hover,
+  .nav-collapse .dropdown-menu > li > a:focus,
+  .nav-collapse .dropdown-menu > .active > a,
+  .nav-collapse .dropdown-menu > .active > a:hover,
+  .nav-collapse .dropdown-menu > .active > a:focus,
+  .nav-collapse .dropdown-menu > .active-trail > a,
+  .nav-collapse .dropdown-menu > .active-trail > a:hover,
+  .nav-collapse .dropdown-menu > .active-trail > a:focus {
+    color: #5e3032;
+    background: #d5d0c0;
+  }
+}
+
+/* mobile styles */
+@media (max-width: 767px) {
+  /* background color of nav in mobile */
+  /* line 419, ../../sass/stanford_light/styles/_styles.scss */
+  #main-nav {
+    background: #fbfbf9;
+  }
+
+  /* dropdown containers that are open in mobile */
+  /* line 423, ../../sass/stanford_light/styles/_styles.scss */
+  .navbar .nav li.dropdown.open {
+    color: #d5d0c0;
+    background: #5e3032;
+    padding-bottom: 0.5em;
+    margin-bottom: 0.25em;
+  }
+}
+/* Sidebar menu styles ------- */
+/* line 434, ../../sass/stanford_light/styles/_styles.scss */
+.sidebar .block-menu,
+.sidebar .block-menu-block {
+  background: #d5d0c0;
+  padding: 1.3em;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+/* line 441, ../../sass/stanford_light/styles/_styles.scss */
+.sidebar .block-menu h2,
+.sidebar .block-menu-block h2 {
+  font-size: 1.3em;
+  font-weight: 600;
+}
+
+/* line 447, ../../sass/stanford_light/styles/_styles.scss */
+.sidebar .nav li a {
+  color: #5e4a1b;
+}
+
+/* line 451, ../../sass/stanford_light/styles/_styles.scss */
+.sidebar .nav li a:hover,
+.sidebar .nav li a:focus,
+.sidebar .nav li a.active,
+.sidebar .nav li a.active-trail {
+  color: #3f3c30;
+  text-decoration: none;
+}
+
+/* top level sidebar links */
+/* line 462, ../../sass/stanford_light/styles/_styles.scss */
+.sidebar .block-menu .content > .menu > li > a,
+.sidebar .block-menu-block .menu-block-wrapper > .menu > li > a {
+  border-top: 1px solid #d9d8d6;
+  padding: 0.5em;
+}
+
+/* line 468, ../../sass/stanford_light/styles/_styles.scss */
+.sidebar .block-menu .content > .menu > li.last,
+.sidebar .block-menu-block .menu-block-wrapper > .menu > li.last {
+  border-bottom: 1px solid #d9d8d6;
+}
+
+/* line 473, ../../sass/stanford_light/styles/_styles.scss */
+.sidebar .block-menu .content > .menu > li.active-trail,
+.sidebar .block-menu-block .menu-block-wrapper > .menu > li.active-trail,
+.sidebar .block-menu .content > .menu > li > a.active,
+.sidebar .block-menu-block .menu-block-wrapper > .menu > li > a.active,
+.sidebar .block-menu .content > .menu > li > a:hover,
+.sidebar .block-menu-block .menu-block-wrapper > .menu > li > a:hover,
+.sidebar .block-menu .content > .menu > li > a:focus,
+.sidebar .block-menu-block .menu-block-wrapper > .menu > li > a:focus,
+.sidebar .block-menu .content > .menu > li.expanded,
+.sidebar .block-menu-block .content > .menu > li.expanded {
+  background: #d5d0c0;
+}
+
+/* nested sidebar links */
+/* line 489, ../../sass/stanford_light/styles/_styles.scss */
+.sidebar .block-menu .content > .menu > li.expanded,
+.sidebar .block-menu-block .menu-block-wrapper > .menu > li.expanded {
+  padding-bottom: 0.75em;
+}
+
+/* line 494, ../../sass/stanford_light/styles/_styles.scss */
+.sidebar .block-menu .content > .menu > li li a,
+.sidebar .block-menu-block .menu-block-wrapper > .menu > li li a {
+  padding: 0.25em 0;
+}
+
+/* line 499, ../../sass/stanford_light/styles/_styles.scss */
+.sidebar .block-menu .content > .menu > li li a:hover,
+.sidebar .block-menu-block .menu-block-wrapper > .menu > li li a:hover,
+.sidebar .block-menu .content > .menu > li li a:focus,
+.sidebar .block-menu-block .menu-block-wrapper > .menu > li li a:focus,
+.sidebar .block-menu .content > .menu > li li a.active-trail,
+.sidebar .block-menu-block .menu-block-wrapper > .menu > li li a.active-trail {
+  text-decoration: underline;
+}
+
+/* Footer menu styles ----- */
+/* line 511, ../../sass/stanford_light/styles/_styles.scss */
+.site-footer .menu li a,
+.site-footer .menu li a.active-trail {
+  color: #ffffff;
+  text-decoration: none;
+}
+
+/* line 517, ../../sass/stanford_light/styles/_styles.scss */
+.site-footer .menu li a:hover,
+.site-footer .menu li a:focus {
+  color: #ffffff;
+  text-decoration: underline;
+}
+
+/* ---------- end menu styles */
+/* line 526, ../../sass/stanford_light/styles/_styles.scss */
+.bodybg .sidebar .region,
+.bodybg .content-wrapper {
+  background-color: #fbfbf9;
+}
+
+/* line 531, ../../sass/stanford_light/styles/_styles.scss */
+.bodybg .sidebar .region {
+  opacity: 1;
+}
+
+/* line 535, ../../sass/stanford_light/styles/_styles.scss */
+.borders .sidebar .region,
+.borders .content-wrapper,
+.bodybg.borders .breadcrumb {
+  border: 1px solid #d5d0c0;
+}
+
+/* line 541, ../../sass/stanford_light/styles/_styles.scss */
+.roundedcorners .well {
+  border-radius: 5px;
+}
+
+/* line 545, ../../sass/stanford_light/styles/_styles.scss */
+.breadcrumb {
+  background-color: #fbfbf9;
+  border-radius: 0;
+}
+
+/* line 550, ../../sass/stanford_light/styles/_styles.scss */
+.bean-stanford-social-media-connect a {
+  opacity: 0.75;
+}
+
+/* line 554, ../../sass/stanford_light/styles/_styles.scss */
+.site-footer {
+  border-top: 1px solid #d5d0c0;
+}
+
+/* Header Image Background */
+/* line 561, ../../sass/stanford_light/styles/_styles.scss */
+.header-bkg a.element-invisible.element-focusable {
+  color: #3f3c30;
+  background: #fbfbf9;
+}
+
+/* Front Page Header Image Background */
+/* line 569, ../../sass/stanford_light/styles/_styles.scss */
+.front.header-bkg.header-bkg-style-frontbleed .content-wrapper,
+.front.header-bkg.header-bkg-style-frontbleed .sidebar .region {
+  background: transparent;
+}
+
+/* line 575, ../../sass/stanford_light/styles/_styles.scss */
+.header-bkg.header-bkg-style-frontbleed .site-main-menu .navbar .nav > .active > a,
+.header-bkg.header-bkg-style-frontbleed .site-main-menu .navbar .nav > .active > a:hover,
+.header-bkg.header-bkg-style-frontbleed .site-main-menu .navbar .nav > .active > a:focus,
+.header-bkg.header-bkg-style-frontbleed .site-main-menu .navbar .nav > li > a:focus,
+.header-bkg.header-bkg-style-frontbleed .site-main-menu .navbar .nav > li > a:hover,
+.header-bkg.header-bkg-style-frontbleed .site-main-menu .navbar .nav > .active-trail > a {
+  color: #fbfbf9;
+  background: #5e3032;
+}
+
+/* line 586, ../../sass/stanford_light/styles/_styles.scss */
+.front.header-bkg.header-bkg-style-frontbleed .site-main-menu .navbar {
+  background: #d5d0c0;
+}
+
+/* line 590, ../../sass/stanford_light/styles/_styles.scss */
+.front.header-bkg.header-bkg-style-frontbleed.header-bkg-text-light .main {
+  color: #ffffff;
+  /* text color */
+}
+
+/* line 595, ../../sass/stanford_light/styles/_styles.scss */
+.front.header-bkg.header-bkg-style-frontbleed.header-bkg-text-light .main a {
+  color: #c6b386;
+  /* link color */
+}
+
+/* line 600, ../../sass/stanford_light/styles/_styles.scss */
+.front.header-bkg.header-bkg-style-frontbleed.header-bkg-text-light .main .nav-tabs a.active,
+.front.header-bkg.header-bkg-style-frontbleed.header-bkg-text-light .main .nav-tabs a.focus,
+.front.header-bkg.header-bkg-style-frontbleed.header-bkg-text-light .main .nav-tabs a:hover {
+  color: #8f7029;
+  /* heading color */
+}
+
+/* line 607, ../../sass/stanford_light/styles/_styles.scss */
+.front.header-bkg.header-bkg-style-frontbleed.header-bkg-text-light .main h1,
+.front.header-bkg.header-bkg-style-frontbleed.header-bkg-text-light .main h2,
+.front.header-bkg.header-bkg-style-frontbleed.header-bkg-text-light .main h3,
+.front.header-bkg.header-bkg-style-frontbleed.header-bkg-text-light .main h4,
+.front.header-bkg.header-bkg-style-frontbleed.header-bkg-text-light .main h5,
+.front.header-bkg.header-bkg-style-frontbleed.header-bkg-text-light .main h6 {
+  color: #ffffff;
+  /* heading color */
+}
+
+/* line 617, ../../sass/stanford_light/styles/_styles.scss */
+.front.header-bkg.header-bkg-style-frontbleed.header-bkg-text-light .main .well,
+.front.header-bkg.header-bkg-style-frontbleed.header-bkg-text-light .main .block-menu {
+  color: #3f3c30;
+  /* well text color */
+}
+
+/* line 623, ../../sass/stanford_light/styles/_styles.scss */
+.front.header-bkg.header-bkg-style-frontbleed.header-bkg-text-light .main .well a,
+.front.header-bkg.header-bkg-style-frontbleed.header-bkg-text-light .main .block-menu a {
+  color: #5e4a1b;
+  /* well link color */
+}
+
+/* line 629, ../../sass/stanford_light/styles/_styles.scss */
+.front.header-bkg.header-bkg-style-frontbleed.header-bkg-text-light .main .well h1,
+.front.header-bkg.header-bkg-style-frontbleed.header-bkg-text-light .main .well h2,
+.front.header-bkg.header-bkg-style-frontbleed.header-bkg-text-light .main .well h3,
+.front.header-bkg.header-bkg-style-frontbleed.header-bkg-text-light .main .well h4,
+.front.header-bkg.header-bkg-style-frontbleed.header-bkg-text-light .main .well h5,
+.front.header-bkg.header-bkg-style-frontbleed.header-bkg-text-light .main .well h6,
+.front.header-bkg.header-bkg-style-frontbleed.header-bkg-text-light .main .block-menu h1,
+.front.header-bkg.header-bkg-style-frontbleed.header-bkg-text-light .main .block-menu h2,
+.front.header-bkg.header-bkg-style-frontbleed.header-bkg-text-light .main .block-menu h3,
+.front.header-bkg.header-bkg-style-frontbleed.header-bkg-text-light .main .block-menu h4,
+.front.header-bkg.header-bkg-style-frontbleed.header-bkg-text-light .main .block-menu h5,
+.front.header-bkg.header-bkg-style-frontbleed.header-bkg-text-light .main .block-menu h6 {
+  color: #3f3c30;
+  /* heading color */
+}
+
+/* --- dark text theme option --- */
+/* line 648, ../../sass/stanford_light/styles/_styles.scss */
+.front.header-bkg.header-bkg-style-frontbleed.header-bkg-text-dark .main {
+  color: #000000;
+  /* text color */
+}
+
+/* line 653, ../../sass/stanford_light/styles/_styles.scss */
+.front.header-bkg.header-bkg-style-frontbleed.header-bkg-text-dark .main a {
+  color: #8f7029;
+  /* link color */
+}
+
+/* line 658, ../../sass/stanford_light/styles/_styles.scss */
+.front.header-bkg.header-bkg-style-frontbleed.header-bkg-text-dark .main .nav-tabs a.active,
+.front.header-bkg.header-bkg-style-frontbleed.header-bkg-text-dark .main .nav-tabs a.focus,
+.front.header-bkg.header-bkg-style-frontbleed.header-bkg-text-dark .main .nav-tabs a:hover {
+  color: #8f7029;
+  /* heading color */
+}
+
+/* line 665, ../../sass/stanford_light/styles/_styles.scss */
+.front.header-bkg.header-bkg-style-frontbleed.header-bkg-text-dark .main h1,
+.front.header-bkg.header-bkg-style-frontbleed.header-bkg-text-dark .main h2,
+.front.header-bkg.header-bkg-style-frontbleed.header-bkg-text-dark .main h3,
+.front.header-bkg.header-bkg-style-frontbleed.header-bkg-text-dark .main h4,
+.front.header-bkg.header-bkg-style-frontbleed.header-bkg-text-dark .main h5,
+.front.header-bkg.header-bkg-style-frontbleed.header-bkg-text-dark .main h6 {
+  color: #000000;
+  /* heading color */
+}
+
+/* line 675, ../../sass/stanford_light/styles/_styles.scss */
+.front.header-bkg.header-bkg-style-frontbleed.header-bkg-text-dark .main .well,
+.front.header-bkg.header-bkg-style-frontbleed.header-bkg-text-dark .main .block-menu {
+  color: #3f3c30;
+  /* well text color */
+}
+
+/* line 681, ../../sass/stanford_light/styles/_styles.scss */
+.front.header-bkg.header-bkg-style-frontbleed.header-bkg-text-dark .main .well a,
+.front.header-bkg.header-bkg-style-frontbleed.header-bkg-text-dark .main .block-menu a {
+  color: #5e4a1b;
+  /* well link color */
+}
+
+/* line 687, ../../sass/stanford_light/styles/_styles.scss */
+.front.header-bkg.header-bkg-style-frontbleed.header-bkg-text-dark .main .well h1,
+.front.header-bkg.header-bkg-style-frontbleed.header-bkg-text-dark .main .well h2,
+.front.header-bkg.header-bkg-style-frontbleed.header-bkg-text-dark .main .well h3,
+.front.header-bkg.header-bkg-style-frontbleed.header-bkg-text-dark .main .well h4,
+.front.header-bkg.header-bkg-style-frontbleed.header-bkg-text-dark .main .well h5,
+.front.header-bkg.header-bkg-style-frontbleed.header-bkg-text-dark .main .well h6,
+.front.header-bkg.header-bkg-style-frontbleed.header-bkg-text-dark .main .block-menu h1,
+.front.header-bkg.header-bkg-style-frontbleed.header-bkg-text-dark .main .block-menu h2,
+.front.header-bkg.header-bkg-style-frontbleed.header-bkg-text-dark .main .block-menu h3,
+.front.header-bkg.header-bkg-style-frontbleed.header-bkg-text-dark .main .block-menu h4,
+.front.header-bkg.header-bkg-style-frontbleed.header-bkg-text-dark .main .block-menu h5,
+.front.header-bkg.header-bkg-style-frontbleed.header-bkg-text-dark .main .block-menu h6 {
+  color: #3f3c30;
+  /* heading color */
+}
+
+/* line 703, ../../sass/stanford_light/styles/_styles.scss */
+.views-row-lines .views-row {
+  border-color: #d5d0c0;
+}
+
+/* line 707, ../../sass/stanford_light/styles/_styles.scss */
+ul.pager li a {
+  background-color: #d5d0c0;
+  color: #3f3c30;
+}
+
+/* line 712, ../../sass/stanford_light/styles/_styles.scss */
+ul.pager li a:hover,
+ul.pager li a:focus,
+ul.pager li.pager-current {
+  background-color: #8f7029;
+  color: #fbfbf9;
+}
+
+/* line 719, ../../sass/stanford_light/styles/_styles.scss */
+.date-stacked {
+  background: #6b6860;
+}
+/* line 721, ../../sass/stanford_light/styles/_styles.scss */
+.date-stacked .date-month,
+.date-stacked .date-day {
+  color: #fbfbf9;
+}
+
+/* Mini-calendar navigtaion */
+/* line 730, ../../sass/stanford_light/styles/_styles.scss */
+.calendar-calendar td.mini a,
+.calendar-calendar td.mini .mini-day-off {
+  color: #3f3c30;
+}
+
+/* line 735, ../../sass/stanford_light/styles/_styles.scss */
+.calendar-calendar .mini td {
+  border-color: #fbfbf9;
+  background: #d5d0c0;
+}
+
+/* line 740, ../../sass/stanford_light/styles/_styles.scss */
+.calendar-calendar table.mini td.empty {
+  border-color: #fbfbf9;
+}
+
+/* line 744, ../../sass/stanford_light/styles/_styles.scss */
+.calendar-calendar .mini td.has-events {
+  background: #c0bbad;
+}
+
+/* line 748, ../../sass/stanford_light/styles/_styles.scss */
+.calendar-calendar .mini td.today {
+  background: #8f7029;
+}
+
+/* line 752, ../../sass/stanford_light/styles/_styles.scss */
+.calendar-calendar td.mini .mini-day-off {
+  color: #3f3c30;
+}
+
+/* line 756, ../../sass/stanford_light/styles/_styles.scss */
+.calendar-calendar td.today .mini-day-off {
+  color: #fbfbf9;
+}
+
+/* line 760, ../../sass/stanford_light/styles/_styles.scss */
+.calendar-calendar tr td.has-events a:hover {
+  background: #8f7029;
+  color: #fbfbf9;
+}
+
+/* line 765, ../../sass/stanford_light/styles/_styles.scss */
+.calendar-calendar tr td.today a,
+.calendar-calendar tr td.today a:hover {
+  background: #8f7029;
+  color: #fbfbf9;
+}
+
+/* line 771, ../../sass/stanford_light/styles/_styles.scss */
+.calendar-calendar table.mini td.empty {
+  background: #c0bbad;
+}
+
+/* line 775, ../../sass/stanford_light/styles/_styles.scss */
+.calendar-calendar th.days {
+  background: #d5d0c0;
+  color: #3f3c30;
+}
+
+/* line 780, ../../sass/stanford_light/styles/_styles.scss */
+.view-stanford-events-calendar .date-nav-wrapper {
+  background: #d5d0c0;
+}
+/* line 782, ../../sass/stanford_light/styles/_styles.scss */
+.view-stanford-events-calendar .date-nav-wrapper h3 {
+  color: #3f3c30;
+}
+
+/* line 787, ../../sass/stanford_light/styles/_styles.scss */
+.view-stanford-events-calendar .date-nav-wrapper .date-nav .date-heading a {
+  color: #8f7029;
+}
+
+/* line 791, ../../sass/stanford_light/styles/_styles.scss */
+.view-stanford-events-calendar .date-nav-wrapper .date-nav .date-heading a:hover {
+  color: #8f7029;
+}
+
+/* line 795, ../../sass/stanford_light/styles/_styles.scss */
+.view-stanford-events-calendar .date-nav-wrapper .date-nav .pager li.date-prev a,
+.view-stanford-events-calendar .date-nav-wrapper .date-nav .pager li.date-next a {
+  background: #fbfbf9;
+  color: #c0bbad;
+}
+
+/* line 801, ../../sass/stanford_light/styles/_styles.scss */
+.view-stanford-events-calendar .date-nav-wrapper .date-nav .pager li.date-prev a:hover,
+.view-stanford-events-calendar .date-nav-wrapper .date-nav .pager li.date-next a:hover {
+  background-color: #8f7029;
+  color: #fbfbf9;
+}
+
+/* line 807, ../../sass/stanford_light/styles/_styles.scss */
+.calendar-calendar tr td.today,
+.calendar-calendar tr.odd td.today,
+.calendar-calendar tr.even td.today {
+  background-color: #8f7029;
+  color: #fbfbf9;
+}
+
+/* override colors on news nodes to match descriptor color */
+/* line 817, ../../sass/stanford_light/styles/_styles.scss */
+.node-stanford-news-item .field-name-field-s-news-categories,
+body.page-node .content .group_s_news_postedin h3,
+body.page-node .content .group-s-news-postedin h3 {
+  color: #3f3c30;
+}
+
+/* Search box */
+/* line 826, ../../sass/stanford_light/styles/_styles.scss */
+#block-search-form input.search-query {
+  border: 2px solid #d5d0c0;
+  color: #3f3c30;
+}
+
+/* line 831, ../../sass/stanford_light/styles/_styles.scss */
+#block-search-form input.search-query:focus {
+  color: black;
+  -moz-box-shadow: #d5d0c0 0px 0px 5px 3px;
+  -webkit-box-shadow: #d5d0c0 0px 0px 5px 3px;
+  box-shadow: #d5d0c0 0px 0px 5px 3px;
+}
+
+/* line 1, ../../sass/stanford_light/styles/_rich-styles.scss */
+.header-bkg .navbar {
+  margin-bottom: 10px;
+}
+
+/* line 4, ../../sass/stanford_light/styles/_rich-styles.scss */
+.header-bkg .site-main-menu {
+  border-top: 1px solid #d5d0c0;
+}
+
+/* menu items bottom border */
+/* line 9, ../../sass/stanford_light/styles/_rich-styles.scss */
+.navbar .nav > li > a {
+  padding-bottom: .25em;
+  border-bottom: 5px solid transparent;
+}
+
+/* line 13, ../../sass/stanford_light/styles/_rich-styles.scss */
+.navbar .nav > .active > a,
+.navbar .nav > .active > a:hover,
+.navbar .nav > .active > a:focus,
+.navbar .nav > li > a:focus,
+.navbar .nav > li > a:hover,
+.navbar .nav > .active-trail > a {
+  border-bottom: 5px solid #5e3032;
+}
+
+/* line 22, ../../sass/stanford_light/styles/_rich-styles.scss */
+.dropdown-menu {
+  border-color: #3f3c30;
+}
+
+/* line 26, ../../sass/stanford_light/styles/_rich-styles.scss */
+h2 a:hover, h2 a:focus {
+  text-decoration: none;
+}
+
+/* line 29, ../../sass/stanford_light/styles/_rich-styles.scss */
+.well a,
+.well .menu li a {
+  color: #5e4a1b;
+}
+
+/* line 33, ../../sass/stanford_light/styles/_rich-styles.scss */
+.site-footer {
+  color: #fbfbf9;
+}
+
+/* line 36, ../../sass/stanford_light/styles/_rich-styles.scss */
+.site-footer .block h2 {
+  color: #fbfbf9;
+}
+
+/* line 39, ../../sass/stanford_light/styles/_rich-styles.scss */
+.site-footer a,
+.site-footer a:hover,
+.site-footer a:focus,
+.site-footer a.active {
+  color: #fbfbf9;
+}
+
+/* line 45, ../../sass/stanford_light/styles/_rich-styles.scss */
+.site-footer a:hover,
+.site-footer a:focus,
+.site-footer a.active {
+  text-decoration: underline;
+}
+
+@media (max-width: 767px) {
+  /* line 51, ../../sass/stanford_light/styles/_rich-styles.scss */
+  .navbar .btn-navbar {
+    background: #5e3032;
+  }
+}
+/* line 55, ../../sass/stanford_light/styles/_rich-styles.scss */
+.well .caption {
+  color: #474640;
+}
+
+/* line 58, ../../sass/stanford_light/styles/_rich-styles.scss */
+th a {
+  color: #644e1d;
+}
+
+/* line 62, ../../sass/stanford_light/styles/_rich-styles.scss */
+.banner-overlay a.more-link, .banner-overlay .more-link a {
+  color: #3f3c30;
+}
+/* line 65, ../../sass/stanford_light/styles/_rich-styles.scss */
+.banner-overlay a.more-link:hover, .banner-overlay .more-link a:hover,
+.banner-overlay a.more-link:focus, .banner-overlay .more-link a:focus {
+  text-decoration: underline;
+}
+
+/* line 70, ../../sass/stanford_light/styles/_rich-styles.scss */
+.calendar-calendar .mini td.has-events,
+.calendar-calendar table.mini td.empty {
+  background: #b5b1a3;
+}
+
+/* line 74, ../../sass/stanford_light/styles/_rich-styles.scss */
+.sidebar .block-menu .content > .menu > li > a,
+.sidebar .block-menu-block .menu-block-wrapper > .menu > li > a,
+.sidebar .block-menu .content > .menu > li.last,
+.sidebar .block-menu-block .menu-block-wrapper > .menu > li.last {
+  border-color: #eae8e0;
+}
+
+/* line 80, ../../sass/stanford_light/styles/_rich-styles.scss */
+.sidebar .block-menu-block .menu-block-wrapper > .menu > li > a.active,
+.sidebar .block-menu .content > .menu > li > a:hover,
+.sidebar .block-menu-block .menu-block-wrapper > .menu > li > a:hover,
+.sidebar .block-menu .content > .menu > li > a:focus,
+.sidebar .block-menu-block .menu-block-wrapper > .menu > li > a:focus {
+  color: #3f3c30;
+}
+
+/* line 87, ../../sass/stanford_light/styles/_rich-styles.scss */
+.sidebar .block-menu .content > .menu > li.active-trail,
+.sidebar .block-menu-block .menu-block-wrapper > .menu > li.active-trail,
+.sidebar .block-menu .content > .menu > li > a.active,
+.sidebar .block-menu-block .menu-block-wrapper > .menu > li > a.active,
+.sidebar .block-menu .content > .menu > li > a:hover,
+.sidebar .block-menu-block .menu-block-wrapper > .menu > li > a:hover,
+.sidebar .block-menu .content > .menu > li > a:focus,
+.sidebar .block-menu-block .menu-block-wrapper > .menu > li > a:focus,
+.sidebar .block-menu .content > .menu > li.expanded,
+.sidebar .block-menu-block .content > .menu > li.expanded {
+  background: #ddd9cd;
+}
+
+/* line 99, ../../sass/stanford_light/styles/_rich-styles.scss */
+#block-search-form input.search-query:focus {
+  border-color: #5e3032;
+  -moz-box-shadow: #5e3032 0px 0px 5px 3px;
+  -webkit-box-shadow: #5e3032 0px 0px 5px 3px;
+  box-shadow: #5e3032 0px 0px 5px 3px;
+}

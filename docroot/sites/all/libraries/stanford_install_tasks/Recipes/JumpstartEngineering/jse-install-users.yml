@@ -1,0 +1,6 @@
+name: JSE Install Users
+machine_name: jse-install-users
+description: Install JSE specific users and roles.
+tasks:
+  - \Stanford\JumpstartEngineering\Install\Users\RichardUser
+  - \Stanford\JumpstartEngineering\Install\Users\UserOne

@@ -1,0 +1,9 @@
+name: JSE Department Modifications
+machine_name: jse-dept-mods
+description: This imports content and enables modules for department sites on a JSE (PICAL) site.
+tasks:
+  - \Stanford\JumpstartEngineering\Hopper\DeptMods
+  - \Stanford\JumpstartEngineering\Install\Content\ImportJSECustomBeans
+  - \Stanford\JumpstartEngineering\Install\Block\JSEBlockClasses
+  - \Stanford\JumpstartEngineering\Install\Block\JSEContextualBlockClasses
+  - \Stanford\Utility\Install\NodeAccessRebuild

@@ -1,0 +1,64 @@
+Stanford Installation Tasks
+--------------------------------------
+
+7.x-1.0-alpha4                     2018-01-24
+---------------------------------------------
+- Updated Get Help and Launch Checklist pages
+
+- For Stanford Sites:
+  - Fix bug where requester was not getting authmap set correctly
+  - Allow to specify the temporary files directory
+
+- For JSA:
+  - Updated BEANs
+  - Add redirect from "login" to "user"
+
+- For JSE:
+  - Update to CAPxConfig.php
+
+- For Jumpstart Lab:
+  - Hide WMD login block
+  - Add redirect from "login" to "user"
+  - Add entry in file_usage table for JS homepage file
+
+
+7.x-1.0-alpha3                     2017-01-20
+---------------------------------------------
+- For JumpstartLab
+  - HSDO-637 #Disables quick steps and webauth blocks
+  - HSDO-637 #removed block disable
+  - HSDO-637 #Execute Jumpstart/Block Settings from LabsBlockSettings
+  - HSDO-637 #webauth & site helper block settings
+
+- For JSE
+  - Adding NodeAccessRebuild utility
+  - Add module revert & cache clear
+  - SOE-1407: Add css classes to the news block
+
+
+7.x-1.0-alpha2                     2016-12-14
+--------------------------------------------
+- Added installation variables
+- Disable code climate checks for comment capitalization
+- Code clean-up and refactoring
+
+- For JumpstartLab
+  - HSDO-605 #Added conference menu item
+  -	HSDO-608 #added alumni page to menu
+  - HSDO-611 #changed path for courses page
+  - HSDO-613 HSDO-614 #Change menu items
+  - HSDO-614 #Removed students term
+  - HSDO-618 #menu rules for courses, conferenece & news
+  - changed news menu path
+
+- For JumpstartEngineering
+  - SOE-1506: Put in task to enable the department homepage
+  - Add CoursesBlockContext task
+
+7.x-1.0-alpha1                     2016-12-02
+--------------------------------------------
+- Remove enabling courses from DeptMods
+
+7.x-1.0-alpha                     2016-11-29
+--------------------------------------------
+- Initial release

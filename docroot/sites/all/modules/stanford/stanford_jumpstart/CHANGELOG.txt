@@ -1,0 +1,170 @@
+Stanford Sites Jumpstart 7.x-x.x 2015-xx-xx
+-------------------------------------------
+7.x-5.5-beta5                     2017-08-11
+--------------------------------------------
+- HSDO-1024 Updated help text links
+
+7.x-5.5-beta4                     2017-08-11
+--------------------------------------------
+- HSDO-951 More granular permissions for reports pages.
+
+7.x-5.5-beta3                     2017-07-18
+--------------------------------------------
+- HSDO-26 Google Analytics lnk in site actions menu
+- HSDO-29 404 Reports page in site actions menu
+- Pastel well colors with well classes
+
+7.x-5.5-beta2                     2017-06-19
+--------------------------------------------
+- HSDO-857 Sticky headers for responsive tables
+- Removed box shadow for Dark theme option for news masonry view
+- HSDO-895 Dont apply tablesaw to calendar tables
+- HSDO-899 opaque banner overlays across the board
+
+7.x-5.5-beta1                     2017-05-15
+--------------------------------------------
+- Responsive tables support in wysiwyg & views
+- Masonry views library
+
+7.x-5.3+9-dev                     2017-01-20
+--------------------------------------------
+- Added current/original version block to help page
+- Added condition for authenticated user so that the info block stays hidden to non-auth users
+- Added CSS for pullquote class
+- added highlight right and left to styles dropdown in wysiwyg
+
+
+7.x-5.3                           2016-11-29
+--------------------------------------------
+Major refactor and cleanup by Joe and Kerri
+- Made search selector more specific
+- Updated footer styles and font size
+- Added soe specific styles for search
+- Added mag glass image, updated related css, sizing, and positioning
+- Cleaned up main nav styles and size
+- Loading css programmatically rather than info file
+- Updated dropdown menu sizing
+- Updated carets for dark option
+- Added calendar border
+
+
+7.x-5.2                           2016-09-16
+--------------------------------------------
+- Add breakout box (pullquote) to wysiwyg
+- New colors from design options.
+- Added styles for various design options
+- Added support for indented text and bullet items and ordered list start number
+
+7.x-5.1                           2016-06-13
+--------------------------------------------
+- CRITICAL BUGFIX: Where all input formats other than content_editor were broken
+
+7.x-5.0                           2016-05-30
+--------------------------------------------
+- Removed product specific stuff from this module and helper utility functions.
+- Removed javascript file that was trying to remove the href property on the first item of a non-existant nav.
+- Small bug fixes
+- Removed stanford_jumpstart_login and broke it up in to two parts. One went in to stanford_sites_helper and the other went in to anchorage_helper
+- Removed anything that was not specific to just jumpstart.
+- BASIC-1779: Re-write get help pages
+- Removed old template files for help pages
+
+7.x-4.5+42-dev                    2015-06-26
+--------------------------------------------
+- SOE-586: added css to WYSIWYG for SoE logo accessibility
+- Added hook_pathologic_alter changing where the URLs are added in the install process
+- Added admin role to admin jumpstart help permission
+
+7.x-4.5                           2015-06-26
+--------------------------------------------
+- Fix overflow issue in WYSIWYG form fields
+- Fix WSOD on missing path for admin/stanford-jumpstart/***
+- Fix for banner overlay problems in mobile
+
+7.x-4.4                           2015-03-19
+--------------------------------------------
+- Added check for user name on hello block
+- PHP notice bug fixes
+
+
+Stanford Sites Jumpstart 7.x-4.3 2014-11-27
+-------------------------------------------
+
+ - Updating permissions for edit links in Site Actions menu. See BASIC-1066
+ - Wording of cache clearing. See BASIC-971
+ - Preprocess link path change so that user get redirected to the right place
+ - Remove ability for site owner and editor to use the full block interface
+ - Update stanford_jumpstart_shortcuts.module for small typo
+ - BASIC-1057 | Updated site shortcuts menu items permissions for visibility of help/launch/features
+ - BASIC-1057 | Updated menu weights
+ - BASIC-1013 | Updated site actions menu weights
+ - BASIC-1013 | Updated site action weights
+
+Stanford Sites Jumpstart 7.x-4.3-alpha1 2014-09-26
+-------------------------------------------
+- Refactored Roles and Permissions modules. They are now split up into two
+different feature modules.
+- Refactored shortcuts feature to now not be a feature but a module with real
+menu entries.
+- Refactored site_actions that are specific to Jumpstart into another module.
+- Created new permissions & site_actions modules.
+
+
+Stanford Sites Jumpstart 7.x-4.2 2014-09-09
+-------------------------------------------
+By jbickar:
+  - Do not link title in Menu Block for sidebar menus
+  - Updated URLs in "Get Help" page
+  - Added permissions Feature to show format tips to stanford_jumpstart_wysiwyg
+
+By sheamck:
+  - Allow "name" attribute in "a" elements (for in-page anchors)
+
+Stanford Sites Jumpstart 7.x-4.1 2014-08-07
+-------------------------------------------
+- Support for dash syntax for field group selectors
+- Removed clear cache permission from feature so we can remove the dependency on the shortcuts module. This was casuing problems in the installation
+
+Stanford Sites Jumpstart 7.x-4.0-alpha1 2014-05-16
+--------------------------------------------------
+- Cache Hello, Howard block per user. Fixes BASIC-819
+- Fixed typos in updated menu hook function
+- Removed extra menu items that are not needed
+- Removed jumpstart content module
+- Removed dashboard permissions as we dont use it
+- Removed JSA modules
+
+Stanford Sites Jumpstart 7.x-3.0-alpha5 2014-04-01
+--------------------------------------------------
+Changes since 7.x-3.0-alpha3:
+  - Removal of duplicate content coming from the content server.
+  - Removal of URL redirects that are now in the installation profile.
+
+Stanford Sites Jumpstart 7.x-3.0-alpha4 2014-03-11
+--------------------------------------------------
+Changes since 7.x-3.0-alpha3:
+  - Compatible version for jumpstart installation profiles.
+  - Removal of content from content modules. Was replaced with content server.
+  - Adjustments of permissions for installation tasks.
+
+Stanford Sites Jumpstart 7.x-3.0-alpha3 2013-10-14
+--------------------------------------------------
+Changes since 7.x-3.0-alpha2:
+  -removed all stanford_courses functionality
+
+Stanford Sites Jumpstart 7.x-3.0-alpha2 2013-10-14
+--------------------------------------------------
+Changes since 7.x-3.0-alpha1:
+  -CSS and style updates
+  -Content updates (JSA)
+  -Bug fixes in content deployment (nodes and BEANs; JSA)
+  -Featurized Deployment plans and endpoints (JSA)
+  -Updates to default Contexts for block placement (JSA)
+  -Added default permissions for site owner and editor roles (JSA)
+  -Added default 404 page (JS and JSA)
+
+Stanford Sites Jumpstart 7.x-3.0-alpha1 2013-09-27
+--------------------------------------------------
+Initial release of the 7.x-3.x branch.
+Includes functionality for the Stanford Sites Jumpstart Academic product.
+Release is functional but feature-incomplete

@@ -1,0 +1,87 @@
+name = Stanford Jumpstart Homepage
+description = Provides several layout options for the home page on Jumpstart sites.
+core = 7.x
+package = Stanford Sites Jumpstart
+version = 7.x-1.x
+project = stanford_jumpstart_home
+project status url = https://github.com/SU-SWS/stanford_jumpstart_home
+
+stylesheets[all][] = css/stanford_jumpstart_home.css
+# scripts[] = js/stanford_jumpstart_home.js
+
+dependencies[] = cbc
+dependencies[] = context
+dependencies[] = ctools
+
+# Example settings
+# layout[setting][header_image] = TRUE
+# layout[setting][light_dark] = TRUE
+# layout[setting][color] = TRUE
+
+layout[stanford_jumpstart_home_panama][context] = "stanford_jumpstart_home_panama"
+layout[stanford_jumpstart_home_panama][thumb] = "js-home-panama.png"
+layout[stanford_jumpstart_home_panama][title] = "Panama"
+layout[stanford_jumpstart_home_panama][description] = "<ul><li>About block</li><li>Spotlight block</li><li>Banner block</li><li>Large Announcements block</li></ul>"
+layout[stanford_jumpstart_home_panama][class] = "stanford-jumpstart-home-panama"
+
+layout[stanford_jumpstart_home_panama_news_events][context] = "stanford_jumpstart_home_panama_news_events"
+layout[stanford_jumpstart_home_panama_news_events][thumb] = "js-home-panama.png"
+layout[stanford_jumpstart_home_panama_news_events][title] = "Panama with News & Events"
+layout[stanford_jumpstart_home_panama_news_events][description] = "<ul><li>About block</li><li>Spotlight block</li><li>Banner block</li><li>Auto-generated News block</li><li>Auto-generated Events block</li><li>Affiliated Programs block</li></ul>"
+layout[stanford_jumpstart_home_panama_news_events][class] = "stanford-jumpstart-home-panama"
+
+layout[stanford_jumpstart_home_palm][context] = "stanford_jumpstart_home_palm"
+layout[stanford_jumpstart_home_palm][thumb] = "js-home-palm.png"
+layout[stanford_jumpstart_home_palm][title] = "Palm"
+layout[stanford_jumpstart_home_palm][description] = "<ul><li>Tall, full-width Banner</li><li>About block</li><li>Spotlight block</li><li>Small Announcements block</li></ul>"
+layout[stanford_jumpstart_home_palm][class] = "stanford-jumpstart-home-palm"
+
+layout[stanford_jumpstart_home_palm_news_events][context] = "stanford_jumpstart_home_palm_news_events"
+layout[stanford_jumpstart_home_palm_news_events][thumb] = "js-home-palm.png"
+layout[stanford_jumpstart_home_palm_news_events][title] = "Palm with News & Events"
+layout[stanford_jumpstart_home_palm_news_events][description] = "<ul><li>Tall, full-width Banner</li><li>About block</li><li>Auto-generated News block</li><li>Auto-generated Events block</li></ul>"
+layout[stanford_jumpstart_home_palm_news_events][class] = "stanford-jumpstart-home-palm"
+
+layout[stanford_jumpstart_home_mayfield][context] = "stanford_jumpstart_home_mayfield"
+layout[stanford_jumpstart_home_mayfield][thumb] = "js-home-mayfield.png"
+layout[stanford_jumpstart_home_mayfield][title] = "Mayfield"
+layout[stanford_jumpstart_home_mayfield][description] = "<ul><li>Lead Text Block</li><li>Testimonial block</li><li>About block</li><li>Spotlight block</li><li>Small Announcements block</li></ul>"
+layout[stanford_jumpstart_home_mayfield][header_image] = TRUE
+layout[stanford_jumpstart_home_mayfield][light_dark] = TRUE
+layout[stanford_jumpstart_home_mayfield][class] = "stanford-jumpstart-home-mayfield"
+
+layout[stanford_jumpstart_home_mayfield_news_events][context] = "stanford_jumpstart_home_mayfield_news_events"
+layout[stanford_jumpstart_home_mayfield_news_events][thumb] = "js-home-mayfield.png"
+layout[stanford_jumpstart_home_mayfield_news_events][title] = "Mayfield with News & Events"
+layout[stanford_jumpstart_home_mayfield_news_events][description] = "<ul><li>Lead Text Block</li><li>Testimonial block</li><li>About block</li><li>Auto-generated News block</li><li>Auto-generated Events block</li></ul>"
+layout[stanford_jumpstart_home_mayfield_news_events][header_image] = TRUE
+layout[stanford_jumpstart_home_mayfield_news_events][light_dark] = TRUE
+layout[stanford_jumpstart_home_mayfield_news_events][class] = "stanford-jumpstart-home-mayfield"
+
+layout[stanford_jumpstart_home_mayfield_lab][context] = "stanford_jumpstart_home_mayfield_lab"
+layout[stanford_jumpstart_home_mayfield_lab][thumb] = "js-home-mayfield.png"
+layout[stanford_jumpstart_home_mayfield_lab][title] = "Mayfield Lab"
+layout[stanford_jumpstart_home_mayfield_lab][description] = "<ul><li>Lead Text Block</li><li>Research Projects block</li><li>Auto-generated Publications block</li><li>Auto-generated News block</li></ul>"
+layout[stanford_jumpstart_home_mayfield_lab][header_image] = TRUE
+layout[stanford_jumpstart_home_mayfield_lab][light_dark] = TRUE
+layout[stanford_jumpstart_home_mayfield_lab][class] = "stanford-jumpstart-home-mayfield"
+
+layout[stanford_jumpstart_home_serra][context] = "stanford_jumpstart_home_serra"
+layout[stanford_jumpstart_home_serra][thumb] = "js-home-serra.png"
+layout[stanford_jumpstart_home_serra][title] = "Serra"
+layout[stanford_jumpstart_home_serra][description] = "<ul><li>Lead Text block</li><li>Info Text block</li><li>Two text columns</li><li>About block</li><li>Spotlight block</li><li>Small Announcements block</li></ul>"
+layout[stanford_jumpstart_home_serra][class] = "stanford-jumpstart-home-serra"
+
+layout[stanford_jumpstart_home_serra_news_events][context] = "stanford_jumpstart_home_serra_news_events"
+layout[stanford_jumpstart_home_serra_news_events][thumb] = "js-home-serra.png"
+layout[stanford_jumpstart_home_serra_news_events][title] = "Serra with News & Events"
+layout[stanford_jumpstart_home_serra_news_events][description] = "<ul><li>Lead Text block</li><li>Info Text block</li><li>Two text columns</li><li>About block</li><li>Auto-generated News block</li><li>Auto-generated Events block</li></ul>"
+layout[stanford_jumpstart_home_serra_news_events][class] = "stanford-jumpstart-home-serra"
+
+layout[stanford_jumpstart_home_lomita][context] = "stanford_jumpstart_home_lomita"
+layout[stanford_jumpstart_home_lomita][thumb] = "js-home-lomita.png"
+layout[stanford_jumpstart_home_lomita][title] = "Lomita"
+layout[stanford_jumpstart_home_lomita][description] = "<ul><li>Big Text block with description</li><li>Flexible block with optional video</li></ul>"
+layout[stanford_jumpstart_home_lomita][light_dark] = TRUE
+layout[stanford_jumpstart_home_lomita][header_image] = TRUE
+layout[stanford_jumpstart_home_lomita][class] = "stanford-jumpstart-home-lomita header-bkg-style-frontbleed"

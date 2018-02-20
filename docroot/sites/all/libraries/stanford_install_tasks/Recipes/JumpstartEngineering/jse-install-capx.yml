@@ -1,0 +1,6 @@
+name: Install CAPx Settings
+machine_name: jse-install-capx
+description: Install all of the CAPx settings for JSE.
+tasks:
+  - \Stanford\JumpstartEngineering\Install\CAPx\CAPxConfig
+  - \Stanford\JumpstartEngineering\Install\CAPx\CAPxDisplay

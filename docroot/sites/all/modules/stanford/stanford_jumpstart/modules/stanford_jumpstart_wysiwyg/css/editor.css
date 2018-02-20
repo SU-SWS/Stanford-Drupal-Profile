@@ -1,0 +1,43 @@
+/* Fix the scrolling in the editor */
+body.cke_panel_frame {
+  overflow: auto;
+}
+
+/**
+ * Breakout text styles
+ */
+
+p.pullquote {
+  margin: .8em;
+  background: #f2f1eb;
+  border: solid 1px #d5d2c5;
+  padding: 1em;
+  line-height: 1.25em;
+  text-indent: 0;
+  width: auto;
+}
+
+.highlight-block-right {
+  float: right;
+  width: 16em;
+  padding: 0 0 0 1.5em;
+  margin: 1em 0 1em 1.5em;
+  border-left: solid 1px #ccc;
+}
+
+.highlight-block-left {
+  float: left;
+  width: 16em;
+  padding: 0 1.5em 0 0;
+  margin: 1em 1.5em 1em 0;
+  border-right: solid 1px #ccc;
+}
+
+/* Fix for Style Dropdown */
+.cke_panel_block .highlight-block-right,
+.cke_panel_block .highlight-block-left {
+  float: none;
+  margin: 0;
+  padding: 0;
+  border-left: 0;
+}

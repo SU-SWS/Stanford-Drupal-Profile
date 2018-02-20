@@ -1,0 +1,20 @@
+<?php
+
+/**
+ * @file
+ * stanford_jumpstart_masonry.module
+ */
+
+/**
+ * Implements hook_preprocess_HOOK().
+ */
+function stanford_jumpstart_masonry_preprocess_views_view(&$vars) {
+  global $theme;
+  if (array_search('masonry', $vars['classes_array']) !== FALSE && $theme == variable_get('theme_default', '')) {
+    $path = drupal_get_path('module', 'stanford_jumpstart_masonry');
+    drupal_add_js("$path/vendor/imagesloaded.min.js");
+    drupal_add_js("$path/vendor/masonry.min.js");
+    drupal_add_js("$path/js/stanford_jumpstart_masonry.js");
+    drupal_add_css("$path/css/stanford_jumpstart_masonry.css");
+  }
+}

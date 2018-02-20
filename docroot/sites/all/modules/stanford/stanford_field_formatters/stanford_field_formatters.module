@@ -1,0 +1,685 @@
+<?php
+
+/**
+ * @file
+ * stanford_field_formatters.module
+ */
+
+/**
+ * Implements hook_permission().
+ */
+function stanford_field_formatters_permission() {
+  return array(
+    'administer stanford field formatter' => array(
+      'title' => t('Administer Stanford link field formatter'),
+      'description' => t('Apply and change settings'),
+    ),
+  );
+}
+
+/**
+ * Implements hook_field_formatter_info().
+ *
+ * Not included field types: 'taxonomy_term_reference', 'file', 'computed',
+ * 'date', 'datestamp', 'datetime', 'email', 'field_collection', 'geofield',
+ * 'relation_endpoint', 'link_field'
+ */
+function stanford_field_formatters_field_formatter_info() {
+  $formatters = array(
+    'stanford_link_formatter_link_to_field' => array(
+      'label' => t('Link to another field'),
+      'field types' => array(
+        'title_wrapper',
+        'image',
+        'text',
+        'text_long',
+        'text_with_summary',
+      ),
+      'settings' => array(
+        'image_style' => '',
+        'link_field' => '',
+        'html_tag' => '',
+        'trim_length' => 600,
+      ),
+      'module' => 'stanford_field_formatters',
+      'description' => t('Wrap this field with a link from another field.'),
+    ),
+    'fontawesome_icon_formatter' => array(
+      'label' => t('Icons'),
+      'field types' => array('fontawesome_icon'),
+    ),
+    'fontawesome_icon_link' => array(
+      'label' => t('Linked Icons'),
+      'field types' => array('fontawesome_icon'),
+      'settings' => array(
+        'link_field' => '',
+      ),
+    ),
+  );
+  return $formatters;
+}
+
+/**
+ * Implements hook_field_formatter_settings_form().
+ */
+function stanford_field_formatters_field_formatter_settings_form($field, $instance, $view_mode, $form, &$form_state) {
+  $display = $instance['display'][$view_mode];
+  $settings = $display['settings'];
+
+  $field_info = field_info_field($field['field_name']);
+  if ($field_info['type'] == "image") {
+    $image_styles = image_style_options(FALSE);
+
+    $element['image_style'] = array(
+      '#title' => t('Image style'),
+      '#type' => 'select',
+      '#default_value' => $settings['image_style'],
+      '#empty_option' => t('None (original image)'),
+      '#options' => $image_styles,
+    );
+  }
+
+  if ($field_info['type'] == "text" || $field_info['type'] == "text_long" || $field_info['type'] == "text_with_summary") {
+    $instance['display'][$view_mode]['type'] = "text_trimmed";
+    $element = text_field_formatter_settings_form($field, $instance, $view_mode, $form, $form_state);
+
+  }
+
+  $element['link_field'] = array(
+    '#title' => t('Choose link field'),
+    '#type' => 'select',
+    '#default_value' => $settings['link_field'],
+    '#empty_option' => t('Nothing'),
+    '#options' => stanford_field_formatters_get_link_fields($instance),
+  );
+
+  return $element;
+
+}
+
+/**
+ * Implements hook_field_formatter_settings_summary().
+ */
+function stanford_field_formatters_field_formatter_settings_summary($field, $instance, $view_mode) {
+  if ($instance['display'][$view_mode]['type'] == 'fontawesome_icon_formatter') {
+    return;
+  }
+
+  $settings = isset($instance['display'][$view_mode]['settings']) ? $instance['display'][$view_mode]['settings'] : NULL;
+
+  if (!$settings) {
+    $settings = isset($field['formatter_settings']) ? $field['formatter_settings'] : NULL;
+  }
+
+  if (!$settings) {
+    return 'No settings';
+  }
+
+  $link_value = !empty($settings['link_field']) ? $settings['link_field'] : t("Nothing");
+  $image_style = !empty($settings['image_style']) ? $settings['image_style'] : FALSE;
+
+  $summary = array();
+
+  $summary[] = t("Link to field: %field", array('%field' => $link_value));
+
+  if ($image_style) {
+    $summary[] = t("Image style: %style", array('%style' => $image_style));
+  }
+
+  return implode('<br />', $summary);
+}
+
+/**
+ * Implements hook_field_formatter_view().
+ */
+function stanford_field_formatters_field_formatter_view($entity_type, $entity, $field, $instance, $langcode, $items, $display) {
+  $element = array();
+
+  switch ($field['type']) {
+    case "image":
+      $display['settings']['image_link'] = "file";
+      $element = image_field_formatter_view($entity_type, $entity, $field, $instance, $langcode, $items, $display);
+      break;
+
+    case "text":
+    case "text_long":
+    case "text_with_summary":
+      $display['type'] = "text_trimmed";
+      $element = text_field_formatter_view($entity_type, $entity, $field, $instance, $langcode, $items, $display);
+      break;
+
+    case "fontawesome_icon":
+      $element = stanford_field_formatters_font_awesome_view($entity_type, $entity, $field, $instance, $langcode, $items, $display);
+      break;
+  }
+
+  _stanford_field_formatters_field_formatter_view_paths($element, $entity, $display);
+  return $element;
+}
+
+/**
+ * Apply link to formatter markup.
+ *
+ * @param array $element
+ *   The element to manipulate.
+ * @param object $entity
+ *   The entity object.
+ * @param array $display
+ *   The field display settings.
+ */
+function _stanford_field_formatters_field_formatter_view_paths(array &$element, $entity, array $display) {
+  $settings = $display['settings'];
+  $link_field = !empty($settings['link_field']) ? $settings['link_field'] : FALSE;
+
+  $paths = array();
+  if ($link_field && !empty($entity->{$link_field}[LANGUAGE_NONE])) {
+    $link_field_items = $entity->$link_field;
+    $paths = $link_field_items[LANGUAGE_NONE];
+  }
+
+  foreach (array_keys($element) as $index) {
+    if (!empty($paths[$index])) {
+
+      $attributes = $paths[$index]['attributes'];
+      $attributes['title'] = $paths[$index]['title'];
+
+      if (isset($element[$index]["#path"])) {
+        $element[$index]['#path']['path'] = url($paths[$index]['url']);
+        $element[$index]['#path']['options'] = $attributes;
+      }
+
+      if (isset($element[$index]["#markup"])) {
+        $link_options = array(
+          'html' => TRUE,
+          'attributes' => $attributes,
+        );
+        $element[$index]["#markup"] = l($element[$index]["#markup"], url($paths[$index]['url']), $link_options);
+      }
+    }
+  }
+}
+
+/**
+ * Build the render array for the font awesome icon field display.
+ */
+function stanford_field_formatters_font_awesome_view($entity_type, $entity, $field, $instance, $langcode, $items, $display) {
+  $element = array();
+  foreach ($items as $delta => $item) {
+    if (isset($item['icon'])) {
+      // Builds font awesome tag <i class="fa fa-{value}"
+      // aria-hidden="true"/>.
+      $element[$delta] = array(
+        '#theme' => 'font_awesome_icon',
+        '#path' => array(),
+        '#tag' => 'i',
+        '#value' => '',
+        '#attributes' => array('class' => array('fa', 'fa-' . $item['icon'])),
+        '#attached' => array(
+          'css' => array(
+            'https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css' => array('type' => 'external'),
+          ),
+        ),
+      );
+    }
+  }
+  return $element;
+}
+
+/**
+ * Implements hook_theme().
+ */
+function stanford_field_formatters_theme($existing, $type, $theme, $path) {
+  return array(
+    'font_awesome_icon' => array(
+      'render element' => 'element',
+    ),
+  );
+}
+
+/**
+ * Theme font awesome icons.
+ *
+ * @param array $variables
+ *   Theme variables similar to theme_html_tag().
+ *
+ * @return string
+ *   Render output.
+ */
+function theme_font_awesome_icon(array $variables) {
+  if (!empty($variables['element']['#path'])) {
+    $link = array(
+      'html' => TRUE,
+      'attributes' => $variables['element']['#path']['options'],
+    );
+    if (isset($link['attributes']['title'])) {
+      $variables['element']['#value'] = '<span class="visually-hidden">' . $link['attributes']['title'] . '</span>';
+    }
+    $tag = theme('html_tag', $variables);
+    $output = l($tag, $variables['element']['#path']['path'], $link);
+  }
+  else {
+    $output = theme('html_tag', $variables);
+  }
+  return $output;
+}
+
+/**
+ * Get the html wrapper tags.
+ *
+ * @return array
+ *   Wrapper tags.
+ */
+function stanford_field_formatters_get_html_wrapper_tags() {
+  $tags = array(
+    'h2' => 'H2',
+    'h3' => 'H3',
+    'h4' => 'H4',
+    'h5' => 'H5',
+    'p' => 'p',
+    'span' => 'span',
+  );
+
+  return $tags;
+}
+
+/**
+ * Implements hook_ds_fields_info().
+ */
+function stanford_field_formatters_ds_fields_info($entity_type) {
+  $fields = array();
+
+  $tags = stanford_field_formatters_get_html_wrapper_tags();
+
+  $fields['title_wrapper'] = array(
+    'title' => t('Title wrapper'),
+    'field_type' => DS_FIELD_TYPE_FUNCTION,
+    'function' => 'stanford_field_formatters_ds_field_title_wrapper',
+    'properties' => array(
+      'formatters' => array(
+        'default' => t('Default'),
+        'stanford_field_formatters' => t('Link to another field'),
+      ),
+      'settings' => array(
+        'link_field' => array(
+          'type' => 'textfield',
+          'description' => t('Eg: field_link'),
+        ),
+        'html_tag' => array(
+          'type' => 'select',
+          'options' => $tags,
+        ),
+      ),
+      'default' => array(
+        'link_field' => '',
+        'html_tag' => '',
+      ),
+    ),
+  );
+
+  return array('node' => $fields, 'bean' => $fields, 'user' => $fields);
+}
+
+/**
+ * Implements hook_ds_fields_info_alter().
+ */
+function stanford_field_formatters_ds_fields_info_alter(&$fields, $entity_type) {
+
+  // Loop through the code fields and allow an extra formatter.
+  foreach ($fields as $field => $settings) {
+    if ($settings['field_type'] == DS_FIELD_TYPE_CODE) {
+      $fields[$field]['field_type'] = DS_FIELD_TYPE_FUNCTION;
+      $fields[$field]['function'] = "stanford_field_formatters_code_field_override";
+      $fields[$field]['module'] = "stanford_field_formatters";
+      $fields[$field]['properties']['formatters']["stanford_field_formatters"] = t('Link rendered output to another field');
+      $fields[$field]['properties']['formatters']['default'] = t('Default');
+      $fields[$field]['properties']['settings']['link_field'] = array(
+        'type' => 'textfield',
+        'description' => t('Eg: field_link'),
+      );
+      $fields[$field]['properties']['default']['link_field'] = "";
+    }
+  }
+}
+
+/**
+ * Implements hook_field_formatter_settings_form().
+ */
+function stanford_field_formatters_ds_field_settings_form($field) {
+
+  // Only run on our settings.
+  $formatter = stanford_field_formatters_get_ds_formatter_selection($field);
+  if ($formatter !== "stanford_field_formatters") {
+    return;
+  }
+
+  // Saved formatter settings are on $field['formatter_settings'];.
+  $settings = isset($field['formatter_settings']) ? $field['formatter_settings'] : $field['properties']['default'];
+  $form = array();
+  $tags = stanford_field_formatters_get_html_wrapper_tags();
+
+  $form['html_tag'] = array(
+    '#title' => t('Html wrapper tag'),
+    '#type' => 'select',
+    '#default_value' => $settings['html_tag'],
+    '#empty_option' => t('None'),
+    '#options' => $tags,
+  );
+
+  $form['link_field'] = array(
+    '#title' => t('Choose link field'),
+    '#type' => 'select',
+    '#default_value' => $settings['link_field'],
+    '#empty_option' => t('Nothing'),
+    '#options' => stanford_field_formatters_get_link_fields($field),
+  );
+
+  return $form;
+}
+
+/**
+ * Implements hook_field_formatter_settings_summary().
+ */
+function stanford_field_formatters_ds_field_format_summary($field) {
+  $instance = array();
+  $view_mode = $field['view_mode'];
+  $formatter = stanford_field_formatters_get_ds_formatter_selection($field);
+
+  // If not our formatter do not return anything.
+  if ($formatter !== "stanford_field_formatters") {
+    return;
+  }
+
+  // Return a summary based on our settings.
+  return stanford_field_formatters_field_formatter_settings_summary($field, $instance, $view_mode);
+}
+
+/**
+ * Needs proper description.
+ */
+function stanford_field_formatters_get_ds_formatter_selection($field) {
+
+  $entity_type = $field['entity_type'];
+  $bundle = $field['bundle'];
+  $view_mode = $field['view_mode'];
+  $field_name = isset($field['name']) ? $field['name'] : $field['field_name'];
+
+  $field_info = ds_get_field_settings($entity_type, $bundle, $view_mode);
+  $request_type = isset($_REQUEST['fields'][$field_name]['format']['type']) ? check_plain($_REQUEST['fields'][$field_name]['format']['type']) : FALSE;
+
+  // Handle the change in the form...
+  if (!empty($request_type)) {
+    return $request_type;
+  }
+
+  // Handle the default values.
+  return $field_info[$field_name]['format'];
+}
+
+/**
+ * Needs proper description.
+ */
+function stanford_field_formatters_ds_field_title_wrapper($field) {
+
+  // Get information about the entity being rated and the formatter we're using.
+  $entity = $field['entity'];
+  $output = "";
+  $link_field = !empty($field['formatter_settings']['link_field']) ? $field['formatter_settings']['link_field'] : FALSE;
+  $wrapper = !empty($field['formatter_settings']['html_tag']) ? $field['formatter_settings']['html_tag'] : FALSE;
+
+  if (empty($entity->title)) {
+    return;
+  }
+
+  // If not available then just return the title.
+  if (!$link_field || empty($link_field)) {
+    $output = $entity->title;
+  }
+  // If there is not a value then return just the title.
+  elseif (empty($entity->{$link_field}[LANGUAGE_NONE][0]['url'])) {
+    $output = $entity->title;
+  }
+  else {
+    $output = l($entity->title, $entity->{$link_field}[LANGUAGE_NONE][0]['url'], array(
+      'attributes' => array('class' => array('link-title-field', 'link-field')),
+    ));
+  }
+
+  if ($wrapper) {
+    $output = "<" . $wrapper . ">" . $output . "</" . $wrapper . ">";
+  }
+
+  return $output;
+}
+
+/**
+ * Needs proper description.
+ */
+function stanford_field_formatters_code_field_override($field) {
+  $render = ds_render_code_field($field);
+
+  // Only run on our settings.
+  $formatter = stanford_field_formatters_get_ds_formatter_selection($field);
+  if ($formatter !== "stanford_field_formatters") {
+    return $render;
+  }
+
+  // It is our render field. Carry on.
+  $render = strip_tags($render, "<img><span><b><strong><i><em>");
+  $entity = $field['entity'];
+  $link_field = !empty($field['formatter_settings']['link_field']) ? $field['formatter_settings']['link_field'] : FALSE;
+  $wrapper = !empty($field['formatter_settings']['html_tag']) ? $field['formatter_settings']['html_tag'] : FALSE;
+
+  // If not available then just return the title.
+  if (!$link_field || empty($link_field)) {
+    $output = $render;
+  }
+  // If there is not a value then return just the title.
+  elseif (empty($entity->{$link_field}[LANGUAGE_NONE][0]['url'])) {
+    $output = $render;
+  }
+  else {
+    $output = l($render, $entity->{$link_field}[LANGUAGE_NONE][0]['url'], array(
+      'html' => TRUE,
+      'attributes' => array('class' => array('link-title-field', 'link-field')),
+    ));
+  }
+
+  if ($wrapper) {
+    $output = "<" . $wrapper . ">" . $output . "</" . $wrapper . ">";
+  }
+
+  return $output;
+}
+
+/**
+ * Returns an array of link fields on an entity type.
+ */
+function stanford_field_formatters_get_link_fields($instance) {
+  $fields = array();
+
+  $entity_type = $instance['entity_type'];
+  $bundle = $instance['bundle'];
+  $instances = field_info_instances($entity_type, $bundle);
+
+  foreach ($instances as $field_name => $value) {
+    $field_info = field_info_field($field_name);
+    $type = $field_info['type'];
+    if ($type == "link_field") {
+      $fields[$field_name] = $value['label'] . " [" . $field_name . "]";
+    }
+  }
+
+  return $fields;
+}
+
+/**
+ * Implements hook_field_is_empty().
+ */
+function stanford_field_formatters_field_is_empty($item, $field) {
+  switch ($field['type']) {
+    case ' fontawesome_icon':
+      if (empty($item['icon'])) {
+        return TRUE;
+      }
+      break;
+  }
+  return FALSE;
+}
+
+/**
+ * Implements hook_field_info().
+ */
+function stanford_field_formatters_field_info() {
+  return array(
+    'fontawesome_icon' => array(
+      'label' => t('Font Awesome Icon'),
+      'description' => t('This field stores varchar text in the database.'),
+      'default_widget' => 'fontawesome_icon_widget',
+      'default_formatter' => 'fontawesome_icon_formatter',
+      'settings' => array('subset' => array()),
+    ),
+  );
+}
+
+/**
+ * Implements hook_field_widget_info().
+ */
+function stanford_field_formatters_field_widget_info() {
+  return array(
+    'fontawesome_icon_widget' => array(
+      'label' => t('Font Awesome Icon'),
+      'field types' => array('fontawesome_icon'),
+      'behaviors' => array(
+        'multiple values' => FIELD_BEHAVIOR_DEFAULT,
+        'default value' => FIELD_BEHAVIOR_DEFAULT,
+      ),
+    ),
+  );
+}
+
+/**
+ * Implements hook_field_widget_settings_form().
+ */
+function stanford_field_formatters_field_widget_settings_form($field, $instance) {
+  $widget = $instance['widget'];
+  $settings = $widget['settings'];
+
+  $form = array();
+
+  switch ($widget['type']) {
+    case 'fontawesome_icon_widget':
+      $options = array();
+      $fa_icons = stanford_field_formatters_get_icons();
+      foreach ($fa_icons as $set => $set_icons) {
+        $options[$set] = str_replace(' Icons', '', $set);
+      }
+      $form['subset'] = array(
+        '#type' => 'select',
+        '#title' => t('FontAwesome Subset'),
+        '#description' => t('Leave empty to allow all'),
+        '#options' => $options,
+        '#default_value' => $settings['subset'],
+        '#multiple' => TRUE,
+      );
+      break;
+  }
+
+  return $form;
+}
+
+/**
+ * Implements hook_field_widget_form().
+ */
+function stanford_field_formatters_field_widget_form(&$form, &$form_state, $field, $instance, $langcode, $items, $delta, $element) {
+  $widget = $instance['widget'];
+  switch ($widget['type']) {
+    case 'fontawesome_icon_widget':
+      return _stanford_field_formatters_fontawesome_icon_widget_form($form, $form_state, $field, $instance, $langcode, $items, $delta, $element);
+      break;
+  }
+  return array();
+}
+
+/**
+ * Fontawesome icon Widget form.
+ *
+ * @see stanford_field_formatters_field_widget_form()
+ */
+function _stanford_field_formatters_fontawesome_icon_widget_form(&$form, &$form_state, $field, $instance, $langcode, $items, $delta, $element) {
+  $path = drupal_get_path('module', 'stanford_field_formatters');
+  $fa_icons = array();
+  $fa_icons += stanford_field_formatters_get_icons();
+
+  // Get the subset of icons if set.
+  if (isset($instance['widget']['settings']['subset'])) {
+    $subsets = $instance['widget']['settings']['subset'];
+
+    if ($subsets) {
+      if (is_string($subsets)) {
+        $fa_icons = $fa_icons[$subsets];
+      }
+      else {
+        $limited_icons = array();
+        foreach ($subsets as $set) {
+          $limited_icons[$set] = $fa_icons[$set];
+        }
+
+        $fa_icons = $limited_icons;
+      }
+    }
+  }
+
+  $icon = array(
+    '#type' => 'select',
+    '#options' => $fa_icons,
+    '#empty_option' => t('- None -'),
+    '#attributes' => array('class' => array('stanford-fontawesome-icon')),
+    '#attached' => array(
+      'css' => array(
+        "$path/css/stanford_field_formatters.admin.css" => array(),
+        'https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css' => array('type' => 'external'),
+      ),
+      'js' => array(
+        "$path/js/stanford_field_formatters.js",
+      ),
+    ),
+    '#default_value' => $items[$delta]['icon'],
+  );
+  return array('icon' => $element + $icon);
+}
+
+/**
+ * Implements hook_field_presave().
+ */
+function stanford_field_formatters_field_presave($entity_type, $entity, $field, $instance, $langcode, &$items) {
+  $reset_deltas = FALSE;
+  foreach ($items as $delta => $value) {
+    if (isset($value['icon']) && $value['icon'] == '0') {
+      unset($items[$delta]);
+      $reset_deltas = TRUE;
+    }
+  }
+  // Reset deltas.
+  if ($reset_deltas) {
+    $items = array_values($items);
+  }
+}
+
+/**
+ * Gets available font awesome icons from the json file.
+ *
+ * @return array
+ *   Font awesome options in groups.
+ */
+function stanford_field_formatters_get_icons() {
+  // If data is cached, return the data.
+  if ($cache = cache_get('stanford_field_formatters_icons')) {
+    return $cache->data;
+  }
+
+  // Get json data and set cache.
+  $fa_icons = drupal_get_path('module', 'stanford_field_formatters') . '/css/font-awesome.json';
+  $fa_icons = drupal_json_decode(file_get_contents($fa_icons));
+  cache_set('stanford_field_formatters_icons', $fa_icons);
+  return $fa_icons;
+}

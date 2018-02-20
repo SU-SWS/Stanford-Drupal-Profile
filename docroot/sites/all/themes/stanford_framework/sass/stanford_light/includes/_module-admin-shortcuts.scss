@@ -1,0 +1,50 @@
+#admin-shortcuts {
+    background: #4D4F53;
+    margin: 0px;
+    padding: 8px 10px 3px 10px;
+    color: white;
+    font-family:"Lucida Grande", "Lucida Sans Unicode", sans-serif;
+}
+#admin-shortcuts .nav {
+    margin: 0;
+    padding: 0;
+}
+#admin-shortcuts ul.menu a, #admin-shortcuts .content a {
+    background: #4D4F53;
+    color: #fff;
+    padding: 3px 10px;
+    font-weight: normal;
+}
+#admin-shortcuts ul.menu a:hover, #admin-shortcuts ul.menu a:active, #admin-shortcuts .content a:hover, #admin-shortcuts .content a:active {
+    background: #222;
+    border-radius: 5px;
+}
+#admin-shortcuts ul.menu > li > a:hover, #admin-shortcuts ul.menu > li > a:active, #admin-shortcuts .content > ul > li > a:hover, #admin-shortcuts .content > ul > li > a:active {
+    background: #222;
+    border-radius: 10px;
+}
+#admin-shortcuts ul.menu, #admin-shortcuts .content ul {
+    background: #4D4F53;
+}
+#admin-shortcuts ul.menu li, #admin-shortcuts .content ul li {
+    display: inline-block;
+    margin: 0;
+}
+#admin-shortcuts ul.menu li ul, #admin-shortcuts .content ul li ul {
+    display: none;
+}
+#admin-shortcuts ul.menu li:hover ul, #admin-shortcuts .content ul li:hover ul {
+    display: block;
+    position: absolute;
+    width: 200px;
+}
+#admin-shortcuts ul.menu ul li, #admin-shortcuts .content ul ul li {
+    display: block;
+}
+#admin-shortcuts ul.menu ul a, #admin-shortcuts .content ul ul a {
+    padding-left: 20px;
+}
+#admin-shortcuts ul.menu .caret, #admin-shortcuts .content .caret {
+    border-bottom-color: #fff;
+    border-top-color: #fff;
+}

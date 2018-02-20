@@ -1,0 +1,5 @@
+name: JSE Uninstall Courses
+machine_name: jse-uninstall-courses
+description: Uninstall courses for JSE.
+tasks:
+  - \Stanford\JumpstartEngineering\Install\Courses\DisableCourses

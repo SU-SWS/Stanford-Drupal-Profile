@@ -1,0 +1,41 @@
+.view.masonry a:focus,
+.view.masonry a:hover {
+  text-decoration: none;
+}
+.view.masonry .views-field-body {
+  padding: 0 40px 40px;
+  word-wrap: break-word;
+}
+.view.masonry .views-field-title {
+  font-size: 1.3em;
+  padding: 40px 40px 0;
+  margin-bottom: 0.5em;
+  word-wrap: break-word;
+}
+.view.masonry .views-field-field-s-image-image img {
+  width: 100%;
+}
+html.js .view.masonry .views-row {
+  width: calc(37% - 58px);
+  position: absolute;
+  box-shadow: 0 1px 4px #777777;
+  padding: 0;
+}
+@media (max-width: 1199px) {
+  html.js .view.masonry .views-row {
+    width: calc(54% - 50px);
+  }
+}
+@media (max-width: 979px) {
+  html.js .view.masonry .views-row {
+    width: calc(55% - 48px);
+  }
+}
+@media (max-width: 590px) {
+  html.js .view.masonry .views-row {
+    width: calc(100% - 5px);
+  }
+}
+html.js .style-custom-styles-dark .view.masonry .views-row {
+  box-shadow: none;
+}

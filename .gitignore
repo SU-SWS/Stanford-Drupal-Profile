@@ -21,6 +21,9 @@ docroot/sites/*/private
 /docroot/sites/*/local.settings.php
 /docroot/sites/default/drushrc.php
 
+# Ignore some extra items we don't really want due to composer dependencies.
+docroot/sites/all/libraries/jquery
+
 # Compiled source #
 ###################
 *.com

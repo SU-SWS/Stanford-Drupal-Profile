@@ -1,0 +1,7 @@
+name = Stanford Jumpstart Masonry
+description = Provides Masonry plugin support for views
+core = 7.x
+package = Stanford Sites Jumpstart
+version = 7.x-5.x
+project = stanford_jumpstart
+project status url = https://github.com/SU-SWS/stanford_jumpstart

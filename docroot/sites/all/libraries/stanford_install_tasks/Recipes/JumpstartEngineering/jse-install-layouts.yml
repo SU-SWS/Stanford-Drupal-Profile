@@ -1,0 +1,7 @@
+name: JSE Install Layouts
+machine_name: jse-install-layouts
+description: JSE product home page layouts will be installed.
+tasks:
+  - \Stanford\JumpstartEngineering\Install\Layouts\PicalHomepage
+  - \Stanford\JumpstartEngineering\Install\Layouts\PicalPeople
+  - \Stanford\JumpstartEngineering\Install\Layouts\Sitewide

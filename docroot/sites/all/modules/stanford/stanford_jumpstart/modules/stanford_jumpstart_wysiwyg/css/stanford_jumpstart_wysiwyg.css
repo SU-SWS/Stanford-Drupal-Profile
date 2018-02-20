@@ -1,0 +1,13 @@
+table.tablesaw:not(.tablesaw-stack) {
+  overflow-x: scroll;
+  display: block;
+}
+
+.tablesaw-all-cols-visible {
+  display: none;
+}
+
+.tablesaw-nav-btn .hide-me {
+  position: absolute;
+  top: -99px;
+}
