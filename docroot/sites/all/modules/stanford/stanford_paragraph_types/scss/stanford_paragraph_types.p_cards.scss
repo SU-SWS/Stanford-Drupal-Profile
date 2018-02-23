@@ -1,0 +1,157 @@
+@import 'colors';
+
+.paragraphs-item-p-cards {
+  .field-name-field-p-cards-card {
+
+    @media(min-width: 767px) {
+      > .field-items {
+        display: flex;
+
+        > .field-item {
+          flex-grow: 1;
+          margin: 0 10px;
+          float: left;
+        }
+      }
+
+      // Old IE Fix.
+      &.items-3 > .field-items > .field-item {
+        width: 33%;
+      }
+
+      &.items-2 > .field-items > .field-item {
+        width: 33%;
+      }
+    }
+  }
+
+  img {
+    margin: 0 auto;
+    display: block;
+  }
+  @media (max-width: 767px) {
+    .field-item .field-collection-view,
+    .field-item:first-child .field-collection-view,
+    .field-item:last-child .field-collection-view {
+      padding: 0;
+    }
+
+    .field-name-field-p-card-cta,
+    .field-name-field-p-card-file,
+    .field-name-field-p-card-text {
+      padding: 0 1em;
+    }
+  }
+
+  div[class*='color-'] {
+    .field-name-field-p-card-image {
+      margin-bottom: 0;
+    }
+
+    .group-card-title {
+      margin-top: 0;
+      display: inline-block;
+      width: 100%;
+
+      .field-item {
+        padding: 20px;
+        margin-bottom: 60px;
+      }
+    }
+  }
+
+  .color-cool-gray {
+    .group-card-title {
+      &,
+      & .field-item {
+        @include paragraph-colors('cool-gray');
+      }
+    }
+  }
+
+  .color-light-taupe {
+    .group-card-title {
+      &,
+      & .field-item {
+        @include paragraph-colors('light-taupe');
+      }
+    }
+  }
+
+  .color-bright-green {
+    .group-card-title {
+      &,
+      & .field-item {
+        @include paragraph-colors('bright-green');
+      }
+    }
+  }
+
+  .color-bright-blue {
+    .group-card-title {
+      &,
+      & .field-item {
+        @include paragraph-colors('bright-blue');
+      }
+    }
+  }
+
+  .color-bright-yellow {
+    .group-card-title {
+      &,
+      & .field-item {
+        @include paragraph-colors('bright-yellow');
+      }
+    }
+  }
+
+  .color-bright-orange {
+    .group-card-title {
+      &,
+      & .field-item {
+        @include paragraph-colors('bright-orange');
+      }
+    }
+  }
+
+  .pattern-asfalt-dark .group-card-title {
+    background-image: url('../img/asfalt-dark.png');
+  }
+
+  .pattern-back-pattern .group-card-title {
+    background-image: url('../img/back-pattern.png');
+  }
+
+  .pattern-cubes .group-card-title {
+    background-image: url('../img/cubes.png');
+  }
+
+  .pattern-dimension .group-card-title {
+    background-image: url('../img/dimension.png');
+  }
+
+  .pattern-flower-trail .group-card-title {
+    background-image: url('../img/flower-trail.png');
+  }
+
+  .pattern-nami .group-card-title {
+    background-image: url('../img/nami.png');
+  }
+
+  .pattern-quilt .group-card-title {
+    background-image: url('../img/quilt.png');
+  }
+
+  .pattern-swirl .group-card-title {
+    background-image: url('../img/swirl.png');
+  }
+
+  .pattern-wild-flowers .group-card-title {
+    background-image: url('../img/wild-flowers.png');
+  }
+
+  .pattern-zig-zag .group-card-title {
+    background-image: url('../img/zig-zag.png');
+  }
+
+}

@@ -1,0 +1,92 @@
+.paragraphs-item-p-hero > .content {
+  position: relative;
+}
+
+.paragraphs-item-p-hero > .content .player {
+  position: relative;
+  width: 100%;
+  height: 0;
+  padding-bottom: 56.25%;
+}
+
+.paragraphs-item-p-hero > .content iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.paragraphs-item-p-hero > .content .field-name-field-p-hero-image {
+  position: relative;
+}
+
+.paragraphs-item-p-hero > .content .field-name-field-p-hero-image img {
+  width: 100%;
+}
+
+.paragraphs-item-p-hero .group-overlay-text {
+  position: absolute;
+  background-color: #ffffff;
+  padding: 40px;
+}
+
+.paragraphs-item-p-hero .group-overlay-text .field.field-name-field-p-hero-headline,
+.paragraphs-item-p-hero .group-overlay-text .field.field-name-field-p-hero-superhead {
+  margin-bottom: 0;
+}
+
+.paragraphs-item-p-hero .group-overlay-text .field-name-field-p-hero-superhead {
+  font-size: 2.4em;
+  font-weight: 400;
+  letter-spacing: -.5px;
+  line-height: 1.2em;
+}
+
+.paragraphs-item-p-hero.overlay-top .group-overlay-text {
+  top: 20px;
+}
+
+.paragraphs-item-p-hero.overlay-bottom .group-overlay-text {
+  bottom: 20px;
+}
+
+.paragraphs-item-p-hero.overlay-left .group-overlay-text {
+  left: 20px;
+}
+
+.paragraphs-item-p-hero.overlay-right .group-overlay-text {
+  right: 20px;
+}
+
+.paragraphs-item-p-hero a.play-video {
+  display: block;
+  position: absolute;
+  font-size: 0;
+  left: calc(50% - 70px);
+  top: calc(50% - 70px);
+  color: #ffffff;
+}
+
+.paragraphs-item-p-hero a.play-video:focus, .paragraphs-item-p-hero a.play-video:hover {
+  color: #b6b1a9;
+  text-decoration: none;
+}
+
+.paragraphs-item-p-hero a.play-video i:before {
+  font-size: 140px;
+}
+
+.paragraphs-item-p-hero .field-name-field-p-hero-video:nth-child(2) {
+  display: none;
+}
+
+@media (max-width: 767px) {
+  .paragraphs-item-p-hero .group-overlay-text {
+    position: static;
+  }
+}
+
+.style-custom-styles-dark .paragraphs-item-p-hero .group-overlay-text {
+  background: #2e2d29;
+}

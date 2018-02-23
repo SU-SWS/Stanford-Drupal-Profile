@@ -1,10 +1,479 @@
 {
   "name": "su-sws/stanford_sites_jumpstart_academic",
-  "description": "A Drupal Installation Profile.",
+  "description": "Stanford Sites Jumpstart Academic Distribution.",
   "type": "drupal-custom-profile",
   "license": "GPL-2.0+",
   "minimum-stability": "dev",
+  "repositories": [
+    {
+      "type": "composer",
+      "url": "https://packages.drupal.org/7"
+    },
+    {
+        "type": "composer",
+        "url": "https://asset-packagist.org"
+    },
+    {
+      "type": "package",
+      "package": {
+        "name": "jackmoore/colorbox",
+        "version": "master",
+        "type": "drupal-library",
+        "dist": {
+          "url": "https://github.com/jackmoore/colorbox/archive/master.zip",
+          "type": "zip"
+        },
+        "require": {
+          "composer/installers": "~1.0"
+        }
+      }
+    },
+    {
+      "type": "package",
+      "package": {
+        "name": "components/chosen",
+        "version": "1.8.2",
+        "type": "drupal-library",
+        "dist": {
+          "url": "https://github.com/harvesthq/chosen/releases/download/v1.8.2/chosen_v1.8.2.zip",
+          "type": "zip"
+        },
+        "require": {
+          "composer/installers": "~1.0"
+        }
+      }
+    },
+    {
+      "type": "package",
+      "package": {
+        "name": "library/simplepie",
+        "version": "1.3.1",
+        "type": "drupal-library",
+        "dist": {
+          "url": "https://gist.githubusercontent.com/sherakama/8ba5e152c2c8944a5a4a1ab604f87761/raw/d6f30a47ca48e5d73c3e7218a45d0c3ac9393b53/simplepie.compiled.php",
+          "type": "file"
+        },
+        "require": {
+          "composer/installers": "~1.0"
+        }
+      }
+    },
+    {
+      "type": "package",
+      "package": {
+        "name": "library/ckeditor",
+        "version": "3.6.6",
+        "type": "drupal-library",
+        "dist": {
+          "url": "http://download.cksource.com/CKEditor/CKEditor/CKEditor%203.6.6.1/ckeditor_3.6.6.1.zip",
+          "type": "zip"
+        },
+        "require": {
+          "composer/installers": "~1.0"
+        }
+      }
+    },
+    {
+      "type": "package",
+      "package": {
+        "name": "library/jquery_cycle",
+        "version": "2.99",
+        "type": "drupal-library",
+        "dist": {
+          "url": "http://malsup.com/jquery/cycle/release/jquery.cycle.zip?v2.99",
+          "type": "zip"
+        },
+        "require": {
+          "composer/installers": "~1.0"
+        }
+      }
+    },
+    {
+      "type": "package",
+      "package": {
+        "name": "library/feeds_jsonpath_parser",
+        "version": "0.8.1",
+        "type": "drupal-library",
+        "dist": {
+          "url": "https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/jsonpath/jsonpath-0.8.1.php",
+          "type": "file"
+        },
+        "require": {
+          "composer/installers": "~1.0"
+        }
+      }
+    },
+    {
+      "type": "package",
+      "package": {
+        "name": "library/jw_player",
+        "version": "5.0.0",
+        "type": "drupal-library",
+        "dist": {
+          "url": "https://github.com/SU-SWS/stanford_sites_libraries/blob/jwplayer5/jwplayer.zip?raw=true",
+          "type": "zip"
+        },
+        "require": {
+          "composer/installers": "~1.0"
+        }
+      }
+    },
+    {
+      "type": "package",
+      "package": {
+        "name": "library/proj4js",
+        "version": "1.1.0",
+        "type": "drupal-library",
+        "dist": {
+          "url": "http://download.osgeo.org/proj4js/proj4js-1.1.0.zip",
+          "type": "zip"
+        },
+        "require": {
+          "composer/installers": "~1.0"
+        }
+      }
+    },
+    {
+      "type": "vcs",
+      "url": "https://github.com/SU-SWS/erus"
+    },
+    {
+      "type": "vcs",
+      "url": "https://github.com/SU-SWS/stanford_alt_check"
+    },
+    {
+      "type": "vcs",
+      "url": "https://github.com/SU-SWS/stanford_bean_types"
+    },
+    {
+      "type": "vcs",
+      "url": "https://github.com/SU-SWS/stanford_capx"
+    },
+    {
+      "type": "vcs",
+      "url": "https://github.com/SU-SWS/stanford_carousel"
+    },
+    {
+      "type": "vcs",
+      "url": "https://github.com/SU-SWS/stanford_courses"
+    },
+    {
+      "type": "vcs",
+      "url": "https://github.com/SU-SWS/stanford_date_formats"
+    },
+    {
+      "type": "vcs",
+      "url": "https://github.com/SU-SWS/stanford_event_series"
+    },
+    {
+      "type": "vcs",
+      "url": "https://github.com/SU-SWS/stanford_events_importer"
+    },
+    {
+      "type": "vcs",
+      "url": "https://github.com/SU-SWS/stanford_feeds_helper"
+    },
+    {
+      "type": "vcs",
+      "url": "https://github.com/SU-SWS/stanford_field_formatters"
+    },
+    {
+      "type": "vcs",
+      "url": "https://github.com/SU-SWS/stanford_gallery"
+    },
+    {
+      "type": "vcs",
+      "url": "https://github.com/SU-SWS/stanford_helper"
+    },
+    {
+      "type": "vcs",
+      "url": "https://github.com/SU-SWS/stanford_image"
+    },
+    {
+      "type": "vcs",
+      "url": "https://github.com/SU-SWS/stanford_image_styles"
+    },
+    {
+      "type": "vcs",
+      "url": "https://github.com/SU-SWS/stanford_news"
+    },
+    {
+      "type": "vcs",
+      "url": "https://github.com/SU-SWS/stanford_page"
+    },
+    {
+      "type": "vcs",
+      "url": "https://github.com/SU-SWS/stanford_person"
+    },
+    {
+      "type": "vcs",
+      "url": "https://github.com/SU-SWS/stanford_slides"
+    },
+    {
+      "type": "vcs",
+      "url": "https://github.com/SU-SWS/stanford_video"
+    },
+    {
+      "type": "vcs",
+      "url": "https://github.com/SU-SWS/stanford_easy_wysiwyg_css"
+    },
+    {
+      "type": "vcs",
+      "url": "https://github.com/SU-SWS/stanford_jumpstart"
+    },
+    {
+      "type": "vcs",
+      "url": "https://github.com/SU-SWS/stanford_landing_page"
+    },
+    {
+      "type": "vcs",
+      "url": "https://github.com/SU-SWS/stanford_manage_content"
+    },
+    {
+      "type": "vcs",
+      "url": "https://github.com/SU-SWS/stanford_jumpstart_home"
+    },
+    {
+      "type": "vcs",
+      "url": "https://github.com/SU-SWS/open_framework"
+    },
+    {
+      "type": "vcs",
+      "url": "https://github.com/SU-SWS/stanford_seven"
+    },
+    {
+      "type": "vcs",
+      "url": "https://github.com/SU-SWS/stanford_framework"
+    },
+    {
+      "type": "vcs",
+      "url": "https://github.com/SU-SWS/stanford_jordan"
+    },
+    {
+      "type": "vcs",
+      "url": "https://github.com/SU-SWS/stanford_wilbur"
+    },
+    {
+      "type": "vcs",
+      "url": "https://github.com/SU-SWS/stanford_install_tasks"
+    },
+    {
+      "type": "vcs",
+      "url": "https://github.com/SU-SWS/stanford_sites_content_importer"
+    },
+    {
+      "type": "vcs",
+      "url": "https://github.com/SU-SWS/stanford_fwb"
+    },
+    {
+      "type": "vcs",
+      "url": "https://github.com/SU-SWS/stanford_story_page"
+    },
+    {
+      "type": "vcs",
+      "url": "https://github.com/SU-SWS/stanford_paragraph_types"
+    },
+    {
+      "type": "vcs",
+      "url": "https://github.com/SU-SWS/stanford_jumpstart_academic"
+    }
+  ],
   "require": {
-      "composer/installers": "^1.2"
+    "composer/installers": "^1.2",
+    "jackmoore/colorbox": "master",
+    "components/chosen": "1.8.2",
+    "library/simplepie": "1.3.1",
+    "library/ckeditor": "3.6.6",
+    "kigkonsult/icalcreator": "~2.24",
+    "library/jquery_cycle": "2.99",
+    "trentrichardson/jquery-timepicker-addon": "1.6.3",
+    "library/feeds_jsonpath_parser": "0.8.1",
+    "library/jw_player": "5.0.0",
+    "dompdf/dompdf": "0.6.2",
+    "library/proj4js": "1.1.0",
+
+    "drupal/admin_menu": "~3.0-rc5",
+    "drupal/admin_views": "~1.6",
+    "drupal/advanced_help": "~1.3",
+    "drupal/backup_migrate": "~3.1",
+    "drupal/bean": "~1.11",
+    "drupal/better_formats": "~1.0-beta2",
+    "drupal/better_exposed_filters": "~3.4",
+    "drupal/biblio": "~1.0-rc7",
+    "drupal/block_class": "~2.3",
+    "drupal/block_titlelink": "~1.5",
+    "drupal/blockreference": "~2.4",
+    "drupal/bundle_copy": "~1.1",
+    "drupal/calendar": "~3.5",
+    "drupal/cbc": "~1.0",
+    "drupal/colorbox": "~2.13",
+    "drupal/computed_field": "~1.1",
+    "drupal/content_access": "~1.2-beta2",
+    "drupal/context": "~3.7",
+    "drupal/context_accordion": "~1.0",
+    "drupal/context_list_active": "~1.0",
+    "drupal/context_respect": "~1.3",
+    "drupal/ctools": "~1.10",
+    "drupal/custom_breadcrumbs": "~1.0-alpha1",
+    "drupal/date": "~2.10-rc1",
+    "drupal/date_ical": "~2.14",
+    "drupal/default_image_ft": "~1.6",
+    "drupal/delta": "~3.0-beta11",
+    "drupal/diff": "~3.2",
+    "drupal/drafty": "~1.0-beta3",
+    "drupal/draggableviews": "~2.1",
+    "drupal/ds": "~2.14",
+    "drupal/email": "~1.3",
+    "drupal/encrypt": "~2.3",
+    "drupal/entity": "~1.7",
+    "drupal/entityreference": "~1.1",
+    "drupal/features": "~2.10",
+    "drupal/feeds": "~2.0-beta2",
+    "drupal/feeds_jsonpath_parser": "~1.0",
+    "drupal/feeds_tamper": "~1.1",
+    "drupal/feeds_xpathparser": "~1.1",
+    "drupal/field_collection": "~1.0-beta12",
+    "drupal/field_group": "~1.5",
+    "drupal/field_permissions": "~1.0",
+    "drupal/file_entity": "~2.0-beta2",
+    "drupal/filefield_paths": "~1.0",
+    "drupal/flag": "~3.9",
+    "drupal/geofield": "~1.2",
+    "drupal/geophp": "~1.7",
+    "drupal/globalredirect": "~1.5",
+    "drupal/google_analytics": "~2.3",
+    "drupal/hires_images": "~1.1",
+    "drupal/insert": "~1.3",
+    "drupal/job_scheduler": "~2.0-alpha3",
+    "drupal/js_injector": "~2.1",
+    "drupal/jw_player": "~1.0-alpha1",
+    "drupal/libraries": "~2.3",
+    "drupal/link": "~1.4",
+    "drupal/menu_attributes": "~1.0",
+    "drupal/menu_block": "~2.7",
+    "drupal/menu_position": "~1.2",
+    "drupal/metatag": "~1.21",
+    "drupal/module_filter": "~2.0",
+    "drupal/mollom": "~2.15",
+    "drupal/multiple_selects": "~1.2",
+    "drupal/newrelic_appname": "~1.0-alpha1",
+    "drupal/nobots": "~1.0",
+    "drupal/node_clone": "~1.0",
+    "drupal/node_convert": "~1.2",
+    "drupal/nodeformcols": "~1.1",
+    "drupal/openlayers": "~2.0-beta11",
+    "drupal/paragraphs": "~1.0-rc5",
+    "drupal/path_redirect_import": "~1.0-rc4",
+    "drupal/pathauto": "~1.3",
+    "drupal/pathologic": "~2.12",
+    "drupal/print": "~2.0",
+    "drupal/proj4js": "~1.2",
+    "drupal/redirect": "~1.0-rc3",
+    "drupal/relation": "~1.1",
+    "drupal/rules": "~2.9",
+    "drupal/services": "~3.20",
+    "drupal/site_verify": "~1.2",
+    "drupal/smart_trim": "~1.5",
+    "drupal/social_share": "~2.5",
+    "drupal/strongarm": "~2.0",
+    "drupal/switch": "~1.0",
+    "drupal/taxonomy_manager": "~1.0",
+    "drupal/token": "~1.7",
+    "drupal/transliteration": "~3.2",
+    "drupal/uuid": "~1.0-beta2",
+    "drupal/video_embed_field": "~2.0-beta11",
+    "drupal/views": "~3.17",
+    "drupal/views_bulk_operations": "~3.4",
+    "drupal/views_data_export": "~3.1",
+    "drupal/views_datasource": "~1.0-alpha2",
+    "drupal/views_field_view": "~1.2",
+    "drupal/views_select_sort": "~1.0-alpha1",
+    "drupal/views_selective_filters": "~1.5",
+    "drupal/views_slideshow": "~3.1",
+    "drupal/webform": "~4.14",
+    "drupal/workbench": "~1.2",
+    "drupal/workbench_access": "~1.4",
+    "drupal/workbench_moderation": "~3.0",
+    "drupal/wysiwyg": "~2.2",
+    "drupal/wysiwyg_filter": "~1.6-rc3",
+    "drupal/xmlsitemap": "~2.3",
+    "drupal/view_unpublished": "~1.2",
+
+    "drupal/auto_nodetitle": "dev-1.x#98d66fb24d54113bbdfba0d1797239493473cd78",
+    "drupal/context_list": "dev-1.x#6d81d058c0fa2aa38f5c86f129b822146991a0fb",
+    "drupal/css_injector": "dev-1.x#41bee7e4421ecfc52a6b673eef6fcde875282a2b",
+    "drupal/token_tweaks": "dev-1.x#75818fbfb97bf8882ca106e6af703be7644b11bb",
+    "drupal/cube": "~1.4",
+    "drupal/rubik": "~4.4",
+    "drupal/tao": "~3.1",
+
+    "SU-SWS/stanford_install_tasks": "dev-7.x-1.x",
+    "SU-SWS/stanford_sites_content_importer": "dev-7.x-2.x",
+
+    "su-sws/erus": "dev-7.x-1.x-dev",
+    "su-sws/stanford_alt_check": "dev-7.x-1.x",
+    "su-sws/stanford_bean_types": "dev-7.x-3.x",
+    "su-sws/stanford_capx": "dev-7.x-2.x",
+    "su-sws/stanford_carousel": "dev-7.x-2.x",
+    "su-sws/stanford_courses": "dev-7.x-4.x",
+    "su-sws/stanford_date_formats": "dev-7.x-1.x-dev",
+    "su-sws/stanford_event_series": "dev-7.x-1.x",
+    "su-sws/stanford_events_importer": "dev-7.x-3.x",
+    "su-sws/stanford_feeds_helper": "dev-7.x-1.x",
+    "su-sws/stanford_field_formatters": "dev-7.x-1.x",
+    "su-sws/stanford_gallery": "dev-7.x-2.x",
+    "su-sws/stanford_helper": "dev-7.x-1.x",
+    "su-sws/stanford_image": "dev-7.x-3.x-dev",
+    "su-sws/stanford_image_styles": "dev-7.x-4.x",
+    "su-sws/stanford_news": "dev-7.x-3.x-dev",
+    "su-sws/stanford_page": "dev-7.x-2.x-dev",
+    "su-sws/stanford_person": "dev-7.x-5.x-dev",
+    "su-sws/stanford_slides": "dev-7.x-3.x-dev",
+    "su-sws/stanford_video": "dev-7.x-2.x-dev",
+    "su-sws/stanford_easy_wysiwyg_css": "dev-7.x-1.x",
+    "su-sws/stanford_jumpstart": "dev-7.x-5.x",
+    "su-sws/stanford_landing_page": "dev-7.x-1.x",
+    "su-sws/stanford_manage_content": "dev-7.x-3.x-dev",
+    "su-sws/stanford_jumpstart_home": "dev-7.x-1.x",
+    "su-sws/stanford_fwb": "dev-7.x-1.x",
+    "su-sws/stanford_story_page": "dev-7.x-1.x",
+    "su-sws/stanford_paragraph_types": "dev-7.x-1.x",
+    "su-sws/stanford_jumpstart_academic": "dev-7.x-5.x",
+
+    "su-sws/open_framework": "dev-7.x-2.x",
+    "su-sws/stanford_seven": "dev-7.x-1.x",
+    "su-sws/stanford_framework": "dev-7.x-3.x",
+    "su-sws/stanford_jordan": "dev-7.x-3.x",
+    "su-sws/stanford_wilbur": "dev-7.x-3.x"
+  },
+  "extra": {
+    "patches": {
+      "drupal/context": {
+        "https://www.drupal.org/node/1904174":
+        "https://www.drupal.org/files/issues/context_css_injector_1.diff"
+      },
+      "drupal/css_injector": {
+          "https://www.drupal.org/node/2471911":
+          "https://www.drupal.org/files/issues/css_injector-remove_drupal_realpath-2471911-2.patch",
+          "https://www.drupal.org/node/2160385":
+          "https://www.drupal.org/files/issues/css_injector-bad_crid_protection-2160385-10.patch"
+      },
+      "drupal/ds": {
+        "https://www.drupal.org/node/2221307":
+        "https://www.drupal.org/files/issues/ds_extras_field_group_not_rendered-2221307-18.patch"
+      },
+      "drupal/features": {
+        "https://drupal.org/node/927566":
+        "https://drupal.org/files/issues/features-parent_identifier-927566-79.patch"
+      },
+      "drupal/jw_player": {
+        "https://www.drupal.org/node/2713921":
+        "https://www.drupal.org/files/issues/jw-player-mysql57-2713921-8.patch"
+      },
+      "drupal/pathauto": {
+        "https://drupal.org/node/1267966":
+        "https://drupal.org/files/pathauto_admin.patch"
+      }
+    }
   }
 }

@@ -1,0 +1,33 @@
+<?php
+
+/**
+ * @file
+ * Drupal needs this blank file.
+ */
+
+/**
+ * Implements hook_user_update().
+ */
+function stanford_jsa_user_rules_user_update(&$edit, $account, $category) {
+  global $user;
+  $original = $account->original;
+  $new = clone $account;
+  unset($new->original);
+  $record = [
+    'updated_uid' => $account->uid,
+    'updated_by_uid' => $user->uid,
+    'updated_time' => time(),
+    'updated' => json_encode(array('original' => $original, 'current' => $new)),
+  ];
+  drupal_write_record('stanford_jsa_user_changes', $record);
+}
+
+/**
+ * Implements hook_cron().
+ */
+function stanford_jsa_user_rules_cron() {
+  // Delete all records older than 2 weeks.
+  db_delete('stanford_jsa_user_changes')
+    ->condition('updated_time', time() - (60 * 60 * 24 * 14), '<')
+    ->execute();
+}

@@ -1,0 +1,197 @@
+.paragraphs-item-p-cards .color-cool-gray .group-card-title,
+.paragraphs-item-p-cards .color-cool-gray .group-card-title .field-item {
+  background-color: #4d4f53;
+  color: #fff;
+}
+
+.paragraphs-item-p-cards .color-cool-gray .group-card-title h2,
+.paragraphs-item-p-cards .color-cool-gray .group-card-title .field-item h2, .paragraphs-item-p-cards .color-cool-gray .group-card-title h3,
+.paragraphs-item-p-cards .color-cool-gray .group-card-title .field-item h3, .paragraphs-item-p-cards .color-cool-gray .group-card-title h4,
+.paragraphs-item-p-cards .color-cool-gray .group-card-title .field-item h4 {
+  color: #fff;
+}
+
+.paragraphs-item-p-cards .color-cool-gray .group-card-title a,
+.paragraphs-item-p-cards .color-cool-gray .group-card-title .field-item a, .paragraphs-item-p-cards .color-cool-gray .group-card-title a:focus, .paragraphs-item-p-cards .color-cool-gray .group-card-title a:hover {
+  color: #d5d0c0;
+}
+
+.paragraphs-item-p-cards .color-light-taupe .group-card-title,
+.paragraphs-item-p-cards .color-light-taupe .group-card-title .field-item {
+  background-color: #d5d0c0;
+  color: #333;
+}
+
+.paragraphs-item-p-cards .color-light-taupe .group-card-title h2,
+.paragraphs-item-p-cards .color-light-taupe .group-card-title .field-item h2, .paragraphs-item-p-cards .color-light-taupe .group-card-title h3,
+.paragraphs-item-p-cards .color-light-taupe .group-card-title .field-item h3, .paragraphs-item-p-cards .color-light-taupe .group-card-title h4,
+.paragraphs-item-p-cards .color-light-taupe .group-card-title .field-item h4 {
+  color: #333;
+}
+
+.paragraphs-item-p-cards .color-light-taupe .group-card-title a,
+.paragraphs-item-p-cards .color-light-taupe .group-card-title .field-item a, .paragraphs-item-p-cards .color-light-taupe .group-card-title a:focus, .paragraphs-item-p-cards .color-light-taupe .group-card-title a:hover {
+  color: #4d4f53;
+}
+
+.paragraphs-item-p-cards .color-bright-green .group-card-title,
+.paragraphs-item-p-cards .color-bright-green .group-card-title .field-item {
+  background-color: #009b76;
+  color: #fff;
+}
+
+.paragraphs-item-p-cards .color-bright-green .group-card-title h2,
+.paragraphs-item-p-cards .color-bright-green .group-card-title .field-item h2, .paragraphs-item-p-cards .color-bright-green .group-card-title h3,
+.paragraphs-item-p-cards .color-bright-green .group-card-title .field-item h3, .paragraphs-item-p-cards .color-bright-green .group-card-title h4,
+.paragraphs-item-p-cards .color-bright-green .group-card-title .field-item h4 {
+  color: #fff;
+}
+
+.paragraphs-item-p-cards .color-bright-green .group-card-title a,
+.paragraphs-item-p-cards .color-bright-green .group-card-title .field-item a, .paragraphs-item-p-cards .color-bright-green .group-card-title a:focus, .paragraphs-item-p-cards .color-bright-green .group-card-title a:hover {
+  color: #000;
+}
+
+.paragraphs-item-p-cards .color-bright-blue .group-card-title,
+.paragraphs-item-p-cards .color-bright-blue .group-card-title .field-item {
+  background-color: #0f6c91;
+  color: #fff;
+}
+
+.paragraphs-item-p-cards .color-bright-blue .group-card-title h2,
+.paragraphs-item-p-cards .color-bright-blue .group-card-title .field-item h2, .paragraphs-item-p-cards .color-bright-blue .group-card-title h3,
+.paragraphs-item-p-cards .color-bright-blue .group-card-title .field-item h3, .paragraphs-item-p-cards .color-bright-blue .group-card-title h4,
+.paragraphs-item-p-cards .color-bright-blue .group-card-title .field-item h4 {
+  color: #fff;
+}
+
+.paragraphs-item-p-cards .color-bright-blue .group-card-title a,
+.paragraphs-item-p-cards .color-bright-blue .group-card-title .field-item a, .paragraphs-item-p-cards .color-bright-blue .group-card-title a:focus, .paragraphs-item-p-cards .color-bright-blue .group-card-title a:hover {
+  color: #dad7cb;
+}
+
+.paragraphs-item-p-cards .color-bright-yellow .group-card-title,
+.paragraphs-item-p-cards .color-bright-yellow .group-card-title .field-item {
+  background-color: #eaab00;
+  color: #333;
+}
+
+.paragraphs-item-p-cards .color-bright-yellow .group-card-title h2,
+.paragraphs-item-p-cards .color-bright-yellow .group-card-title .field-item h2, .paragraphs-item-p-cards .color-bright-yellow .group-card-title h3,
+.paragraphs-item-p-cards .color-bright-yellow .group-card-title .field-item h3, .paragraphs-item-p-cards .color-bright-yellow .group-card-title h4,
+.paragraphs-item-p-cards .color-bright-yellow .group-card-title .field-item h4 {
+  color: #333;
+}
+
+.paragraphs-item-p-cards .color-bright-yellow .group-card-title a,
+.paragraphs-item-p-cards .color-bright-yellow .group-card-title .field-item a, .paragraphs-item-p-cards .color-bright-yellow .group-card-title a:focus, .paragraphs-item-p-cards .color-bright-yellow .group-card-title a:hover {
+  color: #53284f;
+}
+
+.paragraphs-item-p-cards .color-bright-orange .group-card-title,
+.paragraphs-item-p-cards .color-bright-orange .group-card-title .field-item {
+  background-color: #e98300;
+  color: #333;
+}
+
+.paragraphs-item-p-cards .color-bright-orange .group-card-title h2,
+.paragraphs-item-p-cards .color-bright-orange .group-card-title .field-item h2, .paragraphs-item-p-cards .color-bright-orange .group-card-title h3,
+.paragraphs-item-p-cards .color-bright-orange .group-card-title .field-item h3, .paragraphs-item-p-cards .color-bright-orange .group-card-title h4,
+.paragraphs-item-p-cards .color-bright-orange .group-card-title .field-item h4 {
+  color: #333;
+}
+
+.paragraphs-item-p-cards .color-bright-orange .group-card-title a,
+.paragraphs-item-p-cards .color-bright-orange .group-card-title .field-item a, .paragraphs-item-p-cards .color-bright-orange .group-card-title a:focus, .paragraphs-item-p-cards .color-bright-orange .group-card-title a:hover {
+  color: #4d4f53;
+}
+
+@media (min-width: 767px) {
+  .paragraphs-item-p-cards .field-name-field-p-cards-card > .field-items {
+    display: flex;
+  }
+  .paragraphs-item-p-cards .field-name-field-p-cards-card > .field-items > .field-item {
+    flex-grow: 1;
+    margin: 0 10px;
+    float: left;
+  }
+  .paragraphs-item-p-cards .field-name-field-p-cards-card.items-3 > .field-items > .field-item {
+    width: 33%;
+  }
+  .paragraphs-item-p-cards .field-name-field-p-cards-card.items-2 > .field-items > .field-item {
+    width: 33%;
+  }
+}
+
+.paragraphs-item-p-cards img {
+  margin: 0 auto;
+  display: block;
+}
+
+@media (max-width: 767px) {
+  .paragraphs-item-p-cards .field-item .field-collection-view,
+  .paragraphs-item-p-cards .field-item:first-child .field-collection-view,
+  .paragraphs-item-p-cards .field-item:last-child .field-collection-view {
+    padding: 0;
+  }
+  .paragraphs-item-p-cards .field-name-field-p-card-cta,
+  .paragraphs-item-p-cards .field-name-field-p-card-file,
+  .paragraphs-item-p-cards .field-name-field-p-card-text {
+    padding: 0 1em;
+  }
+}
+
+.paragraphs-item-p-cards div[class*='color-'] .field-name-field-p-card-image {
+  margin-bottom: 0;
+}
+
+.paragraphs-item-p-cards div[class*='color-'] .group-card-title {
+  margin-top: 0;
+  display: inline-block;
+  width: 100%;
+}
+
+.paragraphs-item-p-cards div[class*='color-'] .group-card-title .field-item {
+  padding: 20px;
+  margin-bottom: 60px;
+}
+
+.paragraphs-item-p-cards .pattern-asfalt-dark .group-card-title {
+  background-image: url("../img/asfalt-dark.png");
+}
+
+.paragraphs-item-p-cards .pattern-back-pattern .group-card-title {
+  background-image: url("../img/back-pattern.png");
+}
+
+.paragraphs-item-p-cards .pattern-cubes .group-card-title {
+  background-image: url("../img/cubes.png");
+}
+
+.paragraphs-item-p-cards .pattern-dimension .group-card-title {
+  background-image: url("../img/dimension.png");
+}
+
+.paragraphs-item-p-cards .pattern-flower-trail .group-card-title {
+  background-image: url("../img/flower-trail.png");
+}
+
+.paragraphs-item-p-cards .pattern-nami .group-card-title {
+  background-image: url("../img/nami.png");
+}
+
+.paragraphs-item-p-cards .pattern-quilt .group-card-title {
+  background-image: url("../img/quilt.png");
+}
+
+.paragraphs-item-p-cards .pattern-swirl .group-card-title {
+  background-image: url("../img/swirl.png");
+}
+
+.paragraphs-item-p-cards .pattern-wild-flowers .group-card-title {
+  background-image: url("../img/wild-flowers.png");
+}
+
+.paragraphs-item-p-cards .pattern-zig-zag .group-card-title {
+  background-image: url("../img/zig-zag.png");
+}

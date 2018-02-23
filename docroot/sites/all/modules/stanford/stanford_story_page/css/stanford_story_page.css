@@ -1,0 +1,28 @@
+.node-type-stanford-story-page.hide-title #page-title {
+  font-size: 0;
+  width: 0;
+  height: 0;
+  display: inline-block;
+  overflow: hidden;
+  position: absolute;
+}
+.node-type-stanford-story-page .main {
+  padding-top: 0;
+}
+.node-type-stanford-story-page .content-head {
+  margin-bottom: 0;
+}
+.node-type-stanford-story-page #main > div,
+.node-type-stanford-story-page #content {
+  width: 100%;
+  margin: 0;
+}
+.node-type-stanford-story-page #main .region:not(.region-content),
+.node-type-stanford-story-page #content-wrapper > div:not(.content-body) {
+  max-width: 1170px;
+  margin: 0 auto;
+}
+.node-type-stanford-story-page #main-content,
+.node-type-stanford-story-page #content {
+  margin: 0;
+}

@@ -1,0 +1,54 @@
+<?php
+
+/**
+ * @file
+ * stanford_jusa_user_rules.install
+ */
+
+/**
+ * Implements hook_schema().
+ */
+function stanford_jsa_user_rules_schema() {
+  $schema = array();
+
+  $schema['stanford_jsa_user_changes'] = array(
+    'description' => 'Table logs user update history',
+    'fields' => array(
+      'id' => array(
+        'description' => 'The primary identifier of the record',
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'updated_uid' => array(
+        'description' => 'Updated user ID',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+      'updated_by_uid' => array(
+        'description' => 'User ID of the acting user.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+      'updated_time' => array(
+        'description' => 'Time in which the update occured.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+      'updated' => array(
+        'description' => 'Difference between the original and new.',
+        'type' => 'blob',
+        'not null' => FALSE,
+      ),
+    ),
+    'primary key' => array('id'),
+  );
+
+  return $schema;
+}

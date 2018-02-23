@@ -1,0 +1,113 @@
+.paragraphs-item-p-callout.cool-gray {
+  background-color: #4d4f53;
+  color: #fff;
+}
+
+.paragraphs-item-p-callout.cool-gray h2, .paragraphs-item-p-callout.cool-gray h3, .paragraphs-item-p-callout.cool-gray h4 {
+  color: #fff;
+}
+
+.paragraphs-item-p-callout.cool-gray a, .paragraphs-item-p-callout.cool-gray a:focus, .paragraphs-item-p-callout.cool-gray a:hover {
+  color: #d5d0c0;
+}
+
+.paragraphs-item-p-callout.light-taupe {
+  background-color: #d5d0c0;
+  color: #333;
+}
+
+.paragraphs-item-p-callout.light-taupe h2, .paragraphs-item-p-callout.light-taupe h3, .paragraphs-item-p-callout.light-taupe h4 {
+  color: #333;
+}
+
+.paragraphs-item-p-callout.light-taupe a, .paragraphs-item-p-callout.light-taupe a:focus, .paragraphs-item-p-callout.light-taupe a:hover {
+  color: #4d4f53;
+}
+
+.paragraphs-item-p-callout.bright-green {
+  background-color: #009b76;
+  color: #fff;
+}
+
+.paragraphs-item-p-callout.bright-green h2, .paragraphs-item-p-callout.bright-green h3, .paragraphs-item-p-callout.bright-green h4 {
+  color: #fff;
+}
+
+.paragraphs-item-p-callout.bright-green a, .paragraphs-item-p-callout.bright-green a:focus, .paragraphs-item-p-callout.bright-green a:hover {
+  color: #000;
+}
+
+.paragraphs-item-p-callout.bright-blue {
+  background-color: #0f6c91;
+  color: #fff;
+}
+
+.paragraphs-item-p-callout.bright-blue h2, .paragraphs-item-p-callout.bright-blue h3, .paragraphs-item-p-callout.bright-blue h4 {
+  color: #fff;
+}
+
+.paragraphs-item-p-callout.bright-blue a, .paragraphs-item-p-callout.bright-blue a:focus, .paragraphs-item-p-callout.bright-blue a:hover {
+  color: #dad7cb;
+}
+
+.paragraphs-item-p-callout.bright-yellow {
+  background-color: #eaab00;
+  color: #333;
+}
+
+.paragraphs-item-p-callout.bright-yellow h2, .paragraphs-item-p-callout.bright-yellow h3, .paragraphs-item-p-callout.bright-yellow h4 {
+  color: #333;
+}
+
+.paragraphs-item-p-callout.bright-yellow a, .paragraphs-item-p-callout.bright-yellow a:focus, .paragraphs-item-p-callout.bright-yellow a:hover {
+  color: #53284f;
+}
+
+.paragraphs-item-p-callout.bright-orange {
+  background-color: #e98300;
+  color: #333;
+}
+
+.paragraphs-item-p-callout.bright-orange h2, .paragraphs-item-p-callout.bright-orange h3, .paragraphs-item-p-callout.bright-orange h4 {
+  color: #333;
+}
+
+.paragraphs-item-p-callout.bright-orange a, .paragraphs-item-p-callout.bright-orange a:focus, .paragraphs-item-p-callout.bright-orange a:hover {
+  color: #4d4f53;
+}
+
+.paragraphs-item-p-callout {
+  text-align: center;
+}
+
+.paragraphs-item-p-callout .center {
+  margin: 0 auto 3em;
+  float: none;
+}
+
+.paragraphs-item-p-callout.entity-paragraphs-item.entity {
+  margin-bottom: 0;
+  padding-top: 1.5em;
+}
+
+.paragraphs-item-p-callout.entity-paragraphs-item.entity.color-background {
+  margin-bottom: 3em;
+}
+
+.paragraphs-item-p-callout.entity-paragraphs-item.entity.color-background .center {
+  margin-bottom: 1em;
+}
+
+.paragraphs-item-p-callout.entity-paragraphs-item.entity.color-background .field-name-field-p-callout-text {
+  margin-bottom: 0;
+}
+
+.paragraphs-item-p-callout p {
+  font-size: 2em;
+  line-height: 1.2em;
+  font-weight: 600;
+}
+
+.paragraphs-item-p-callout a {
+  text-decoration: underline;
+}
