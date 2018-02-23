@@ -1,8 +1,0 @@
-{
-    "require": {
-        "guzzlehttp/guzzle": "5.*",
-        "guzzlehttp/oauth-subscriber": "*",
-        "peekmo/jsonpath": "dev-master",
-        "phpunit/phpunit": "~4.7"
-    }
-}

@@ -1,9 +1,0 @@
-name = Stanford Courses Link To Page
-description = Overrides the default course views so that they link to the node page instead of the explorecourses page
-core = 7.x
-package = Stanford
-version = 7.x-4.0
-project = stanford_courses_link_to_page
-dependencies[] = ctools
-dependencies[] = stanford_courses
-dependencies[] = views

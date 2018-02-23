@@ -1,7 +1,0 @@
-name = Stanford Paragraphs Defaults
-description = Allows the configuration of default layouts of the paragraphs.
-core = 7.x
-package = Stanford
-version = 7.x-1.1
-
-dependencies[] = paragraphs

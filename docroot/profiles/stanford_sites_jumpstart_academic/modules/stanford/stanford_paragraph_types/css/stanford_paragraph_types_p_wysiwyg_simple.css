@@ -1,9 +1,0 @@
-.paragraphs-item-p-wysiwyg-simple {
-  width: 65%;
-  margin: 50px auto 0;
-}
-@media (max-width: 480px) {
-  .paragraphs-item-p-wysiwyg-simple {
-    width: 100%;
-  }
-}

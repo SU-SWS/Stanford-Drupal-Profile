@@ -1,7 +1,0 @@
-name = Stanford Bean Types Permissions
-description = A permissions module for stanford_bean_types so that it may be used in a clean installation profile.
-core = 7.x
-package = Stanford
-version = 7.x-3.0
-dependencies[] = bean
-dependencies[] = stanford_bean_types

@@ -1,7 +1,0 @@
-<?php
-/**
- * @file
- * Code for the Stanford Events Views feature.
- */
-
-include_once 'stanford_events_views.features.inc';
