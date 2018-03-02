@@ -1,0 +1,92 @@
+# Stanford Sites Jumpstart Engineering
+----------------------------------------
+
+Stanford Sites Jumpstart Engineering 7.x-5.3+7-dev 2017-03-21
+------------------------------------------------------------
+- Removed dependency on services module
+- Added dependency on stanford_gallery_administration and stanford_gallery_block
+
+Stanford Sites Jumpstart Engineering 7.x-5.2+2-dev 2017-01-25
+------------------------------------------------------------
+- Added VersionIdentifier install task
+
+Stanford Sites Jumpstart Engineering 7.x-5.2 2017-01-25
+------------------------------------------------------------
+- Added NodeAccessRebuild task to installation
+- Added dependency on alt check module
+
+Stanford Sites Jumpstart Engineering 7.x-5.1+7-dev 2016-12-14
+------------------------------------------------------------
+- Removed dependency on rest_server
+- Replaced stanford_news_views with stanford_news_extras_views
+
+
+Stanford Sites Jumpstart Engineering 7.x-5.1+4-dev 2016-11-29
+------------------------------------------------------------
+- Changed class paths and loader
+
+
+Stanford Sites Jumpstart Engineering 7.x-5.1 2016-09-16
+------------------------------------------------------------
+- Installation Tasks added:
+  - Add example user Richard
+  - Add JSE specific items to the admin shortcuts menu (site actions)
+  - Add Features page
+- Modules added:
+  - Site specific help (Stanford Help)
+  - View unpublished
+- Update tasks
+  - Add Features Page
+
+
+Stanford Sites Jumpstart Engineering 7.x-5.0+3-dev 2016-07-19
+------------------------------------------------------------
+- SOE-1041: Replace stanford_metatag_nobots with nobots
+
+Stanford Sites Jumpstart Engineering 7.x-5.0  2016-06-08
+------------------------------------------------------------
+- SOE-686: Added default_image_ft
+- SOE-686: added news_extras dependicies and alphabetized
+- SOE-686: added news_admimistration
+- SOE-796: added dependency on stanford_feeds_helper
+- Added stanford_soe_helper dependency
+- SOE-686: prohibit[] = stanford_news_views
+
+
+Stanford Sites Jumpstart Engineering 7.x-5.x-dev  2016-03-24
+------------------------------------------------------------
+Re-architecting to use install tasks
+
+Stanford Sites Jumpstart Engineering 7.x-1.1+4-dev  2016-02-18
+------------------------------------------------------------
+- SOE-604: update URL for Affiliates
+
+Stanford Sites Jumpstart Engineering 7.x-1.1  2016-02-18
+------------------------------------------------------------
+- basic-1435: add person_layouts module
+- SOE-349: Adding Affiliate Organizations to the main menu
+- SOE-419: added contextual_view_modes to JSE
+- SOE-419: added stanford_person_cap to JSE
+- SOE-441: Added mapping for the CAP profile link
+- SOE-419: added configure_person_cap_display installation task.
+- SOE-457: Adding research to the main menu
+- SOE-457: disable the academics section on the main menu
+- SOE-457: Disable courses feature
+- SOE-457: Adding position_jse_menus() to create JSE specific menus
+- SOE-457: Added affiliate organizations to the menu
+- SOE-542: Added JSE redirects task
+- Removed JSA footer menus
+- deleted stanford_jumpstart_help_settings for jse install
+
+Stanford Sites Jumpstart Engineering 7.x-1.0+10-dev  2015-10-26
+------------------------------------------------------------
+- Add JSE Roles module
+
+Stanford Sites Jumpstart Engineering 7.x-1.0+1-dev  2015-10-21
+------------------------------------------------------------
+- Disable Related Content modules until tested and documented
+
+
+Stanford Sites Jumpstart Engineering 7.x-1.0  2015-10-14
+------------------------------------------------------------
+- Initial Release

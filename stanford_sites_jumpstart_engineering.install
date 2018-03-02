@@ -1,0 +1,27 @@
+<?php
+/**
+* Implement hook_install().
+*
+* Perform actions to set up the site for this profile.
+*/
+function stanford_sites_jumpstart_engineering_install() {}
+
+/**
+ * Implements hook_install_finished().
+ */
+function stanford_sites_jumpstart_engineering_install_finished() {
+  itasks_install_finished();
+}
+
+/**
+ * Implements hook_uninstall().
+ */
+function stanford_sites_jumpstart_engineering_uninstall() {}
+
+/**
+ * Implements hook_requirements().
+ */
+function stanford_sites_jumpstart_engineering_requirements($phase) {
+  $requirements = array();
+  return $requirements;
+}
