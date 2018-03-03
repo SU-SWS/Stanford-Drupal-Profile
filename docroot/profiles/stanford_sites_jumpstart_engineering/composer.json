@@ -1,6 +1,6 @@
 {
-  "name": "su-sws/stanford_sites_jumpstart_academic",
-  "description": "Stanford Sites Jumpstart Academic Distribution.",
+  "name": "su-soe/stanford_sites_jumpstart_engineering",
+  "description": "Stanford Sites Jumpstart Engineering Distribution.",
   "type": "drupal-custom-profile",
   "license": "GPL-2.0+",
   "minimum-stability": "dev",
