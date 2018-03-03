@@ -1,0 +1,76 @@
+<?php
+/**
+ * @file
+ * File description
+ *
+ * Long description
+ */
+
+/**
+ * Implements hook_form_alter().
+ */
+function stanford_jumpstart_engineering_form_alter(&$form, &$form_state, $form_id) {
+  if ($form_id == "system_theme_settings" || $form_id == "stanford_jumpstart_homepage_dashboard_form") {
+
+    // Remove unneeded styles
+    unset($form['design_container']['styles']['#options']['styles-dark']);
+    unset($form['design_container']['styles']['#options']['styles-bright']);
+    unset($form['design_container']['styles']['#options']['styles-vivid']);
+  }
+
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter() for stanford_news_item_node_form.
+ */
+function stanford_jumpstart_engineering_form_stanford_news_item_node_form_alter(
+  &$form,
+  &$form_state,
+  $form_id) {
+
+  // Handle deprecation of image credits.
+  if (function_exists('stanford_news_extras_deprecate_image_credits')) {
+    stanford_news_extras_deprecate_image_credits($form, $form_id);
+  }
+}
+
+/**
+ * Implements preprocess_page().
+ */
+function stanford_jumpstart_engineering_preprocess_page(&$vars) {
+
+  if (!path_is_admin(current_path())) {
+
+    $file_path = drupal_get_path('module', 'stanford_jumpstart_engineering') . '/css/stanford_jumpstart_engineering.css';
+
+    // CSS Injector file weights start at 200.
+    // See http://www.rit.edu/drupal/api/drupal/sites!all!modules!css_injector!css_injector.module/7.43.
+    $weight = 180;
+    $conditions = "admin
+admin*
+admin/*
+block/*/edit*
+block/add*
+block/*/delete
+node/*/edit
+node/add*
+node/*/delete
+user/*/edit";
+
+    $css_rules = array();
+    $css_rules['rule_conditions'] = $conditions;
+    $css_rules['rule_type'] = CSS_INJECTOR_PAGES_NOTLISTED;
+
+    $pass = _css_injector_evaluate_rule($css_rules);
+    if ($pass) {
+
+      drupal_add_css($file_path, array(
+        'type' => 'file',
+        'group' => CSS_THEME,
+        'media' => "all",
+        'preprocess' => TRUE,
+        'weight' => $weight
+      ));
+    }
+  }
+}

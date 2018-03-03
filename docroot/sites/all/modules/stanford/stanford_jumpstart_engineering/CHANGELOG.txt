@@ -1,0 +1,76 @@
+Stanford Jumpstart Engineering
+
+Version 7.x-5.4+12-dev                                                2017-02-22
+--------------------------------------------------------------------------------
+- For JSE sites, this changes the image caption field on news to image caption and credits
+- Deprecates the use of the existing image credits field
+
+Version 7.x-5.3+3-dev                                                       2017-01-25
+--------------------------------------------------------------------------------
+- Update JSE to use News Extras.
+
+Version 7.x-5.3                                                       2017-01-25
+--------------------------------------------------------------------------------
+- Menu padding fix.
+- Calendar and news caption css fixes.
+- Related content exposed filter css fixes.
+
+
+Version 7.x-5.2+42-dev (Department sites)                             2016-12-14
+--------------------------------------------------------------------------------
+- SOE-1511: replace grid four with grid five for related people
+
+Version 7.x-5.2+38-dev (Department sites)                             2016-12-02
+--------------------------------------------------------------------------------
+- Removed setting the default fonts and styles.
+
+Version 7.x-5.2+34-dev (Department sites)                             2016-11-30
+--------------------------------------------------------------------------------
+- Added css for related content
+
+Version 7.x-5.2+29-dev (Department sites)                             2016-11-29
+--------------------------------------------------------------------------------
+- Added support for displaying related content
+
+
+Version 7.x-5.2 (Department sites)                                    2016-10-19
+--------------------------------------------------------------------------------
+- Added submodule for department site specific items including
+  - New stylesheets for fonts and styles
+  - Alter which adds a new font and style to the Customize Design form
+
+Version 7.x-5.1                                                       2016-06-08
+--------------------------------------------------------------------------------
+
+Version 7.x-5.0+11-dev                                                2016-06-08
+--------------------------------------------------------------------------------
+- Added site specific help block to jumpstart help page
+- update permissions:
+  - Editor can delete own help page,
+  - Site owner can administer meta-tags, event importers, and redirects
+  - Added missing taxonomy permissions
+
+Version 7.x-5.0                                                      2016-06-08
+--------------------------------------------------------------------------------
+- fixed layout issue on grid grouped people layout
+
+Version 7.x-5.x                                                      2016-04-13
+--------------------------------------------------------------------------------
+- Merged in the permissions from JSA Roles so that JSE Roles is an independent module
+
+
+Version 7.x-1.0+16-dev                                               2016-02-18
+--------------------------------------------------------------------------------
+- SOE-349: Added permissions for affiliated organizations.
+- added styles for soe logo for cardinal styles
+- added necessary media queries for responsiveness
+- styled for high contrast and rich styles
+
+Version 7.x-1.0+2-dev                                                 2015-10-21
+--------------------------------------------------------------------------------
+- Added stanford_jse_roles module
+
+Version 7.x-1.0                                                       2015-10-14
+--------------------------------------------------------------------------------
+
+- Initial Release

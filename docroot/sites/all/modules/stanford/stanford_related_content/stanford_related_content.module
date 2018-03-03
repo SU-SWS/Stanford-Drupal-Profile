@@ -1,0 +1,709 @@
+<?php
+
+/**
+ * @file
+ * Common functions (utilities) for related content.
+ */
+
+/**
+ * This rewrites the pattern in the subject.
+ *
+ * It replaces it with:
+ * 1) the link text.
+ * 2) a link built with the url in the subject plus the taxonomy terms.
+ *
+ * @param string $subject
+ *   Subject with pattern to match.
+ * @param string $link_text
+ *   Text to display.
+ * @param string $pattern
+ *   Pattern to replace.
+ *
+ * @return string
+ *   Updated URL.
+ */
+function stanford_related_content_add_more_link($subject, $link_text = "See more", $pattern = "/\[hook_views_pre_build:.*\]/") {
+
+  $matches = array();
+  preg_match($pattern, $subject, $matches);
+  if (!empty($matches)) {
+
+    // Build the URL.
+    $parts = explode(":", $matches[0]);
+    $url = str_replace("]", "", $parts[1]);
+    $args = stanford_related_content_build_tax_args();
+
+    $options = array(
+      'attributes' => array(
+        'class' => array(
+          'more-link',
+        ),
+      ),
+      'query' => array($args),
+    );
+
+    $a = l($link_text, $url, $options);
+
+    // Replace text with the URL.
+    $subject = preg_replace($pattern, $a, $subject);
+  }
+  return $subject;
+}
+
+/**
+ * Build link arguments.
+ *
+ * This takes the related_content terms from the current node and builds them
+ * into arguments for link options.
+ *
+ * @returns array of arguments.
+ */
+function stanford_related_content_build_tax_args() {
+  $result = array();
+  if (arg(0) == 'node') {
+    $nid = arg(1);
+    if (is_numeric($nid)) {
+      $node = node_load($nid);
+      if ((!is_null($node)) && (isset($node->field_s_related_content['und']))) {
+        foreach ($node->field_s_related_content['und'] as $key => $value) {
+          $result['term_node_tid_depth[' . $key . ']'] = $value['tid'];
+        }
+      }
+    }
+  }
+  return $result;
+}
+
+/**
+ * Validates a view and returns false if it doesn't validate.
+ *
+ * @param object $view
+ *   The view.
+ * @param string $name
+ *   The name of the module.
+ *
+ * @return bool
+ *   Success or failure.
+ */
+function stanford_related_content_validate_view($view, $name = 'stanford_related_content') {
+
+  if ($view->validate()) {
+    return TRUE;
+  }
+  else {
+    if (variable_get("stanford_related_debug_mode", FALSE)) {
+      watchdog($name, "Could not validate view: %name (%title).",
+      array(
+        '%name' => $view->name,
+        '%title' => $view->get_title(),
+      ),
+      WATCHDOG_DEBUG);
+    }
+    return FALSE;
+  }
+}
+
+/**
+ * Add the related content exposed filter to a display.
+ *
+ * Given a view and display, this adds the related content exposed filter to the
+ * display.
+ *
+ * @param object $views
+ *   View to be altered.
+ * @param string $view_name
+ *   View to be altered.
+ * @param string $display_name
+ *   Display to be altered.
+ * @param bool $multiple
+ *   Indicates if the filter should be multiple select.
+ *
+ * @return bool
+ *   Indicates success or failure.
+ */
+function stanford_related_content_add_exposed_filter($views, $view_name, $display_name = 'page', $multiple = FALSE, $label = "Filter by related content") {
+  if (array_key_exists($view_name, $views)) {
+    $view = $views[$view_name];
+  }
+  else {
+    if (variable_get("stanford_related_debug_mode", FALSE)) {
+      watchdog('stanford_related_content', "View %view_name not available.",
+      array('%view_name' => $view_name), WATCHDOG_DEBUG);
+    }
+    return FALSE;
+  }
+
+  if ($view->set_display($display_name)) {
+    $handler = $view->display_handler;
+  }
+  else {
+    if (variable_get("stanford_related_debug_mode", FALSE)) {
+      watchdog('stanford_related_content', "Display %display_name not available in view %view_name.",
+      array('%display_name' => $display_name, '%view_name' => $view_name), WATCHDOG_DEBUG);
+    }
+    return FALSE;
+  }
+
+  $options = $handler->get_option('filters');
+  $options['term_node_tid_depth']['id'] = 'term_node_tid_depth';
+  $options['term_node_tid_depth']['table'] = 'node';
+  $options['term_node_tid_depth']['field'] = 'term_node_tid_depth';
+  $options['term_node_tid_depth']['exposed'] = TRUE;
+  $options['term_node_tid_depth']['expose']['operator_id'] = 'term_node_tid_depth_op';
+  $options['term_node_tid_depth']['expose']['label'] = $label;
+  $options['term_node_tid_depth']['expose']['operator'] = 'term_node_tid_depth_op';
+  $options['term_node_tid_depth']['expose']['identifier'] = 'term_node_tid_depth';
+  $options['term_node_tid_depth']['expose']['multiple'] = $multiple;
+  $options['term_node_tid_depth']['expose']['remember_roles'] = array(
+    2 => '2',
+    1 => 0,
+    6 => 0,
+    5 => 0,
+    4 => 0,
+    3 => 0,
+    9 => 0,
+    7 => 0,
+    8 => 0,
+  );
+  $options['term_node_tid_depth']['type'] = 'select';
+  $options['term_node_tid_depth']['vocabulary'] = 'stanford_related_content';
+  $options['term_node_tid_depth']['hierarchy'] = 1;
+  $options['term_node_tid_depth']['depth'] = '0';
+
+  $handler->set_option('filters', $options);
+
+  // Check that the view still works after we altered it!
+  if (stanford_related_content_validate_view($views[$view_name], 'stanford_related_content')) {
+    if (variable_get("stanford_related_debug_mode", FALSE)) {
+      watchdog('stanford_related_content', "Filter 'stanford_related_content' added to display %display_name on view %view_name.",
+      array('%display_name' => $display_name, '%view_name' => $view_name), WATCHDOG_DEBUG);
+    }
+    return TRUE;
+  }
+  else {
+    return FALSE;
+  }
+}
+
+/**
+ * Given a view and display, this adds the related content VBO to the display.
+ *
+ * @param array $views
+ *   View to be altered.
+ * @param string $view_name
+ *   View to be altered.
+ * @param string $display_name
+ *   Display to be altered.
+ *
+ * @return bool
+ *   Indicates success or failure.
+ */
+function stanford_related_content_add_vbo($views, $view_name, $display_name = 'page') {
+  if (array_key_exists($view_name, $views)) {
+    $view = $views[$view_name];
+  }
+  else {
+    if (variable_get("stanford_related_debug_mode", FALSE)) {
+      watchdog('stanford_related_content', "View %view_name not available.",
+      array('%view_name' => $view_name), WATCHDOG_DEBUG);
+    }
+    return FALSE;
+  }
+
+  if ($view->set_display($display_name)) {
+    $handler = $view->display_handler;
+  }
+  else {
+    if (variable_get("stanford_related_debug_mode", FALSE)) {
+      watchdog('stanford_related_content', "Display %display_name not available in view %view_name.",
+      array('%display_name' => $display_name, '%view_name' => $view_name), WATCHDOG_DEBUG);
+    }
+    return FALSE;
+  }
+
+  $options = $handler->get_option('fields');
+
+  // Add VBO option.
+  // VBO 7.x-3.2.
+  if (isset($options['views_bulk_operations']['vbo_operations']['action::views_bulk_operations_modify_action']['settings'])) {
+    $options['views_bulk_operations']['vbo_operations']['action::views_bulk_operations_modify_action']
+    ['settings']['display_values']['stanford_event::field_s_related_content']
+      = 'stanford_event::field_s_related_content';
+  }
+
+  // VBO 7.x-3.0-rc1.
+  elseif (is_array($options['views_bulk_operations']['vbo']['operations']['action::views_bulk_operations_modify_action']
+  ['settings']['display_values'])) {
+    $options['views_bulk_operations']['vbo']['operations']['action::views_bulk_operations_modify_action']
+    ['settings']['display_values']['stanford_event::field_s_related_content']
+      = 'stanford_event::field_s_related_content';
+  }
+  else {
+    $options['views_bulk_operations']['vbo_operations']['action::views_bulk_operations_modify_action'] =
+      array(
+        'selected' => 1,
+        'postpone_processing' => 0,
+        'skip_confirmation' => 0,
+        'override_label' => 1,
+        'label' => 'Modify',
+        'settings' => array(
+          'show_all_tokens' => 0,
+          'display_values' => array(
+            'stanford_event::field_s_event_type' => 'stanford_event::field_s_event_type',
+            'stanford_event::field_s_related_content' => 'stanford_event::field_s_related_content',
+          ),
+        ),
+      );
+  }
+
+  $handler->set_option('fields', $options);
+
+  // Check that the view still works after we altered it!
+  if (stanford_related_content_validate_view($views[$view_name], 'stanford_related_content')) {
+    if (variable_get("stanford_related_debug_mode", FALSE)) {
+      watchdog('stanford_related_content', "Filter 'stanford_related_content' added to display %display_name on view %view_name.",
+      array('%display_name' => $display_name, '%view_name' => $view_name), WATCHDOG_DEBUG);
+    }
+    return TRUE;
+  }
+  else {
+    return FALSE;
+  }
+}
+
+/**
+ * Return the handler to a copy of a display.
+ *
+ * @param array $views
+ *   Array of views.
+ * @param string $view_name
+ *   Name of view to copy.
+ * @param string $display_name
+ *   Name of display to copy.
+ * @param string $new_title
+ *   Title of new display.
+ * @param string $new_id
+ *   Id for new display.
+ *
+ * @return object
+ *   Display handler or false.
+ */
+function stanford_related_content_copy_display($views, $view_name, $display_name, $new_title = NULL, $new_id = NULL) {
+  if (array_key_exists($view_name, $views)) {
+    $view = $views[$view_name];
+  }
+  else {
+    if (variable_get("stanford_related_debug_mode", FALSE)) {
+      watchdog('stanford_related_content', "View '%view_name' not available.",
+      array('%view_name' => $view_name), WATCHDOG_DEBUG);
+    }
+    return FALSE;
+  }
+
+  if ($view->set_display($display_name)) {
+    $display_orig = $view->display_handler;
+  }
+  else {
+    if (variable_get("stanford_related_debug_mode", FALSE)) {
+      watchdog('stanford_related_content', "Display %display_name not available in view %view_name.",
+      array('%display_name' => $display_name, '%view_name' => $view_name), WATCHDOG_DEBUG);
+    }
+    return FALSE;
+  }
+
+  // Get the type of display.
+  $type = $display_orig->display->display_plugin;
+
+  // Get the display options.
+  if (isset($display_orig->handler->display->display_options)) {
+    $options_orig = $display_orig->handler->display->display_options;
+  }
+  elseif (isset($display_orig->display->display_options)) {
+    $options_orig = $display_orig->display->display_options;
+  }
+  else {
+    if (variable_get("stanford_related_debug_mode", FALSE)) {
+      watchdog('stanford_related_content', "Display options for display %display_name not available in view %view_name.",
+      array('%display_name' => $display_name, '%view_name' => $view_name), WATCHDOG_DEBUG);
+    }
+    return FALSE;
+  }
+
+  // Copy the display options.
+  $handler = $view->new_display($type, $new_title, $new_id);
+  foreach ($options_orig as $key => $value) {
+    $handler->set_option($key, $value);
+  }
+  return $handler;
+}
+
+/**
+ * Adds the related content to the contextual filter in the given display.
+ *
+ * @param object $display_handler
+ *   Display handler to update.
+ *
+ * @return object
+ *   Updated display handler
+ */
+function stanford_related_content_add_contextual_filter($display_handler, $title = 'Related Content') {
+
+  // Override defaults.
+  $options = $display_handler->get_option('defaults');
+  $options['arguments'] = FALSE;
+  $display_handler->set_option('defaults', $options);
+
+  // Add the contextual filter.
+  $options = $display_handler->get_option('arguments');
+  $options['term_node_tid_depth']['id'] = 'term_node_tid_depth';
+  $options['term_node_tid_depth']['table'] = 'node';
+  $options['term_node_tid_depth']['field'] = 'term_node_tid_depth';
+  $options['term_node_tid_depth']['default_action'] = 'default';
+  $options['term_node_tid_depth']['title_enable'] = TRUE;
+  $options['term_node_tid_depth']['title'] = $title;
+  $options['term_node_tid_depth']['default_argument_type'] = 'taxonomy_tid';
+  $options['term_node_tid_depth']['default_argument_options']['node'] = TRUE;
+  $options['term_node_tid_depth']['default_argument_options']['anyall'] = '+';
+  $options['term_node_tid_depth']['default_argument_options']['vocabularies'] = array(
+    'stanford_related_content' => 'stanford_related_content',
+  );
+  $options['term_node_tid_depth']['summary']['number_of_records'] = '0';
+  $options['term_node_tid_depth']['summary']['format'] = 'default_summary';
+  $options['term_node_tid_depth']['summary_options']['items_per_page'] = '25';
+  $options['term_node_tid_depth']['specify_validation'] = TRUE;
+  $options['term_node_tid_depth']['depth'] = '0';
+  $options['term_node_tid_depth']['break_phrase'] = TRUE;
+
+  $display_handler->set_option('arguments', $options);
+  return $display_handler;
+
+}
+
+/**
+ * Adds a more link to footer of the given display.
+ *
+ * @param object $display_handler
+ *   Display handler to update.
+ * @param string $url
+ *   Url for the more link.
+ *
+ * @return object
+ *   Updated display handler.
+ */
+function stanford_related_content_add_footer_more_link($display_handler, $url) {
+
+  // Override defaults.
+  $options = $display_handler->get_option('defaults');
+  $options['link_display'] = FALSE;
+  $options['footer'] = FALSE;
+  // No results behavior: Override so nothing displays when no results.
+  $options['empty'] = FALSE;
+  $display_handler->set_option('defaults', $options);
+
+  $display_handler->set_option('use_more', FALSE);
+  $display_handler->set_option('use_more_always', FALSE);
+
+  // Footer: Global: See more link.
+  $options = $display_handler->get_option('footer');
+  $options['area']['id'] = 'area';
+  $options['area']['table'] = 'views';
+  $options['area']['field'] = 'area';
+  $options['area']['ui_name'] = 'Global: See more link';
+  $options['area']['content'] = '[hook_views_pre_build:' . $url . ']';
+  $options['area']['format'] = 'content_editor_text_format';
+  $options['area']['tokenize'] = TRUE;
+
+  $display_handler->set_option('footer', $options);
+  return $display_handler;
+}
+
+/**
+ * Adds the related content field after the location field.
+ *
+ * This would be used for the manage content view.
+ *
+ * @param string $view
+ *   View to be altered.
+ * @param string $display_id
+ *   Display to be altered.
+ * @param string $after_field
+ *   Field after which the related content should be added.
+ */
+function stanford_related_content_insert_related_content(&$view,
+                                                         &$display_id,
+                                                         $after_field) {
+
+  $options['field_s_related_content']['id'] = 'field';
+  $options['field_s_related_content']['table'] = 'field_data_field_s_related_content';
+  $options['field_s_related_content']['field'] = 'field';
+  $options['field_s_related_content']['type'] = 'taxonomy_term_reference_plain';
+  $options['field_s_related_content']['delta_offset'] = '0';
+  $options['field_s_related_content']['multi_type'] = 'ul';
+
+  stanford_related_content_insert_item($view, $display_id, 'field', 'field_data_field_s_related_content', 'field_s_related_content', $options, $after_field);
+}
+
+/**
+ * Adds the field after the given field.
+ *
+ * @param string $view
+ *   View to be altered.
+ * @param string $display_id
+ *   Display to be altered.
+ * @param string $type
+ *   Type of item to be altered.
+ * @param string $table
+ *   Table name of the item to be inserted.
+ * @param string $field
+ *   Name of the item to be inserted.
+ * @param array $options
+ *   Options to be included when inserting the item.
+ * @param string $after_field
+ *   Name of field to insert after, if it is 0, it is inserted first.
+ *
+ * @return bool
+ *   Indicates success or failure.
+ */
+function stanford_related_content_insert_item($view,
+                                              $display_id,
+                                              $type,
+                                              $table,
+                                              $field,
+                                              $options = array(),
+                                              $after_field = NULL) {
+
+  if (!$view->set_display($display_id)) {
+    if (variable_get("stanford_related_debug_mode", FALSE)) {
+      watchdog('stanford_related_content', "Display %display_id not available in view %view_name.",
+      array('%display_id' => $display_id, '%view_name' => $view->name), WATCHDOG_DEBUG);
+    }
+    return FALSE;
+  }
+
+  // Get all of the fields.
+  $items = $view->get_items($type, $display_id);
+  $added_item = FALSE;
+
+  if ($after_field == NULL) {
+    // Add it first.
+    $view->add_item($view->current_display, $type, $table, $field, $options);
+    $added_item = TRUE;
+  }
+
+  // Re-arrange the fields.
+  foreach ($items as $field_name => $value) {
+
+    // Need to remove the item to change the order.
+    $view->set_item($display_id, $type, $field_name, NULL);
+
+    // Don't add it twice.
+    if (!$added_item) {
+
+      // If the field is the field we want, insert the new field after.
+      if ($field_name == $after_field) {
+        // Set the event field type first.
+        $view->set_item($display_id, $type, $field_name, $value);
+
+        // Then add the new item.
+        $view->add_item($display_id, $type, $table, $field, $options);
+        $added_item = TRUE;
+
+        continue;
+      }
+    }
+    // All other items just get saved in the same order.
+    $view->set_item($display_id, $type, $field_name, $value);
+  }
+
+  // If we didn't find the after_field, append the new field.
+  if (!$added_item) {
+    $view->add_item($display_id, $type, $table, $field, $options);
+  }
+}
+
+/**
+ * Remove the added to the display.
+ *
+ * @param object $views
+ *   Array of views.
+ * @param string $view_name
+ *    View to be altered.
+ * @param string $display_name
+ *    Display to be removed.
+ * @param string $module_name
+ *    Name of originating module.
+ */
+function stanford_related_content_remove_display(&$views, $view_name, $display_name, $module_name = 'stanford_related_content') {
+  if (array_key_exists($view_name, $views)) {
+    $view = $views[$view_name];
+    unset($view->display[$display_name]);
+
+    // Check that the view still works after we altered it!
+    if (stanford_related_content_validate_view($view, $module_name)) {
+      $view->save();
+      views_flush_caches();
+      if (variable_get("stanford_related_debug_mode", FALSE)) {
+        watchdog($module_name, "Display %display_name removed from view %view_name.",
+        array('%display_name' => $display_name, '%view_name' => $view_name), WATCHDOG_DEBUG);
+      }
+    }
+  }
+}
+
+/**
+ * Remove the filter from the display.
+ *
+ * @param object $views
+ *   Array of views.
+ * @param string $view_name
+ *    View to be altered.
+ * @param string $display_name
+ *    Display to be removed.
+ * @param string $module_name
+ *    Name of originating module.
+ */
+function stanford_related_content_remove_filter(&$views, $view_name, $display_name, $module_name = 'stanford_related_content') {
+  if (array_key_exists($view_name, $views)) {
+    $view = $views[$view_name];
+    $filter_name = 'term_node_tid_depth';
+
+    if ($view->set_display($display_name)) {
+      $handler = $view->display_handler;
+
+      // Remove the exposed filter.
+      $options = $handler->get_option('filters');
+      unset($options[$filter_name]);
+      $handler->set_option('filters', $options);
+
+      // Check that the view still works after we altered it!
+      if (stanford_related_content_validate_view($views[$view_name], $module_name)) {
+        $view->save();
+        if (variable_get("stanford_related_debug_mode", FALSE)) {
+          watchdog($module_name, "Filter %filter_name removed from view %view_name.",
+          array('%filter_name' => $filter_name, '%view_name' => $view_name), WATCHDOG_DEBUG);
+        }
+      }
+    }
+
+  }
+}
+
+/**
+ * Get views display path.
+ *
+ * Given a page within a views display, return its path.
+ *
+ * @param array $views
+ *   Array of views.
+ * @param string $view_name
+ *   Machine name of the view, e.g. 'stanford_news'.
+ * @param string $page_name
+ *   Machine name of the page e.g 'page_1'.
+ *
+ * @return bool
+ *   A string path (url) of the page.
+ */
+function stanford_related_content_get_views_display_path(&$views, $view_name, $page_name) {
+  if (array_key_exists($view_name, $views)) {
+    $view = $views[$view_name];
+  }
+  else {
+    if (variable_get("stanford_related_debug_mode", FALSE)) {
+      watchdog('stanford_related_content', "View '%name' not available.",
+        array('%name' => $view_name), WATCHDOG_DEBUG);
+    }
+    return FALSE;
+  }
+
+  // Get the page URL.
+  $page_handler = NULL;
+  if (isset($view->display[$page_name])) {
+    if ($view->set_display($page_name)) {
+      $page_handler = $view->display_handler;
+    }
+  }
+  // Is it overridden?
+  elseif (isset($view->display['recent_news_page_2'])) {
+    if ($view->set_display('recent_news_page_2')) {
+      $page_handler = $view->display_handler;
+    }
+  }
+
+  if ($page_handler == NULL) {
+    if (variable_get("stanford_related_debug_mode", FALSE)) {
+      watchdog('stanford_related_news', "Display not available in view %view_name.",
+        array('%view_name' => $view_name), WATCHDOG_DEBUG);
+    }
+    return FALSE;
+  }
+  return($page_handler->get_option('path'));
+}
+
+/**
+ * Create a block to display related content.
+ *
+ * Copy the block display in the view, add contextual filter, and more link.
+ *
+ * @param array $views
+ *   Array of views.
+ * @param string $view_name
+ *   Machine name of the view, e.g. 'stanford_news'.
+ * @param string $source_block_name
+ *   Machine name of the page e.g 'block_1'.
+ * @param array $dest_block
+ *   Attributes and values for the new block.
+ * @param string $page_path
+ *   If there's a more link, what is its path.
+ *
+ * @return bool
+ *   Success or failure.
+ */
+function stanford_related_content_create_block(&$views,
+                                               $view_name,
+                                               $source_block_name,
+                                               $dest_block,
+                                               $page_path = NULL) {
+  if (array_key_exists($view_name, $views)) {
+    $view = $views[$view_name];
+  }
+  else {
+    if (variable_get("stanford_related_debug_mode", FALSE)) {
+      watchdog('stanford_related_content', "View '%name' not available.",
+        array('%name' => $view_name), WATCHDOG_DEBUG);
+    }
+    return FALSE;
+  }
+
+  // Copy the block display.
+  $handler = stanford_related_content_copy_display($views, $view_name, $source_block_name,
+    $dest_block['display_title'], $dest_block['display_name']);
+
+  if ($handler == FALSE) {
+    return FALSE;
+  }
+
+  // If this block links out to a related content page,
+  // Add contextual filter and more link to the block display.
+  stanford_related_content_add_contextual_filter($handler, $dest_block['title']);
+  if (isset($page_path)) {
+    stanford_related_content_add_footer_more_link($handler, $page_path);
+  }
+
+  // Check that the view still works after we altered it!
+  if (stanford_related_content_validate_view($views[$view_name], 'stanford_related_content')) {
+    // Leaving this save here. It helps with development.
+    // $view->save();
+    return TRUE;
+  }
+  else {
+    if (variable_get("stanford_related_debug_mode", FALSE)) {
+      watchdog('stanford_related_content', 'Unsuccessful in adding %block to %view_name',
+        array(
+          '%block' => $dest_block['display_name'],
+          '%view_name' => $view_name,
+        ),
+        WATCHDOG_DEBUG);
+    }
+    return FALSE;
+  }
+}

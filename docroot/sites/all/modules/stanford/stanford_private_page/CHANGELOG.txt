@@ -1,0 +1,46 @@
+Stanford Private Page x.x-x.x, xxxx-xx-xx
+----------------------------------------
+
+7.x-2.0-alpha3, 2018-02-02
+--------------------------------------------------------------------------------
+- Bug fix for update hook that disabled admin module.
+
+7.x-2.0-alpha2, 2017-12-19
+--------------------------------------------------------------------------------
+- check if the private directory is set
+
+7.x-2.0-alpha1, 2017-12-15
+--------------------------------------------------------------------------------
+- Basic 2409 move files private
+
+7.x-1.1+7-dev, 2016-10-19
+--------------------------------------------------------------------------------
+- Updated help text
+- CSS fix on "Internal Login" button
+
+7.x-1.1, 2016-06-08
+--------------------------------------------------------------------------------
+- Removed dependency on jumpstart_roles
+- updated private page menu link styles for vivid design option
+- updated image file being applied to :after for menu items
+- updated main menu hover states for private page feature for vivid design option
+
+7.x-1.0+26-dev, 2015-10-14
+--------------------------------------------------------------------------------
+- added content access permissions to install
+- added variable merge in case other modules interact with variable
+- added styles for all design options
+- Added dependecy for stanford_jumpstart_roles
+- BASIC-1615: jQuery plugin for private page links and page titles
+
+7.x-1.0, 2015-10-14
+--------------------------------------------------------------------------------
+
+7.x-1.0-alpha1, 2015-08-14
+-----------------------------------------------
+Initial release:
+Main feature:
+ - Private Page Content type
+Sub features:
+ - Administration (manage content)
+ - Private Section (creates section on site with two contexts and private page menu)

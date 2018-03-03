@@ -1,0 +1,14 @@
+/* Related content BLOCKS */
+
+@media (max-width: 979px) and (min-width: 586px) {
+    .main .region-sidebar-second .block-views {
+        width: 60%;
+        margin-left: 0;
+    }
+}
+
+@media (max-width: 585px) {
+    .main .region-sidebar-second .block-views {
+        width: 80%;
+    }
+}

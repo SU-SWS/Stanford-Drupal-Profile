@@ -1,0 +1,112 @@
+/* CSS for Jumpstart Engineering */
+
+/* full width on banner images */
+
+.fullwidth .view-mode-stanford-full-width-banner-short img {
+  width: 100%;
+}
+
+/* SOE footer logo for cardinal style */
+
+.style-custom-styles-cardinal #block-bean-jse-linked-logo-block img,
+.style-custom-styles-contrast #block-bean-jse-linked-logo-block img,
+.style-custom-styles-rich #block-bean-jse-linked-logo-block img {
+  display: none;
+}
+
+.style-custom-styles-cardinal #block-bean-jse-linked-logo-block,
+.style-custom-styles-contrast #block-bean-jse-linked-logo-block,
+.style-custom-styles-rich #block-bean-jse-linked-logo-block {
+  margin-top: 43px;
+}
+
+.style-custom-styles-cardinal #block-bean-jse-linked-logo-block p a,
+.style-custom-styles-contrast #block-bean-jse-linked-logo-block p a,
+.style-custom-styles-rich #block-bean-jse-linked-logo-block p a {
+  background-image: url("../img/engineering-wordmark-white.png");
+  background-position: 0 center;
+  background-repeat: no-repeat;
+  padding: 0 370px 27px 0;
+}
+
+@media (max-width: 1200px) {
+  .style-custom-styles-cardinal #block-bean-jse-linked-logo-block p a,
+  .style-custom-styles-contrast #block-bean-jse-linked-logo-block p a,
+  .style-custom-styles-rich #block-bean-jse-linked-logo-block p a {
+    background-size: 80%;
+  }
+}
+
+@media (max-width: 980px) {
+  .style-custom-styles-cardinal #block-bean-jse-linked-logo-block p a,
+  .style-custom-styles-contrast #block-bean-jse-linked-logo-block p a,
+  .style-custom-styles-rich #block-bean-jse-linked-logo-block p a {
+    background-size: 60%;
+  }
+}
+
+@media (max-width: 767px) {
+  .style-custom-styles-cardinal #block-bean-jse-linked-logo-block p a,
+  .style-custom-styles-contrast #block-bean-jse-linked-logo-block p a,
+  .style-custom-styles-rich #block-bean-jse-linked-logo-block p a {
+    padding-bottom: 10px;
+  }
+}
+
+/* grouped grid layout for people */
+
+.views-grid-four .views-row.views-row-4,
+.views-grid-four .views-row.views-row-8,
+.views-grid-four .views-row.views-row-12,
+.views-grid-four .views-row.views-row-16,
+.views-grid-four .views-row.views-row-20,
+.views-grid-four .views-row.views-row-24,
+.views-grid-four .views-row.views-row-28,
+.views-grid-four .views-row.views-row-32,
+.views-grid-four .views-row.views-row-36,
+.views-grid-four .views-row.views-row-40,
+.views-grid-four .views-row.views-row-44,
+.views-grid-four .views-row.views-row-48,
+.views-grid-four .views-row.views-row-52,
+.views-grid-four .views-row.views-row-56,
+.views-grid-four .views-row.views-row-60,
+.views-grid-four .views-row.views-row-64,
+.views-grid-four .views-row.views-row-68,
+.views-grid-four .views-row.views-row-72,
+.views-grid-four .views-row.views-row-76,
+.views-grid-four .views-row.views-row-80,
+.views-grid-four .views-row.views-row-84,
+.views-grid-four .views-row.views-row-88,
+.views-grid-four .views-row.views-row-92,
+.views-grid-four .views-row.views-row-96,
+.views-grid-four .views-row.views-row-100,
+.views-grid-four .views-row.views-row-104,
+.views-grid-four .views-row.views-row-108,
+.views-grid-four .views-row.views-row-112 {
+    margin-right: 0px;
+}
+
+/* LANDING PAGE */
+
+@media (max-width: 1199px) {
+  .node-stanford-landing-page.large-landscape .field-name-field-landing-page-item>.field-items>.field-item {
+    width: 48% !important;
+  }
+  .node-stanford-landing-page.large-landscape .field-name-field-landing-page-item>.field-items>.field-item:nth-child(3n+0) {
+    margin-right: 3% !important;
+  }
+  .node-stanford-landing-page.large-landscape .field-name-field-landing-page-item>.field-items>.field-item:nth-child(2n) {
+    margin-right: 0 !important;
+  }
+}
+
+@media (max-width: 530px) {
+  .node-stanford-landing-page.large-landscape .field-name-field-landing-page-item>.field-items>.field-item,
+  .node-stanford-landing-page.large-landscape .field-name-field-landing-page-item>.field-items>.field-item img {
+    width: 100% !important;
+    margin-right: 0 !important;
+  }
+  .node-stanford-landing-page.large-landscape .field-name-field-landing-page-item>.field-items>.field-item:nth-child(3n+0) {
+    margin-right: 0 !important;
+  }
+}

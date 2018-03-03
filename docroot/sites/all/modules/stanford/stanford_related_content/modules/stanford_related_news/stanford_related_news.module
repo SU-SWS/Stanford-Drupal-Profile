@@ -1,0 +1,254 @@
+<?php
+
+/**
+ * @file
+ * Code for the Stanford Related News feature.
+ */
+
+/**
+ * Implements hook_views_default_views_alter().
+ */
+function stanford_related_news_views_default_views_alter(&$views) {
+
+  // Add related content for 3 item News Extras view.
+  if (stanford_related_news_alter_image_title_3_item_block($views)) {
+    stanford_related_content_add_exposed_filter(
+      $views,
+      'stanford_news_with_teaser',
+      'page_1',
+      TRUE);
+  }
+
+  // Add related content for 2 item News Extras view.
+  if (stanford_related_news_alter_image_title_2_item_block($views)) {
+    stanford_related_content_add_exposed_filter(
+      $views,
+      'stanford_news_with_teaser',
+      'page_1',
+      TRUE);
+  }
+
+  // Add related content for three item News view.
+  if (stanford_related_news_alter_3_item_block($views)) {
+    stanford_related_news_alter_page($views);
+  }
+
+  stanford_related_news_alter_manage_news($views);
+}
+
+/**
+ * Add exposed filter for related content to the page display.
+ *
+ * @param object $views
+ *   Array of views.
+ */
+function stanford_related_news_alter_manage_news(&$views) {
+  $view_name = 'admin_manage_stanford_news_item';
+  if (array_key_exists($view_name, $views)) {
+    $view = $views[$view_name];
+  }
+  else {
+    return FALSE;
+  }
+
+  $display_name = 'page_1';
+  if ($view->set_display($display_name)) {
+    $handler = $view->display_handler;
+  }
+  else {
+    if (variable_get("stanford_related_debug_mode", FALSE)) {
+      watchdog('stanford_related_news', "Display %display_name not available in view %view_name.",
+      array('%display_name' => $display_name, '%view_name' => $view_name), WATCHDOG_DEBUG);
+    }
+    return FALSE;
+  }
+
+  // Add the exposed filter.
+  // TODO: Add the VBO.
+  return stanford_related_content_add_exposed_filter($views, $view_name, $display_name, FALSE, "Related Content");
+
+}
+
+/**
+ * Implements hook_views_pre_view().
+ */
+function stanford_related_news_views_pre_view(&$view, &$display_id, &$args) {
+
+  // Insert the related content field after the location field.
+  if ($view->name == 'admin_manage_stanford_news_item' && $view->current_display == "page_1") {
+    stanford_related_content_insert_related_content($view, $display_id, 'field_s_news_source');
+  }
+
+}
+
+/**
+ * Implements hook_views_pre_build().
+ *
+ *   This rewrites the pattern in the footer of the view and replaces it
+ *   with a link to the related view page.
+ */
+function stanford_related_news_views_pre_build(&$view) {
+  if ($view->name == "stanford_news") {
+    if ($view->current_display == "filtered_3_news_block") {
+      $subject = $view->footer["area"]->options["content"];
+      $view->footer["area"]->options["content"]
+        = stanford_related_content_add_more_link($subject, "See more related news");
+    }
+  }
+  if ($view->name == "stanford_news_image_title") {
+    if ($view->current_display == "filtered_three_block") {
+      $subject = $view->footer["area"]->options["content"];
+      $view->footer["area"]->options["content"]
+        = stanford_related_content_add_more_link($subject, "See more related news");
+    }
+  }
+  if ($view->name == "stanford_news_image_title") {
+    if ($view->current_display == "filtered_two_block") {
+      $subject = $view->footer["area"]->options["content"];
+      $view->footer["area"]->options["content"]
+        = stanford_related_content_add_more_link($subject, "See more related news");
+    }
+  }
+}
+
+/**
+ * Copy the block display in the stanford_news_view and add contextual filter.
+ *
+ * @param object $views
+ *   Array of views.
+ */
+function stanford_related_news_alter_3_item_block(&$views) {
+  $view_name = 'stanford_news';
+  if (array_key_exists($view_name, $views)) {
+    $view = $views[$view_name];
+  }
+  else {
+    if (variable_get("stanford_related_debug_mode", FALSE)) {
+      watchdog('stanford_related_news', "View '%name' not available.",
+        array('%name' => $view_name), WATCHDOG_DEBUG);
+    }
+    return FALSE;
+  }
+
+  // Get the page URL.
+  $page_handler = NULL;
+  if (isset($view->display['page_1'])) {
+    if ($view->set_display('page_1')) {
+      $page_handler = $view->display_handler;
+    }
+  }
+  // Is it overridden?
+  elseif (isset($view->display['recent_news_page_2'])) {
+    if ($view->set_display('recent_news_page_2')) {
+      $page_handler = $view->display_handler;
+    }
+  }
+
+  if ($page_handler == NULL) {
+    if (variable_get("stanford_related_debug_mode", FALSE)) {
+      watchdog('stanford_related_news', "Display not available in view %view_name.",
+      array('%view_name' => $view_name), WATCHDOG_DEBUG);
+    }
+    return FALSE;
+  }
+  $page_path = $page_handler->get_option('path');
+
+  // Copy the block display.
+  $handler = stanford_related_content_copy_display($views, $view_name, 'block_1', 'Filtered 3 Item News Block', 'filtered_3_news_block');
+  if ($handler == FALSE) {
+    return FALSE;
+  }
+
+  // Add contextual filter and more link.
+  $handler = stanford_related_content_add_contextual_filter($handler, 'Related News');
+  $handler = stanford_related_content_add_footer_more_link($handler, $page_path);
+
+  // Check that the view still works after we altered it!
+  if (stanford_related_content_validate_view($views[$view_name], 'stanford_related_news')) {
+    if (variable_get("stanford_related_debug_mode", FALSE)) {
+      watchdog('stanford_related_news', "Block 'filtered_3_news_block' added to view %view_name.",
+      array('%view_name' => $view_name), WATCHDOG_DEBUG);
+    }
+    return TRUE;
+  }
+  return FALSE;
+}
+
+/**
+ * Add related content to the page display or upcoming_news_page_list.
+ *
+ * @param array $views
+ *   Array of views.
+ */
+function stanford_related_news_alter_page(&$views) {
+
+  // Add related content to the exposed filter.
+  $page_result = stanford_related_content_add_exposed_filter($views, 'stanford_news', 'page_1', TRUE);
+  $soe_page_result = stanford_related_content_add_exposed_filter($views, 'stanford_news', 'recent_news_page_2', TRUE);
+
+  return ($page_result || $soe_page_result);
+}
+
+/**
+ * Create the related news block.
+ *
+ * Copy the block display in the stanford_news_with_title and
+ * add contextual filter.
+ *
+ * @param object $views
+ *   Array of views.
+ *
+ * @return bool
+ *   Returns true if successful.
+ */
+function stanford_related_news_alter_image_title_3_item_block($views) {
+  $page_path = stanford_related_content_get_views_display_path(
+    $views,
+    'stanford_news_with_teaser',
+    'page_1');
+
+  $dest_block = array(
+    'title' => 'Related News',
+    'display_title' => 'Filtered three item block',
+    'display_name' => 'filtered_three_block',
+  );
+
+  return stanford_related_content_create_block(
+    $views,
+    'stanford_news_image_title',
+    'three_block',
+    $dest_block,
+    $page_path);
+}
+
+/**
+ * Create the related news two item block.
+ *
+ * Copy the block display in the stanford_news_with_title and
+ * add contextual filter.
+ *
+ * @param object $views
+ *   Array of views.
+ *
+ * @return bool
+ *   Returns true if successful.
+ */
+function stanford_related_news_alter_image_title_2_item_block($views) {
+  $page_path = stanford_related_content_get_views_display_path(
+    $views,
+    'stanford_news_with_teaser',
+    'page_1');
+
+  $dest_block = array(
+    'title' => 'Related News',
+    'display_title' => 'Filtered two item block',
+    'display_name' => 'filtered_two_block',
+  );
+
+  return stanford_related_content_create_block(
+    $views,
+    'stanford_news_image_title',
+    'two_block',
+    $dest_block,
+    $page_path);
+}

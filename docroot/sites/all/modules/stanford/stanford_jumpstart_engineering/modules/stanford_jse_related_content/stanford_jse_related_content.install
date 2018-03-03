@@ -1,0 +1,35 @@
+<?php
+/**
+ * @file
+ */
+
+/**
+ * Implements hook_install().
+ */
+function stanford_jse_related_content_install() {
+
+}
+
+/**
+ * Implements hook_enable().
+ */
+function stanford_jse_related_content_enable() {
+
+}
+
+/**
+ * Implements hook_disable().
+ */
+function stanford_jse_related_content_disable() {
+  /*
+   *mymodule_cache_rebuild();
+   */
+  /* Your code here */
+}
+
+/**
+ * Implements hook_uninstall().
+ */
+function stanford_jse_related_content_uninstall() {
+
+}

@@ -1,0 +1,191 @@
+<?php
+
+/**
+ * @file
+ * Install tasks.
+ */
+
+/**
+ * Implements hook_enable().
+ */
+function stanford_private_page_enable() {
+
+  // Let's keep the default settings defined in only one place.
+  $settings = stanford_private_page_get_settings();
+  variable_set('stanford_stanford_private_page_settings', $settings);
+  // Setting access permissions for roles if they exist.
+  $roles = array('site owner', 'editor', 'site member');
+  $caspp = array();
+  $rids = array();
+  foreach ($roles as $role_name) {
+    $role = user_role_load_by_name($role_name);
+    if ($role->rid) {
+      $rids[] = $role->rid;
+    }
+  }
+  if ($admin_role = user_role_load_by_name('administrator')) {
+    $rids[] = $admin_role->rid;
+  }
+  $current = variable_get('content_access_stanford_private_page', array());
+  $caspp = array('view_own' => $rids, 'view' => $rids);
+  $merged = array_merge_recursive_ex($current, $caspp);
+  variable_set('content_access_stanford_private_page', $merged);
+  node_access_rebuild();
+}
+
+function array_merge_recursive_ex(array & $array1, array & $array2) {
+  $merged = $array1;
+  foreach ($array2 as $key => & $value) {
+    if (is_array($value) && isset($merged[$key]) && is_array($merged[$key])) {
+      $merged[$key] = array_merge_recursive_ex($merged[$key], $value);
+    }
+    elseif (is_numeric($key)) {
+      if (!in_array($value, $merged)) {
+        $merged[] = $value;
+      }
+    }
+    else {
+      $merged[$key] = $value;
+    }
+  }
+  return $merged;
+}
+
+/**
+ * Implements hook_uninstall().
+ */
+function stanford_private_page_uninstall() {
+  variable_del('stanford_stanford_private_page_settings');
+  variable_set('content_access_stanford_private_page', array());
+}
+
+/**
+ * Move files to private directory.
+ */
+function stanford_private_page_update_7001() {
+  // Make sure the private path is configured.
+  if (!variable_get('file_private_path', FALSE)) {
+    throw new DrupalUpdateException('Private directory is not configured.');
+  }
+
+  // Check if private directory is writable first.
+  $dir = 'private://';
+  file_prepare_directory($dir, FILE_CREATE_DIRECTORY | FILE_MODIFY_PERMISSIONS);
+  if (!is_writable($dir)) {
+    throw new DrupalUpdateException('Private directory is not writable.');
+  }
+
+  $fields = array(
+    'field_s_private_file',
+    'field_s_private_image_insert',
+  );
+
+  $file_paths = array();
+
+  $moved_files = array();
+  foreach ($fields as $field_name) {
+    $field_info = field_info_field($field_name);
+    $field_info['settings']['uri_scheme'] = 'private';
+    field_update_field($field_info);
+
+    $query = db_select("field_revision_$field_name", 'f')
+      ->fields('f')
+      ->execute();
+
+    while ($row = $query->fetchAssoc()) {
+      // Get the fid and load the original file.
+      $column = $field_name . '_fid';
+      $fid = $row[$column];
+
+      // Since we are querying the revision table, we have to track files that
+      // have already moved.
+      if (in_array($fid, $moved_files)) {
+        continue;
+      }
+      $moved_files[] = $fid;
+
+      if ($file = file_load($fid)) {
+        $new_dir = str_replace('public://', 'private://', $file->uri);
+
+        // Make sure the file actually exists.
+        if (!file_exists($file->uri)) {
+          continue;
+        }
+
+        // Move the file to the new private directory.
+        if ($new_file = file_move($file, $new_dir)) {
+          $file_paths += stanford_private_page_get_paths($file->uri, $new_file->uri, $file->type);
+        }
+      }
+    }
+  }
+
+  // Update any inline body urls.
+  foreach ($file_paths as $old_url => $new_url) {
+    db_query("UPDATE field_data_body SET body_value = REPLACE(body_value, '$old_url', '$new_url') where body_value like '%$old_url%'")->execute();
+    db_query("UPDATE field_revision_body SET body_value = REPLACE(body_value, '$old_url', '$new_url') where body_value like '%$old_url%'")->execute();
+  }
+}
+
+/**
+ * Move field collection images to private directory.
+ */
+function stanford_private_page_update_7002() {
+  $query = db_query("select i.field_s_image_image_fid from field_revision_field_s_image_image i right join field_revision_field_s_image_info f on f.field_s_image_info_value = i.entity_id where f.entity_type = 'node' and f.bundle ='stanford_private_page'");
+  while ($fid = $query->fetchField()) {
+    if ($file = file_load($fid)) {
+      $destination = str_replace('public://', 'private://', $file->uri);
+      file_move($file, $destination);
+    }
+  }
+
+  // Flush image styles to protect derivatives.
+  foreach (image_styles() as $style) {
+    image_style_flush($style);
+  }
+}
+
+/**
+ * Get all replacement urls from an old uri to the new uri.
+ *
+ * @param string $old_uri
+ *   Old File URI.
+ * @param string $new_uri
+ *   New file URI.
+ * @param string $file_type
+ *   The type of file: image, document, other.
+ *
+ * @return array
+ *   Keyed array of paths that need to be replaced with old_path => new_path
+ */
+function stanford_private_page_get_paths($old_uri, $new_uri, $file_type) {
+  global $base_url;
+  $paths = array();
+
+  $old_url = file_create_url($old_uri);
+  $old_url = str_replace($base_url, '', $old_url);
+
+  $new_url = file_create_url($new_uri);
+  $new_url = str_replace($base_url, '', $new_url);
+
+  $paths[$old_url] = $new_url;
+
+  if ($file_type != 'image') {
+    return $paths;
+  }
+
+  // Get all image style paths.
+  foreach (image_styles() as $style) {
+    $old_style_uri = image_style_path($style['name'], $old_uri);
+    $old_style = file_create_url($old_style_uri);
+    $old_style = str_replace($base_url, '', $old_style);
+
+    $new_style_uri = image_style_path($style['name'], $new_uri);
+    $new_style = file_create_url($new_style_uri);
+    $new_style = str_replace($base_url, '', $new_style);
+
+    $paths[$old_style] = $new_style;
+  }
+
+  return $paths;
+}

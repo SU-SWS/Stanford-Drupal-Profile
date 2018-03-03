@@ -1,0 +1,155 @@
+engines:
+  # https://docs.codeclimate.com/docs/eslint
+  # ES Linting requires an .eslintrc file to tweak checks.
+  eslint:
+    enabled: false
+  csslint:
+    enabled: true
+    checks:
+      overqualified-elements:
+        enabled: false
+      order-alphabetical:
+        enabled: false
+      adjoining-classes:
+        enabled: false
+      fallback-colors:
+        enabled: false
+      ids:
+        enabled: false
+      regex-selectors:
+        enabled: false
+  # We don't lint our coffee. Eew.
+  coffeelint:
+    enabled: false
+  # SCSS Lint requires a .scss-lint.yml file in the repo in order to tweak settings.
+  # Withouth the .scss-lint.yml file it will run with the defaults.
+  # Defaults file: https://github.com/brigade/scss-lint/blob/master/config/default.yml
+  scss-lint:
+    enabled: true
+    checks:
+      IdSelector:
+        enabled: false
+      SelectorFormat:
+        enabled: false
+      NestingDepth:
+        enabled: false
+      MergeableSelector:
+        enabled: false
+      ColorVariable:
+        enabled: false
+      PropertySortOrder:
+        enabled: false
+      SelectorDepth:
+        enabled: false
+      QualifyingElement:
+        enabled: false
+      VendorPrefix:
+        enabled: false
+      LeadingZero:
+        enabled: false
+      HexLength:
+        enabled: false
+      PseudoElement:
+        enabled: false
+  phpcodesniffer:
+    enabled: true
+    checks:
+      Drupal Commenting FunctionComment TypeHintMissing:
+        enabled: false
+      Drupal Commenting FunctionComment IncorrectTypeHint:
+        enabled: false
+      DrupalPractice Commenting CommentEmptyLine SpacingAfter:
+        enabled: false
+      Drupal NamingConventions ValidFunctionName ScopeNotCamelCaps:
+        enabled: false
+      Drupal NamingConventions ValidClassName StartWithCaptial:
+        enabled: false
+      Drupal NamingConventions ValidFunctionName NotCamelCaps:
+        enabled: false
+      DrupalPractice General ClassName ClassPrefix:
+        enabled: false
+      Drupal NamingConventions ValidClassName NoUnderscores:
+        enabled: false
+    config:
+      file_extensions: "php,inc,install,module,profile"
+      standard: "Drupal,DrupalPractice"
+  phpmd:
+    enabled: true
+    checks:
+      Design/WeightedMethodCount:
+        enabled: false
+      CleanCode/StaticAccess:
+        enabled: false
+      CleanCode/ElseExpression:
+        enabled: false
+      CleanCode/BooleanArgumentFlag:
+        enabled: false
+      UnusedFormalParameter:
+        enabled: false
+    config:
+      # https://phpmd.org/rules/index.html
+      # The following sets include everything except the controversial set.
+      # We can configure these further through .xml files. See docs.
+      rulesets: "cleancode,codesize,design,naming,unusedcode"
+      # Include special Drupal file extensions.
+      file_extensions: "inc,module,profile,php,install"
+  # https://docs.codeclimate.com/docs/phan
+  phan:
+    enabled: true
+    config:
+      file_extensions: "php,module,profile,inc,install"
+      # minimum-severity: 1
+      ignore-undeclared: true
+      # quick: true
+      # backward-compatiility-checks: true
+      # dead-code-detection: true
+  # https://docs.codeclimate.com/docs/duplication
+  duplication:
+    enabled: true
+    # exclude_paths:
+    #   - examples/
+    config:
+      languages:
+        javascript:
+          mass_threshold: 50
+          # count_threshold: 3
+        php:
+          mass_threshold: 60
+  fixme:
+    enabled: true
+    config:
+      strings:
+      - FIXME
+      - BUG
+      - TODO
+      - todo
+      - dpm
+      - dsm
+ratings:
+  paths:
+  - "**.inc"
+  - "**.module"
+  - "**.profile"
+  - "**.php"
+  - "**.install"
+  - "**.scss"
+  - "**.sass"
+  - "**.js"
+# exclude these files/paths
+exclude_paths:
+- "**.features.**"
+- "**.views_default.inc"
+- "**.field_group.inc"
+- "**.ds.inc"
+- "**.bean.inc"
+- "**.context.inc"
+- "test/**/*"
+- "**/vendor/**/*"
+- "**.min.*"
+- "tests/"
+- "spec/"
+- "**/vendor/"
+- "**.api.php"
+- "*.twig"
+- "**.tpl.php"
+- "**.strongarm.inc"

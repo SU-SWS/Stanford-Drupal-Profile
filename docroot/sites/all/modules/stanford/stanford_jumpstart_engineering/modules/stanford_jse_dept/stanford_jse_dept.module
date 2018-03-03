@@ -1,0 +1,107 @@
+<?php
+/**
+ * @file
+ * Stanford Jumpstart Engineering for Department Sites
+ *
+ * @author  Caryl Westerberg <cjwest@stanford.edu>
+ * Provides custom functionality for School of Engineering departments sites.
+ *
+ */
+
+/**
+ * Implements hook_form_alter().
+ */
+function stanford_jse_dept_form_alter(&$form, &$form_state, $form_id) {
+
+  if ($form_id == "system_theme_settings" || $form_id == "stanford_jumpstart_homepage_dashboard_form") {
+
+    drupal_add_css(drupal_get_path('module', 'stanford_jse_dept') . '/css/stanford_jse_dept.css');
+
+    //Add SoE font variables
+    $form['design_container']['fonts']['#options']['fonts-jse-dept'] =
+      '<span class="design-font df-jse-dept">' . t('SoE Department') . '</span>';
+
+    //Add JSE Department Styles
+    $form['design_container']['styles']['#options']['styles-jse-dept'] =
+      '<span class="design-style ds-jse-dept">' . t('SoE Department') . '</span>';
+  }
+  elseif ($form_id = 'views_exposed_form') {
+    if($form['#id'] === 'views-exposed-form-stanford-news-with-teaser-page-1') {
+      unset($form['field_s_news_categories_tid']);
+      unset($form['#info']['filter-field_s_news_categories_tid']);
+    }
+  }
+}
+
+/**
+ * @param $css
+ * Set the SoE styles.
+ * See stanford_framework_css_alter()
+ */
+function stanford_jse_dept_css_alter(&$css) {
+
+  // Exclude admin pages
+  $conditions = "admin
+admin*
+admin/*
+block/*/edit*
+block/add*
+block/*/delete
+node/*/edit
+node/add*
+node/*/delete
+user/*/edit";
+
+  $css_rules = array();
+  $css_rules['rule_conditions'] = $conditions;
+  $css_rules['rule_type'] = CSS_INJECTOR_PAGES_NOTLISTED;
+
+  $pass = _css_injector_evaluate_rule($css_rules);
+  if (!$pass) {
+    return;
+  }
+
+  $styles = theme_get_setting('styles');
+  $fonts = theme_get_setting('fonts');
+
+  // Styles variables.
+  switch ($styles) {
+    case "styles-jse-dept":
+      drupal_add_css(drupal_get_path('theme', 'stanford_framework') .
+        '/css/stanford_light/styles-light.css', array(
+          'group' => CSS_THEME,
+          'media' => 'all',
+          'weight' => 98,
+          'preprocess' => TRUE));
+      drupal_add_css(drupal_get_path('module', 'stanford_jse_dept') .
+        '/css/stanford_jse_dept_styles.css', array(
+          'group' => CSS_THEME,
+          'media' => 'all',
+          'weight' => 120,
+          'preprocess' => TRUE,
+      ));
+      break;
+    default:
+  }
+
+  // SoE fonts variables
+  switch ($fonts) {
+    case "fonts-jse-dept":
+      drupal_add_css(drupal_get_path('theme', 'stanford_framework') .
+        '/css/stanford_light/fonts-sans.css', array(
+          'group' => CSS_THEME,
+          'media' => 'all',
+          'weight' => 98,
+          'preprocess' => TRUE));
+      drupal_add_css(drupal_get_path('module', 'stanford_jse_dept') .
+        '/css/stanford_jse_dept_fonts.css', array(
+          'group' => CSS_THEME,
+          'media' => 'all',
+          'weight' => 120,
+          'preprocess' => TRUE
+      ));
+      break;
+    default:
+  }
+}
+

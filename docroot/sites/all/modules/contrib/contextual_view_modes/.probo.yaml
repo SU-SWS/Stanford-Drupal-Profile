@@ -1,0 +1,38 @@
+assets:     
+  - db.sql.gz
+steps:
+  - name: Download Drupal 7
+    plugin: Shell
+    command: "drush dl drupal-7.x --destination=/var/www"
+  - name: Rename web dir
+    plugin: Shell
+    command: "mv /var/www/drupal-7.x-dev /var/www/html"
+  - name: Probo CI site setup
+    plugin: Drupal
+    database: db.sql.gz
+    databaseGzipped: true
+    databaseUpdates: true
+    clearCaches: true
+  - name: Make Module Dirs
+    plugin: Shell
+    command: "mkdir /var/www/html/sites/all/modules/contrib && mkdir /var/www/html/sites/all/modules/contrib/contextual_view_modes"
+  - name: Move contextual_view_modes source to contrib dir
+    command: "mv /src/* /var/www/html/sites/all/modules/contrib/contextual_view_modes/"
+  - name: Set file directory permissions
+    plugin: Shell
+    command: 'chown -R www-data:www-data /var/www/html/sites/default/files'
+  - name: Enable and download dependencies
+    plugin: Shell
+    command: "drush --root=/var/www/html en contextual_view_modes -y"
+  - name: Dl and enable features
+    plugin: Shell
+    command: "drush --root=/var/www/html dl features -y && drush --root=/var/www/html en features"
+  - name: Revert all features
+    plugin: Shell
+    command: 'drush --root="/var/www/html" fra -y'
+  - name: Update all the things
+    plugin: Shell
+    command: 'drush --root="/var/www/html" updb -y'
+  - name: Clear cache
+    plugin: Shell
+    command: 'drush --root="/var/www/html" cc all -y'

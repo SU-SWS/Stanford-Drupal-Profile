@@ -1,0 +1,103 @@
+<?php
+
+/**
+ * @file
+ * Code for installing the Stanford Related Person feature.
+ */
+
+/**
+ * Implements hook_install().
+ *
+ * If the view is in the database it has been overridden on the site.
+ * Load the view, update it, save the changed view back to the database.
+ */
+function stanford_related_person_install() {
+
+  $views = view::load_views();
+
+  $name = 'stanford_person_grid';
+  if (array_key_exists($name, $views)) {
+    if (stanford_related_person_alter_four_grid_block($views)) {
+      $views[$name]->save();
+    }
+  }
+
+  $name = 'stanford_person_grid_five';
+  if (array_key_exists($name, $views)) {
+    if (stanford_related_person_alter_five_grid_block($views)) {
+      $views[$name]->save();
+    }
+  }
+
+  $name = 'stanford_person_grid_six';
+  if (array_key_exists($name, $views)) {
+    if (stanford_related_person_alter_six_grid_block($views)) {
+      $views[$name]->save();
+    }
+  }
+
+  $name = 'stanford_person_manage';
+  if (array_key_exists($name, $views)) {
+    if (stanford_related_person_alter_manage_person($views)) {
+      $views[$name]->save();
+    }
+  }
+}
+
+/**
+ * Implements hook_uninstall().
+ */
+function stanford_related_person_uninstall() {
+  $views = view::load_views();
+  stanford_related_content_remove_display($views, 'stanford_person_grid', 'filtered_block', 'stanford_related_person');
+  stanford_related_content_remove_display($views, 'stanford_person_grid_five', 'filtered_block', 'stanford_related_person');
+  stanford_related_content_remove_display($views, 'stanford_person_grid_six', 'filtered_block', 'stanford_related_person');
+  stanford_related_person_uninstall_manage_person($views);
+}
+
+/**
+ * Remove the items added to the manage person page display.
+ *
+ * @param object $views
+ *   Array of views.
+ * @param string $name
+ *    View to be altered.
+ */
+function stanford_related_person_uninstall_manage_person(&$views, $name = 'stanford_person_manage') {
+  if (array_key_exists($name, $views)) {
+    $view = $views[$name];
+
+    if ($view->set_display('page')) {
+      $handler = $view->display_handler;
+
+      // Remove the exposed filter.
+      $options = $handler->get_option('filters');
+      unset($options['term_node_tid_depth']);
+      $handler->set_option('filters', $options);
+
+      // Remove the related content field.
+      $options = $handler->get_option('fields');
+      unset($options['field_s_related_content']);
+
+      // Remove the VBO.
+      if (isset($options['views_bulk_operations']['vbo_operations']['action::views_bulk_operations_modify_action']
+        ['settings']['display_values']['stanford_event::field_s_related_content'])) {
+        unset($options['views_bulk_operations']['vbo_operations']['action::views_bulk_operations_modify_action']
+          ['settings']['display_values']['stanford_event::field_s_related_content']);
+      }
+      elseif (isset($options['views_bulk_operations']['vbo']['operations']['action::views_bulk_operations_modify_action']
+        ['settings']['display_values']['stanford_event::field_s_related_content'])) {
+        unset($options['views_bulk_operations']['vbo']['operations']['action::views_bulk_operations_modify_action']
+          ['settings']['display_values']['stanford_event::field_s_related_content']);
+      }
+      $handler->set_option('fields', $options);
+
+      // Check that the view still works after we altered it!
+      if (stanford_related_content_validate_view($views[$name], 'stanford_related_person')) {
+        $view->save();
+        watchdog($name, "Field 'field_s_related_content' removed from view %name.",
+          array('%name' => $name), WATCHDOG_DEBUG);
+      }
+    }
+  }
+}

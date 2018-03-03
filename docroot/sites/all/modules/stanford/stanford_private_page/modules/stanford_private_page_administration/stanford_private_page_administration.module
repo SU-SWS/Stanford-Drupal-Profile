@@ -1,0 +1,7 @@
+<?php
+/**
+ * @file
+ * Code for the Stanford Private Page Administration feature.
+ */
+
+include_once 'stanford_private_page_administration.features.inc';

@@ -1,0 +1,9 @@
+/* Select Box for Exposed filter */
+
+#block-views-b9c01c6eb8df3ae2f662a9d4a0e35311 .content option,
+#block-views-exp-stanford-events-views-page .content option {
+    word-wrap: break-word;      /* IE*/
+    white-space: normal;      /* other browsers */
+    float: left;
+    padding-bottom: 5px;
+}

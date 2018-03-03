@@ -1,0 +1,27 @@
+Stanford Related Content x.x-x.x, xxxx-xx-xx
+------------------------------------
+
+Stanford Related Content 7.x-1.0+16-dev, 2017-01-19
+------------------------------------
+- Updated for Code Climate coding standards
+
+Stanford Related Content 7.x-1.0+6-dev, 2016-12-14
+------------------------------------
+- SOE-1524: Adding views_grid_five and views_grid_six
+
+Stanford Related Content 7.x-1.0, 2016-11-29
+------------------------------------
+- Refactored code to allow for re-use
+- Added support for two news extras block and page displays
+
+Stanford Related Content 7.x-1.0-alpha3, 2016-10-19
+------------------------------------
+- Fix typo in "variable"
+
+Stanford Related Content 7.x-1.0-alpha2, 2016-02-18
+------------------------------------
+- Quiet the logs
+
+Stanford Related Content 7.x-1.0, 2015-05-06
+------------------------------------
+- Initial Version Release.

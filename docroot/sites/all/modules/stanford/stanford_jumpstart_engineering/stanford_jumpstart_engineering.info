@@ -1,0 +1,11 @@
+name = Stanford Jumpstart Engineering
+description = For all things specific to JSE
+core = 7.x
+package = Stanford
+version = 7.x-5.4-dev
+project = stanford_jumpstart_engineering
+dependencies[] = block
+; stylesheets[all][] = css/stanford_jumpstart_engineering.css
+; scripts[] = js/stanford_module.js
+project status url = https://github.com/SU-SOE/stanford_jumpstart_engineering
+files[] = stanford_jumpstart_engineering.install

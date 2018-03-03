@@ -1,0 +1,7 @@
+<?php
+/**
+ * @file
+ * Code for the Stanford Help Administration feature.
+ */
+
+include_once 'stanford_help_administration.features.inc';

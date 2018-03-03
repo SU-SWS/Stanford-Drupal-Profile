@@ -1,0 +1,12 @@
+.inline-fields {
+  border-bottom: solid 1px #CCC;
+}
+
+.inline-fields .form-item {
+  display: inline-block;
+  margin-right: 3em;
+}
+
+.inline-fields:last-of-type {
+  border-bottom: 0;
+}

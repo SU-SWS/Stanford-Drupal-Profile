@@ -1,0 +1,17 @@
+name = Stanford Affiliate Organization Views
+description = Views for Stanford Affiliate Organization
+core = 7.x
+package = Stanford
+version = 7.x-1.1
+dependencies[] = ctools
+dependencies[] = stanford_affiliate_organization
+dependencies[] = stanford_image_styles
+dependencies[] = views
+stylesheets[all][] = css/stanford_affiliate_organization.css
+features[ctools][] = views:views_default:3.0
+features[features_api][] = api:2
+features[views_view][] = stanford_affiliates
+features[views_view][] = stanford_affiliates_grid_page
+features[views_view][] = stanford_affiliates_large_block
+features[views_view][] = stanford_affiliates_list_page
+features[views_view][] = stanford_affiliates_stacked_block

@@ -1,0 +1,15 @@
+name = Stanford Related Person
+description = Defines relationships for displaying people as aggregated content
+core = 7.x
+package = Stanford
+version = 7.x-1.0-dev
+project = stanford_related_person
+dependencies[] = features
+dependencies[] = options
+dependencies[] = stanford_person
+dependencies[] = stanford_person_views
+dependencies[] = stanford_related_content
+dependencies[] = taxonomy
+features[features_api][] = api:2
+features[field_instance][] = node-stanford_person-field_s_related_content
+project path = sites/all/modules/stanford/stanford_related_content/modules

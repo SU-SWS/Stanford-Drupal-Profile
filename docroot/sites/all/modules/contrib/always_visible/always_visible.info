@@ -1,0 +1,4 @@
+name = Always Visible
+description = "Allows administrators to override menu item visibility."
+package = Other
+core = 7.x

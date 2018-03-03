@@ -1,0 +1,7 @@
+<?php
+/**
+ * @file
+ * Code for the Stanford Affiliate Organization Administration feature.
+ */
+
+include_once 'stanford_affiliate_organization_administration.features.inc';

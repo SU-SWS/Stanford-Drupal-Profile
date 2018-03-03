@@ -1,0 +1,67 @@
+<?php
+
+/**
+ * @file
+ * Code for the Stanford Related Publication feature.
+ */
+
+/**
+ * Implements hook_views_default_views_alter().
+ */
+function stanford_related_publication_views_default_views_alter(&$views) {
+  // stanford_related_publication_alter_block($views);
+  // stanford_related_publication_alter_page($views);
+  stanford_related_publication_alter_manage_publication($views);
+}
+
+/**
+ * Add exposed filter for related content to the page display.
+ *
+ * @param array $views
+ *   Array of views.
+ */
+function stanford_related_publication_alter_manage_publication(&$views) {
+  $view_name = 'publication_manage';
+  if (array_key_exists($view_name, $views)) {
+    $view = $views[$view_name];
+  }
+  else {
+    return FALSE;
+  }
+
+  $display_name = 'page';
+  if ($view->set_display($display_name)) {
+    $handler = $view->display_handler;
+  }
+  else {
+    if (variable_get("stanford_related_debug_mode", FALSE)) {
+      watchdog('stanford_related_publication',
+        "Display %display_name not available in view %view_name.",
+      array('%display_name' => $display_name, '%view_name' => $view_name),
+        WATCHDOG_NOTICE);
+    }
+    return FALSE;
+  }
+
+  // Add the exposed filter.
+  return((stanford_related_content_add_exposed_filter($views, $view_name,
+      $display_name, FALSE, "Related Content"))
+
+    // Add the VBO.
+    && (stanford_related_content_add_vbo($views, $view_name, $display_name))
+  );
+}
+
+/**
+ * Implements hook_views_pre_view().
+ */
+function stanford_related_publication_views_pre_view(&$view,
+                                                     &$display_id,
+                                                     &$args) {
+
+  // Insert the related content field after the location field.
+  if ($view->name == 'publication_manage' && $view->current_display == "page") {
+    stanford_related_content_insert_related_content($view, $display_id,
+      'field_s_pub_type');
+  }
+}

@@ -1,0 +1,7 @@
+<?php
+/**
+ * @file
+ * Code for the Stanford Private Page Section feature.
+ */
+
+include_once 'stanford_private_page_section.features.inc';

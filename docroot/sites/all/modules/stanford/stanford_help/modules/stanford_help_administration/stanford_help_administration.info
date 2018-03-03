@@ -1,0 +1,11 @@
+name = Stanford Help Administration
+description = Stanford Help manage views
+core = 7.x
+package = Stanford
+version = 7.x-1.1-dev
+project = stanford_help_administration
+dependencies[] = stanford_help
+dependencies[] = views
+features[ctools][] = views:views_default:3.0
+features[features_api][] = api:2
+features[views_view][] = help_manage

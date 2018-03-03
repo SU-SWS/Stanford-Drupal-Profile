@@ -1,0 +1,15 @@
+<?php
+
+/**
+ * Implements hook_install().
+ */
+function contextual_view_modes_nodes_install() {
+  variable_set("contextual_view_modes_node", array());
+}
+
+/**
+ * Implements hook_uninstall().
+ */
+function contextual_view_modes_nodes_uninstall() {
+  variable_del('contextual_view_modes_node');
+}

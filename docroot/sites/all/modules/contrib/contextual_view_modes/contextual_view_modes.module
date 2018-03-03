@@ -1,0 +1,281 @@
+<?php
+
+/**
+ * Implements hook_help().
+ */
+function contextual_view_modes_help($path, $arg) {
+  switch ($path) {
+    case 'admin/help#contextual_view_modes':
+      $help = '<p>' . t('Please submit help requests and issues to the !link.', array('!link' => l("Druapl.org issue queue", 'https://www.drupal.org/project/contextual_view_modes/'))) . '</p>';
+      $help .= "<p>" . t("For more help, please se the !readme", array('!readme' => l("README.md", drupal_get_path("module", "contextual_view_modes") . "/README.md"))) . "</p>";
+      $help .= "<p>" . t("") . "</p>";
+      $help .= "<p>" . t("") . "</p>";
+      $help .= "<p>" . t("") . "</p>";
+      $help .= "<p>" . t("") . "</p>";
+      $help .= "<p>" . t("") . "</p>";
+      return $help;
+  }
+}
+
+/**
+ * This is the magic of this module.
+ *
+ * This hook allows us to evaluate the context conditions and trigger a change
+ * in view mode for the entity that is being rendered.
+ *
+ * @param string &$view_mode
+ *   The machine name of the view mode.
+ * @param array $context
+ *   An array of information surrounding the entity. Not the context module.
+ */
+function contextual_view_modes_entity_view_mode_alter(&$view_mode, $context) {
+
+  // Some contexts have yet to fire as this hook is before the context.
+  // Theme related stuff is an example.
+  // Lets try to fire them. But only once.
+  $static = &drupal_static(__FUNCTION__, FALSE);
+  if (!$static) {
+    module_invoke_all('context_page_condition');
+    // Also fire node conditions if this is a node entity.
+    if (isset($context['entity_type']) && $context['entity_type'] == 'node') {
+      context_node_condition($context['entity'], 'view');
+    }
+    $static = TRUE;
+  }
+
+  // Get some more information about the entity we are looking at.
+  $entity_types = entity_get_info();
+  $type = $context['entity_type'];
+  $entity = $context['entity'];
+
+  // We do not support comments at this time.
+  if ($type == "comment") {
+    return;
+  }
+
+  // Check to see if the entity has local settings first.
+  $entity_view_mode = contextual_view_modes_evaluate_individual_options($entity, $type);
+  // Then grab the global (in context plugin).
+  $global_view_mode = contextual_view_modes_evaluate_global_options($entity, $type);
+
+  // Local settings trump the global settings.
+  if ($entity_view_mode) {
+    $view_mode = $entity_view_mode;
+  }
+  elseif ($global_view_mode) {
+    $view_mode = $global_view_mode;
+  }
+
+}
+
+/**
+ * Evaluate an entity for a view mode setting.
+ *
+ * @param object $entity
+ *   The entity being evaluated.
+ * @param string $type
+ *   The bundle name.
+ *
+ * @return mixed
+ *   The machine name of the view mode setting on the entity or false.
+ */
+function contextual_view_modes_evaluate_individual_options($entity, $type) {
+  $entity_types = entity_get_info();
+
+  // Check for a setting in the entity.
+  if (!contextual_view_modes_is_valid_entity($entity, $type)) {
+    return FALSE;
+  }
+
+  // Check to see if the view mode exists.
+  $view_mode = contextual_view_modes_entity_get_view_mode($entity, $type);
+
+  // Invalid view mode.
+  if (!isset($entity_types[$type]['view modes'][$view_mode])) {
+    return FALSE;
+  }
+
+  // Good view mode.
+  return $view_mode;
+}
+
+/**
+ * Evaluate the view mode that should be displayed by the global options.
+ *
+ * @param object $entity
+ *   The entity being evaluated.
+ * @param string $type
+ *   The bundle name.
+ *
+ * @return mixed
+ *   The machine name of the view mode setting on the entity or false.
+ */
+function contextual_view_modes_evaluate_global_options($entity, $type) {
+  if ($plugin = context_get_plugin('reaction', 'context_reaction_view_mode')) {
+    return $plugin->execute($entity, $type);
+  }
+}
+
+/**
+ * Validates view_mode switching on entity.
+ *
+ * Check to see if this entity has global view mode options or a per entity
+ * option available.
+ *
+ * @param object $entity
+ *   The entity object to work upon.
+ *
+ * @return bool
+ *   True if the entity is a valid entity and has settings to run.
+ */
+function contextual_view_modes_is_valid_entity($entity, $entity_type) {
+
+  // We do not support comments at this time.
+  if ($entity_type == "comment") {
+    return FALSE;
+  }
+
+  list($id, $vid, $bundle) = entity_extract_ids($entity_type, $entity);
+
+  // Users do not have a $vid so it will return null. Swap it for the id.
+  if (is_null($vid)) {
+    $vid = $id;
+  }
+
+  $settings = variable_get("contextual_view_modes_" . $entity_type);
+
+  // If there is an entry for the entity id return true.
+  if (!empty($settings[$vid])) {
+    return TRUE;
+  }
+
+  return FALSE;
+}
+
+/**
+ * [contextual_view_modes_entity_get_view_mode description]
+ * @param  [type] $entity [description]
+ * @return [type]         [description]
+ */
+function contextual_view_modes_entity_get_view_mode($entity, $type) {
+
+  list($id, $vid, $bundle) = entity_extract_ids($type, $entity);
+
+  // Users have no vid.
+  if (is_null($vid) && $type == "user") {
+    $vid = $id;
+  }
+
+  // Now just need to actually have this return something.
+  if ($plugin = context_get_plugin('reaction', 'view_mode')) {
+    $plugin->execute($entity, $type);
+  }
+
+  $contexts = context_enabled_contexts();
+
+  // Get the variables for this entity.
+  $settings = variable_get('contextual_view_modes_' . $type, array());
+
+  // Loop through each context and see if this entity has a view mode assigned
+  // to a valid context.
+  $keys = array_keys($contexts);
+
+  foreach ($settings[$vid] as $delta => $values) {
+    if (in_array($values['context_name'], $keys)) {
+      return $values['view_mode'];
+    }
+  }
+
+  return "default";
+}
+
+/**
+ * Returns an array of keyed and formatted values of available contexts.
+ *
+ * @return array
+ *   An array of context names keyed by their machine name.
+ */
+function contextual_view_modes_get_context_options() {
+  // Get the available contexts for use in a select field.
+  $contexts = array('none' => '- Select a context -');
+  $contexts += context_context_list();
+  foreach ($contexts as $key => $name) {
+    $contexts[$key] = ucfirst(str_replace('_', " ", $name));
+  }
+  return $contexts;
+}
+
+/**
+ * Returns an array of view modes for an entity type.
+ * @param  [type] $entity_type [description]
+ * @return [type]              [description]
+ */
+function contextual_view_modes_get_view_mode_options($entity_type = NULL) {
+
+  // Get the available view modes for use in a select field.
+  $entity_info = entity_get_info($entity_type);
+  $view_modes_formatted = array('none' => '- None -');
+  $view_modes_formatted['default'] = 'Default';
+  foreach ($entity_info['view modes'] as $name => $values) {
+
+    // @Todo: allow this to work.
+    if ($name == "rss") {
+      continue;
+    }
+
+    $view_modes_formatted[$name] = ucwords(str_replace('_', " ", $values['label']));
+  }
+
+  return $view_modes_formatted;
+}
+
+/**
+ * Implements hook_ctools_plugin_api().
+ *
+ * Make module compatible with context 3.x.
+ */
+function contextual_view_modes_ctools_plugin_api($module, $api) {
+  if ($module == 'context' && $api == 'plugins') {
+    return array('version' => 3);
+  }
+}
+
+/**
+ * Implements hook_context_plugins().
+ *
+ * To define your plugins, classes, and class hierarchy.
+ *
+ * @return array
+ *   An array of plugin information
+ */
+function contextual_view_modes_context_plugins() {
+  $plugins = array();
+  $plugins['context_reaction_view_mode'] = array(
+    'handler' => array(
+      'path' => drupal_get_path('module', 'contextual_view_modes') . '/plugins',
+      'file' => 'context_reaction.view_mode.inc',
+      'class' => 'context_reaction_view_mode',
+      'parent' => 'context_reaction',
+    ),
+  );
+  return $plugins;
+}
+
+/**
+ * Implements hook_context_registry().
+ *
+ * To define your conditions and/or reactions and map them to plugins.
+ *
+ * @return array
+ *   An array of configuration values.
+ */
+function contextual_view_modes_context_registry() {
+  return array(
+    'reactions' => array(
+      'context_reaction_view_mode' => array(
+        'title' => t('View Mode'),
+        'plugin' => 'context_reaction_view_mode',
+      ),
+    ),
+  );
+}

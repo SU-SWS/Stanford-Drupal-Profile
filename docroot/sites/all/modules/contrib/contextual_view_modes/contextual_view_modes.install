@@ -1,0 +1,144 @@
+<?php
+
+/**
+ * Implements hook_update().
+ */
+function contextual_view_modes_update_7101(&$sandbox) {
+  db_update('system')
+    ->fields(array(
+      'weight' => 100,
+      )
+    )
+    ->condition('name', 'contextual_view_modes')
+    ->execute();;
+}
+
+/**
+ * Legacy function. No longer needed.
+ */
+function contextual_view_modes_update_7102(&$sandbox) {
+
+}
+
+/**
+ * Upgrade contextual view modes from 7.x-1.x -> 7.x-2.x
+ * - Convert cvm field settings into variable
+ * - Clean up and remove cvm field settings
+ * - Convert global settings into new format
+ * - Enable contextual view modes nodes ui module
+ */
+function contextual_view_modes_update_7200(&$sandbox) {
+
+  // Enable the contextual view modes nodes module.
+  module_enable(
+    array(
+      "contextual_view_modes_nodes",
+      "contextual_view_modes_users"
+    ),
+    TRUE
+  );
+
+  // Variable storage variable.
+  $storage = array();
+
+  // Convert the per type settings by getting the data from the field.
+  $values = db_select('field_data_field_cvm_cvm', 'fdfcc')
+    ->fields("fdfcc", array(
+      "entity_type",
+      "entity_id",
+      "field_cvm_cvm_view_mode",
+      "field_cvm_cvm_context",
+      "delta",
+    )
+  )->execute();
+
+  // Loop through the results and set into the storage variables.
+  while($o = $values->fetchObject()) {
+
+    $type = $o->entity_type;
+    if (isset($storage["contextual_view_modes_" . $type])) {
+      $vars = $storage["contextual_view_modes_" . $type];
+    }
+    else {
+      $vars = variable_get("contextual_view_modes_" . $type, array());
+    }
+
+    // Create a storage array if not set.
+    if (isset($vars[$o->entity_id])) {
+      $vars[$o->entity_id] = array();
+    }
+
+    // Create the entry.
+    $vars[$o->entity_id][$o->delta] = array(
+      'context_name' => $o->field_cvm_cvm_context,
+      'view_mode' => $o->field_cvm_cvm_view_mode,
+    );
+
+    // Put the storage back so we can continue to build the loop.
+    $storage["contextual_view_modes_" . $type] = $vars;
+  }
+
+  // Loop through the storage and save the the database.
+  foreach ($storage as $cvm_type => $variables) {
+    variable_set($cvm_type, $variables);
+  }
+
+  // Now drop the tables.
+  db_drop_table("field_data_field_cvm_cvm");
+  db_drop_table("field_revision_field_cvm_cvm");
+
+  // And the field config.
+  db_delete("field_config")
+    ->condition("module", "cvm_field")
+    ->execute();
+
+  db_delete("field_config_instance")
+    ->condition("field_name", "field_cvm_cvm")
+    ->execute();
+
+  // Convert the global settings to the new format.
+  // ----------------------------------------------
+
+  $old_global = variable_get("cvm_global_content_type_modes", array());
+  $new_global = variable_get("contextual_view_modes_global", array());
+
+  foreach ($old_global as $bundle => $settings) {
+    foreach ($settings as $context_name => $view_mode) {
+      $new_global["node"][] = array(
+        'bundle' => $bundle,
+        'context' => $context_name,
+        'view_mode' => $view_mode,
+      );
+    }
+  }
+
+  variable_set("contextual_view_modes_global", $new_global);
+  variable_del("cvm_enabled_content_types");
+  variable_del("cvm_global_content_type_modes");
+
+}
+
+/**
+ * Change the global contextual view mode settings in to
+ * a real context reaction on the contexts they were set to.
+ */
+function contextual_view_modes_update_7300(&$sandbox) {
+
+  // Get the settings from the previous version.
+  $settings = variable_get("contextual_view_modes_global", array());
+  if (empty($settings)) {
+    return;
+  }
+
+  // Loop through the settings and attach them to a context.
+  foreach ($settings as $entity_type => $more) {
+    foreach ($more as $delta => $variables) {
+      $context = context_load($variables['context']);
+      $context->reactions["context_reaction_view_mode"]["entity_types"][$entity_type][$variables["bundle"]] = $variables["view_mode"];
+      context_save($context);
+    }
+  }
+
+  variable_del("contextual_view_modes_global");
+
+}

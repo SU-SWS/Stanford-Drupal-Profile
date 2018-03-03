@@ -1,0 +1,19 @@
+name = Stanford Related Events
+description = Defines relationships for displaying events as aggregated content
+core = 7.x
+package = Stanford
+version = 7.x-1.0-dev
+project = stanford_related_events
+dependencies[] = ctools
+dependencies[] = features
+dependencies[] = field_group
+dependencies[] = options
+dependencies[] = stanford_events_importer
+dependencies[] = stanford_related_content
+dependencies[] = taxonomy
+features[ctools][] = field_group:field_group:1
+features[features_api][] = api:2
+features[field_group][] = group_s_related_content_style|node|stanford_event|default
+features[field_instance][] = node-stanford_event-field_s_related_content
+features_exclude[field_base][field_s_related_content] = field_s_related_content
+

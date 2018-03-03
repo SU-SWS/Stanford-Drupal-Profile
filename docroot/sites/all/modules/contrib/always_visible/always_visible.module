@@ -1,0 +1,47 @@
+<?php
+//largely based on http://drupal.org/node/300607#comment-2805992
+
+/**
+ * Implements hook_form_alter().
+ */
+function always_visible_form_alter(&$form, &$form_state, $form_id) {
+  if ($form_id == 'menu_edit_item') {
+    $form['always_visible'] = array(
+      '#title' => t('Always show this menu item.'),
+      '#description' => t('Disables the check if the user has access to this path.'),
+      '#type' => 'checkbox',
+      '#weight' => '0',
+      '#default_value' => isset($form['options']['#value']['always_visible'])?$form['options']['#value']['always_visible']:FALSE,
+    );
+    array_unshift($form['#submit'], 'always_visible_menu_edit_form_submit');
+  }
+}
+
+function always_visible_menu_edit_form_submit($form, &$form_state) {
+  $menu =& $form_state['values'];
+  if ($menu['always_visible']) {
+    $menu['options']['always_visible'] = 1;
+    $menu['options']['alter'] = 1;
+  }
+  else {
+    $menu['options']['always_visible'] = 0;
+    $menu['options']['alter'] = 0;
+  }
+}
+
+/**
+ * Implements hook_translated_menu_link_alter().
+ */
+function always_visible_translated_menu_link_alter(&$item, $map) {
+  if (isset($item['options']['always_visible']) && $item['options']['always_visible'] == TRUE) {
+    $item['access'] = TRUE;
+    $item['title'] = $item['link_title'];
+    if (!array_key_exists('localized_options', $item)) {
+      if (array_key_exists('options', $item)) {
+        $item['localized_options'] = $item['options'];
+      }
+      else $item['localized_options'] = array();
+    }
+    $item['localized_options']['attributes']['class'][] = 'restricted';
+  }
+}
