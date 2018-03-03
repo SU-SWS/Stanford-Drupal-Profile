@@ -1,0 +1,63 @@
+<?php
+/**
+ * @file
+ */
+
+/**
+ * Implements hook_install().
+ */
+function stanford_jumpstart_home_dept_install() {
+  // Populate the default {node_access} record.
+  /*
+   *db_insert('node_access')
+   *  ->fields(array(
+   *    'nid' => 0,
+   *    'gid' => 0,
+   *    'realm' => 'all',
+   *    'grant_view' => 1,
+   *    'grant_update' => 0,
+   *    'grant_delete' => 0,
+   *  ))
+   *  ->execute();
+   */
+  /* Your code here */
+
+}
+
+/**
+ * Implements hook_enable().
+ */
+function stanford_jumpstart_home_dept_enable() {
+
+  // Add layout settings from the .info file
+  $filename = drupal_get_path('module', 'stanford_jumpstart_home_dept') . "/stanford_jumpstart_home_dept.info";
+  $info = drupal_parse_info_file($filename);
+  $layouts = $info['layout'];
+
+  foreach ($layouts as $index => $config) {
+
+    $config['site_admin'] = 1;
+
+    // Add the layout to the database
+    variable_set('sjh_' . $config['context'], $config);
+
+  }
+
+}
+
+/**
+ * Implements hook_disable().
+ */
+function stanford_jumpstart_home_dept_disable() {
+
+  variable_del('sjh_stanford_jumpstart_home_gibbons');
+
+}
+
+/**
+ * Implements hook_uninstall().
+ */
+function stanford_jumpstart_home_dept_uninstall() {
+
+
+}

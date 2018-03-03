@@ -1,0 +1,691 @@
+<?php
+/**
+ * @file
+ * @author Shea McKinney <sheamck@stanford.edu>, Caryl Westerberg <cjwest@stanford.edu>
+ * Provides the ability to offer several layouts on the home page via context.
+ * Provides a dashboard administrative page to toggle through those layouts
+ *
+ */
+require_once DRUPAL_ROOT . '/' . drupal_get_path('module', 'stanford_jumpstart_home') . '/stanford_jumpstart_home.context.inc';
+
+/**
+ * Implements hook_ctools_plugin_api().
+ */
+function stanford_jumpstart_home_ctools_plugin_api() {
+  list($module, $api) = func_get_args();
+  if ($module == "context" && $api == "context") {
+    return array("version" => "3");
+  }
+}
+
+/**
+ * Implements hook_help().
+ */
+function stanford_jumpstart_home_help($path, $arg) {
+  switch ($path) {
+    // Main module help for the block module
+    /*
+     *case 'admin/help#block':
+     *  return '<p>' . t('Blocks are boxes of content rendered into an area, or region, of a web page. The default theme Bartik, for example, implements the regions "Sidebar first", "Sidebar second", "Featured", "Content", "Header", "Footer", etc., and a block may appear in any one of these areas. The <a href="@blocks">blocks administration page</a> provides a drag-and-drop interface for assigning a block to a region, and for controlling the order of blocks within regions.', array('@blocks' => url('admin/structure/block'))) . '</p>';
+     */
+    case 'admin/stanford-jumpstart-home':
+      return '<p>' . t('For more help please contact %sws', array('%sws' => l('Stanford Web Services', 'mailto:sitesjumpstart-help@lists.stanford.edu'))) . '</p>';
+  }
+}
+
+/**
+ * Implements hook_permission().
+ */
+function stanford_jumpstart_home_permission() {
+  return array(
+    'administer stanford homepage' =>  array(
+      'title' => t('Administer Stanford Homepage'),
+      'description' => t('Allow user to change and modify the homepage settings'),
+    ),
+    'see enabled homepage options' =>  array(
+      'title' => t('See enabled options'),
+      'description' => t('Allow user to see and choose an enabled homepage option.'),
+    ),
+    'see disabled homepage options' => array(
+      'title' => t('See disabled homepage options'),
+      'description' => t('See disabled homepage options.'),
+    ),
+  );
+}
+
+/**
+ * Implements hook_menu().
+ */
+function stanford_jumpstart_home_menu() {
+
+  $items['admin/stanford-jumpstart/customize-design'] = array(
+    'title' => 'Customize Design',
+    'page callback' => 'stanford_jumpstart_home_dashboard',
+    'access arguments' => array('administer stanford homepage'),
+    'type' => MENU_LOCAL_TASK,
+    'weight' => -80,
+  );
+
+  $items['admin/stanford-jumpstart/customize-designs'] = array(
+    'title' => 'Customize Design',
+    'access arguments' => array('administer stanford homepage'),
+    'page callback' => 'drupal_goto',
+    'page arguments' => array('admin/stanford-jumpstart/customize-design'),
+    'type' => MENU_NORMAL_ITEM,
+    'menu_name' => 'menu-admin-shortcuts',
+    'plid' => 0, // set this to 0 so that the menu item doesnt get stuck under get help
+    'weight' => 1,
+  );
+
+  return $items;
+}
+
+/**
+ * The dashboard functionality for the home page.
+ * @return [type] [description]
+ */
+function stanford_jumpstart_home_dashboard() {
+  $output = "";
+  drupal_add_css(drupal_get_path('module', 'stanford_jumpstart_home') . "/css/stanford_jumpstart_home.admin.css");
+  $form_id = 'stanford_jumpstart_homepage_dashboard_form';
+  $form = drupal_get_form($form_id);
+  $output .= drupal_render($form);
+  return $output;
+}
+
+/**
+ * [stanford_jumpstart_homepage_dashboard_form description]
+ * @param  [type] $form       [description]
+ * @param  [type] $form_state [description]
+ * @return [type]             [description]
+ */
+function stanford_jumpstart_homepage_dashboard_form($form, $form_state) {
+
+  drupal_set_title('Customize Design');
+
+  $filename = drupal_get_path('module', 'stanford_jumpstart_home') . "/stanford_jumpstart_home.info";
+  $info = drupal_parse_info_file($filename);
+  $layouts = $info['layout'];
+
+  $form['intro']['#markup'] = "<h5>" . t("Use the following options to customize the design and layout of your site. Choose a homepage layout, visual style, and font family") . "</h5>";
+
+  $form['choosehome'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Choose home page layout'),
+    '#description' => t('Press the select button of one of the home page layout options below to select and customize your site\'s home page.'),
+    '#collapsed' => FALSE,
+    '#collapsible' => FALSE,
+  );
+
+  $form['choosehome']['layouts']["#tree"] = TRUE;
+
+  foreach ($layouts as $index => $config) {
+
+    $context = context_load($config['context']);
+    $options = variable_get('sjh_' . $context->name, array());
+    $key = $context->name;
+    $access = user_access('see enabled homepage options');
+
+    if (!$context) {
+      drupal_set_message('Could not load context: ' . $config['context'], 'error');
+      continue;
+    }
+
+    if (!$options['site_admin']) {
+      $access = user_access('see disabled homepage options');
+    }
+
+    // Field Group
+    $form['choosehome']['layouts'][$key] = array(
+      '#type' => 'container',
+      '#tree' => TRUE,
+      '#attributes' => array(
+        'class' => array(
+          'homepage-layout',
+        ),
+      ),
+      '#access' => $access,
+    );
+
+    if (!$context->disabled) {
+      $form['choosehome']['layouts'][$key]["#attributes"]['class'][] = "selected";
+    }
+
+    // Show this option to site owner
+    $form['choosehome']['layouts'][$key]['site_admin'] = array(
+      '#type' => 'checkbox',
+      '#title' => t('Enable this option.'),
+      '#description' => t('This checkbox enables users with the "See enabled homepage options" permission to select this layout.'),
+      '#default_value' => isset($options['site_admin']) ? $options['site_admin'] : "",
+      '#access' => user_access('see disabled homepage options'),
+    );
+
+    // Thumbnail
+    $img_path = drupal_get_path('module', 'stanford_jumpstart_home') . "/img/" . $config['thumb'];
+    $variables = array(
+      'path' => $img_path,
+      'alt' => $config['title'],
+      'title' => $config['title'],
+      'height' => 330,
+      'width' => 270,
+      'attributes' => array(),
+    );
+    $form['choosehome']['layouts'][$key]['thumb']["#markup"] = theme_image($variables);
+
+    // Enabled
+    $selectedornot = ($context->disabled) ? t("Select") : t("Selected");
+
+    $form['choosehome']['layouts'][$key]['selector'] = array(
+      '#type' => "button",
+      '#value' => $selectedornot,
+      '#name' => $context->name . "_select",
+      '#submit' => array('stanford_homepage_switch_context'),
+      '#executes_submit_callback' => TRUE,
+      '#attributes' => array('class' => array('clear-both')),
+      "#disabled" => !$context->disabled,
+      '#tree' => TRUE,
+    );
+
+    // Title
+    $form['choosehome']['layouts'][$key]['title']['#markup'] = "<h2 class=\"title\">" . t($config['title']) . "</h2>";
+
+    // Description
+    $form['choosehome']['layouts'][$key]['description']['#markup'] = check_markup($config['description'], 'filtered_html');
+
+    // Context name
+    $form['choosehome']['layouts'][$key]["context_name"] = array(
+      '#type' => "hidden",
+      '#value' => $config['context'],
+    );
+
+    // Body class
+    $form['choosehome']['layouts'][$key]["body_class"] = array(
+      '#type' => "hidden",
+      '#value' => $config['class'],
+    );
+
+    // State machine, or just form states.
+    $form['choosehome']['layouts'][$key]["selectedstate"] = array(
+      '#type' => 'hidden',
+      '#value' => $context->disabled,
+    );
+
+    // Header Image Field
+    if (!empty($config['header_image'])) {
+      $form['choosehome']['layouts'][$key]['header_image'] = array(
+        '#title' => t('Header image'),
+        '#type' => 'managed_file',
+        '#description' => t('The uploaded image will be displayed on this layout as a header image.'),
+        '#default_value' => isset($options['header_image']) ? $options['header_image'] : "",
+        '#upload_location' => 'public://stanford_jumpstart_home/header/',
+        '#process' => array('stanford_jumpstart_home_process_file_managed'),
+        '#states' => array(
+          'invisible' => array(
+           ':input[name="layouts[' . $key . '][selectedstate]"]' => array('value' => 1),
+          ),
+        ),
+      );
+    }
+
+    // Color picker
+    if (!empty($config['color'])) {
+      $form['choosehome']['layouts'][$key]['color'] = array(
+        '#title' => t('Choose color'),
+        '#type' => 'select',
+        '#description' => t('Choose the color you would like your background to be.'),
+        '#options' => array(
+          '#FF00FF' => t('Supa Pink'),
+          '#00FF00' => t('Supa Green'),
+          '#000000' => t('black'),
+        ),
+        '#default_value' => isset($options['color']) ? $options['color'] : '',
+        '#states' => array(
+          'invisible' => array(
+           ':input[name="layouts[' . $key . '][selectedstate]"]' => array('value' => 1),
+          ),
+        ),
+      );
+    }
+
+    // Light & Dark options
+    // Color picker
+    if (!empty($config['light_dark'])) {
+      $form['choosehome']['layouts'][$key]['light_dark'] = array(
+        '#title' => t('Choose a title color'),
+        '#type' => 'radios',
+        '#description' => t('Choose the color you would like your header title to be.'),
+        '#options' => array(
+          'light' => t('Light'),
+          'dark' => t('Dark'),
+        ),
+        "#default_value" => isset($options['light_dark']) ? $options['light_dark'] : 'light',
+        '#states' => array(
+          'invisible' => array(
+           ':input[name="layouts[' . $key . '][selectedstate]"]' => array('value' => 1),
+          ),
+        ),
+      );
+    }
+
+    // Remove these so we can check for other config.
+    unset($config['context']);
+    unset($config['thumb']);
+    unset($config['title']);
+    unset($config['description']);
+    unset($config['class']);
+
+    if (count($config) >= 1) {
+      $form['choosehome']['layouts'][$key]['submit'] = array(
+        '#type' => 'submit',
+        '#value' => t('Save settings'),
+        '#states' => array(
+          'invisible' => array(
+           ':input[name="layouts[' . $key . '][selectedstate]"]' => array('value' => 1),
+          ),
+        ),
+      );
+    }
+
+  } // End for each loop
+
+  // Pull theme options from the theme itself
+
+  // Include theme-settings.php
+  $themesettingsphp = drupal_get_path('theme', 'stanford_framework') . "/theme-settings.php";
+  if (!is_file($themesettingsphp)) {
+    drupal_set_message("Could not find theme-settings.php for Stanford Framework theme", 'error');
+    return $form;
+  }
+  require_once $themesettingsphp;
+  $theme_form = array();
+
+  // Set the theme temporarily
+  $GLOBALS['theme_key'] = 'stanford_framework';
+  stanford_framework_form_system_theme_settings_alter($theme_form, $form_state);
+
+  $form['design_container'] = $theme_form['design_container'];
+  $form['design_container']['#attributes']["style"] = array("width: 100%;");
+  $form['design_container']['#tree'] = TRUE;
+  $form['design_container']['#collapsible'] = FALSE;
+
+  $form['submit'] = array(
+    '#type' => 'submit',
+    '#value' => t('Save settings'),
+    '#weight' => 9999,
+    '#prefix' => "<div style=\"clear: both;\">",
+    '#suffix' => "</div>",
+  );
+
+  return $form;
+}
+
+
+/**
+ * stanford_jumpstart_home_dashboard_add_layouts
+ *
+ * Given a module, this adds the layouts specified in the .info file
+ * for that module to the customize design page.
+ * Refactored from: stanford_jumpstart_homepage_dashboard_form()
+ *
+ * @param $form
+ * @param $form_state
+ * @param $module_name
+ */
+function stanford_jumpstart_home_dashboard_add_layouts(&$form, &$form_state, $module_name) {
+
+  $filename = drupal_get_path('module', $module_name) . "/" . $module_name . ".info";
+  $info = drupal_parse_info_file($filename);
+  $layouts = $info['layout'];
+
+  foreach ($layouts as $index => $config) {
+
+    $context = context_load($config['context']);
+    $options = variable_get('sjh_' . $context->name, array());
+    $key = $context->name;
+    $access = user_access('see enabled homepage options');
+
+    if (!$context) {
+      drupal_set_message('Could not load context: ' . $config['context'], 'error');
+      continue;
+    }
+
+    if (!$options['site_admin']) {
+      $access = user_access('see disabled homepage options');
+    }
+    // Field Group
+    $form['choosehome']['layouts'][$key] = array(
+      '#type' => 'container',
+      '#tree' => TRUE,
+      '#attributes' => array(
+        'class' => array(
+          'homepage-layout',
+        ),
+      ),
+      '#access' => $access,
+    );
+
+    if (!$context->disabled) {
+      $form['choosehome']['layouts'][$key]["#attributes"]['class'][] = "selected";
+    }
+
+    // Show this option to site owner
+    $form['choosehome']['layouts'][$key]['site_admin'] = array(
+      '#type' => 'checkbox',
+      '#title' => t('Enable this option.'),
+      '#description' => t('This checkbox enables users with the "See enabled homepage options" permission to select this layout.'),
+      '#default_value' => isset($options['site_admin']) ? $options['site_admin'] : "",
+      '#access' => user_access('see disabled homepage options'),
+    );
+
+    // Thumbnail
+    $img_path = drupal_get_path('module', 'stanford_jumpstart_home') . "/img/" . $config['thumb'];
+    $variables = array(
+      'path' => $img_path,
+      'alt' => $config['title'],
+      'title' => $config['title'],
+      'height' => 330,
+      'width' => 270,
+      'attributes' => array(),
+    );
+    $form['choosehome']['layouts'][$key]['thumb']["#markup"] = theme_image($variables);
+
+    // Enabled
+    $selectedornot = ($context->disabled) ? t("Select") : t("Selected");
+
+    $form['choosehome']['layouts'][$key]['selector'] = array(
+      '#type' => "button",
+      '#value' => $selectedornot,
+      '#name' => $context->name . "_select",
+      '#submit' => array('stanford_homepage_switch_context'),
+      '#executes_submit_callback' => TRUE,
+      '#attributes' => array('class' => array('clear-both')),
+      "#disabled" => !$context->disabled,
+      '#tree' => TRUE,
+    );
+
+    // Title
+    $form['choosehome']['layouts'][$key]['title']['#markup'] = "<h2 class=\"title\">" . t($config['title']) . "</h2>";
+
+    // Description
+    $form['choosehome']['layouts'][$key]['description']['#markup'] = check_markup($config['description'], 'filtered_html');
+
+    // Context name
+    $form['choosehome']['layouts'][$key]["context_name"] = array(
+      '#type' => "hidden",
+      '#value' => $config['context'],
+    );
+
+    // Body class
+    $form['choosehome']['layouts'][$key]["body_class"] = array(
+      '#type' => "hidden",
+      '#value' => $config['class'],
+    );
+
+    // State machine, or just form states.
+    $form['choosehome']['layouts'][$key]["selectedstate"] = array(
+      '#type' => 'hidden',
+      '#value' => $context->disabled,
+    );
+
+    // Header Image Field
+    if (!empty($config['header_image'])) {
+      $form['choosehome']['layouts'][$key]['header_image'] = array(
+        '#title' => t('Header image'),
+        '#type' => 'managed_file',
+        '#description' => t('The uploaded image will be displayed on this layout as a header image.'),
+        '#default_value' => isset($options['header_image']) ? $options['header_image'] : "",
+        '#upload_location' => 'public://stanford_jumpstart_home/header/',
+        '#process' => array('stanford_jumpstart_home_process_file_managed'),
+        '#states' => array(
+          'invisible' => array(
+            ':input[name="layouts[' . $key . '][selectedstate]"]' => array('value' => 1),
+          ),
+        ),
+      );
+    }
+
+    // Remove these so we can check for other config.
+    unset($config['context']);
+    unset($config['thumb']);
+    unset($config['title']);
+    unset($config['description']);
+    unset($config['class']);
+
+    if (count($config) >= 1) {
+      $form['choosehome']['layouts'][$key]['submit'] = array(
+        '#type' => 'submit',
+        '#value' => t('Save settings'),
+        '#states' => array(
+          'invisible' => array(
+            ':input[name="layouts[' . $key . '][selectedstate]"]' => array('value' => 1),
+          ),
+        ),
+      );
+    }
+  }
+}
+
+/**
+ * Save all the images!
+ * @param  [type] $form       [description]
+ * @param  [type] $form_state [description]
+ * @return [type]             [description]
+ */
+function stanford_jumpstart_homepage_dashboard_form_submit($form, $form_state) {
+
+  global $user;
+  $active = variable_get('stanford_jumpstart_home_active', '');
+
+  $values = $form_state['values'];
+  foreach ($values['layouts'] as $key => $config) {
+
+    if ($key == $active) {
+      variable_set('stanford_jumpstart_home_active_body_class', $config['body_class']);
+    }
+
+    if (!empty($config['header_image']) && is_numeric($config['header_image'])) {
+      $fid = $config['header_image'];
+      // Load the file via file.fid.
+      $file = file_load($fid);
+      // Change status to permanent.
+      $file->status = FILE_STATUS_PERMANENT;
+      // Save.
+      file_save($file);
+      // // Record that the module (in this example, user module) is using the file.
+      file_usage_add($file, 'user', 'user', $file->uid);
+    }
+
+    variable_set('sjh_' . $config['context_name'], $config);
+  }
+
+  // Save the theme settings
+  $theme_settings = variable_get('theme_stanford_framework_settings', array());
+  foreach ($values['design_container'] as $key => $value) {
+    $theme_settings[$key] = $value;
+  }
+  // force custom option.
+  $theme_settings['choosestyle_styleoptions'] = 'style-custom';
+
+  variable_set('theme_stanford_framework_settings', $theme_settings);
+
+  drupal_set_message('Customized design options saved', 'status');
+
+}
+
+/**
+ * Changes the context based on the submitted button from the dashboard form.
+ * @param  [type] $form       [description]
+ * @param  [type] $form_state [description]
+ * @return [type]             [description]
+ */
+function stanford_homepage_switch_context($form, $form_state) {
+
+  $values = $form_state['values'];
+  $submit_button = $form_state['triggering_element'];
+  $selected = $form_state["clicked_button"]['#parents'][1];
+  $context_status = variable_get('context_status', array());
+
+  foreach ($values['layouts'] as $k => $config) {
+    $context_name = $config['context_name'];
+    $context_status[$context_name] = TRUE;
+  }
+
+  $context_status[$selected] = FALSE;
+
+  variable_set('context_status', $context_status);
+  variable_set('stanford_jumpstart_home_active', $selected);
+  cache_clear_all('context', 'cache');
+
+  // Save the things.
+  stanford_jumpstart_homepage_dashboard_form_submit($form, $form_state);
+}
+
+/**
+ * Given a the name of a homepage layout, set it as the default or "Selected"
+ * homepage layout.
+ *
+ * @param $layout
+ */
+function stanford_homepage_set_default_layout($layout) {
+
+  $context_status = variable_get('context_status', array());
+  $homecontexts = stanford_jumpstart_home_context_default_contexts();
+  $names = array_keys($homecontexts);
+
+  if (!in_array($layout, $names)) {
+    throw new Exception('Layout: ' . $layout . ' is not available.');
+  }
+
+  $active = variable_get('stanford_jumpstart_home_active', '');
+  $context_status[$active] = TRUE;
+
+  $context_status[$layout] = FALSE;
+
+  // Not sure why we are getting an empty space...
+  unset($context_status['']);
+
+  // Save settings.
+  variable_set('stanford_jumpstart_home_active_body_class', $layout);
+  variable_set('stanford_jumpstart_home_active', $layout);
+  variable_set('context_status', $context_status);
+  cache_clear_all('context', 'cache');
+}
+
+/**
+ * Additional field formatter for file_managed to display a thumbnail.
+ * @param  [type] $element    The form element
+ * @param  [type] $form_state [description]
+ * @param  [type] $form       [description]
+ * @return [type]             [description]
+ */
+function stanford_jumpstart_home_process_file_managed($element, &$form_state, $form) {
+  $element = file_managed_file_process($element, $form_state, $form);
+
+  if (!empty($element['#file']->uri)) {
+    $uri = $element['#file']->uri;
+    $variables = array(
+      'style_name' => 'medium',
+      'path' => $uri,
+      'alt' => 'layout',
+      'title' => 'layout',
+      'attributes' => array('class' => 'image-thumb'),
+      'width' => null,
+      'height' => null,
+    );
+    $thumb = theme_image_style($variables);
+    $element['filename']['#markup'] = "<span class=\"file\">" . $thumb . "</span>";
+  }
+
+  return $element;
+}
+
+/**
+ * [stanford_jumpstart_home_preprocess_html description]
+ * @param  [type] $vars [description]
+ * @return [type]       [description]
+ */
+function stanford_jumpstart_home_preprocess_html(&$vars) {
+  global $theme;
+
+  $context_name = variable_get('stanford_jumpstart_home_active', '');
+
+  // No active context set.
+  if (empty($context_name)) {
+    return;
+  }
+
+  // Get and add classes to body field.
+  $settings = variable_get('sjh_' . $context_name, null);
+  $body_classes = explode(" ", variable_get('stanford_jumpstart_home_active_body_class', ''));
+  $body_classes[] = "active-home-context";
+
+  foreach ($body_classes as $index => $class) {
+    $body_classes[$index] = drupal_clean_css_identifier($class);
+  }
+
+  $vars['classes_array'] = array_merge($vars['classes_array'], $body_classes);
+
+  // Missing settings.
+  if (is_null($settings)) {
+    return;
+  }
+
+  // Header Image File Upload
+  // ---------------------------------------------------------------------------
+
+  // Try to load a file from the upload form.
+  if (isset($settings['header_image'])) {
+    $header_file = file_load($settings['header_image']);
+  }
+
+  // If there is a file adjust the URI for the theme to use.
+  if (isset($header_file->uri)) {
+    $header_file->uri = file_create_url($header_file->uri);
+  }
+  else {
+    // If there is no file and the setting is available provide a default image.
+    $header_file = new stdClass();
+    $header_file->uri = variable_get("stanford_jumpstart_home_default_header_image", drupal_get_path("module", "stanford_jumpstart_home") . "/img/header-background-default.jpg");
+  }
+
+  // If not empty and a setting exists.
+  if (isset($settings['header_image'])) {
+    $vars['header_bkg_style'] = "header-bkg-image";
+    $vars['header_bkg'] = 'header-bkg';
+    $vars['header_bkg_path'] = url($header_file->uri, array('absolute' => TRUE));
+  }
+
+  // Light or dark theme option
+  // ---------------------------------------------------------------------------
+  if (isset($settings['light_dark'])) {
+    if ($settings['light_dark'] == "light") {
+      $vars['header_bkg_text'] = "header-bkg-text-light";
+    }
+    else {
+      $vars['header_bkg_text'] = "header-bkg-text-dark";
+    }
+  }
+
+}
+
+/**
+ * Implements hook_preprocess_page().
+ */
+function stanford_jumpstart_home_preprocess_page(&$vars) {
+  $context_name = variable_get('stanford_jumpstart_home_active', '');
+  $settings = variable_get('sjh_' . $context_name, null);
+
+  if (isset($settings['header_image'])) {
+    $vars['header_bkg'] = 'header-bkg';
+  }
+
+  // Color settings.
+  if (isset($settings['light_dark'])) {
+    if ($settings['light_dark'] == "light") {
+      $vars['header_bkg_text'] = "header-bkg-text-light";
+    }
+    else {
+      $vars['header_bkg_text'] = "header-bkg-text-dark";
+    }
+  }
+}

@@ -1,0 +1,49 @@
+name = Stanford Jumpstart Homepage
+description = Provides several layout options for the home page on Jumpstart sites.
+core = 7.x
+package = Stanford Sites Jumpstart Engineering
+version = 7.x-1.6-dev
+project = stanford_jumpstart_home
+project status url = https://github.com/SU-SOE/stanford_jumpstart_home
+
+stylesheets[all][] = css/stanford_jumpstart_home.css
+# scripts[] = js/stanford_jumpstart_home.js
+
+dependencies[] = cbc
+dependencies[] = context
+dependencies[] = ctools
+
+# Example settings
+# layout[setting][header_image] = TRUE
+# layout[setting][light_dark] = TRUE
+# layout[setting][color] = TRUE
+
+layout[stanford_jumpstart_home_hoover][context] = "stanford_jumpstart_home_hoover"
+layout[stanford_jumpstart_home_hoover][thumb] = "js-home-hoover.jpg"
+layout[stanford_jumpstart_home_hoover][title] = "Hoover"
+layout[stanford_jumpstart_home_hoover][description] = "<ul><li>About block</li><li>Banner block</li><li>Small custom block</li><li>Large custom block</li></ul>"
+layout[stanford_jumpstart_home_hoover][class] = "stanford-jumpstart-home-hoover"
+
+layout[stanford_jumpstart_home_morris][context] = "stanford_jumpstart_home_morris"
+layout[stanford_jumpstart_home_morris][thumb] = "js-home-morris.jpg"
+layout[stanford_jumpstart_home_morris][title] = "Morris"
+layout[stanford_jumpstart_home_morris][description] = "<ul><li>About block</li><li>Banner block</li><li>Small custom block</li><li>Auto-generated News block</li><li>Auto-generated Events block</li></ul>"
+layout[stanford_jumpstart_home_morris][class] = "stanford-jumpstart-home-morris"
+
+layout[stanford_jumpstart_home_terman][context] = "stanford_jumpstart_home_terman"
+layout[stanford_jumpstart_home_terman][thumb] = "js-home-terman.jpg"
+layout[stanford_jumpstart_home_terman][title] = "Terman"
+layout[stanford_jumpstart_home_terman][description] = "<ul><li>Full-width banner block</li><li>About block</li><li>Auto-generated News block</li><li>Auto-generated Events block</li><li>Large custom block</li><li>Small custom block</li></ul>"
+layout[stanford_jumpstart_home_terman][class] = "stanford-jumpstart-home-terman"
+
+layout[stanford_jumpstart_home_pettit][context] = "stanford_jumpstart_home_pettit"
+layout[stanford_jumpstart_home_pettit][thumb] = "js-home-pettit.jpg"
+layout[stanford_jumpstart_home_pettit][title] = "Pettit"
+layout[stanford_jumpstart_home_pettit][description] = "<ul><li>Full-width banner block</li><li>Large About block</li><li>Auto-generated News block</li><li>Large custom block</li><li>Auto-generated Events block</li></ul>"
+layout[stanford_jumpstart_home_pettit][class] = "stanford-jumpstart-home-pettit"
+
+layout[stanford_jumpstart_home_kays][context] = "stanford_jumpstart_home_kays"
+layout[stanford_jumpstart_home_kays][thumb] = "js-home-kays.jpg"
+layout[stanford_jumpstart_home_kays][title] = "Kays"
+layout[stanford_jumpstart_home_kays][description] = "<ul><li>Full-width banner block</li><li>Large About block</li><li>Small custom block</li></ul>"
+layout[stanford_jumpstart_home_kays][class] = "stanford-jumpstart-home-kays"

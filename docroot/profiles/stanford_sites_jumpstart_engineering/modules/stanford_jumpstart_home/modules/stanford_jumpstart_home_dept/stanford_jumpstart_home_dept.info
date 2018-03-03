@@ -1,0 +1,18 @@
+name = Stanford Jumpstart Homepage for Department Sites
+description = Provides functionality for supporting department homepages.
+core = 7.x
+package = Stanford Sites Jumpstart Engineering
+version = 7.x-1.6-dev
+project = stanford_jumpstart_home_dept
+;stylesheets[all][] = css/stanford_jumpstart_home_dept.css
+dependencies[] = stanford_jumpstart_home
+; scripts[] = js/stanford_module.js
+project status url = https://github.com/SU-SWS/stanford_jumpstart_home
+files[] = stanford_jumpstart_home_dept.install
+
+layout[stanford_jumpstart_home_gibbons][context] = "stanford_jumpstart_home_gibbons"
+layout[stanford_jumpstart_home_gibbons][thumb] = "js-home-gibbons.jpg"
+layout[stanford_jumpstart_home_gibbons][title] = "Gibbons"
+layout[stanford_jumpstart_home_gibbons][description] = "<ul><li>Full-width banner block</li><li>Large About block</li><li>Auto-generated News block</li><li>Five small custom block</li><li>Auto-generated Events block</li></ul>"
+layout[stanford_jumpstart_home_gibbons][class] = "stanford-jumpstart-home-gibbons"
+

@@ -1,0 +1,22 @@
+<?php
+/**
+ * @file
+ * Stanford Jumpstart Homepage for Department Sites
+ *
+ * @author  Caryl Westerberg <cjwest@stanford.edu>
+ * Supports homepage functionality for departments sites.
+ *
+ */
+
+/**
+ *  Implements hook_form_FORM_ID_alter()
+ *
+ * @param $form
+ * @param $form_state
+ */
+function stanford_jumpstart_home_dept_form_stanford_jumpstart_homepage_dashboard_form_alter(&$form, &$form_state) {
+
+  // Add the stanford_jumpstart_home_dept layouts to the customize design page
+  stanford_jumpstart_home_dashboard_add_layouts($form, $form_state, 'stanford_jumpstart_home_dept');
+
+}

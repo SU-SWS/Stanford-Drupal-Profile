@@ -1,5 +1,5 @@
-#[Jumpstart Engineering (JSE)](https://github.com/SU-SOE/stanford_sites_jumpstart_engineering)
-##### Version: 7.x-5.3+7-dev 
+# [Jumpstart Engineering (JSE)](https://github.com/SU-SOE/stanford_sites_jumpstart_engineering)
+##### Version: 7.x-5.3+7-dev
 
 Maintainers: [boznik](https://github.com/boznik), [sherakama](https://github.com/sherakama), and
 [cjwest](https://github.com/cjwest)
