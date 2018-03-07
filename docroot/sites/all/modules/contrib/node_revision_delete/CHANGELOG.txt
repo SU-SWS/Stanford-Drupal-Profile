@@ -1,0 +1,170 @@
+Node Revision Delete 7.x-3.0-beta1, 2017-08-10
+-----------------------------------------------
+Changes since 7.x-3.0-alpha2:
+
+- #2892807 by MustangGB, adriancid, Murz, Andreas Radloff, RaulMuroc, kiwimind:
+  Use the minimum_age_to_delete and when_to_delete variables to delete 
+  revisions.
+- #2900979 by adriancid: Untranslated strings.
+- #2900518 by adriancid: Drush command to configure time options for the minimum
+  age to delete revisions.
+- #2899740 by adriancid: Drush command to configure time options to know when 
+  the revision should be deleted.
+- #2899066 by adriancid: Drush command to configure frequency with which to
+  delete revisions while cron is running
+- #2899085 by adriancid: Update the module help.
+
+Node Revision Delete 7.x-3.0-alpha2, 2017-07-17
+-----------------------------------------------
+Changes since 7.x-3.0-alpha1:
+
+- #2895498 by adriancid: Drush command to get the last time that the node 
+  revision delete was made.
+- #2892441 by adriancid: Change the drush error codes.
+- #2888840 by kbasarab, adriancid: Cron fails with no content types returned.
+- #2888614 by adriancid: Use the node_revision_delete_cron variable value to
+  delete the revisions.
+- #2888613 by adriancid: Invalid validation once you try to untrack a content
+  type.
+- #2888577 by adriancid, Andreas Radloff: Add a dry-run option.
+- #2888217 by gmaltoni, adriancid: Fix javascript coding standard format.
+- #2888159 by adriancid: Drush command to get how many revisions will be deleted
+  per cron run.
+- #2888145 by adriancid: Drush command to configure how many revisions delete
+  per cron run.
+- #2846726 by proconnor15, adriancid: Add option to delete revisions every 2
+  years while cron runs.
+- #2888124 by adriancid: Improve the recommended modules section.
+
+Node Revision Delete 7.x-3.0-alpha1, 2017-06-20
+-----------------------------------------------
+Changes since 7.x-2.7:
+
+- by adriancid: Change variables to the his new name.
+- by adriancid: Manage the configuration for the 'when_to_delete' and
+  'minimun_age_to_delete' variables.
+- by adriancid: Create a Confirm Form to delete the content type configuration.
+- by adriancid: Added the operations dropbutton.
+- by adriancid: Added time configurations to the module configuration page.
+- by adriancid: Changed the module configuration page.
+- by adriancid: Add the configuration options to the content type edit form.
+- by adriancid: Update variables to the new format.
+- by adriancid: Starting the port of the Drupal 8 module functionalities.
+
+Node Revision Delete 7.x-2.7, 2017-05-25
+----------------------------------------
+Changes since 7.x-2.6:
+
+- #2881507 by adriancid: Create an option group in the content type edit form.
+- #2881502 by adriancid: Use dt() function to translate the drush command
+  strings.
+- #2881467 by adriancid: Disable the 'Delete revisions now' option if there not
+  exists candidates nodes with revisions to delete.
+- #2881321 by adriancid: Always show the status table in the admin settings
+  page.
+- #2881289 by adriancid: Put the admin form in the
+  node_revision_delete.admin.inc file.
+- #2871238 by by applicity_sam, adriancid: Add the 'Limit the amount of
+  revisions for this content type' option in the Publishing option vertical tab.
+- #2881168 by adriancid: Create the CHANGELOG.txt file.
+- #2867883 by adriancid: Delete the custom variables related to content types if
+  they really exists.
+- #2865907 by adriancid, dhwani.addweb: Use the README.txt template.
+- #2869563 by adriancid: Once the content type is deleted the variables remains
+  in the database.
+- #2333555 by kalabro: PostgreSQL PDOException in
+  node_revision_delete_candidates().
+- #2866086 by adriancid, krina.addweb: Fix code standard format.
+- #2869206 by adriancid: Add a destination to the edit link in the module
+  configuration page.
+- #2866092 by adriancid: Unused variable.
+- #2869163 by adriancid, rodrigoac: Improve the table header in the
+  Node Revision Delete Administration Page.
+- #2869096 by adriancid, rodrigoac: Improve the permission title and 
+  description.
+- #2867877 by adriancid, rodrigoac: Delete the node_revision_delete_cron config
+  variable when the module is uninstalled.
+- #2248657 by vbouchet: Implements hook_workbench_moderation_transition.
+- #2257257 by jeremyclassic, vbouchet: List tracked content types at admin page.
+- by juampy: Validate arguments at Drush command.
+- by juampy: Remove unused option --show-deleted.
+
+Node Revision Delete 7.x-2.6, 2014-09-01
+----------------------------------------
+Changes since 7.x-2.5:
+
+- by juampy: Fix bug when reporting final results.
+
+Node Revision Delete 7.x-2.5, 2014-09-01
+----------------------------------------
+Changes since 7.x-2.4:
+
+- by juampy: Fixed admin menu title and description.
+- #2291177 by vbouchet: Use core #element_validate instead of custom function.
+- #2295945 by jeremyclassic, alvar0hurtad0: Fixed Storing unused values in batch
+  process causes poor performance and drush command crash.
+- #2283549 by alvar0hurtad0, jeremyclassic: Make sure module meets coding
+  standards.
+- #1891050 by hanoii, iMiksu, jeremyclassic, juampy: Integrate with Batch API.
+- by juampy: Couple label improvements at the settings form.
+- #2267561 by juampy: Improve reporting on Drush integration.
+
+Node Revision Delete 7.x-2.4, 2014-05-14
+----------------------------------------
+Changes since 7.x-2.3:
+
+- #2267477 by parashutiki, juampy: Error after upgrade.
+
+Node Revision Delete 7.x-2.3, 2014-05-14
+----------------------------------------
+Changes since 7.x-2.2:
+
+- General refactoring.
+- #2257053 by jeremyclassic, Cayenne: Error on cron run when no content types
+  are tracked.
+- #2257257 by jeremyclassic, aubjr_drupal, juampy: List tracked content types at
+  admin page.
+- #2058777 by rovo89, jeremyclassic, juampy "Run Now Only" option actually
+  deletes revisions on every cron run.
+- #2130691 by simone960, robv Do not require PHP 5.3.X.
+
+Node Revision Delete 7.x-2.2, 2014-05-01
+----------------------------------------
+Changes since 7.x-2.1:
+
+- by juampy: Simplify the logic to choose a list of revisions to delete.
+
+Node Revision Delete 7.x-2.1, 2014-04-29
+----------------------------------------
+Changes since 7.x-2.0:
+
+- by hexabinaer, juampy: Add permissions settings.
+- by juampy: Fix database update numbering for 7.x-2.x.
+- by juampy: Remove trailing whitespace and packaging script metadata.
+
+Node Revision Delete 7.x-2.0, 2012-10-22
+----------------------------------------
+Changes since 7.x-1.2-unstable1:
+
+- by juampy: Define revision limit per content type.
+- by juampy: Create an upgrade path from 7.x-1.x to 7.x-2.x.
+- #2244733 by juampy: Optimize the query that looks for candidate nodes.
+- #2244763 by juampy: Add basic Drush support.
+- #2244549 by juampy: Limit the amount of revisions to be deleted per cron run.
+
+Node Revision Delete 7.x-1.2-unstable1, 2012-09-13
+--------------------------------------------------
+Changes since 7.x-1.1:
+
+- by kaushalkishorejaiswal: The user can delete the revisions by time.
+
+Node Revision Delete 7.x-1.1, 2012-09-13
+----------------------------------------
+Changes since 7.x-1.0:
+
+- by kaushalkishorejaiswal: Change the name of variable to
+  total_revision_to_keep.
+
+Node Revision Delete 7.x-1.0, 2012-09-10
+----------------------------------------
+- Initial release.

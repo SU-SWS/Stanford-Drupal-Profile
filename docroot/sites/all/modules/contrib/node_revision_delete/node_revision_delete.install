@@ -1,0 +1,116 @@
+<?php
+
+/**
+ * @file
+ * Install, update and uninstall functions for the Node Revision Delete module.
+ */
+
+/**
+ * Implements hook_install().
+ */
+function node_revision_delete_install() {
+  // Number of revisions to remove in each cron run.
+  variable_set('node_revision_delete_cron', 50);
+  // Last time that the node revision delete was made.
+  variable_set('node_revision_delete_last_execute', 0);
+  // Frequency with which to delete revisions while cron is running.
+  variable_set('node_revision_delete_time', 'never');
+  // Time configuration to know when the revision should be deleted.
+  $node_revision_delete_when_to_delete_time = array(
+    'max_number' => 12,
+    'time' => 'months',
+  );
+  variable_set('node_revision_delete_when_to_delete_time', $node_revision_delete_when_to_delete_time);
+  // Time configuration to know the minimum age that the revision should have
+  // to be deleted.
+  $node_revision_delete_minimum_age_to_delete_time = array(
+    'max_number' => 12,
+    'time' => 'months',
+  );
+  variable_set('node_revision_delete_minimum_age_to_delete_time', $node_revision_delete_minimum_age_to_delete_time);
+  // Configuration for each content_type.
+  variable_set('node_revision_delete_track', array());
+}
+
+/**
+ * Implements hook_uninstall().
+ */
+function node_revision_delete_uninstall() {
+  variable_del('node_revision_delete_cron');
+  variable_del('node_revision_delete_last_execute');
+  variable_del('node_revision_delete_time');
+  variable_del('node_revision_delete_when_to_delete_time');
+  variable_del('node_revision_delete_minimum_age_to_delete_time');
+  variable_del('node_revision_delete_track');
+}
+
+/**
+ * Sets max amount of revisions per content type.
+ */
+function node_revision_delete_update_7200() {
+  // If content types were selected, set the global max to each of them.
+  $content_types = variable_get('node_revision_delete_content_type', '');
+  if (!empty($content_types)) {
+    $content_types = explode(',', $content_types);
+    $max = variable_get('node_revision_delete_number');
+    if ($max) {
+      foreach ($content_types as $type) {
+        variable_set('node_revision_delete_track_' . $type, 1);
+        variable_set('node_revision_delete_number_' . $type, $max);
+      }
+    }
+  }
+
+  variable_del('node_revision_delete_number');
+  variable_del('node_revision_delete_content_type');
+}
+
+/**
+ * Removes node_revision_delete_time if its values is 0.
+ *
+ * It was matching a wrong condition in a switch at hook_cron.
+ */
+function node_revision_delete_update_7201() {
+  if (variable_get('node_revision_delete_time') == 0) {
+    variable_del('node_revision_delete_time');
+  }
+}
+
+/**
+ * Update the configurations to the 3.x module version.
+ */
+function node_revision_delete_update_7300() {
+  // Creating new variables.
+  // Time configuration to know when the revision should be deleted.
+  $node_revision_delete_when_to_delete_time = array(
+    'max_number' => 12,
+    'time' => 'months',
+  );
+  variable_set('node_revision_delete_when_to_delete_time', $node_revision_delete_when_to_delete_time);
+  // Time configuration to know the minimum age that the revision should have
+  // to be deleted.
+  $node_revision_delete_minimum_age_to_delete_time = array(
+    'max_number' => 12,
+    'time' => 'months',
+  );
+  variable_set('node_revision_delete_minimum_age_to_delete_time', $node_revision_delete_minimum_age_to_delete_time);
+
+  $node_revision_delete_track = array();
+
+  // Searching the content type machine name.
+  $results = db_query("SELECT SUBSTR(name, 28) as name
+                       FROM {variable}
+                       WHERE name LIKE 'node_revision_delete_track_%'");
+
+  foreach ($results as $content_type) {
+    $node_revision_delete_track[$content_type->name]['minimum_revisions_to_keep'] = variable_get('node_revision_delete_number_' . $content_type->name);
+    $node_revision_delete_track[$content_type->name]['minimum_age_to_delete'] = 0;
+    $node_revision_delete_track[$content_type->name]['when_to_delete'] = 0;
+
+    // Deleting old variables.
+    variable_del('node_revision_delete_track_' . $content_type->name);
+    variable_del('node_revision_delete_number_' . $content_type->name);
+  }
+  // Saving the new format.
+  variable_set('node_revision_delete_track', $node_revision_delete_track);
+}

@@ -9,8 +9,8 @@
       "url": "https://packages.drupal.org/7"
     },
     {
-        "type": "composer",
-        "url": "https://asset-packagist.org"
+      "type": "composer",
+      "url": "https://asset-packagist.org"
     }
   ],
   "require": {
@@ -38,7 +38,8 @@
     "drupal/drupal": "~7.0",
     "drupal/acsf": "~1.43",
     "drupal/newrelic_appname": "~1.0-alpha1",
-    "drupal/paranoia": "~1.7"
+    "drupal/paranoia": "~1.7",
+    "drupal/node_revision_delete": "~3.0"
   },
   "conflict": {
     "drupal/core": "8.*"

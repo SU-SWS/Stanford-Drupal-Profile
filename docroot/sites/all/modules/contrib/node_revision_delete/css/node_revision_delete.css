@@ -1,0 +1,31 @@
+table caption {
+  font-weight: bold;
+  text-align: left;
+}
+
+div.form-item-minimum-revisions-to-keep,
+div.form-item-minimum-age-to-delete,
+div.form-item-when-to-delete {
+  margin-left: 15px;
+}
+
+.fieldgroup {
+  border-width: 0;
+}
+
+.fieldgroup .fieldset-legend {
+  text-transform: none;
+  padding: 0;
+}
+
+.fieldgroup .fieldset-wrapper {
+  padding: 0;
+}
+
+#edit-node-revision-delete-number {
+  width: auto;
+}
+
+div.form-item.form-type-checkbox.form-item-node-revision-delete-track {
+  padding-top: 0;
+}

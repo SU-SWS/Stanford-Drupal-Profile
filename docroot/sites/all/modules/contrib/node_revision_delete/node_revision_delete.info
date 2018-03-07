@@ -1,0 +1,6 @@
+name = Node Revision Delete
+description = "Track and prune node revisions."
+core = 7.x
+package = Content
+
+configure = admin/config/content/node_revision_delete

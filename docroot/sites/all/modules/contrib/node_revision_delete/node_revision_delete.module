@@ -1,0 +1,651 @@
+<?php
+
+/**
+ * @file
+ * Node Revision Delete Module.
+ */
+
+/**
+ * Implements hook_help().
+ */
+function node_revision_delete_help($path, $arg) {
+  switch ($path) {
+    case 'admin/help#node_revision_delete':
+      $output = '';
+      $output .= '<h3>' . t('About') . '</h3>';
+      $output .= '<p>' . t('The Node Revision Delete module allows you to manage the revisions of the Node according to your choice. It helps you to keep the specific number of revisions for the node. This module provides you the flexibility for applying the revision delete for the specific content type and run it on the specific time.') . '</p>';
+      $output .= '<h3>' . t('Uses') . '</h3>';
+      $output .= '<dl>';
+      $output .= '<dt>' . t('Configuring the module') . '</dt>';
+      $output .= '<dd>' . t('You can manage your settings from the <a href="@config-page">Node Revision Delete</a> page. For this you need the <em>Administer node revision delete settings</em> permission.', array('@config-page' => url('admin/config/content/node_revision_delete'))) . '</dd>';
+      $output .= '</dl>';
+      $output .= '<h3>' . t('Drush commands') . '</h3>';
+      $output .= '<dl>';
+      $output .= '<dt>drush node-revision-delete</dt>';
+      $output .= '<dd>' . t('Deletes old node revisions for a given content type.') . '</dd>';
+      $output .= '<dt>drush nrd-delete-cron-run</dt>';
+      $output .= '<dd>' . t('Configures how many revisions delete per cron run.') . '</dd>';
+      $output .= '<dt>drush nrd-last-execute</dt>';
+      $output .= '<dd>' . t('Get the last time that the node revision delete was made.') . '</dd>';
+      $output .= '<dt>drush nrd-set-time</dt>';
+      $output .= '<dd>' . t('Configures the frequency with which to delete revisions while cron is running.') . '</dd>';
+      $output .= '<dt>drush nrd-get-time</dt>';
+      $output .= '<dd>' . t('Shows the frequency with which to delete revisions while cron is running.') . '</dd>';
+      $output .= '<dt>drush nrd-when-to-delete-time</dt>';
+      $output .= '<dd>' . t('Configures the time options for the inactivity time that the revision must have to be deleted.') . '</dd>';
+      $output .= '<dt>drush nrd-minimum-age-to-delete-time</dt>';
+      $output .= '<dd>' . t('Configures time options to know the minimum age that the revision must have to be deleted.') . '</dd>';
+      $output .= '</dl>';
+
+      return $output;
+
+    case 'admin/config/content/node_revision_delete':
+      $output = '';
+      $output .= '<p>' . t("To allow Node Revision Delete to act upon a certain content type, you should navigate to the desired content type's edit page via:") . '</p>';
+      $output .= '<p><em>' . t('Administration » Structure » Content types » [Content type name]') . '</em></p>';
+      $output .= '<p>' . t("Under the Publishing Options tab, enable 'Create new revision' and 'Limit the amount of revisions for this content type' checkboxes. Change the Maximum number of revisions to keep, if you need to, and finally, save your changes clicking in the Save content type button.") . '</p>';
+
+      return $output;
+  }
+}
+
+/**
+ * Implements hook_permission().
+ */
+function node_revision_delete_permission() {
+  return array(
+    'administer node_revision_delete' => array(
+      'title' => t('Administer Node Revision Delete'),
+      'description' => t('Allow access to configure the module settings.'),
+    ),
+  );
+}
+
+/**
+ * Implements hook_menu().
+ */
+function node_revision_delete_menu() {
+  $items['admin/config/content/node_revision_delete'] = array(
+    'title' => 'Node Revision Delete',
+    'description' => 'Settings for automatically deleting node revisions.',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('node_revision_delete_admin_settings_form'),
+    'access callback' => 'user_access',
+    'access arguments' => array('administer node_revision_delete'),
+    'type' => MENU_NORMAL_ITEM,
+    'file' => 'node_revision_delete.admin.inc',
+  );
+  $items['admin/config/content/node_revision_delete/delete/%'] = array(
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('node_revision_delete_content_type_configuration_delete_form', 5),
+    'access arguments' => array('administer node_revision_delete'),
+    'file' => 'node_revision_delete.admin.inc',
+  );
+  return $items;
+}
+
+/**
+ * Implements hook_form_BASE_FORM_ID_alter().
+ */
+function node_revision_delete_form_node_type_form_alter(&$form, &$form_state) {
+  // Getting the content types to track variable.
+  $node_revision_delete_track = variable_get('node_revision_delete_track');
+  // Getting the content type machine name from the actual form.
+  $content_type = $form['#node_type']->type;
+  // Looking if the config exists for the content type.
+  if (isset($node_revision_delete_track[$content_type])) {
+    $track = TRUE;
+    $minimum_revisions_to_keep = $node_revision_delete_track[$content_type]['minimum_revisions_to_keep'];
+    $when_to_delete = $node_revision_delete_track[$content_type]['when_to_delete'];
+    $minimum_age_to_delete = $node_revision_delete_track[$content_type]['minimum_age_to_delete'];
+  }
+  else {
+    $track = FALSE;
+    $minimum_revisions_to_keep = 1;
+    $when_to_delete = 0;
+    $minimum_age_to_delete = 0;
+  }
+
+  $form['workflow']['section'] = array(
+    '#type' => 'fieldset',
+    '#title' => t("Node revision delete"),
+    '#attributes' => array('class' => array('fieldgroup', 'form-composite')),
+    '#attached' => array(
+      'css' => array(
+        drupal_get_path('module', 'node_revision_delete') . '/css/node_revision_delete.css',
+      ),
+    ),
+  );
+  // Element to track the content type.
+  $form['workflow']['section']['node_revision_delete_track'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Limit the amount of revisions for this content type'),
+    '#default_value' => $track,
+  );
+  // Element for the minimum number of revisions to keep.
+  $form['workflow']['section']['minimum_revisions_to_keep'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Minimum number of revisions to keep'),
+    '#description' => t('Oldest revisions will be deleted when the total amount surpases this value. Set it to 1 to remove all revisions.'),
+    '#default_value' => $minimum_revisions_to_keep,
+    '#element_validate' => array('element_validate_integer_positive'),
+    '#states' => array(
+      // Hide the settings when the cancel notify checkbox is disabled.
+      'visible' => array(
+        ':input[name="node_revision_delete_track"]' => array('checked' => TRUE),
+      ),
+    ),
+  );
+  // Getting the max number for node_revision_delete_minimum_age_to_delete_time.
+  $node_revision_delete_minimum_age_to_delete_time_max_number = variable_get('node_revision_delete_minimum_age_to_delete_time')['max_number'];
+  // Available options for minimum_age_to_delete.
+  $options_minimum_age_to_delete[0] = t('None');
+  for ($i = 1; $i <= $node_revision_delete_minimum_age_to_delete_time_max_number; $i++) {
+    $options_minimum_age_to_delete[$i] = _node_revision_delete_time_string('minimum_age_to_delete', $i);
+  }
+  // Element to know when to delete the revisions.
+  $form['workflow']['section']['minimum_age_to_delete'] = array(
+    '#type' => 'select',
+    '#title' => t('Minimum age of revisions to delete'),
+    '#description' => t('Revisions older of this age will be deleted, but just only after the "Minimum number of revisions to keep" will be reached. If you don\'t want to take in count the age of the revisions, set to "None".'),
+    '#options' => $options_minimum_age_to_delete,
+    '#size' => 1,
+    '#default_value' => $minimum_age_to_delete,
+    '#states' => array(
+      // Show the field when the checkbox is checked.
+      'visible' => array(
+        ':input[name="node_revision_delete_track"]' => array('checked' => TRUE),
+      ),
+    ),
+  );
+  // Getting the max number for node_revision_delete_when_to_delete_time.
+  $node_revision_delete_when_to_delete_time_max_number = variable_get('node_revision_delete_when_to_delete_time')['max_number'];
+  // Available options for when_to_delete variable.
+  $options_when_to_delete[0] = t('Always');
+  for ($i = 1; $i <= $node_revision_delete_when_to_delete_time_max_number; $i++) {
+    // Creating the time string.
+    $options_when_to_delete[$i] = _node_revision_delete_time_string('when_to_delete', $i);
+  }
+  // Element to know when to delete the revisions.
+  $form['workflow']['section']['when_to_delete'] = array(
+    '#type' => 'select',
+    '#title' => t('When to delete'),
+    '#description' => t('If the current revision is not older than specified here, its older revisions will not be deleted, even if they are old enough. If set to "Always", older revisions will be deleted regardless of the age of the current revision.'),
+    '#options' => $options_when_to_delete,
+    '#size' => 1,
+    '#default_value' => $when_to_delete,
+    '#states' => array(
+      // Show the field when the checkbox is checked.
+      'visible' => array(
+        ':input[name="node_revision_delete_track"]' => array('checked' => TRUE),
+      ),
+    ),
+  );
+
+  // If we are creating the content type. Putting the custom submit handler
+  // first to use the Entity->isNew() function, if the custom submit handler is
+  // the last function called always the Entity is created first.
+  array_unshift($form['#submit'], '_node_revision_delete_form_node_type_submit');
+}
+
+/**
+ * Custom submit handler to save the configuration variables.
+ *
+ * @param array $form
+ *   The form element.
+ * @param array $form_state
+ *   The form state.
+ */
+function _node_revision_delete_form_node_type_submit(array &$form, array $form_state) {
+  // Getting the form values.
+  $track = $form_state['values']['node_revision_delete_track'];
+  // Getting the content type machine name.
+  $content_type = $form['type']['#value'];
+  // If we will track the content type.
+  if ($track) {
+    // Getting the form values.
+    $minimum_revisions_to_keep = $form_state['values']['minimum_revisions_to_keep'];
+    $minimum_age_to_delete = $form_state['values']['minimum_age_to_delete'];
+    $when_to_delete = $form_state['values']['when_to_delete'];
+    // Saving the values in the config.
+    _node_revision_delete_save_content_type_config($content_type, $minimum_revisions_to_keep, $minimum_age_to_delete, $when_to_delete);
+  }
+  // If we are not tranking the content type and it exists (is not new)
+  // we need to delete the existing config.
+  elseif (!isset($form_state['complete form']['#node_type']->is_new) || !$form_state['complete form']['#node_type']->is_new) {
+    // Deleting the value from the config.
+    _node_revision_delete_delete_content_type_config($content_type);
+  }
+}
+
+/**
+ * Save the content type config variable.
+ *
+ * @param string $content_type
+ *   Content type machine name.
+ * @param int $minimum_revisions_to_keep
+ *   Minimum number of revisions to keep.
+ * @param int $minimum_age_to_delete
+ *   Minimum age in months of revision to delete.
+ * @param int $when_to_delete
+ *   Number of inactivity months to wait for delete a revision.
+ */
+function _node_revision_delete_save_content_type_config($content_type, $minimum_revisions_to_keep, $minimum_age_to_delete, $when_to_delete) {
+  // Getting the variables with the content types configuration.
+  $node_revision_delete_track = variable_get('node_revision_delete_track');
+  // Creating the content type info.
+  $content_type_info = array(
+    'minimum_revisions_to_keep' => $minimum_revisions_to_keep,
+    'minimum_age_to_delete' => $minimum_age_to_delete,
+    'when_to_delete' => $when_to_delete,
+  );
+  // Adding the info into te array.
+  $node_revision_delete_track[$content_type] = $content_type_info;
+  // Saving the values in the config.
+  variable_set('node_revision_delete_track', $node_revision_delete_track);
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function node_revision_delete_form_node_type_delete_confirm_alter(&$form, &$form_state, $form_id) {
+  // If we are deleting a content type.
+  $form['#submit'][] = '_node_revision_delete_form_node_type_delete';
+}
+
+/**
+ * Custom submit handler to delete the configuration variables.
+ *
+ * @param array $form
+ *   The form element.
+ * @param array $form_state
+ *   The form state.
+ */
+function _node_revision_delete_form_node_type_delete(array $form, array &$form_state) {
+  // Getting the content type machine name.
+  $content_type = $form['type']['#value'];
+  // Deleting the value from the config.
+  _node_revision_delete_delete_content_type_config($content_type);
+}
+
+/**
+ * Delete the content type config variable.
+ *
+ * @param string $content_type
+ *   Content type machine name.
+ *
+ * @return bool
+ *   Return TRUE if the content type config was deleted or FALSE if not exists.
+ */
+function _node_revision_delete_delete_content_type_config($content_type) {
+  // Getting the variables with the content types configuration.
+  $node_revision_delete_track = variable_get('node_revision_delete_track');
+  // Checking if the config exists.
+  if (isset($node_revision_delete_track[$content_type])) {
+    // Deleting the value from the array.
+    unset($node_revision_delete_track[$content_type]);
+    // Saving the values in the config.
+    variable_set('node_revision_delete_track', $node_revision_delete_track);
+    return TRUE;
+  }
+  return FALSE;
+}
+
+/**
+ * Return the list of candidate nodes for node revision delete.
+ *
+ * @param string $content_type
+ *   Content type machine name.
+ * @param int $minimum_revisions_to_keep
+ *   Minimum number of revisions to keep.
+ * @param int $minimum_age_to_delete
+ *   Minimum age in months of revision to delete.
+ * @param int $when_to_delete
+ *   Number of inactivity months to wait for delete a revision.
+ *
+ * @return array
+ *   Array of nids.
+ */
+function _node_revision_delete_candidates($content_type, $minimum_revisions_to_keep, $minimum_age_to_delete, $when_to_delete) {
+  static $minimum_age_to_delete_time, $when_to_delete_time;
+
+  // Get the time value for minimum age to delete.
+  if (empty($minimum_age_to_delete_time)) {
+    $minimum_age_to_delete_time = variable_get('node_revision_delete_minimum_age_to_delete_time')['time'];
+  }
+
+  // Get the time value for when to delete.
+  if (empty($when_to_delete_time)) {
+    $when_to_delete_time = variable_get('node_revision_delete_when_to_delete_time')['time'];
+  }
+
+  $params = array(
+    ':content_type' => $content_type,
+    ':max_revisions' => $minimum_revisions_to_keep,
+    ':age' => strtotime($minimum_age_to_delete . ' ' . $minimum_age_to_delete_time . ' ago'),
+    ':when' => strtotime($when_to_delete . ' ' . $when_to_delete_time . ' ago'),
+  );
+
+  $result = db_query('SELECT r.nid, count(*) as total
+                     FROM {node} n
+                     INNER JOIN {node_revision} r ON r.nid = n.nid
+                     WHERE n.type = :content_type
+                     AND r.timestamp < :age
+                     AND n.changed < :when
+                     GROUP BY r.nid
+                     HAVING count(*) > :max_revisions
+                     ORDER BY total DESC', $params);
+  return $result->fetchCol();
+}
+
+/**
+ * Implements hook_js_alter().
+ */
+function node_revision_delete_js_alter(&$javascript) {
+  // Deleting the library because we have our own version.
+  // Maybe this cannot be longer needed once https://www.drupal.org/node/2871619
+  // will be fixed.
+  // Getting the core js file.
+  $core_file = (drupal_get_path('module', 'node') . '/content_types.js');
+  // Replacing the file.
+  if (isset($javascript[$core_file])) {
+    // Getting the module js file.
+    $module_file = drupal_get_path('module', 'node_revision_delete') . '/js/content_types.js';
+    // Overwriting the file.
+    $javascript[$core_file] = drupal_js_defaults($module_file);
+  }
+}
+
+/**
+ * Return the time string for the config_name parameter.
+ *
+ * @param string $config_name
+ *   The config name.
+ * @param int $number
+ *   The number for the $config_name parameter configuration.
+ *
+ * @return string
+ *   The time string for the $config_name parameter.
+ */
+function _node_revision_delete_time_string($config_name, $number) {
+  $config_name_time = variable_get('node_revision_delete_' . $config_name . '_time');
+  // Is singular or plural?
+  $time = _node_revision_delete_time_number_string($number, $config_name_time['time']);
+  // Return the time string for the $config_name parameter.
+  switch ($config_name) {
+    case 'minimum_age_to_delete':
+      return t('@number @time', array('@number' => $number, '@time' => $time));
+
+    case 'when_to_delete':
+      return t('After @number @time of inactivity', array('@number' => $number, '@time' => $time));
+  }
+}
+
+/**
+ * Update the max_number for a config name.
+ *
+ * We need to update the max_number in the existing content type configuration
+ * if the new value (max_number) is lower than the actual, in this case the new
+ * value will be the value for the content type.
+ *
+ * @param string $config_name
+ *   Config name to update.
+ * @param int $max_number
+ *   The maximum number for $config_name parameter.
+ */
+function _node_revision_delete_update_time_max_number_config($config_name, $max_number) {
+  $node_revision_delete_track = variable_get('node_revision_delete_track', array());
+  $changed = FALSE;
+  // Checking the when_to_delete value for all the configured content types.
+  foreach ($node_revision_delete_track as $content_type => $content_type_info) {
+    // If the new defined max_number is smaller than the defined when_to_delete
+    // value in the config, we need to change the stored config value.
+    if ($max_number < $content_type_info[$config_name]) {
+      $node_revision_delete_track[$content_type][$config_name] = $max_number;
+      $changed = TRUE;
+    }
+  }
+  // Saving only if we have changes.
+  if ($changed) {
+    // Saving the values in the config.
+    variable_set('node_revision_delete_track', $node_revision_delete_track);
+  }
+}
+
+/**
+ * Implements hook_cron().
+ */
+function node_revision_delete_cron() {
+  // Get node revision limits for all content types.
+  // If there are no tracked content types, exit this cron hook.
+  $node_revision_delete_track = variable_get('node_revision_delete_track', array());
+  if (empty($node_revision_delete_track)) {
+    return;
+  }
+
+  // Figure out whether we should delete revisions or not on this run.
+  $node_revision_delete_time = variable_get('node_revision_delete_time');
+  $node_revision_delete_last_execute = variable_get('node_revision_delete_last_execute');
+  $execute_revision_delete = 0;
+  $current_time = time();
+  $time_difference = $current_time - $node_revision_delete_last_execute;
+  switch ($node_revision_delete_time) {
+    case 'every_time':
+      variable_set('node_revision_delete_last_execute', $current_time);
+      $execute_revision_delete = 1;
+      break;
+
+    case 'everyday':
+      if ($time_difference > 86400) {
+        variable_set('node_revision_delete_last_execute', $current_time);
+        $execute_revision_delete = 1;
+      }
+      break;
+
+    case 'every_week':
+      if ($time_difference > 604800) {
+        variable_set('node_revision_delete_last_execute', $current_time);
+        $execute_revision_delete = 1;
+      }
+      break;
+
+    case 'every_10_days':
+      if ($time_difference > 864000) {
+        variable_set('node_revision_delete_last_execute', $current_time);
+        $execute_revision_delete = 1;
+      }
+      break;
+
+    case 'every_15_days':
+      if ($time_difference > 1296000) {
+        variable_set('node_revision_delete_last_execute', $current_time);
+        $execute_revision_delete = 1;
+      }
+      break;
+
+    case 'every_month':
+      if ($time_difference > 2592000) {
+        variable_set('node_revision_delete_last_execute', $current_time);
+        $execute_revision_delete = 1;
+      }
+      break;
+
+    case 'every_3_months':
+      if ($time_difference > 7776000) {
+        variable_set('node_revision_delete_last_execute', $current_time);
+        $execute_revision_delete = 1;
+      }
+      break;
+
+    case 'every_6_months':
+      if ($time_difference > 15552000) {
+        variable_set('node_revision_delete_last_execute', $current_time);
+        $execute_revision_delete = 1;
+      }
+      break;
+
+    case 'every_year':
+      if ($time_difference > 31536000) {
+        variable_set('node_revision_delete_last_execute', $current_time);
+        $execute_revision_delete = 1;
+      }
+      break;
+
+    case 'every_2_years':
+      if ($time_difference > 63072000) {
+        variable_set('node_revision_delete_last_execute', $current_time);
+        $execute_revision_delete = 1;
+      }
+      break;
+  }
+
+  if ($execute_revision_delete) {
+    // Getting the number of revisions to remove in each cron run.
+    $max = variable_get('node_revision_delete_cron', 50);
+    // Flag used to count how many have been deleted in this cron run.
+    $total_deleted = 0;
+    foreach ($node_revision_delete_track as $content_type => $content_type_info) {
+      // Extracting variables.
+      extract($node_revision_delete_track[$content_type]);
+      $candidate_nids = _node_revision_delete_candidates($content_type, $minimum_revisions_to_keep, $minimum_age_to_delete, $when_to_delete);
+      if (!empty($candidate_nids)) {
+        foreach ($candidate_nids as $nid) {
+          $deleted_revisions = _node_revision_delete_do_delete($nid, $node_revision_delete_track[$content_type]['minimum_revisions_to_keep']);
+          $total_deleted += $deleted_revisions->count;
+          if ($total_deleted >= $max) {
+            break 2;
+          }
+        }
+      }
+    }
+    drupal_set_message(t('Deleted @total revisions.', array('@total' => $total_deleted)));
+  }
+}
+
+/**
+ * Private function to perform revision deletion.
+ *
+ * @param int $nid
+ *   The node whose oldest revisions will be deleted.
+ * @param int $minimum_revisions_to_keep
+ *   Max amount of revisions to keep for this node.
+ * @param bool $dry_run
+ *   TRUE to test run without deleting revisions but seeing the output results,
+ *   FALSE for a real node revision delete.
+ *
+ * @return object
+ *   stdClass with list containing an array of deleted revisions
+ *   and pending containing a boolean where TRUE means that there
+ *   are more revisions to delete for this node.
+ */
+function _node_revision_delete_do_delete($nid, $minimum_revisions_to_keep, $dry_run = FALSE) {
+  // Getting the number of revisions to remove in each cron run.
+  $max = variable_get('node_revision_delete_cron', 50);
+
+  $node = new stdClass();
+  $node->nid = $nid;
+  $revisions = node_revision_list($node);
+  // Keep recent revisions.
+  $revisions = array_slice($revisions, $minimum_revisions_to_keep);
+  // Reverse the list so we start deleting oldest revisions first.
+  $revisions = array_reverse($revisions);
+  // POPO to keep track of deleted revisions and whether there are more
+  // to be deleted on a next run.
+  $deleted_revisions = new stdClass();
+  $deleted_revisions->count = 0;
+  $deleted_revisions->pending = FALSE;
+  foreach ($revisions as $revision) {
+    $revision_id = $revision->vid;
+    if ($dry_run ? $dry_run : node_revision_delete($revision_id)) {
+      $deleted_revisions->count++;
+      // Stop deleting if we hit the limit per cron run.
+      if ($deleted_revisions->count == $max) {
+        $deleted_revisions->pending = TRUE;
+        break;
+      }
+    }
+  }
+
+  return $deleted_revisions;
+}
+
+/**
+ * Implements hook_workbench_moderation_transition().
+ *
+ * Delete old revisions directly during moderation transition.
+ */
+function node_revision_delete_workbench_moderation_transition($node, $previous_state, $new_state) {
+  // Getting the config variable.
+  $node_revision_delete_track = variable_get('node_revision_delete_track', array());
+
+  if (count($node_revision_delete_track)) {
+    $deleted_revisions = _node_revision_delete_do_delete($node->nid, $node_revision_delete_track[$node->type]['minimum_revisions_to_keep']);
+
+    if (!empty($deleted_revisions->count)) {
+      drupal_set_message(t('Deleted @total revisions.', array('@total' => $deleted_revisions->count)));
+    }
+  }
+}
+
+/**
+ * Return the available values for time frequency.
+ *
+ * @param string $index
+ *   The index to retrieve.
+ *
+ * @return string
+ *   The index value (human readable value).
+ */
+function _node_revision_delete_time_value($index = NULL) {
+  $options_node_revision_delete_time = array(
+    'never' => t('Never'),
+    'every_time' => t('Every time cron runs'),
+    'everyday' => t('Everyday'),
+    'every_week' => t('Every Week'),
+    'every_10_days' => t('Every 10 Days'),
+    'every_15_days' => t('Every 15 Days'),
+    'every_month' => t('Every Month'),
+    'every_3_months' => t('Every 3 Months'),
+    'every_6_months' => t('Every 6 Months'),
+    'every_year' => t('Every Year'),
+    'every_2_years' => t('Every 2 Years'),
+  );
+
+  if (isset($index) && isset($options_node_revision_delete_time[$index])) {
+    return $options_node_revision_delete_time[$index];
+  }
+  else {
+    return $options_node_revision_delete_time;
+  }
+}
+
+/**
+ * Return the time option in singular or plural.
+ *
+ * @param string $number
+ *   The number.
+ * @param string $time
+ *   The time option (days, weeks or months).
+ *
+ * @return string
+ *   The singular or plural value for the time.
+ */
+function _node_revision_delete_time_number_string($number, $time) {
+  // Time options.
+  $time_options = array(
+    'days' => array(
+      'singular' => t('day'),
+      'plural' => t('days'),
+    ),
+    'weeks' => array(
+      'singular' => t('week'),
+      'plural' => t('weeks'),
+    ),
+    'months' => array(
+      'singular' => t('month'),
+      'plural' => t('months'),
+    ),
+  );
+
+  return $number == 1 ? $time_options[$time]['singular'] : $time_options[$time]['plural'];
+}
