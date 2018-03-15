@@ -51,7 +51,7 @@ validate_uri() {
   fi
 }
 
-# Rotate the backup logs.
+# Rotate the backup directories.
 #
 # @param $1 Number of backups to keep
 # @param $2 Backup directory path
@@ -77,9 +77,21 @@ bak_rotate() {
     # Iterate.
     i=$[$i-1]
   done
-
-  # Remove the oldest backup. We start counting at 0 so we can use the total.
-  rm -fr $BACKUPDIR/daily-archive-$NUMBEROFBACKUPSTOKEEP
+  # By this point we have 7 directories:
+  # daily-archive-1
+  # daily-archive-2
+  # daily-archive-3
+  # daily-archive-4
+  # daily-archive-5
+  # daily-archive-6
+  # daily-archive-7
+  # Remove daily-archive-7, the oldest backup. Check first if it's a directory.
+  # We start counting at 0; thus, we can use $NUMBEROFBACKUPSTOKEEP.
+  if [ -d $BACKUPDIR/daily-archive-$NUMBEROFBACKUPSTOKEEP ]
+  then
+    rm -fr $BACKUPDIR/daily-archive-$NUMBEROFBACKUPSTOKEEP
+  fi
+  # Now we have daily-archive-1 through daily-archive-6.
 }
 
 # Create a new backup of files and db.
