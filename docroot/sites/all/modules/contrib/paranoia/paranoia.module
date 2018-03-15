@@ -205,6 +205,16 @@ function paranoia_paranoia_hide_modules() {
   );
 }
 
+
+/**
+ * Implements hook_paranoia_hide_permissions().
+ *
+ * On behalf of backup_migrate.module.
+ */
+function backup_migrate_paranoia_hide_permissions() {
+  return array('restore from backup');
+}
+
 /**
  * Implements hook_paranoia_hide_permissions().
  *
@@ -381,7 +391,10 @@ function paranoia_form_validate_always_fail() {
  * On behalf of backup_migrate module.
  */
 function backup_migrate_paranoia_risky_forms() {
-  return array('backup_migrate_crud_import_form');
+  return array(
+    'backup_migrate_crud_import_form',
+    'backup_migrate_ui_manual_restore_form',
+  );
 }
 
 /**
