@@ -191,10 +191,6 @@
     },
     {
       "type": "vcs",
-      "url": "https://github.com/su-sws/stanford_date_timepicker"
-    },
-    {
-      "type": "vcs",
       "url": "https://github.com/su-sws/stanford_events_importer"
     },
     {
@@ -391,6 +387,7 @@
     "drupal/site_verify": "~1.2",
     "drupal/smart_trim": "~1.5",
     "drupal/social_share": "~2.5",
+    "drupal/stanford_date_timepicker": "~1.3",
     "drupal/strongarm": "~2.0",
     "drupal/switch": "~1.0",
     "drupal/taxonomy_manager": "~1.0",
@@ -432,7 +429,6 @@
     "su-sws/stanford_conference": "dev-7.x-1.x",
     "su-sws/stanford_courses": "dev-7.x-4.x",
     "su-sws/stanford_date_formats": "dev-7.x-1.x-dev",
-    "su-sws/stanford_date_timepicker": "dev-7.x-1.x",
     "su-sws/stanford_events_importer": "dev-7.x-3.x",
     "su-sws/stanford_helper": "dev-7.x-1.x",
     "su-sws/stanford_field_formatters": "dev-7.x-1.x",
