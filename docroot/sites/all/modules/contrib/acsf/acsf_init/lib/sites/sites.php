@@ -66,6 +66,12 @@ if (!function_exists('gardens_site_data_load_file')) {
   require_once dirname(__FILE__) . '/g/sites.inc';
 }
 
+// Prevents to run further if the sites.json file doesn't exists.
+// This step also tries to prevent errors on a none acsf environment.
+if (empty($_ENV['AH_SITE_GROUP']) || empty($_ENV['AH_SITE_ENVIRONMENT']) || !function_exists('gardens_site_data_get_filepath') || !file_exists(gardens_site_data_get_filepath())) {
+  return;
+}
+
 // Drush site-install gets confused about the uri when we specify the
 // --sites-subdir option. The HTTP_HOST is set incorrectly and we can't
 // find it in the sites.json. By specifying the --acsf-install-uri option
@@ -85,10 +91,15 @@ else {
 }
 
 $acsf_host = implode('.', array_reverse(explode(':', $host)));
+// Build an array with maximum one path fragment. Since the paths always start
+// with a '/' and we are splitting them by the '/', the array will always start
+// with an empty string.
 $acsf_uri_path_fragments = explode('/', $acsf_uri_path);
 $acsf_uri_path_fragments = array_diff($acsf_uri_path_fragments, array('index.php'));
 // Only check the first path fragment, then the base domain.
 $acsf_uri_path_fragments = array_slice($acsf_uri_path_fragments, 0, 2);
+// Check whether we can find site data for the hostname suffixed by one
+// fragment, or for only the hostname.
 $data = NULL;
 for ($i = count($acsf_uri_path_fragments); $i > 0; $i--) {
   $dir = $acsf_host . implode('.', array_slice($acsf_uri_path_fragments, 0, $i));
@@ -98,29 +109,38 @@ for ($i = count($acsf_uri_path_fragments); $i > 0; $i--) {
     // the file at all and a single line parse fails.
     $data = gardens_site_data_refresh_one($acsf_uri);
   }
-  elseif (($data = gardens_site_data_cache_get($acsf_uri)) !== 0) {
-    if (empty($data)) {
-      // Note - when set to use APC, we never parse the whole file on a web
-      // request, but we do attempt to parse out the one requested.
+  else {
+    // Check for data in APC: FALSE means no; 0 means "not found" cached in APC;
+    // NULL means "sites.json read failure" cached in APC.
+    $data = gardens_site_data_cache_get($acsf_uri);
+    if ($data === FALSE) {
       $data = gardens_site_data_refresh_one($acsf_uri);
     }
   }
-  if ($data) {
+  // Check again for a hostname with less fragments if we got a "not found";
+  // stop if we got a read failure or found data.
+  if ($data || $data === NULL) {
     break;
   }
 }
 
-// A value of zero either from the cache or when attempting to refresh indicates
-// that the host is known to not exist and was cached as such - we don't need to
-// refresh, just fail.
-if ($data === 0) {
+// If either "not found" or "read failure" (from either the cache or the
+// sites.json file): don't set $sites and fall through (to, probably, reading
+// sites/default/settings.php for settings).
+if (empty($data)) {
+  if ($data === NULL) {
+    // If we encountered a read error, indicate that we want the same (short)
+    // cache time for the page, as we have for the data in APC.
+    $GLOBALS['gardens_site_settings']['page_ttl'] = GARDENS_SITE_DATA_READ_FAILURE_TTL;
+  }
   return;
 }
 
 $GLOBALS['gardens_site_settings'] = $data['gardens_site_settings'];
 $sites[$dir] = $data['dir'];
 
-// Include custom sites.php code from factory-hooks/pre-sites-php.
+// Include custom sites.php code from factory-hooks/post-sites-php, only when
+// a domain was found.
 foreach (acsf_hooks_includes('post-sites-php') as $post_hook) {
   include_once $post_hook;
 }

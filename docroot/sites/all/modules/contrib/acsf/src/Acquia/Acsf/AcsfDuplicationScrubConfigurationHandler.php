@@ -23,6 +23,17 @@ class AcsfDuplicationScrubConfigurationHandler extends AcsfEventHandler {
 
     $options = $this->event->context['scrub_options'];
 
+    // The Acquia Connector module puts the below values in the state system
+    // (because it's a general module, not only running on Acquia Hosting
+    // infrastructure) but our actual authoritative values are in an include
+    // file from Hosting, e.g. D7-<hosting_site>-common-settings.inc:
+    // $config['ah_network_key'] and $config['ah_network_identifier']. So we
+    // need to clear them here because they are stale after we do a cross-
+    // sitegroup duplication. (Hosting/ACE has no method for this because only
+    // ACSF ever does cross-sitegroup site copies.)
+    variable_del('acquia_identifier');
+    variable_del('acquia_key');
+
     variable_del('cron_last');
     variable_del('cron_semaphore');
     variable_del('node_cron_last');

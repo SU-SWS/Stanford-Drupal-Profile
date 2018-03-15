@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * Code for the stanford help feature.
@@ -6,11 +7,10 @@
 
 include_once 'stanford_help.features.inc';
 
-
 /**
  * Implements hook_help().
  */
-function stanford_help_help($path, $arg) {
+function stanford_help_help($path) {
 
   if ($path == 'admin/help#stanford_help') {
     $output = '<h3>' . t('About the Stanford Help module') . '</h3>';
@@ -21,7 +21,8 @@ function stanford_help_help($path, $arg) {
 }
 
 /**
- * Default settings wrapper for variable_get
+ * Default settings wrapper for variable_get.
+ *
  * @return array
  *   Persistent settings for this module.
  */
@@ -30,7 +31,7 @@ function stanford_help_get_settings() {
     'site_specific_help_title' => t('See site specific help'),
     'site_specific_help_url' => 'site-help',
   );
-  $settings = variable_get('stanford_help_settings', $default_settings );
+  $settings = variable_get('stanford_help_settings', $default_settings);
 
   return $settings;
 }
@@ -53,11 +54,11 @@ function stanford_help_block_info() {
 function stanford_help_block_configure($delta = '') {
   $form = array();
 
-  switch($delta) {
-    case 'stanford_site_specific_help' :
+  switch ($delta) {
+    case 'stanford_site_specific_help':
       $settings = stanford_help_get_settings();
 
-      // Title
+      // Configure the Title.
       $form['site_specific_help_title'] = array(
         '#type' => 'textfield',
         '#title' => t('Site Specific Help Button Title'),
@@ -65,7 +66,7 @@ function stanford_help_block_configure($delta = '') {
         '#required' => TRUE,
       );
 
-      // URL
+      // Configure the URL.
       $form['site_specific_help_url'] = array(
         '#type' => 'textfield',
         '#title' => t('Site Specific Help Button URL'),
@@ -82,8 +83,8 @@ function stanford_help_block_configure($delta = '') {
  * Implements hook_block_save().
  */
 function stanford_help_block_save($delta = '', $edit = array()) {
-  switch($delta) {
-    case 'stanford_site_specific_help' :
+  switch ($delta) {
+    case 'stanford_site_specific_help':
 
       $settings = stanford_help_get_settings();
       $new_settings = array_merge($settings, $edit);
@@ -102,8 +103,8 @@ function stanford_help_block_save($delta = '', $edit = array()) {
 function stanford_help_block_view($delta = '') {
   $block = array();
 
-  switch($delta) {
-    case 'stanford_site_specific_help' :
+  switch ($delta) {
+    case 'stanford_site_specific_help':
       $block['content'] = stanford_site_specific_help_block_view();
       break;
   }
@@ -112,9 +113,10 @@ function stanford_help_block_view($delta = '') {
 }
 
 /**
- * Defines fields for the Site Specific Help block
- * 
+ * Defines fields for the Site Specific Help block.
+ *
  * @return array
+ *   Configured site specific help block.
  */
 function stanford_site_specific_help_block_view() {
   $block = array();
@@ -129,4 +131,3 @@ function stanford_site_specific_help_block_view() {
   );
   return $block;
 }
-

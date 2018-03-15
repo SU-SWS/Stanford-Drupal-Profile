@@ -35,7 +35,7 @@ function stanford_help_field_default_field_bases() {
     'settings' => array(
       'display_default' => 0,
       'display_field' => 1,
-      'uri_scheme' => 'public',
+      'uri_scheme' => 'private',
     ),
     'translatable' => 0,
     'type' => 'file',
@@ -65,7 +65,7 @@ function stanford_help_field_default_field_bases() {
     'module' => 'image',
     'settings' => array(
       'default_image' => 0,
-      'uri_scheme' => 'public',
+      'uri_scheme' => 'private',
     ),
     'translatable' => 0,
     'type' => 'image',

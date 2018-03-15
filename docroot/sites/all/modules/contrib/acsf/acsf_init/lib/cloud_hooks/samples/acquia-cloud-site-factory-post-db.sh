@@ -3,8 +3,9 @@
 # Cloud Hook: post-db-copy
 #
 # The post-db-copy hook is run whenever you use the Workflow page to copy a
-# database from one environment to another. See ../README.md for
-# details.
+# database from one environment to another. (Note this means it is run when
+# staging a site but not when duplicating a site, because the latter happens on
+# the same environment.) See ../README.md for details.
 #
 # Usage: post-db-copy site target-env db-role source-env
 
@@ -19,7 +20,7 @@ source_env="$4"
 uri=`/usr/bin/env php /mnt/www/html/$site.$target_env/hooks/acquia/uri.php $site $target_env $db_role`
 
 # Print a statement to the cloud log.
-echo "$site.$target_env: Received copy of database $db_name from $source_env."
+echo "$site.$target_env: Received copy of database from $uri ($source_env environment)."
 
 # Retrieve a variable called "site_name" - remember to use the --uri argument!
 drush6 @$site.$target_env --uri=$uri vget site_name

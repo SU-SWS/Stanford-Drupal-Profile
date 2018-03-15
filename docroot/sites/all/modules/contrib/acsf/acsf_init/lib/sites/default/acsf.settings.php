@@ -26,6 +26,14 @@ if (!empty($_ENV['AH_SITE_GROUP']) && !empty($_ENV['AH_SITE_ENVIRONMENT']) && fu
   // Print a 404 response and a small HTML page.
   header("HTTP/1.0 404 Not Found");
   header('Content-type: text/html; charset=utf-8');
+  if (!empty($GLOBALS['gardens_site_settings']['page_ttl'])
+    && is_numeric($GLOBALS['gardens_site_settings']['page_ttl'])
+    && $GLOBALS['gardens_site_settings']['page_ttl'] > 0) {
+    // Set alternative Cache-Control header. The other header is required
+    // because Acquia's Varnish will not allow max-age < 900 without it.
+    header("Cache-Control: max-age={$GLOBALS['gardens_site_settings']['page_ttl']}, public");
+    header('X-Acquia-No-301-404-Caching-Enforcement: 1');
+  }
 
   print <<<HTML
 <!DOCTYPE html>
@@ -36,11 +44,7 @@ if (!empty($_ENV['AH_SITE_GROUP']) && !empty($_ENV['AH_SITE_ENVIRONMENT']) && fu
   <meta name="robots" content="noindex, nofollow, noarchive" />
  </head>
  <body>
-HTML;
-
-  print('<p>' . t('The site you are looking for could not be found.') . '</p>');
-
-  print <<<HTML
+  <p>The site you are looking for could not be found.</p>
  </body>
 </html>
 HTML;

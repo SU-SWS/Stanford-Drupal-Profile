@@ -1,6 +1,7 @@
 <?php
 
 /**
+ * @file
  * Install tasks.
  */
 
@@ -8,15 +9,15 @@
  * Implements hook_enable().
  *
  * This initializes two database variables:
- *  - settings for this module: stanford_help_settings
- *  - configuration for content access: content_access_stanford_help
+ *  - settings for this module: stanford_help_settings.
+ *  - configuration for content access: content_access_stanford_help.
  *
  * For content access configuration, this gives access to view help pages for
- * 'administrator', 'site owner', and 'editor' roles
+ * 'administrator', 'site owner', and 'editor' roles.
  */
 function stanford_help_enable() {
 
-  // Initialize settings
+  // Initialize settings.
   $settings = stanford_help_get_settings();
   variable_set('stanford_help_settings', $settings);
 
@@ -44,16 +45,15 @@ function stanford_help_enable() {
 }
 
 /**
- * Merges array2 into array1
+ * Merges array2 into array1.
  *
  * @param array $array1
- *   The array to be merged into
+ *   The array to be merged into.
  * @param array $array2
- *   The array to be merged into array1
+ *   The array to be merged into array1.
+ *
  * @return array
  *   The merged array
- *
- *
  */
 function _stanford_help_array_merge_recursive_ex(array & $array1, array & $array2) {
   $merged = $array1;
@@ -79,4 +79,116 @@ function _stanford_help_array_merge_recursive_ex(array & $array1, array & $array
 function stanford_help_uninstall() {
   variable_del('stanford_help_settings');
   variable_set('content_access_stanford_help_page', array());
+}
+
+/**
+ * Implements hook_update().
+ *
+ * This update moves files from the public to the private directory.
+ */
+function stanford_help_update_7001() {
+  // Make sure the private path is configured.
+  if (!variable_get('file_private_path', FALSE)) {
+    throw new DrupalUpdateException('Private directory is not configured.');
+  }
+  // Check if private directory is writable first.
+  $dir = 'private://';
+  file_prepare_directory($dir, FILE_CREATE_DIRECTORY | FILE_MODIFY_PERMISSIONS);
+  if (!is_writable($dir)) {
+    throw new DrupalUpdateException('Private directory is not writable.');
+  }
+  $fields = array(
+    'field_s_help_file_insert',
+    'field_s_help_image_insert',
+  );
+
+  $file_paths = array();
+  $moved_files = array();
+
+  foreach ($fields as $field_name) {
+    $field_info = field_info_field($field_name);
+    $field_info['settings']['uri_scheme'] = 'private';
+    field_update_field($field_info);
+
+    $query = db_select("field_revision_$field_name", 'f')
+      ->fields('f')
+      ->execute();
+
+    while ($row = $query->fetchAssoc()) {
+      // Get the fid and load the original file.
+      $column = $field_name . '_fid';
+      $fid = $row[$column];
+
+      // Since we are querying the revision table, we have to track files that
+      // have already moved.
+      if (in_array($fid, $moved_files)) {
+        continue;
+      }
+      $moved_files[] = $fid;
+
+      if ($file = file_load($fid)) {
+        $new_dir = str_replace('public://', 'private://', $file->uri);
+
+        // Make sure the file actually exists.
+        if (!file_exists($file->uri)) {
+          continue;
+        }
+
+        // Move the file to the new private directory.
+        if ($new_file = file_move($file, $new_dir)) {
+          $file_paths += stanford_help_get_paths($file->uri, $new_file->uri, $file->type);
+        }
+      }
+    }
+  }
+  // Update any inline body urls.
+  foreach ($file_paths as $old_url => $new_url) {
+    db_query("UPDATE field_data_body SET body_value = REPLACE(body_value, '$old_url', '$new_url') where body_value like '%$old_url%'")->execute();
+    db_query("UPDATE field_revision_body SET body_value = REPLACE(body_value, '$old_url', '$new_url') where body_value like '%$old_url%'")->execute();
+  }
+}
+
+/**
+ * Get all replacement urls from an old uri to the new uri.
+ *
+ * @param string $old_uri
+ *   Old File URI.
+ * @param string $new_uri
+ *   New file URI.
+ * @param string $file_type
+ *   The type of file: image, document, other.
+ *
+ * @return array
+ *   Keyed array of paths that need to be replaced with old_path => new_path
+ */
+function stanford_help_get_paths($old_uri, $new_uri, $file_type) {
+  global $base_url;
+  $paths = array();
+
+  $old_url = file_create_url($old_uri);
+  $old_url = str_replace($base_url, '', $old_url);
+
+  $new_url = file_create_url($new_uri);
+  $new_url = str_replace($base_url, '', $new_url);
+
+  $paths[$old_url] = $new_url;
+
+  if ($file_type != 'image') {
+    return $paths;
+  }
+
+  // Get all image style paths.
+  foreach (image_styles() as $style) {
+    $old_style_uri = image_style_path($style['name'], $old_uri);
+    $old_style = file_create_url($old_style_uri);
+    $old_style = str_replace($base_url, '', $old_style);
+
+    $new_style_uri = image_style_path($style['name'], $new_uri);
+    $new_style = file_create_url($new_style_uri);
+    $new_style = str_replace($base_url, '', $new_style);
+
+    $paths[$old_style] = $new_style;
+  }
+
+  return $paths;
 }

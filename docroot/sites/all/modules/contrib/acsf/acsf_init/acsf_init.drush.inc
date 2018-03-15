@@ -558,7 +558,7 @@ function drush_acsf_uninstall() {
     $dest = sprintf('%s/%s', $location['dest'], $file);
 
     // Some files only contain a destination as they are already in place.
-    if (isset($location['src']) && file_exists($dest)) {
+    if (isset($location['source']) && file_exists($dest)) {
       $confirm = drush_confirm(dt('Delete !file?', array('!file' => $dest)));
       if ($confirm === FALSE) {
         continue;
@@ -647,11 +647,6 @@ function acsf_init_get_required_files($repo_root) {
     ),
     array(
       'filename' => 'hello-world.sh',
-      'source' => 'cloud_hooks/samples',
-      'dest' => sprintf('%s/hooks/samples', $repo_root),
-    ),
-    array(
-      'filename' => 'post-code-deploy.tmpl',
       'source' => 'cloud_hooks/samples',
       'dest' => sprintf('%s/hooks/samples', $repo_root),
     ),

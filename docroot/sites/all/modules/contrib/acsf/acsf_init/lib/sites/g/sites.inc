@@ -18,6 +18,25 @@ if (function_exists('is_acquia_host') && !is_acquia_host()) {
 define('GARDENS_SITE_DATA_USE_APC', (get_cfg_var('gardens.disable_apc_for_sites_php') != 1));
 // TTL set to 30 minutes to allow a cron to run full refreshes.
 define('GARDENS_SITE_DATA_TTL', 1800);
+// 'Domain not found' is unlikely to be triggered for most customers (because it
+// requires a hostname on the balancer to be pointing to us), but can happen for
+// customers with path based domains (because those hostnames pointing to us +
+// whatever path is requested, is not necessarily a domain registered in
+// sites.json). We do want Varnish to keep its regular caching times for the
+// "Site not found" page served by our acsf.settings.php. An empty sites.json is
+// equivalent to "domain not found" in our code; in this case we would rather
+// not cache anything, but it's not hugely important. Based on this, we can
+// either set a high value like above, or a low value because Varnish will
+// shield us from repeated HTTP requests anyway. (CLI requests don't have APC.)
+define('GARDENS_SITE_DATA_NOT_FOUND_TTL', 60);
+// Read failure is likely gluster acting up. In this case we will want to
+// dramatically shorten the cache time for both APC and Varnish. (It's unclear
+// whether we even need APC at all.) This means that extended read failures will
+// increase hits on Drupal (at least on the path through sites.php ->
+// acsf.settings.php -> "Site not found" page), but that's better than having
+// sites be unreachable for too long.
+define('GARDENS_SITE_DATA_READ_FAILURE_TTL', 60);
+// Note: a nonexistent sites.json leads to no caching at all.
 
 // The path (template) to the lock file that should be checked when sites.json
 // is unreadable. Sitegroup + env need to be filled.
@@ -162,12 +181,13 @@ function gardens_site_data_get_site_from_file($domain) {
  * @param string $domain
  *   The domain name to look up in the JSON file.
  *
- * @return array|int
- *   An array of site data, or 0 if no site was found for the given domain.
+ * @return array|int|null
+ *   An array of site data, 0 if no site was found for the given domain, or NULL
+ *   if a sites.json read failure was encountered.
  */
 function gardens_site_data_refresh_one($domain) {
   $data = gardens_site_data_refresh_domains(array($domain));
-  return $data[$domain];
+  return isset($data[$domain]) ? $data[$domain] : NULL;
 }
 
 /**
@@ -180,39 +200,50 @@ function gardens_site_data_refresh_one($domain) {
  *
  * @return array
  *   An array keyed by the specified domains, whose values are site data arrays
- *   or 0 if no site was found for the given domain.
+ *   or 0 if no site was found for the given domain. If a domain is not present
+ *   in the array keys, this indicates a sites.json read failure.
  */
 function gardens_site_data_refresh_domains(array $domains) {
   $location = gardens_site_data_get_filepath();
   $data = array();
-  $json_read_failure = FALSE;
   foreach ($domains as $domain) {
     $domain = trim($domain);
-    // Shell out to grep to find the relevant line of the json file.
+    // Below code expects the JSON file to contain newlines such that
+    // - all data except the 'sites' data and the closing brace are on the first
+    //   line;
+    // - all data for a key/value pair representing one single site, on a single
+    //   line. (See below for example.)
+    // This way we can isolate data for one site by performing a grep command,
+    // which is much quicker than reading all data into one JSON object. The
+    // code is built to keep working if the formatting changes by accident; it
+    // will just be much slower. Also, our grep command does not assume that the
+    // key for a site is included in double quotes (apparently for fear of
+    // having a file in illegal JSON format, which does not double-quote its
+    // object keys...) so we may hit false positives.
     exec(sprintf("grep %s %s --no-filename --color=never --context=0", escapeshellarg($domain), escapeshellarg($location)), $output_array, $exit_code);
     $result = trim(implode("\n", $output_array));
 
     if (empty($result)) {
-      if ($exit_code !== 0) {
-        $json_read_failure = TRUE;
-      }
       // Log an explicit fail in APC if we cannot find the domain, so that we
-      // can take advantage of APC caching the "fail" also. To do this, cache an
-      // integer literal zero for any failed domain.
-      $data[$domain] = 0;
+      // can take advantage of APC caching the "fail" also. Differentiate
+      // between values for "site not found" and "read failure" so future
+      // requests can emit different responses for them. (From the docs about
+      // Gnu grep: exit status is 0 if a line is selected -which should never
+      // happen here-, 1 if no line is selected, 2 if error encountered.)
+      if ($exit_code === 1) {
+        $data[$domain] = 0;
+      }
     }
     else {
       // $result is in the form of
       // "example.com": {"name": "g123", "flags": {}},
-      // (with or without the trailing comma).  Due to the fact that the above
-      // grep command is quite greedy, we need to be prepared for the fact that
-      // we may get more than 1 line returned from the command.  The "m"
-      // (multiline) modifier is used in the following regular expression
-      // so that the begin and end anchors can match the beginning and end of
-      // any one of those lines, rather than having to match the entire string
-      // from beginning to end (which fails if there is more than 1 line of
-      // results).  More than one line can typically be returned if the
-      // searched-for site domain is a substring of another site domain.
+      // (with or without the trailing comma).  Since we didn't include quotes,
+      // we may have more than 1 line returned from the grep command, typically
+      // if the searched-for site domain is a substring of another site domain.
+      // The "m" (multiline) modifier is used in the regular expression so that
+      // the begin and end anchors can match the beginning and end of any one of
+      // those lines, rather than having to match the entire string from
+      // beginning to end (which fails if there is more than 1 line of results).
       $matches = array();
       $pattern = '@^\s*"' . preg_quote($domain, '@') . '": ({.+}),?$@m';
       if (preg_match($pattern, $result, $matches)) {
@@ -243,44 +274,60 @@ function gardens_site_data_refresh_domains(array $domains) {
             $data[$domain] = gardens_site_data_build_data($map['sites'][$domain], $map);
           }
           else {
+            // The domain isn't actually present; apparently $domain is a
+            // substring of the domain(s) matched by grep. (Or, who knows: the
+            // string might appear somewhere else on the line than the 'key'.)
             $data[$domain] = 0;
-            // 'Read failure' is a missing domain; the file as a whole is OK.
-            $json_read_failure = $domain;
           }
         }
-        else {
-          $json_read_failure = TRUE;
-        }
+        // If $data[$domain] was not set here, the file is readable (or there's
+        // a race condition and the error just appeared) because we did get a
+        // line of data returned earlier. So the JSON is invalid.
       }
       else {
         $data[$domain] = gardens_site_data_build_data($found_site, $global_map_data);
       }
     }
-    // Update the current record in place *if* we are using APC.
-    if (GARDENS_SITE_DATA_USE_APC) {
-      gardens_site_data_cache_set($domain, $data[$domain]);
-    }
 
-    if ($json_read_failure) {
-      // Report the read failure, only if Drupal is bootstrapped. We skip
-      // reporting for other requests because these have a relatively high
-      // probability of getting sites.json read failures (e.g. apc_rebuild.php
-      // run from FlushDomains WIPs when sites.json has just been changed).
+    if (isset($data[$domain])) {
+      // Update the current record in place *if* we are using APC.
+      if (GARDENS_SITE_DATA_USE_APC) {
+        gardens_site_data_cache_set($domain, $data[$domain]);
+      }
+    }
+    else {
+      // Report the read failure, only if Drupal is bootstrapped.
       if (function_exists('drupal_register_shutdown_function')) {
         // Since reporting involves contacting the Site Factory it should be
         // done in a way that does not affect pageload.
-        $reported_domain = $json_read_failure === TRUE ? '' : $json_read_failure;
-        drupal_register_shutdown_function('gardens_site_data_json_alert_flag_set', $reported_domain);
+        drupal_register_shutdown_function('gardens_site_data_json_alert_flag_set');
       }
-      // Bail to prevent repeated failures.
+      // Stop processing further domains.
       break;
     }
   }
 
-  if (!$json_read_failure && gardens_site_data_json_alert_flag_check() && function_exists('drupal_register_shutdown_function')) {
-    // Clear the flag. Since it involves contacting the Site Factory it should
-    // be done in a way that does not affect pageload.
-    drupal_register_shutdown_function('gardens_site_data_json_alert_flag_clear');
+  if (count($data) == count($domains)) {
+    // No read failure encountered; all domains were accounted for / cached.
+    if (gardens_site_data_json_alert_flag_check() && function_exists('drupal_register_shutdown_function')) {
+      // Clear the flag. Since it involves contacting the Site Factory it should
+      // be done in a way that does not affect pageload.
+      drupal_register_shutdown_function('gardens_site_data_json_alert_flag_clear');
+    }
+  }
+  else {
+    // If we were checking several domains and any check reported a read failure
+    // then don't try reading the file again for other domains; cache the failed
+    // domain plus any that were not processed yet, as "read failure". (It's
+    // unlikely that we gathered data for some domains before encountering a
+    // read failure for another one, but account for it.)
+    if (GARDENS_SITE_DATA_USE_APC) {
+      foreach ($domains as $domain) {
+        if (!isset($data[$domain])) {
+          gardens_site_data_cache_set($domain, NULL);
+        }
+      }
+    }
   }
 
   return $data;
@@ -294,12 +341,23 @@ function gardens_site_data_refresh_domains(array $domains) {
  * @param mixed $data
  *   An array of data about the site/domain containing keys 'dir' and
  *   'gardens_site_settings'. If the domain was not found in the sites.json then
- *   a scalar 0.
+ *   a scalar 0; if sites.json could not be read, then NULL.
  */
 function gardens_site_data_cache_set($domain, $data) {
   if (function_exists('apc_store')) {
-    $domain_key = "gardens_domain:$domain";
-    apc_store($domain_key, $data, GARDENS_SITE_DATA_TTL);
+    if ($data === NULL) {
+      $ttl = GARDENS_SITE_DATA_READ_FAILURE_TTL;
+    }
+    elseif ($data === 0) {
+      $ttl = GARDENS_SITE_DATA_NOT_FOUND_TTL;
+    }
+    else {
+      $ttl = GARDENS_SITE_DATA_TTL;
+    }
+    if ($ttl) {
+      $domain_key = "gardens_domain:$domain";
+      apc_store($domain_key, $data, $ttl);
+    }
   }
 }
 
@@ -329,15 +387,11 @@ function gardens_site_data_cache_get($domain) {
  * to doublecheck the exact type of issue / doublecheck for a race condition,
  * after an issue was initially detected outside this function.
  *
- * @param string $domain
- *   Domain name, if the issue was found for one specific domain only. This
- *   implies that the file as a whole could be read/decoded.
- *
  * @return string
  *   Type of issue encountered. Empty string means the sites.json file is OK
  *   (or is missing, which is also OK).
  */
-function gardens_site_data_sites_json_issue_type_get($domain = '') {
+function gardens_site_data_sites_json_issue_type_get() {
   $issue_type = '';
   $sites_json_path = gardens_site_data_get_filepath();
   // If sites.json is missing completely then this script is being executed
@@ -364,12 +418,13 @@ function gardens_site_data_sites_json_issue_type_get($domain = '') {
         $issue_type = 'gluster_split_brain';
       }
     }
-    // Check if the file's contents are invalid JSON. Both 'missing site data'
-    // and 'invalid JSON string' get the same issue type.
+    // Check for invalid JSON data. We treat empty file as invalid too here,
+    // because it doesn't matter much. It's not consistent with the initial
+    // check, though. (An empty file does not cause
+    // gardens_site_data_json_alert_flag_set() to be called.)
     if (!$issue_type) {
       $map = gardens_site_data_load_file();
-      $issue = $domain ? empty($map['sites'][$domain]) : !$map;
-      if ($issue) {
+      if (!$map) {
         $issue_type = 'invalid_json_data';
       }
     }
@@ -390,12 +445,8 @@ function gardens_site_data_sites_json_issue_type_get($domain = '') {
  * written to), the function will always return empty string, and no logging/
  * alerting is done at all. We basically have a choice between this and flooding
  * watchdog/syslog/the factory with alerts.
- *
- * @param string $domain
- *   Domain name, if the issue was found for one specific domain only. This
- *   implies that the file as a whole could be read/decoded.
  */
-function gardens_site_data_json_alert_flag_set($domain = '') {
+function gardens_site_data_json_alert_flag_set() {
   $lock_file = sprintf(GARDENS_SITE_JSON_ALERT_LOCK_TEMPLATE, $_ENV['AH_SITE_GROUP'], $_ENV['AH_SITE_ENVIRONMENT']);
 
   if (!file_exists($lock_file)) {
@@ -413,7 +464,7 @@ function gardens_site_data_json_alert_flag_set($domain = '') {
         // would result in a superfluous alert being sent out at that time. To
         // prevent this, we repeat the check. (We often would need to do this
         // check anyway, somewhere, if we did not know the issue type yet.)
-        $issue_type = gardens_site_data_sites_json_issue_type_get($domain);
+        $issue_type = gardens_site_data_sites_json_issue_type_get();
 
         // Send the alert to the Site Factory.
         $alert_sent = FALSE;

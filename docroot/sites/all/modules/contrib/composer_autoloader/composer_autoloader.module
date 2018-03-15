@@ -1,36 +1,38 @@
 <?php
 
 /**
- * Implements hook_boot().
- *
- * Require the Composer Autoload File.
+ * @file
+ * Composer Autoloader.
  */
-function composer_autoloader_boot() {
 
-  // Define the default path to the  composer autoloader.
-  $default = DRUPAL_ROOT . '/../vendor/autoload.php';
+/**
+ * Returns Composer's class loader.
+ *
+ * @return \Composer\Autoload\ClassLoader|null
+ *   Composer's class loader.
+ */
+function composer_autoloader() {
+  static $autoloader;
 
-  // Allow the path to be modified by $conf.
-  $autoloader = variable_get('composer_autoloader', $default);
+  if ($autoloader === NULL) {
+    $composer_autoloader = variable_get('composer_autoloader', DRUPAL_ROOT . '/../vendor/autoload.php');
 
-  // Determine if the file exists.
-  if (!file_exists($autoloader)) {
-
-    // The error message text.
-    $text = 'Autoloader not found: @file';
-
-    // Variables for the text.
-    $variables = array('@file' => $autoloader);
-
-    // Trigger an error.
-    trigger_error(t($text, $variables), E_USER_ERROR);
-
-    // End the function.
-    return;
-
+    if (file_exists($composer_autoloader)) {
+      $autoloader = require $composer_autoloader;
+    }
+    else {
+      trigger_error(sprintf('Composer autoloader was not found at "%s".', $composer_autoloader), E_USER_ERROR);
+    }
   }
 
-  // Require the Autoloader.
-  require_once $autoloader;
+  return $autoloader;
+}
 
+/**
+ * Implements hook_boot().
+ *
+ * @internal
+ */
+function composer_autoloader_boot() {
+  composer_autoloader();
 }
