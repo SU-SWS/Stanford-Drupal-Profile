@@ -1,0 +1,10 @@
+{
+  "name": "su-sws/stanford_sites_jumpstart_plus",
+  "description": "A Drupal Install Profile.",
+  "type": "drupal-custom-profile",
+  "license": "GPL-2.0+",
+  "minimum-stability": "dev",
+  "require": {
+      "composer/installers": "^1.2"
+  }
+}
