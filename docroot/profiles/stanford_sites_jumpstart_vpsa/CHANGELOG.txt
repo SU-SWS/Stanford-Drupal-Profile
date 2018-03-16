@@ -1,0 +1,58 @@
+Stanford Sites Jumpstart VPSA
+-------------------------------------------------------------------
+
+7.x-5.0-alpha1   2016-11-28
+---------------------------
+- Initial 5.x alpha release
+
+7.x-4.6+14-dev                                          2016-01-14
+-------------------------------------------------------------------
+- Finalized upgrade path.
+
+7.x-4.6       2015-10-30
+-------------------------------------------------------------------
+- Skipped versions 4.4 and 4.5 to go right to 4.6 because it felt good inside.
+- VPSADEV-136: Removed VPSA landing page in favor for stanford_landing_page
+- VPSADEV-136: Added stanford_jumpstart_easy_wysiwyg_css
+- VPSA-136: Added landing page to the menu system.
+- Removed research from menu
+- VPSADEV-147: Remove news category fields
+- VPSADEV-136: Fixed content importer to use new filter option
+- VPSADEV-159: Set default theme setting to stanford_framework
+- VPSADEV-159: Use theme settings from JSV
+- Added stanford_person to install
+- VPSADEV-171: Update the main menu link titles to be title case instead of all uppercase
+- VPSADEV-209 VPSADEV-210 VPSADEV-211 VPSADEV-212 VPSADEV-213: Created and imported blocks from JSA-Content
+- VPSADEV-214: Added full width banner short block to bean import
+- VPSADEV-205: Added people menu position rule.
+- VPSADEV-82: Menu change updates to support news changes
+- VPSADEV-82: Added menu item for In the news view
+- VPSADEV-82: Fix for menu path rules
+- Added stanford_gallery to installation
+- VPSADEV-92: Changed past events menu item into related events
+- VPSADEV-92: Restored past events menu link
+- VSPADEV-255: Added chosen as a dependency
+- Changed the people menu link to use the view instead of the node from jsa-content
+- Added stanford_person to the types of content that the content importer pulls from JSA-Content
+- VPSADEV-261: changed "in the news" to capitals
+- VPSADEV-221: Cleanup code
+- VPSADEV-221: Added clear-row to storytelling CBCs
+- VPSADEV-221: Updated cbc classes for custom block 2
+- VPSADEV-63: Tag and replace the events that get imported with the special ones for VPSA
+- VPSADEV-63: Added private page menu to install items
+- VPSADEV-63: Added stanford_private_page_section to dependencies
+- VPSADEV-63: Flattened the private page menu structure
+
+7.x-4.3       2014-11-05
+-------------------------------------------------------------------
+- Updated installation to set wilbur as default theme
+- Added disable blocks install task to disable the extra blocks that get set because this profile uses stanford_wilbur as the theme
+
+
+7.x-4.2-dev+1       2014-09-26
+-------------------------------------------------------------------
+- Updated for new features and permissions
+- Adding custom processors for new content
+- Fixed bug where manage content site actions link was not available to non admin roles. It had to do with the menu path not being set correctly.
+- Workflow related updates
+- Cleaned up install
