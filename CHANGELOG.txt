@@ -1,5 +1,12 @@
 ACSF CardinalD7
 
+Version 0.0.10                                                       2018-03-16
+-------------------------------------------------------------------------------
+- Adds node_revision_delete module to help cut down on site size.
+- Automatically backup sites every day, week, and month.
+- Paranoia patch to hide the Backup and Migrate form 'restore from backup'.
+- Bug fix: Remove local database credentials from docroot/sites/default/settings.php
+
 Version 0.0.9                                                        2018-01-17
 -------------------------------------------------------------------------------
 - Adds paranoia module with John's patches, see: paranoia issue 2313945.
