@@ -1,0 +1,14 @@
+<?php
+/**
+ * @file
+ * Default install file.
+ * @author Shea McKinney <sheamck@stanford.edu>
+ */
+
+/**
+ * Implements hook_install_finished().
+ */
+function stanford_sites_jumpstart_vpsa_install_finished() {
+  itasks_install_finished();
+}
+
