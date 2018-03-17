@@ -1,0 +1,42 @@
+<?php
+/**
+ * @file
+ * Code for the Stanford News Item feature.
+ */
+
+include_once 'stanford_news.features.inc';
+
+/**
+ * Alter the search results for news items to link externally or not.
+ *
+ * @param array &$vars
+ *   Description.
+ *
+ * @return mixed
+ *   [description]
+ */
+function stanford_news_preprocess_search_result(&$vars) {
+
+  // If not a node then die.
+  if (!isset($vars['result']["node"])) {
+    return;
+  }
+
+  $node = $vars['result']["node"];
+  $wrapper = entity_metadata_wrapper('node', $node);
+  $bundle = $wrapper->getBundle();
+
+  // Only act upon stanford_news types.
+  if ($bundle !== "stanford_news_item") {
+    return;
+  }
+
+  // If not set or not enabled then return.
+  if (!isset($wrapper->field_s_news_external) || !$wrapper->field_s_news_external->value()) {
+    return;
+  }
+
+  // We are on a news type with an external link now we need to change the title
+  // to do just that, link to the external article.
+  $vars['url'] = url($wrapper->field_s_news_source->url->value(), array("absolute" => TRUE));
+}

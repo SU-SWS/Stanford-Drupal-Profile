@@ -1,0 +1,16 @@
+name = Stanford Events Export
+description = View that exposes Stanford Event content as JSON and XML data
+core = 7.x
+package = Stanford
+version = 7.x-3.3-jsvpsa
+project = stanford_events_export
+dependencies[] = strongarm
+dependencies[] = views
+dependencies[] = views_json
+dependencies[] = views_xhtml
+dependencies[] = views_xml
+features[ctools][] = strongarm:strongarm:1
+features[ctools][] = views:views_default:3.0
+features[features_api][] = api:1
+features[variable][] = date_format_iso_8601
+features[views_view][] = stanford_events_export

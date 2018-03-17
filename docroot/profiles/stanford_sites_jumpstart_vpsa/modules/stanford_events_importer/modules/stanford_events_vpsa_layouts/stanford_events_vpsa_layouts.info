@@ -1,0 +1,17 @@
+name = Stanford Events VPSA Layouts
+description = Event Page Layouts For Jumpstart VPSA
+core = 7.x
+package = Stanford Jumpstart VPSA
+version = 7.x-3.3-jsvpsa
+project = stanford_events_vpsa_layouts
+dependencies[] = context
+dependencies[] = ctools
+dependencies[] = features
+dependencies[] = stanford_events_importer
+dependencies[] = strongarm
+dependencies[] = views
+features[context][] = vpsa_events_past
+features[context][] = vpsa_events_upcoming
+features[ctools][] = context:context:3
+features[ctools][] = strongarm:strongarm:1
+features[features_api][] = api:2

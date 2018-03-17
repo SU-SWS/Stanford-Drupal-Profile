@@ -1,0 +1,745 @@
+<?php
+/**
+ * @file
+ * Schema definitions. Install/update/uninstall hooks.
+ */
+
+define("SU_EVENTS_FEEDS_PROCESS_LIMIT", 200);
+
+/**
+ * Implements hook_requirements().
+ */
+function stanford_events_importer_requirements($phase) {
+  $requirements = array();
+
+  switch ($phase) {
+    case 'update':
+
+      // Ensure that strongarm module is enabled before updating.
+      if (!module_exists('strongarm')) {
+        // Be nice and try to enable it for the user.
+        if (!module_enable(array('strongarm'))) {
+          // Still no dice. Throw out requirement.
+          $requirements['strongarm_enabled'] = array(
+            'title' => 'Strongarm Module Required',
+            'value' => 'Not installed',
+            'description' => 'The Strongarm module is required for version 2.x of the Stanford Events Importer module. Please download and enable the Strongarm module before proceeding. http://drupal.org/project/strongarm',
+            'severity' => REQUIREMENT_ERROR,
+          );
+        }
+      }
+
+      // Ensure that field_group module is enabled before updating.
+      if (!module_exists('field_group')) {
+        // Be nice and try to enable it for the user.
+        if (!module_enable(array('field_group'))) {
+          // Still no dice. Throw out requirement.
+          $requirements['field_group_enabled'] = array(
+            'title' => 'Field Group Module Required',
+            'value' => 'Not installed',
+            'description' => 'The Field Group module is required for version 2.x of the Stanford Events Importer module. Please download and enable the Field Group module before proceeding. http://drupal.org/project/field_group',
+            'severity' => REQUIREMENT_ERROR,
+          );
+        }
+      }
+
+      // Ensure that stanford_date_formats module is enabled before updating.
+      if (!module_exists('stanford_date_formats')) {
+        // Be nice and try to enable it for the user.
+        if (!module_enable(array('stanford_date_formats'))) {
+          // Still no dice. Throw out requirement.
+          $requirements['stanford_date_formats_enabled'] = array(
+            'title' => 'Stanford Date Formats Module Required',
+            'value' => 'Not installed',
+            'description' => 'The Stanford Date Formats module is required for version 3.x of the Stanford Events Importer module.',
+            'severity' => REQUIREMENT_ERROR,
+          );
+        }
+      }
+
+      // This should be a duh moment but sometimes this may not be. If the
+      // module has been installed and then disabled along with features the
+      // update hooks will still run.
+
+      if (!module_exists('features')) {
+        // Still no dice. Throw out requirement.
+        $requirements['features_enabled'] = array(
+          'title' => 'Features Module Required',
+          'value' => 'Not installed',
+          'description' => 'The Features module is required for version 3.x of the Stanford Events Importer module.',
+          'severity' => REQUIREMENT_ERROR,
+        );
+      }
+
+    break;
+    default:
+  }
+
+  return $requirements;
+}
+
+
+/**
+ * Implements hook_install().
+ */
+function stanford_events_importer_install() {
+  variable_set('stanford_events_category_source', 'http://events.stanford.edu/xml/drupal/v2.php?category-list');
+  variable_set('stanford_events_organization_source', 'http://events.stanford.edu/xml/drupal/v2.php?organization-list');
+  module_enable(array('stanford_events_importer'));
+  // Get the list of categories and orgs, and put them into the DB.
+  stanford_events_importer_update_cat_org();
+  // Clear the cache, because we're adding a new menu item.
+  menu_cache_clear_all();
+  $feeds_process_limit = variable_get('feeds_process_limit');
+  // Don't set this if the user already has set it.
+  if (!is_numeric($feeds_process_limit) || $feeds_process_limit < SU_EVENTS_FEEDS_PROCESS_LIMIT) {
+    variable_set("feeds_process_limit", SU_EVENTS_FEEDS_PROCESS_LIMIT);
+    watchdog('stanford_events_importer', 'feeds_process_limit set to %limit during install', array("%limit" => SU_EVENTS_FEEDS_PROCESS_LIMIT));
+  }
+  else {
+    watchdog('stanford_events_importer', 'feeds_process_limit left as %limit during install', array('%limit' => $feeds_process_limit));
+  }
+}
+
+/**
+ * Implements hook_uninstall().
+ */
+function stanford_events_importer_uninstall() {
+  // db_drop_table('stanford_events_category_list');
+  // db_drop_table('stanford_events_organization_list');
+  variable_del('stanford_events_category_source');
+  variable_del('stanford_events_organization_source');
+}
+
+/**
+ * Implements hook_enable().
+ */
+function stanford_events_importer_enable() {
+  // Enable module functions
+}
+
+/**
+ * Implements hook_disable().
+ */
+function stanford_events_importer_disable() {
+  // Disable module functions
+}
+
+/**
+ * Implements hook_schema().
+ */
+function stanford_events_importer_schema() {
+  $schema = array();
+  $schema['stanford_events_category_list'] = array(
+    'description' => 'List of categories from events.stanford.edu',
+    'fields' => array(
+      'guid' => array(
+        'type' => 'int',
+        'size' => 'tiny',
+        'not null' => TRUE,
+        'default' => 0,
+        'description' => '',
+        'unsigned' => 1,
+      ),
+      'category_id' => array(
+        'type' => 'int',
+        'size' => 'tiny',
+        'not null' => FALSE,
+        'description' => '',
+        'unsigned' => 1,
+      ),
+      'name' => array(
+        'type' => 'varchar',
+        'size' => 'normal',
+        'length' => '255',
+        'not null' => FALSE,
+        'description' => '',
+      ),
+      'type' => array(
+        'type' => 'int',
+        'size' => 'tiny',
+        'not null' => FALSE,
+        'description' => '',
+        'unsigned' => 1,
+      ),
+      'description' => array(
+        'type' => 'varchar',
+        'size' => 'normal',
+        'length' => '255',
+        'not null' => FALSE,
+        'description' => '',
+      ),
+      'tag' => array(
+        'type' => 'varchar',
+        'size' => 'normal',
+        'length' => '255',
+        'not null' => FALSE,
+        'description' => '',
+      ),
+    ),
+    'name' => 'stanford_events_category_list',
+    'indexes' => array(
+      'category_id' => array(
+        0 => 'category_id',
+      ),
+      'guid' => array(
+        0 => 'guid',
+      ),
+      'type' => array(
+        0 => 'type',
+      ),
+    ),
+    'primary key' => array(
+      0 => 'guid',
+    ),
+  );
+  $schema['stanford_events_organization_list'] = array(
+    'description' => '',
+    'fields' => array(
+      'guid' => array(
+        'type' => 'int',
+        'size' => 'small',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+        'description' => 'GUID',
+      ),
+      'organization_id' => array(
+        'type' => 'int',
+        'size' => 'small',
+        'unsigned' => TRUE,
+        'not null' => FALSE,
+        'description' => 'Organization ID',
+      ),
+      'name' => array(
+        'type' => 'varchar',
+        'size' => 'normal',
+        'length' => '255',
+        'not null' => FALSE,
+        'description' => 'Name',
+      ),
+      'type' => array(
+        'type' => 'int',
+        'size' => 'tiny',
+        'unsigned' => TRUE,
+        'not null' => FALSE,
+        'description' => 'Type',
+      ),
+      'email' => array(
+        'type' => 'varchar',
+        'size' => 'normal',
+        'length' => '255',
+        'not null' => FALSE,
+        'description' => 'Email',
+      ),
+      'phone' => array(
+        'type' => 'varchar',
+        'size' => 'normal',
+        'length' => '255',
+        'not null' => FALSE,
+        'description' => 'Phone',
+      ),
+      'url' => array(
+        'type' => 'varchar',
+        'size' => 'normal',
+        'length' => '255',
+        'not null' => FALSE,
+        'description' => 'URL',
+      ),
+      'rss_url' => array(
+        'type' => 'varchar',
+        'size' => 'normal',
+        'length' => '255',
+        'not null' => FALSE,
+        'description' => 'RSS URL',
+      ),
+    ),
+    'name' => 'stanford_events_organization_list',
+    'indexes' => array(
+      'guid' => array(
+        0 => 'guid',
+      ),
+      'organization_id' => array(
+        0 => 'organization_id',
+      ),
+      'type' => array(
+        0 => 'type',
+      ),
+    ),
+    'primary key' => array(
+      0 => 'guid',
+    ),
+  );
+  return $schema;
+}
+
+
+/**
+ * 7.x-1.x Update #1. Placeholder Legacy update
+ */
+function stanford_events_importer_update_7100(&$sandbox) {
+  // Legacy Placeholder
+  if (!module_exists('stanford_date_formats')) {
+    module_enable(array('stanford_date_formats'));
+  }
+  return;
+}
+
+
+/**
+ * Install two new database tables for holding category and organization information.
+ */
+function stanford_events_importer_update_7200(&$sandbox) {
+
+  // Get helper functions and utilities.
+  module_load_include('php', 'stanford_events_importer', 'inc/stanford_events_importer.util.inc');
+
+  // check for new dependencies.
+  $path = drupal_get_path('module', 'stanford_events_importer') . '/stanford_events_importer.info';
+  $info = drupal_parse_info_file($path);
+
+  foreach ($info['dependencies'] as $dependency) {
+    $parsed = drupal_parse_dependency($dependency);
+    // ensure that dependencies are installed before trying to update
+    if (!module_exists($parsed['name'])) {
+      // be nice and try to enable it for the user
+      if (!module_enable($parsed['name'])) {
+        throw new DrupalUpdateException('Missing dependency: ' . $parsed['name'] . ". Please install it to continue with upgrades.");
+        return;
+      }
+    }
+  }
+
+  // First batch of updates. Schema checks and such.
+  $success = stanford_events_importer_update_7200a();
+
+  // Update all existing feed items datetime stamp to match site!
+  $success = stanford_events_importer_update_7200b();
+
+  // Update all existing feed items guid to new values.
+  $success = stanford_events_importer_update_7200c();
+
+}
+
+/**
+ * The features schema changes and so will the db schmea. Because field api
+ * does not allow this we have to do some dirty work with changing the values.
+ * @return bool
+ *   success or not.
+ */
+function stanford_events_importer_update_7200a() {
+  // Check if latest schema is installed. If not, install it.
+  if (db_table_exists('stanford_events_organization_list') == FALSE) {
+    drupal_install_schema('stanford_events_importer');
+  }
+
+  // Set initial source URLs for category and organization lists.
+  variable_set('stanford_events_category_source', 'http://events.stanford.edu/xml/drupal/v2.php?category-list');
+  variable_set('stanford_events_organization_source', 'http://events.stanford.edu/xml/drupal/v2.php?organization-list');
+  // Make stanford_events_importer functions available to us.
+  drupal_load('module', 'stanford_events_importer');
+  // Get the list of categories and orgs, and put them into the DB.
+  stanford_events_importer_update_cat_org();
+  // Clear the cache and rebuild the menus, because we're adding a new menu item.
+  cache_clear_all(NULL, 'cache_menu');
+  menu_rebuild();
+
+  // There is a slight schema change on field_stanford_event_datetime where the
+  // timezone handling settings change.
+
+  $config = db_select('field_config', 'fc')
+            ->fields('fc')
+            ->condition('field_name', 'field_stanford_event_datetime')
+            ->execute()
+            ->fetchAssoc();
+
+  if (!is_array($config)) {
+    return;
+  }
+
+  $data = unserialize($config['data']);
+  $data['settings']['tz_handling'] = 'site';
+  $data['settings']['timezone_db'] = 'UTC';
+  $data['settings']['todate'] = 'optional';
+
+  $config['data'] = serialize($data);
+
+  db_update('field_config')
+  ->fields(
+    array(
+      'data' => $config['data'],
+    )
+  )
+  ->condition('field_name', 'field_stanford_event_datetime')
+  ->execute();
+
+  // The second date field did not exist in 7.x-1.x so we will have to add it
+  // manully here.
+  $val2d = db_field_exists('field_data_field_stanford_event_datetime', 'field_stanford_event_datetime_value2');
+  $val2r = db_field_exists('field_revision_field_stanford_event_datetime', 'field_stanford_event_datetime_value2');
+  $field_config = array(
+    'type' => 'datetime',
+    'mysql_type' => 'datetime',
+    'pgsql_type' => 'timestamp without time zone',
+    'sqlite_type' => 'varchar',
+    'sqlsrv_type' => 'smalldatetime',
+    'not null' => FALSE,
+  );
+
+  if (!$val2d) {
+    db_add_field('field_data_field_stanford_event_datetime', 'field_stanford_event_datetime_value2', $field_config);
+  }
+
+  if (!$val2r) {
+    db_add_field('field_revision_field_stanford_event_datetime', 'field_stanford_event_datetime_value2', $field_config);
+  }
+
+  return TRUE;
+}
+
+
+/**
+ * Update all existing stanford_event nodes' datetime field to go from UTC to
+ * the sites timezone. With the datetime field this update will only work with
+ * MYSQL databases. Contact sheamck@stanford.edu
+ * if you have another database type.
+ * @return bool
+ *   success or not.
+ */
+function stanford_events_importer_update_7200b() {
+
+  // Get the offset from UTC
+  $ntz = timezone_offset_get(new DateTimeZone(variable_get('date_default_timezone', @date_default_timezone_get())), new DateTime());
+  // hours
+  $ntzh = $ntz / 3600;
+  // reverse thinking
+  $ntzh *= -1;
+
+  $utc = new DateTimeZone("UTC");
+  $ntz = new DateTimeZone(variable_get('date_default_timezone', @date_default_timezone_get()));
+
+  // Cannot seem to get a single query to work. Falling back to loops :(
+  $data_results = db_select('field_data_field_stanford_event_datetime', 'fdfd')
+    ->fields('fdfd', array('entity_id', 'revision_id','field_stanford_event_datetime_value', 'field_stanford_event_datetime_value2'))
+    ->execute()
+    ->fetchAllAssoc('entity_id');
+
+  foreach ($data_results as $k => $v) {
+
+    $entity_id = $v->entity_id;
+    $revision_id = $v->revision_id;
+
+    $original_time = $v->field_stanford_event_datetime_value;
+    $original_time2 = $v->field_stanford_event_datetime_value2;
+
+    if (empty($original_time2)) {
+      $original_time2 = $original_time;
+    }
+
+    // Handle DST
+    // if event time is between november 2 and march 9 we need to add an hour.
+    $day = date('d', strtotime($original_time));
+    $month = date('m', strtotime($original_time));
+    $day2 = date('d', strtotime($original_time2));
+    $month2 = date('m', strtotime($original_time2));
+
+    // Check span
+    $addone = 0;
+    if ($month >= 11 || $month <= 3) {
+      if ($month == 11 && $day >= 2) { $addone = 1; }
+      if ($month == 3 && $day <= 9) { $addone = 1; }
+      if ($month !== 11 && $month != 3) { $addone = 1; }
+    }
+
+    // Check span
+    $addone2 = 0;
+    if ($month2 >= 11 || $month2 <= 3) {
+      if ($month2 == 11 && $day2 >= 2) { $addone2 = 1; }
+      if ($month2 == 3 && $day2 <= 9) { $addone2 = 1; }
+      if ($month2 !== 11 && $month2 != 3) { $addone2 = 1; }
+    }
+
+    // If in DST we need to add an hour.
+    if ($addone) {
+      $original_time = new DateTime($original_time);
+      $original_time->add(new DateInterval('PT1H'));
+      $original_time = $original_time->format('Y-m-d H:i:s');
+    }
+
+    if ($addone2) {
+      $original_time2 = new DateTime($original_time2);
+      $original_time2->add(new DateInterval('PT1H'));
+      $original_time2 = $original_time2->format('Y-m-d H:i:s');
+    }
+
+    $new_time = new DateTime($original_time, $utc);
+    $new_time2 = new DateTime($original_time2, $utc);
+
+    if ($ntzh > 0) {
+      $new_time->add(new DateInterval('PT' . $ntzh . 'H'));
+      $new_time2->add(new DateInterval('PT' . $ntzh . 'H'));
+    }
+    else {
+      $ntzh *= -1;
+      $new_time->sub(new DateInterval('PT' . $ntzh . 'H'));
+      $new_time2->sub(new DateInterval('PT' . $ntzh . 'H'));
+    }
+
+    $new_time_value = $new_time->format('Y-m-d H:i:s');
+    $new_time_value2 = $new_time2->format('Y-m-d H:i:s');
+
+    db_update('field_data_field_stanford_event_datetime')
+      ->fields(array(
+        'field_stanford_event_datetime_value' => $new_time_value,
+        'field_stanford_event_datetime_value2' => $new_time_value2,
+      ))
+      ->condition('revision_id', $revision_id)
+      ->execute();
+
+    db_update('field_revision_field_stanford_event_datetime')
+      ->fields(array(
+        'field_stanford_event_datetime_value' => $new_time_value,
+        'field_stanford_event_datetime_value2' => $new_time_value2,
+      ))
+      ->condition('revision_id', $revision_id)
+      ->execute();
+  }
+
+  return TRUE;
+}
+
+/**
+ * This function has been broken out into its own function for testing and
+ * because it may not be included in the end. It goes through all stanford event
+ * importers and updates the GUID of the feeds_item so that the nodes are
+ * updated rather then re-imported. To do this we have to get the feed
+ * from feeds.php and line up the guid and guid2 into a keyed array then loop
+ * through the database to update the keys.
+ *
+ * Gack.
+ */
+function stanford_events_importer_update_7200c() {
+
+  // The guid field is changing. Will need to update that.
+  // Get and store XML information as keyd guids.
+  $keys = stanford_events_importer_update_7200_get_xml_keys();
+
+  // Loop through each importer node and generate an update query.
+  foreach ($keys as $entity_id => $mappings) {
+
+    // The mysql query we are going to generate can really only handle 50000
+    // clauses so limit it!.
+    if (count($mappings) >= 50000) {
+      watchdog('stanford_events_importer', 'Could not update new event nodes. Too many.');
+      continue;
+    }
+
+    // Possibly the feed was right? yes. Possible.
+    if (empty($mappings)) {
+      watchdog('stanford_events_importer', 'Nothing to map. Continuing on. Importer node id: ' . $entity_id, array(), WATCHDOG_NOTICE);
+      continue;
+    }
+
+    $exression = 'CASE';
+    $guids = array();
+    foreach ($mappings as $guid => $guid2) {
+      $guids[] = $guid;
+      $exression .= " WHEN guid = '" . $guid . "' THEN '" . $guid2 . "' \n";
+    }
+
+    $exression .= ' END';
+
+    // Create an update fields array... oi.
+    $query = db_update('feeds_item');
+    $query->condition('feeds_item.guid', $guids, 'IN');
+    $query->expression('guid', $exression);
+    $results = $query->execute();
+
+  } // end foreach.
+
+  return TRUE;
+}
+
+
+/**
+ * Update all importers to use the new v2.php for importing.
+ * Update all included views.
+ * Invalidate hash for feed imported nodes.
+ * Revert feature.
+ */
+function stanford_events_importer_update_7201(&$sandbox) {
+
+  // Check if latest schema is installed. No. Install it.
+  if (db_table_exists('stanford_events_organization_list') == FALSE) {
+    drupal_install_schema('stanford_events_importer');
+  }
+
+  if (!module_exists("features")) {
+    throw new DrupalUpdateException('ERROR: Missing Features module. Please enable to complete update 7201.');
+  }
+
+  // Programically revert the feature so the user doesnt have to.
+  features_revert(
+    array(
+      'stanford_events_importer' => array(
+        'field',
+        'ctools',
+        'feeds_importer',
+        'feeds_tamper',
+        'node',
+        'variable',
+        'field_group',
+        'taxonomy',
+        'variable',
+      )
+    )
+  );
+
+  // Update all importers to use the new v2.php for importing
+  // Update all included views.
+
+  // Expire the hash in the feeds_item table in order to 'trick' feed_importer
+  // into thinking that there is new content.
+  db_update('feeds_item')
+    ->fields(
+      array(
+        'hash' => 'nullified'
+      )
+    )
+    ->condition('id', 'stanford_event_importer')
+    ->execute();
+
+  // Remove the extra configuration on the feeds_source configuration for
+  // legacy importer nodes. The xpathparser is no longer correct and should
+  // be just dropped.
+
+  $configs = db_select('feeds_source', 'fs')
+  ->fields('fs',
+    array(
+    'feed_nid', 'config', 'source'
+    ))
+  ->condition('id', 'stanford_event_importer')
+  ->execute();
+
+  // Loop through each of the configured nodes and drop the xpathparser config.
+  while ($values = $configs->fetchAssoc()) {
+    $nid = $values['feed_nid'];
+    $importer_configuration = unserialize($values['config']);
+    $source = $values['source'];
+
+    $source = str_replace('feed.php', 'v2.php', $source);
+    $importer_configuration['FeedsHTTPFetcher']['source'] = $source;
+
+    db_update('feeds_source')
+      ->fields(array(
+        'config' => serialize($importer_configuration),
+        'source' => $source,
+        )
+      )
+      ->condition('feed_nid', $nid)
+      ->execute();
+  }
+
+}
+
+/**
+ * Update from 2.x -> 3.x features
+ */
+function stanford_events_importer_update_7300(&$sandbox) {
+
+  if (!module_exists("features")) {
+    throw new DrupalUpdateException('ERROR: Missing Features module. Please enable to complete update 7300.');
+  }
+
+  // Programically revert the feature so the user doesnt have to.
+  // features_revert(
+  //   array(
+  //     'stanford_events_importer' => array(
+  //       'field_base',
+  //       'field_instance',
+  //       'ctools',
+  //       'feeds_importer',
+  //       'feeds_tamper',
+  //       'node',
+  //       'variable',
+  //       'field_group',
+  //       'taxonomy',
+  //       'variable',
+  //     )
+  //   )
+  // );
+}
+
+
+/**
+ * Update location text field to textarea
+ *
+ *
+ *
+ */
+function stanford_events_importer_update_7301(&$sandbox) {
+
+  $config = db_select('field_config', 'fc')
+    ->fields('fc', array('data'))
+    ->condition('field_name', 'field_stanford_event_location')
+    ->execute()
+    ->fetchAssoc();
+
+  // Get existing config.
+  $data = unserialize($config['data']);
+  unset($data['settings']['max_length']);
+
+  // Change field config values.
+  db_update('field_config')
+    ->fields(array(
+      'type' => 'text_long',
+      'data' => serialize($data),
+    ))
+    ->condition('field_name', 'field_stanford_event_location')
+    ->execute();
+
+  // From text.install for long text fields.
+  $textarea_spec = array(
+    'type' => 'text',
+    'size' => 'big',
+    'not null' => FALSE,
+  );
+
+  db_change_field('field_data_field_stanford_event_location', 'field_stanford_event_location_value', 'field_stanford_event_location_value', $textarea_spec);
+  db_change_field('field_revision_field_stanford_event_location', 'field_stanford_event_location_value', 'field_stanford_event_location_value', $textarea_spec);
+
+  field_cache_clear(TRUE);
+
+  features_revert(array(
+    'stanford_events_importer' => array(
+      'field_base',
+      'field_instance',
+      'ctools',
+      'feeds_importer',
+      'feeds_tamper',
+      'node',
+      'variable',
+      'field_group',
+      'taxonomy',
+      'variable',
+      ),
+  ));
+
+}
+
+/**
+ * Update the Feeds process limit to 200 at a time.
+ *
+ */
+
+function stanford_events_importer_update_7302(&$sandbox) {
+  $feeds_process_limit = variable_get('feeds_process_limit');
+  // Don't set this if the user already has set it.
+  if(!is_numeric($feeds_process_limit) || $feeds_process_limit < SU_EVENTS_FEEDS_PROCESS_LIMIT) {
+    variable_set("feeds_process_limit", SU_EVENTS_FEEDS_PROCESS_LIMIT);
+    watchdog('stanford_events_importer', 'feeds_process_limit set to %limit during update 7302', array("%limit" => SU_EVENTS_FEEDS_PROCESS_LIMIT));
+  }
+  else {
+    watchdog('stanford_events_importer', 'feeds_process_limit left as %limit during update 7302', array('%limit' => $feeds_process_limit));
+  }
+}

@@ -1,0 +1,101 @@
+<?php
+
+/**
+ * @file
+ * Code for the Stanford Bean Types Call to Action feature.
+ */
+
+include_once 'stanford_bean_types_call_to_action.features.inc';
+
+/**
+ * Implements hook_element_info_alter().
+ */
+function stanford_bean_types_call_to_action_element_info_alter(&$type) {
+  if (isset($type['textfield'])) {
+    $type['textfield']['#process'][] = 'stanford_bean_types_call_to_action_textfield_process';
+  }
+  if (isset($type['link_field'])) {
+    $type['link_field']['#process'][] = 'stanford_bean_types_call_to_action_link_field_process';
+  }
+  if (isset($type['select'])) {
+    $type['select']['#process'][] = 'stanford_bean_types_call_to_action_select_process';
+  }
+}
+
+/**
+ * Process Callback Function
+ *
+ * Callback to process the Call-to-Action textfields.
+ */
+function stanford_bean_types_call_to_action_textfield_process($element, $form_state, $complete_form) {
+  if ($form_state['build_info']['form_id'] == 'bean_form'){
+    if ($form_state['complete form']['#bundle'] == 'stanford_call_to_action') {
+      if (isset($element['#name'])) {
+        switch ($element['#name']) {
+          case 'title':
+            $element['#description'] = t('This is the text that is displayed for the "Call-to-Action." ');
+            break;
+        }
+      }
+    }
+  }
+  return $element;
+}
+
+/**
+ * Process Callback Function
+ *
+ * Callback to process the Call-to-Action link field.
+ */
+function stanford_bean_types_call_to_action_link_field_process($element, $form_state, $complete_form) {
+  if ($form_state['build_info']['form_id'] == 'bean_form'){
+    if ($form_state['complete form']['#bundle'] == 'stanford_call_to_action') {
+      if (isset($element['#field_name'])) {
+        switch ($element['#field_name']) {
+          case 'field_s_cta_link':
+            $element['title']['#title'] = t('Link text');
+            break;
+        }
+      }
+    }
+  }
+  return $element;
+}
+
+/**
+ * Process Callback Function
+ *
+ * Callback to process the Call-to-Action select field.
+ */
+function stanford_bean_types_call_to_action_select_process($element, $form_state, $complete_form) {
+  if ($form_state['build_info']['form_id'] == 'bean_form') {
+    if ($form_state['complete form']['#bundle'] == 'stanford_call_to_action') {
+      if (isset($element['#field_name'])) {
+        switch ($element['#field_name']) {
+          case 'field_s_cta_icon':
+            $element['#description'] =
+              t('To find your service icon, begin by clicking on the dropdown and type the service\'s name (e.g. Instagram, Facebook, Twitter, YouTube, etc.). If you don\'t want an icon, type "none".');
+            break;
+        }
+      }
+    }
+  }
+  return $element;
+}
+
+/**
+ * Implements hook_block_view_alter
+ */
+function stanford_bean_types_call_to_action_block_view_alter(&$data, $block) {
+  if ($block->module == 'bean') {
+    $delta = $block->delta;
+    if (isset($data['content']['bean'][$delta]['#bundle'])) {
+      if ($data['content']['bean'][$delta]['#bundle'] == 'stanford_call_to_action') {
+
+        // Don't display the title.
+        $data['subject'] = '<none>';
+      }
+    }
+  }
+}
+

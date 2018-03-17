@@ -1,0 +1,80 @@
+@charset "UTF-8";
+/* line 8, ../scss/styles/_call-to-action-global.scss */
+.bean-stanford-call-to-action .group-s-cta-image-style {
+  position: relative;
+  text-align: center;
+}
+/* line 13, ../scss/styles/_call-to-action-global.scss */
+.bean-stanford-call-to-action .group-s-cta-image-style .field-name-field-s-cta-image:after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #000000;
+  opacity: 0.5;
+}
+/* line 24, ../scss/styles/_call-to-action-global.scss */
+.bean-stanford-call-to-action .group-s-cta-image-style .field-name-field-s-cta-image img {
+  width: 100%;
+}
+/* line 29, ../scss/styles/_call-to-action-global.scss */
+.bean-stanford-call-to-action .group-s-cta-image-style .field-name-field-s-cta-icon {
+  color: #ffffff;
+  font-size: 100px;
+  position: absolute;
+  top: 40%;
+  width: 100%;
+}
+@media (max-width: 480px) {
+  /* line 29, ../scss/styles/_call-to-action-global.scss */
+  .bean-stanford-call-to-action .group-s-cta-image-style .field-name-field-s-cta-icon {
+    font-size: 75px;
+    top: 30%;
+  }
+}
+/* line 40, ../scss/styles/_call-to-action-global.scss */
+.span4 .bean-stanford-call-to-action .group-s-cta-image-style .field-name-field-s-cta-icon {
+  font-size: 85px;
+  top: 30%;
+}
+@media (max-width: 979px) and (min-width: 480px) {
+  /* line 40, ../scss/styles/_call-to-action-global.scss */
+  .span4 .bean-stanford-call-to-action .group-s-cta-image-style .field-name-field-s-cta-icon {
+    font-size: 65px;
+  }
+}
+/* line 48, ../scss/styles/_call-to-action-global.scss */
+.span3 .bean-stanford-call-to-action .group-s-cta-image-style .field-name-field-s-cta-icon {
+  font-size: 65px;
+  top: 30%;
+}
+@media (max-width: 979px) and (min-width: 480px) {
+  /* line 48, ../scss/styles/_call-to-action-global.scss */
+  .span3 .bean-stanford-call-to-action .group-s-cta-image-style .field-name-field-s-cta-icon {
+    font-size: 45px;
+  }
+}
+/* line 56, ../scss/styles/_call-to-action-global.scss */
+.span2 .bean-stanford-call-to-action .group-s-cta-image-style .field-name-field-s-cta-icon {
+  font-size: 40px;
+  top: 30%;
+}
+/* line 63, ../scss/styles/_call-to-action-global.scss */
+.bean-stanford-call-to-action .group-s-cta-title-style {
+  text-align: center;
+  padding: 30px 30px 40px;
+  background: #e9e6df;
+  -webkit-box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.2);
+  -moz-box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.2);
+  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.2);
+}
+/* line 69, ../scss/styles/_call-to-action-global.scss */
+.bean-stanford-call-to-action .group-s-cta-title-style h2 {
+  margin-bottom: 0;
+}
+/* line 74, ../scss/styles/_call-to-action-global.scss */
+.page-node .content-body .bean-stanford-call-to-action .field {
+  margin-bottom: 0;
+}

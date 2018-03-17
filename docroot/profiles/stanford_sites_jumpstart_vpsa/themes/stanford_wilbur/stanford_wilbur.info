@@ -1,0 +1,59 @@
+name = Stanford Wilbur
+base theme = stanford_framework
+description = Use of the Stanford-branded themes is limited to Stanford University academic departments, centers, research groups, and administrative units. If your website is for a student group, please use the Stanford Light theme. Modern, clean, minimal subtheme of Stanford Framework, recommended for department and official group sites. Requires Stanford Framework and <a href="http://openframework.stanford.edu">Open Framework</a> to be enabled. Provided by <a href="http://webservices.stanford.edu">Stanford Web Services</a>. Learn more at the <a href="http://drupalthemes.stanford.edu">Drupal Themes website</a>.
+core = 7.x
+version = 7.x-2.1
+project = stanford_wilbur
+project status url = https://github.com/SU-SWS/stanford_wilbur
+
+stylesheets[all][] = css/stanford_wilbur.css
+scripts[] = js/stanford_wilbur.js
+
+regions[admin_shortcuts] = Admin Shortcuts (Authenticated Users Only)
+regions[global_header] = Site: Global Header
+regions[header] = Header
+regions[navigation] = Navigation
+regions[search_box] = Search Box
+regions[main_top] = Main: Top
+regions[main_upper] = Main: Upper
+regions[sidebar_first] = First sidebar
+regions[highlighted] = Highlighted
+regions[help] = Help
+regions[content_top] = Content: Top
+regions[content_upper] = Content: Upper
+regions[content] = Content: Body
+regions[content_row2] = Content: 2-column flow
+regions[content_col2-1] = Content: 2-column stacked (1)
+regions[content_col2-2] = Content: 2-column stacked (2)
+regions[content_row3] = Content: 3-column flow
+regions[content_col3-1] = Content: 3-column stacked (1)
+regions[content_col3-2] = Content: 3-column stacked (2)
+regions[content_col3-3] = Content: 3-column stacked (3)
+regions[content_row4] = Content: 4-column flow
+regions[content_col4-1] = Content: 4-column stacked (1)
+regions[content_col4-2] = Content: 4-column stacked (2)
+regions[content_col4-3] = Content: 4-column stacked (3)
+regions[content_col4-4] = Content: 4-column stacked (4)
+regions[content_lower] = Content: Lower
+regions[content_bottom] = Content: Bottom
+regions[sidebar_second] = Second sidebar
+regions[main_lower] = Main: Lower
+regions[main_bottom] = Main: Bottom
+regions[page_bottom] = Page: Bottom
+regions[footer] = Footer
+
+; Settings
+settings[front_heading_classes] = ''
+settings[breadcrumb_classes] = ''
+settings[body_bg_type] = ''
+settings[body_bg_classes] = ''
+settings[body_bg_path] = ''
+settings[body_bg_preview] = ''
+settings[body_bg_upload] = ''
+settings[border_classes] = ''
+settings[corner_classes] = ''
+settings[logo_image_style_classes] = ''
+settings[site_title_first_line] = ''
+settings[site_title_second_line] = ''
+settings[site_title_style_classes] = ''
+settings[site_title_position_classes] = ''

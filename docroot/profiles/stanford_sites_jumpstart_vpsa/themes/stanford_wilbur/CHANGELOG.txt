@@ -1,0 +1,20 @@
+Version 7.x-2.1
+------------------------------
+by meganem: Updated readme.txt
+by hyperboy: Updated Stanford favicon image
+by sherakama: Added project URL to .info file
+by hyperboy: Updated theme description in .info file
+by hyperboy: Updated Terms of Use
+by hyperboy: Removed left margin in breadcrumbs
+by hyperboy: Updated breadcrumb color
+
+Version 7.x-2.01
+------------------------------
+by hyperboy: Updated logo to be retina
+by meganem: Added new "block-title-style" class for making h2 inside a block look like the block title
+by meganem: Added "active-trail" styles for nested menu items
+by meganem: Removed max-width on block well images
+
+Version 7.x-2.0
+------------------------------
+by hyperboy: Initial Release

@@ -1,0 +1,16 @@
+.bean-stanford-icon-block i {
+  color: #4D4F53;
+  margin-right: 15px;
+}
+
+.bean-stanford-icon-block .icon-text {
+  position: absolute;
+  height: 1px;
+  width: 1px;
+  overflow: hidden;
+}
+
+.bean-stanford-icon-block h2 {
+  font-size: 1.3em;
+  font-weight: 600;
+}

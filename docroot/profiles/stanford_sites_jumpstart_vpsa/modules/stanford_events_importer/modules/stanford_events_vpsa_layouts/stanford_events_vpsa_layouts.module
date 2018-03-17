@@ -1,0 +1,7 @@
+<?php
+/**
+ * @file
+ * Code for the Stanford Events VPSA Layouts feature.
+ */
+
+include_once 'stanford_events_vpsa_layouts.features.inc';

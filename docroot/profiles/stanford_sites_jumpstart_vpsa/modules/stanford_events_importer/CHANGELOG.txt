@@ -1,0 +1,102 @@
+Stanford Events Importer x.x-x.x, xxxx-xx-xx
+--------------------------------------------
+
+7.x-3.3-jsvpsa                           2015-10-30
+---------------------------------------------------
+- Too many commits to list here:
+- https://github.com/SU-SWS/stanford_events_importer/compare/7.x-3.0-jsvpsa...7.x-3.x-jsvpsa
+
+
+7.x-3.2                                  2015-06-26
+---------------------------------------------------
+- Removed logging
+- Removed the extra cron settings
+- Removed foreign keys
+- CAW-537: Events calendar block nav javascript aria fixes
+- BASIC-1269: Added image insert field
+- BASIC-1269: Updates to .info file and form weight order
+- Body field help text
+- ADding stanford_date_formats dependency
+
+
+7.x-3.1                                  2015-03-19
+---------------------------------------------------
+
+ - Added project status url so that module gets update info from ERUS.
+ - Set the body field input format to content_editor_text_format if the format is available
+ - Check for body field. Loop through languages. Loop through indices. filter_xss() on body field
+ - Added check for stanford_event type on feeds_presave().
+ - Set the admissions field input format to content_editor_text_format if the format is available
+ - BASIC-852 | Added Past Events page display
+ - BASIC-852 | Changed no results text on past events view
+ - Updated sub module version numbers
+
+
+Stanford Events Importer 7.x-3.0, 2014-10-23
+---------------------------------------------------
+Changes since 7.x-3.0-alpha9:
+
+ - Add fields to .info file
+ - Updating strongarm to add event feed type field
+ - Updating field group to add event feed type field
+ - Updating feeds_importer to map event feed type field
+ - Updating features.inc to add event feed type field
+ - Updating field_instance to add event feed type field
+ - Updating field_base to add event feed type field
+
+
+Stanford Events Importer 7.x-3.0-alpha9, 2014-10-23
+---------------------------------------------------
+Changes since 7.x-3.0-alpha8:
+By sheamck:
+  - Set drupal_http_request limit to 15.0 seconds
+  - Changed cron to run only once every 23 hours
+
+Stanford Events Importer 7.x-3.0-alpha8, 2014-08-29
+---------------------------------------------------
+By jbickar: styling on map link
+
+Stanford Events Importer 7.x-3.0-alpha7, 2014-08-28
+---------------------------------------------------
+By sheamck:
+  -Fixed bug in upgrade path from 2.x -> 3.x
+By jbickar:
+  -Updated field_group classes to match 1.4
+  -Added map link field
+
+Stanford Events Importer 7.x-3.0-alpha6, 2014-08-20
+---------------------------------------------------
+By sheamck:
+  - Added missing features dependency protection for update hooks
+  - Added views-row-lines to 5 item upcoming block
+By jbickar:
+  -Added ability to choose Published, Unlisted, or Bookmarked events feeds
+  -Minor improvement to UI for choosing between Category and Organization in UI
+
+Stanford Events Importer 7.x-3.0-alpha4, 2014-07-22
+---------------------------------------------------
+By sheamck:
+  - Fix in update hook to deal with Daylight Saving Time
+
+Stanford Events Importer 7.x-3.0-alpha3, 2014-07-15
+---------------------------------------------------
+By sheamck:
+  - Set date field to use site's time zone handling
+  - remove 8-hour offset
+  - Change update hook to calculates the difference between timezone field set from UTC to site's
+
+Stanford Events Importer 7.x-3.0-alpha2, 2014-05-16
+---------------------------------------------------
+- BASIC-795: removed no results text
+- BASIC-806: Change image display to large-scaled
+- BASIC-729 | Changed date format on event display
+- Cleaned UP 2.x Autopop pull request
+- Cleaned up some formatting
+
+Stanford Events Importer 7.x-3.0-alpha1, 2014-03-11
+--------------------------------------------------
+- Features 2.x Compatible feature
+- New Views
+- New sub feature modules
+- Clead up node edit form
+

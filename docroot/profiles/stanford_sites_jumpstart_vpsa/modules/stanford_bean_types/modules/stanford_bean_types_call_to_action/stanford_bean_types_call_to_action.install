@@ -1,0 +1,16 @@
+<?php
+
+/**
+ * @file
+ * Code for Stanford Bean Types Call to Action install.
+ */
+/**
+ * Remove field_s_cta_color if it exists
+ */
+function stanford_bean_types_call_to_action_update_7201() {
+  $field = 'field_s_cta_color';
+  if (field_info_field($field)) {
+    field_delete_field($field);
+  }
+}
+

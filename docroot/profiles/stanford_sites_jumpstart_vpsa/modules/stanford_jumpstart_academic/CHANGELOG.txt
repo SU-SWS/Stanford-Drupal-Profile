@@ -1,0 +1,62 @@
+Stanford Sites Jumpstart Academic x.x-x.x xxxx-xx-xx
+-------------------------------------------
+
+7.x-4.6                                   2016-08-12
+----------------------------------------------------
+- Added Site owner and Editor permissions for stanford_gallery
+- basic-1435: added new paths for faculty
+- basic-1435: fixed new paths for faculty
+- basic-1435: added why I teach to new url paths
+- Added condition to courses layout to not include courses tag path
+- Small change to courses context condition path
+- One should not depend on oneself; Updated .info dependencies
+
+7.x-4.5                                   2015-06-26
+----------------------------------------------------
+- Updated dependencies to add those that were missing.
+- Fix delta of why-i-teach block for people/faculty page on context.
+- Removed main menu from upcoming events context.
+
+7.x-4.4                                   2015-03-19
+----------------------------------------------------
+
+- Remove webauth login block from layouts module
+- BASIC-1136: Added show format select for xyz entity to roles module
+- 7.x-4.x-BASIC-852 | Update to past events context
+- BASIC-909: Added permission to convert page to landing page
+- BASIC-909: Added site owner and editor roles to convert perms
+- BASIC-1232 | Changed event_nodes context, removed mini-cal in sidebar
+- BASIC-1232 | Fixed stanford_jsa_layouts.context.inc to not be enabled by default
+- BASIC-1245: Added permissions for event series content
+
+
+Stanford Sites Jumpstart Academic 7.x-4.3 2014-11-27
+----------------------------------------------------
+- Added use contextual links permission
+- BASIC-1057 | Updated upcoming events page to have menu on sidebar
+- BASIC-1057 | Removed Lindseys ability to see add features menu item
+- BASIC-1057 | Removed Howards ability to CRUD event/course importers
+- BASIC-1057 | Updated publications nodes to have more publications block on it
+- Removed jsa_shortcuts module as it is no longer needed. Updated permissions
+- Changing wording on Clear Site Cache menu item in Site Actions menu
+
+Stanford Sites Jumpstart Academic 7.x-4.2 2014-09-09
+----------------------------------------------------
+Changes since 4.0-alpha2:
+By sheamck:
+  - Updated blocks for News and Events landing pages
+  - Updated shortcuts Feature to use Features 2.x
+
+There were no 4.0 or 4.1 releases; updating to 4.2 to have version number
+compatibility with other Stanford Sites Jumpstart products
+
+Stanford Sites Jumpstart Academic 7.x-4.0-alpha2 2014-08-07
+--------------------------------------------------
+- Removed dependency on jumpstart_shortcuts and switched to jsa_shortcuts
+- BASIC-843 | Added exposed filter to courses search context
+- Swapped featured event for event calendar sidebar on upcoming events page.
+- Installation Fixes
+
+Stanford Sites Jumpstart Academic 7.x-4.0-alpha1 2014-05-16
+--------------------------------------------------
+- Initial Release to match JSA 4.1.1

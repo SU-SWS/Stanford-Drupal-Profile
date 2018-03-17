@@ -1,0 +1,91 @@
+<?php
+/**
+ * @file
+ * Code for the Stanford Person feature.
+ */
+
+include_once 'stanford_person.features.inc';
+
+/**
+ * function hook_form_alter()
+ */
+function stanford_person_form_alter(&$form, &$form_state, $form_id){
+  if ($form_id == "stanford_person_node_form"){
+    $form ['title'] ['#description'] = '<p>' . t('If left empty, this optional text field is populated from the "First name" and "Last name" fields.') . '</p>';
+  }
+}
+
+
+/**
+ * Implements hook_preprocess_block()
+ *
+ */
+function stanford_person_preprocess_block(&$vars) {
+
+  // If this is not the full width block then do nothing!
+  if (!isset($vars['elements']["#block"]->bid) && $vars["elements"]['#block']->bid !== "ds_extras-full_width_bleed") {
+    return;
+  }
+
+  // Remove the defualt block title.
+  if ($vars['elements']["#block"]->subject == t("Full Width Bleed")) {
+    $vars['elements']["#block"]->subject = "";
+  }
+
+}
+
+/**
+ * Implements hook_preprocess().
+ */
+function stanford_person_preprocess_node(&$vars) {
+
+  // Only on staford_person.
+  if ($vars['type'] !== "stanford_person") {
+    return;
+  }
+
+  // And only on the node page.
+  if (arg(0) !== "node" || !is_numeric(arg(1))) {
+    return;
+  }
+
+  // If on the 'full bleed' option we need to set the image to the background.
+  // This is easy with css.
+  if (isset($vars['view_mode']) && $vars['view_mode'] == "stanford_huge_landscape") {
+    $css = "body.view-mode-stanford-huge-landscape {";
+    $css .= "background-image: url('" . image_style_url("huge-landscape", $vars['field_s_person_profile_picture'][0]["uri"]) . "');";
+    $css .= "}";
+    drupal_add_css($css, array("type" => "inline"));
+  }
+
+}
+
+/**
+ * Implements hook_preprocess_html().
+ *
+ * Add a view mode css class to the body tag.
+ */
+function stanford_person_preprocess_html(&$vars) {
+
+  // Node holder.
+  $node = FALSE;
+
+  // Check the current path for admin pages.
+  $admin_path = path_is_admin(current_path());
+
+  // Load the node if on node page.
+  if (arg(0) == 'node' && is_numeric(arg(1))) {
+    $node = node_load(arg(1));
+  }
+
+  // End if not a person node or on admin page..
+  if (!$node || $node->type !== "stanford_person" || $admin_path) {
+    return;
+  }
+
+  // If the ds_switch option is available then lets add the value to the body classes.
+  if (isset($node->ds_switch) && !empty($node->ds_switch)) {
+    $vars['classes_array'][] = "view-mode-" . drupal_clean_css_identifier($node->ds_switch);
+  }
+
+}

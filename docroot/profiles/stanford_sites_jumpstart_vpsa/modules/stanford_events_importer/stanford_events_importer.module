@@ -1,0 +1,555 @@
+<?php
+/**
+ * @file
+ * Code for the Stanford Events Importer feature.
+ */
+
+include_once('stanford_events_importer.features.inc');
+
+/**
+ * Implements hook_help().
+ */
+function stanford_events_importer_help($path, $arg) {
+  switch ($path) {
+    case 'admin/help#stanford_events_importer':
+      $output = '<h2>' . t('To Use') . '</h2>';
+      $output .= '<ol><li>' . t('Enable the module and all dependencies') . '</li>';
+      $output .= '<li>' . t('Go to !permissions and give selected roles the following permissions:', array('!permissions' => l('admin/people/permissions', 'admin/people/permissions')));
+      $output .= '<ul><li>' . t('Import Stanford Event Importer feeds') . ' </li><li>' . t('Stanford Event: Create new content') . '</li><li>' . t('Stanford Event Importer: Create new content') . ' </li></ul></li>';
+      $output .= '<li>' . t('!addnode of the type "Stanford Event Importer". Give it a title (eg, "Featured Events") and choose <strong>either</strong> a Category or an Organization (not one of each). ', array('!addnode' => l('Create a new node', 'node/add/stanford-event-importer')));
+      $output .= '<ul><li>' . t('Full documentation of the Stanford Events Drupal Feed Service is available at !eventsdrupal', array('!eventsdrupal' => l('http://events.stanford.edu/xml/drupal/', 'http://events.stanford.edu/xml/drupal/'))) . '</li></ul></li>';
+      $output .= '<li>' . t('Your events will be imported') . '</li>';
+      $output .= '<li>' . t('Create a separate Stanford Event Importer node for each category or organization you would like to use to import events');
+      $output .= '<li>' . t('By default, the module will check events.stanford.edu for updates daily, and will import new events and changes. You can set refresh rate and other options at !editimporter (requires enabling the Feeds UI module).', array('!editimporter' => l('admin/build/feeds/edit/stanford_event_importer', 'admin/build/feeds/edit/stanford_event_importer'))) . '</li></ol>';
+      $output .= '<p>' . t('The service at !events maintains lists of categories and organizations.', array('!events' => l('events.stanford.edu', 'http://events.stanford.edu'))) . ' ';
+      $output .= t('These lists are updated several times daily, and the Drupal module is configured to fetch changes regularly.') . ' ';
+      $output .= t('If you have recently added an organization and it is not appearing in the list at !import, you can manually refresh the list information at !config.', array('!import' => l('node/add/stanford-event-importer', 'node/add/stanford-event-importer'), '!config' => l('the module configuration page', 'admin/config/stanfordevents'))) . '</p>';
+      return $output;
+  }
+}
+
+
+/**
+ * Implements hook_menu().
+ */
+function stanford_events_importer_menu() {
+  $items['admin/config/stanfordevents'] = array(
+    'title' => 'Stanford Events Importer',
+    'type' => MENU_NORMAL_ITEM,
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('stanford_events_importer_config_form'),
+    'access arguments' =>  array('administer site configuration'),
+  );
+  return $items;
+}
+
+/**
+ * Configuration form.
+ */
+function stanford_events_importer_config_form($form, &$form_state) {
+  $form['refresh'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Refresh Lists'),
+    '#description' => t('Click this button to import the latest category and organization information to your website.'),
+  );
+  $form['refresh']['refresh_cat_org_lists'] = array(
+    '#type' => 'button',
+    '#value' => t('Refresh category and organization information'),
+    '#executes_submit_callback' => TRUE,
+    '#submit' => array('stanford_events_importer_config_form_refresh_lists'),
+  );
+  $form['feed_urls'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Feed URLs'),
+    '#description' => t('These are the feed URLs used to generate the lists of Categories and Organizations. You should not need to change them, and probably should not change them unless you really know what you\'re doing.'),
+  );
+  $form['feed_urls']['stanford_events_category_source'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Categories Feed URL'),
+    '#default_value' => variable_get('stanford_events_category_source'),
+  );
+  $form['feed_urls']['stanford_events_organization_source'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Organizations Feed URL'),
+    '#default_value' => variable_get('stanford_events_organization_source'),
+  );
+  $form['feed_urls']['submit'] = array(
+    '#type' => 'submit',
+    '#value' => t('Update feed URLs'),
+  );
+  return $form;
+}
+
+/**
+ * Submit function for configuration form.
+ */
+function stanford_events_importer_config_form_submit($form, &$form_state) {
+  variable_set('stanford_events_category_source', $form_state['values']['stanford_events_category_source']);
+  variable_set('stanford_events_organization_source', $form_state['values']['stanford_events_organization_source']);
+}
+
+/**
+ * Custom submit function for "Refresh" button of config form.
+ */
+function stanford_events_importer_config_form_refresh_lists($form, &$form_state) {
+  stanford_events_importer_update_cat_org();
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function stanford_events_importer_form_stanford_event_importer_node_form_alter(&$form, &$form_state, $form_id) {
+  //get our list of categories
+  $query = db_select('stanford_events_category_list', 'c');
+  $query->fields('c', array('category_id', 'name'));
+  $result = $query->execute();
+  $categories = $result->fetchAllKeyed();
+  //add Featured and Today into the list
+  $categories[] = 'Featured';
+  $categories[] = 'Today';
+  //grab the key of Featured and Today
+  //These may change if additional categories are added, so don't make these persistent
+  $featured_id = array_search('Featured', $categories);
+  $today_id = array_search('Today', $categories);
+  //stash the Featured and Today as variables, because they're special cases
+  variable_set('stanford_events_featured_id', $featured_id);
+  variable_set('stanford_events_today_id', $today_id);
+  //tidy them up alphabetically
+  asort($categories);
+  //get our list of organizations
+  $query = db_select('stanford_events_organization_list', 'o');
+  $query->fields('o', array('organization_id', 'name'));
+  $result = $query->execute();
+  $organizations = $result->fetchAllKeyed();
+  //tidy them up alphabetically
+  asort($organizations);
+  $form['s_events_cat_org'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Importer Information'),
+    '#collapsible' => FALSE,
+//    '#description' => t('Select <strong>either</strong> a Category <strong>or</strong> an Organization.'),
+  );
+  $form['s_events_cat_org']['s_events_choose_cat_org'] = array(
+    '#type' => 'radios',
+    '#options' => array('organization' => t('Organization'), 'category' => t('Category')),
+    '#title' => t('Category or Organization'),
+    '#description' => t('Do you want to import events by Category, or Organization?'),
+    '#default_value' => 'organization',
+  );
+  $form['s_events_cat_org']['s_events_category'] = array(
+    '#type' => 'select',
+    '#options' => $categories,
+    '#title' => t('Category'),
+    '#description' => t('Select a category'),
+    '#empty_option' => '-- ' . t('None') . ' --',
+    '#states' => array(
+      'visible' => array(
+        ':input[name="s_events_choose_cat_org"]' => array('value' => 'category'),
+      ),
+    ),
+  );
+  $form['s_events_cat_org']['s_events_organization'] = array(
+    '#type' => 'select',
+    '#options' => $organizations,
+    '#title' => t('Organization'),
+    '#description' => t('Select an organization'),
+    '#empty_option' => '-- ' . t('None') . ' --',
+    '#states' => array(
+      'visible' => array(
+        ':input[name="s_events_choose_cat_org"]' => array('value' => 'organization'),
+      ),
+    ),
+  );
+  $form['s_events_cat_org']['s_events_feedtype'] = array(
+    '#type' => 'radios',
+    '#options' => array('published' => t('Published'), 'unlisted' => t('Unlisted'), 'bookmarked' => ('Bookmarked')),
+    '#title' => t('Event Type'),
+    '#description' => t('Select the subset(s) of events from the Department or Organization'),
+    '#default_value' => 'published',
+    '#states' => array(
+      'visible' => array(
+        ':input[name="s_events_choose_cat_org"]' => array('value' => 'organization'),
+      ),
+    ),
+  );
+  //disable the default feed URL form field
+  //We'll supply our own options, then convert to a feed URL.
+  $form['feeds']['#access'] = FALSE;
+  //Check if the feed URL is blank (e.g., when creating a new node)
+  if ($form['feeds']['FeedsHTTPFetcher']['source']['#default_value'] == '') {
+    //if it's blank, set the default to featured, to avoid errors, because we're hiding the field
+    $form['feeds']['FeedsHTTPFetcher']['source']['#default_value'] = 'http://events.stanford.edu/xml/drupal/v2.php?featured';
+  }
+  //if the feed URL is not blank (e.g., when editing an existing node), populate the correct dropdown.
+  else {
+    //OK, what is the feed URL?
+    $feed_url = $form['feeds']['FeedsHTTPFetcher']['source']['#default_value'];
+    //Does it have v2.php in it?
+    $pattern = '/v2\.php\?.*$/';
+    $feed_exists = preg_match($pattern, $feed_url);
+    $message = t('This importer has an invalid feed source. This error usually appears when updating from an earlier version of the Stanford Events Importer module. Please choose an organization or category from the lists below.');
+    //If it doesn't use the v2 version of the feed URL, display a warning message
+    if ($feed_exists == 0){
+      drupal_set_message($message, 'warning', FALSE);
+    }
+
+    //look for 'v2.php?foo' or whatever in the feed URL, and capture that into $matches[0]
+    preg_match($pattern, $feed_url, $matches);
+    $current_selection = '';
+    if(isset($matches[0])) {
+      $current_selection = $matches[0];
+    }
+    //strip out 'v2.php?'
+    $current_selection = preg_replace('/v2\.php\?/', '', $current_selection);
+    //today is a beautiful and unique snowflake
+    if ($current_selection == 'today') {
+      $form['s_events_cat_org']['s_events_category']['#default_value'] = $today_id;
+      $form['s_events_cat_org']['s_events_choose_cat_org']['#default_value'] = 'category';
+    }
+    //featured also is a beautiful and unique snowflake
+    elseif ($current_selection == 'featured') {
+      $form['s_events_cat_org']['s_events_category']['#default_value'] = $featured_id;
+      $form['s_events_cat_org']['s_events_choose_cat_org']['#default_value'] = 'category';
+    }
+    //if it's a category, pull the category id and make that the default in the dropdown
+    elseif (preg_match('/category\=/', $current_selection) == 1) {
+      $current_selection = preg_replace('/category\=/', '', $current_selection);
+      $form['s_events_cat_org']['s_events_category']['#default_value'] = $current_selection;
+      $form['s_events_cat_org']['s_events_choose_cat_org']['#default_value'] = 'category';
+    }
+    //if it's an organization, pull the organization id and make that the default in the dropdown
+    elseif (preg_match('/organization\=/', $current_selection) == 1) {
+      // check if we have an ampersand query parameter appended to our feed URL
+      if (preg_match('/\&.*$/', $current_selection, $feedtype) == 1) {
+        // If so, use it to populate the radio button
+        $feedtype = preg_replace('/\&/', '', $feedtype[0]);
+        $current_selection = preg_replace("/\&$feedtype/", '', $current_selection);
+        $current_selection = preg_replace('/organization\=/', '', $current_selection);
+        $form['s_events_cat_org']['s_events_organization']['#default_value'] = $current_selection;
+        $form['s_events_cat_org']['s_events_feedtype']['#default_value'] = $feedtype;
+        $form['s_events_cat_org']['s_events_choose_cat_org']['#default_value'] = 'organization';
+      }
+      else {
+        // If not, do the default
+        $current_selection = preg_replace('/organization\=/', '', $current_selection);
+        $form['s_events_cat_org']['s_events_organization']['#default_value'] = $current_selection;
+        $form['s_events_cat_org']['s_events_choose_cat_org']['#default_value'] = 'organization';
+        $form['s_events_cat_org']['s_events_feedtype']['#default_value'] = 'published';
+      }
+    }
+  }
+  //make our validation function run first
+  if (is_array($form['#validate'])) {
+    array_unshift($form['#validate'], 'stanford_events_importer_build_feed_url');
+    array_unshift($form['#validate'], 'stanford_events_importer_validate');
+  }
+  else {
+    $form['#validate'][] = 'stanford_events_importer_validate';
+    $form['#validate'][] = 'stanford_events_importer_build_feed_url';
+  }
+}
+
+/**
+ * Validate user input.
+ */
+function stanford_events_importer_validate($form, &$form_state) {
+  if ($form_state['submit_handlers'][0] !== 'node_form_delete_submit') {
+    // Check that the user did not select both a Category and an Organization.
+    if (($form_state['values']['s_events_category'] != '') && ($form_state['values']['s_events_organization'] != '')) {
+      form_set_error('s_events_cat_org', t('You must choose either a Category or an Organization, not one of each.'));
+    }
+    // Check that the user did not select both a Category and an Organization.
+    if (($form_state['values']['s_events_category'] == '') && ($form_state['values']['s_events_organization'] == '')) {
+      form_set_error('s_events_cat_org', t('You must choose either a Category or an Organization.'));
+    }
+  }
+}
+
+/**
+ * Build the feed URL out of the user's choice in the select list.
+ */
+function stanford_events_importer_build_feed_url($form, &$form_state) {
+  //set the stem of the feed URL
+  $feed_url = 'http://events.stanford.edu/xml/drupal/v2.php?';
+  //grab the user-entered values, which have already been validated
+  $category = $form_state['values']['s_events_category'];
+  $organization = $form_state['values']['s_events_organization'];
+  $event_feedtype = $form_state['values']['s_events_feedtype'];
+  //append the correct category or organization number to the feed URL
+  //the array of options that we presented to the user in $form['s_events_cat_org']['s_events_category'] returns a numeric value (the numeric key)
+  if ($organization != '') {
+    switch($event_feedtype) {
+      case 'published' :
+        $feed_url .= 'organization=' . $organization;
+        break;
+      case 'unlisted' :
+        $feed_url .= 'organization=' . $organization . '&unlisted';
+        break;
+      case 'bookmarked' :
+        $feed_url .= 'organization=' . $organization . '&bookmarked';
+        break;
+    }
+  }
+  elseif ($category != '') {
+    //get the id/numeric key of our beautiful and unique snowflakes, Featured and Today
+    $featured_id = variable_get('stanford_events_featured_id');
+    $today_id =  variable_get('stanford_events_today_id');
+    //set the Feed URL to pull Featured events if requested
+    if ($category == $featured_id) {
+      $feed_url .= 'featured';
+    }
+    //set the Feed URL to pull Today's events if requested
+    elseif ($category == $today_id) {
+      $feed_url .= 'today';
+    }
+    else {
+      $feed_url .= 'category=' . $category;
+    }
+  }
+  //pray we don't get this far.
+  else {
+    form_set_error(NULL, t('Something has gone horribly, horribly wrong.'));
+  }
+  //pop our constructed feed URL into the field in a format that Feeds and Feeds XPath Parser can digest it.
+  $form_state['values']['feeds']['FeedsHTTPFetcher']['source'] = $feed_url;
+  //clear warning messages
+  drupal_get_messages('warning');
+}
+
+/**
+ * Implements hook_form_alter().
+ */
+function stanford_events_importer_form_stanford_event_node_form_alter(&$form, &$form_state) {
+  drupal_add_js(drupal_get_path('module', 'stanford_events_importer') . '/js/stanford_events_importer.js');
+}
+
+
+/**
+ * Fetch the list of categories.
+ */
+function stanford_events_importer_get_categories() {
+  //get the XML url, either user-defined, or fall back to a default.
+  $category_url = variable_get('stanford_events_category_source', 'http://events.stanford.edu/xml/drupal/v2.php?category-list');
+  //Pull in the XML file from a URL
+  $categories = drupal_http_request($category_url, array('timeout' => '15.0'));
+  //check that drupal_http_request didn't return an error and that we have data
+  if (!isset($categories->error) && isset($categories->data)) {
+    //Put just the XML data into a variable
+    $category_xml = $categories->data;
+    return ($category_xml);
+  }
+  else {
+    return;
+  }
+}
+
+/**
+ * Write the categories to the database.
+ */
+function stanford_events_importer_write_categories($category_xml) {
+  //don't do anything if we don't have anything
+  if (!isset($category_xml)) {
+    return;
+  }
+  $parser = xml_parser_create();
+  xml_parser_set_option($parser, XML_OPTION_CASE_FOLDING, 0);
+  xml_parser_set_option($parser, XML_OPTION_SKIP_WHITE, 1);
+  xml_parse_into_struct($parser, $category_xml, $valuesarray, $index);
+  xml_parser_free($parser);
+  foreach ($index['guid'] as $key => $value) {
+    $guid = $valuesarray[$value]['value'];
+    $value = $value + 1;
+    $category_id = $valuesarray[$value]['value'];
+    $value = $value + 1;
+    $name = $valuesarray[$value]['value'];
+    $value = $value + 1;
+    $type = $valuesarray[$value]['value'];
+    $value = $value + 1;
+    $description = $valuesarray[$value]['value'];
+    $value = $value + 1;
+    $tag = $valuesarray[$value]['value'];
+    $result = db_merge('stanford_events_category_list')
+      ->key(array('guid' => $guid))
+      ->fields(array(
+        'category_id' => $category_id,
+        'name' => $name,
+        'type' => $type,
+        'description' => $description,
+        'tag' => $tag,
+      ))
+      ->execute();
+  }
+}
+
+/**
+ * Fetch the list of organizations.
+ */
+function stanford_events_importer_get_organizations() {
+  //get the XML url, either user-defined, or fall back to a default.
+  $organization_url = variable_get('stanford_events_organization_source', 'http://events.stanford.edu/xml/drupal/v2.php?organization-list');
+  //Pull in the XML file from a URL
+  $organizations = drupal_http_request($organization_url, array('timeout' => '15.0'));
+  //check that drupal_http_request didn't return an error and that we have data
+  if (!isset($organizations->error) && isset($organizations->data)) {
+    //Put just the XML data into a variable
+    $organization_xml = $organizations->data;
+    return ($organization_xml);
+  }
+  else {
+    return;
+  }
+}
+
+/**
+ * Write the organizations to the database.
+ */
+function stanford_events_importer_write_organizations($organization_xml) {
+  //don't do anything if we don't have anything
+  if (!isset($organization_xml)) {
+    return;
+  }
+  $parser = xml_parser_create();
+  xml_parser_set_option($parser, XML_OPTION_CASE_FOLDING, 0);
+  xml_parser_set_option($parser, XML_OPTION_SKIP_WHITE, 1);
+  xml_parse_into_struct($parser, $organization_xml, $valuesarray, $index);
+  xml_parser_free($parser);
+  foreach ($index['guid'] as $key => $value) {
+    $guid = $valuesarray[$value]['value'];
+    $value = $value + 1;
+    $organization_id = $valuesarray[$value]['value'];
+    $value = $value + 1;
+    $name = $valuesarray[$value]['value'];
+    $value = $value + 1;
+    $type = $valuesarray[$value]['value'];
+    $value = $value + 1;
+    //email can be empty sometimes; set it to the value if it's set, blank if it's not set.
+    $email = isset($valuesarray[$value]['value']) ? $valuesarray[$value]['value'] : '';
+    $value = $value + 1;
+    //phone can be empty sometimes; set it to the value if it's set, blank if it's not set.
+    $phone = isset($valuesarray[$value]['value']) ? $valuesarray[$value]['value'] : '';
+    $value = $value + 1;
+    $url = $valuesarray[$value]['value'];
+    $value = $value + 1;
+    $rss_url = $valuesarray[$value]['value'];
+    $result = db_merge('stanford_events_organization_list')
+      ->key(array('guid' => $guid))
+      ->fields(array(
+        'guid' => $guid,
+        'organization_id' => $organization_id,
+        'name' => $name,
+        'type' => $type,
+        'email' => $email,
+        'phone' => $phone,
+        'url' => $url,
+        'rss_url' => $rss_url,
+      ))
+      ->execute();
+  }
+}
+
+/**
+ * Combination function to get the list of categories and organizations, and write them to the database.
+ * Used in several places: hook_cron_queue_info(), hook_install(), hook_update_N().
+ */
+function stanford_events_importer_update_cat_org() {
+  $category_xml = stanford_events_importer_get_categories();
+  stanford_events_importer_write_categories($category_xml);
+  $organization_xml = stanford_events_importer_get_organizations();
+  stanford_events_importer_write_organizations($organization_xml);
+}
+
+/**
+ * Implements hook_cron().
+ */
+function stanford_events_importer_cron() {
+
+  $last = variable_get("stanford_events_importer_last_cron", 0);
+  $next = $last + 86400; // (60 * 60 * 23) // 23 hours
+  $now = time();
+
+  // Run only once every 23 hours.
+  if ($now >= $next) {
+    variable_set('stanford_events_importer_last_cron', $now);
+    stanford_events_importer_update_cat_org();
+    watchdog('stanford_events_importer', 'Updated category and organization info');
+  }
+
+}
+
+
+/**
+ * Implements hook date_popup_process_alter()
+ * Alters the time field to include additional formatting data for js to use.
+ */
+function stanford_events_importer_date_popup_process_alter(&$element, &$form_state, $form) {
+
+  // The time field. Already processed.
+  $format = preg_replace('/[^AaigGHhs\:]/', '', $element['#date_format']);
+  // $element['#attributes']['data-timeformat'] = $format;
+  // $element['#wrapper_attributes']['data-timeformat'] = $format;
+  $element['time']['#attributes']['data-timeformat'] = $format;
+
+  // If there is a value on the to field already then we dont want to autopop.
+  if (!empty($element['#value']['time'])) {
+    $element['time']['#attributes']['class'][] = 'autopop-no-process';
+  }
+
+}
+
+/**
+ * Add nl2br to all plain text fields on events
+ * @param  [type] $vars [description]
+ * @return [type]       [description]
+ */
+function stanford_events_importer_preprocess_field(&$vars) {
+  if ($vars['element']['#field_type'] == 'text_long' && $vars['element']['#bundle'] == "stanford_event") {
+    $field_name = $vars['element']['#field_name'];
+    foreach ($vars['items'] as $key => &$item) {
+      if ($vars['element']['#object']->{$field_name}[LANGUAGE_NONE][$key]['format'] == NULL) {
+        $item['#markup'] = nl2br($item['#markup']);
+      }
+    }
+  }
+}
+
+/**
+* Implements hook_feeds_presave().
+* Set the body field input format to content_editor_text_format if the format is available.
+*/
+function stanford_events_importer_feeds_presave(FeedsSource $source, $entity, $item) {
+  $formats = filter_formats();
+  $node_type = node_type_get_type($entity);
+  // IF the content_editor_text_format is available, AND it's a stanford_event entity.
+  if (!empty($formats['content_editor_text_format']) && $node_type->type == "stanford_event") {
+    // If the entity has a body field set.
+    if (isset($entity->body)) {
+      // Set our allowed tags for filter_xss().
+      $allowed_tags = array('a', 'em', 'strong', 'cite', 'blockquote', 'code', 'ul', 'ol', 'li', 'dl', 'dt', 'dd', 'p');
+      // Loop through our languages.
+      foreach ($entity->body as $lang => $indices) {
+        // Loop through our indices.
+        foreach ($indices as $index => $values) {
+          // Set the format to content_editor_text_format.
+          $entity->body[$lang][$index]['format'] = 'content_editor_text_format';
+          // Filter out XSS tags in the body field.
+          $entity->body[$lang][$index]['value'] = filter_xss($values['value'], $allowed_tags);
+        }
+      }
+    }
+    // If the entity has the stanford_event_admission field set.
+    if (isset($entity->field_stanford_event_admission)) {
+      // Set our allowed tags for filter_xss().
+      $allowed_tags = array('a', 'em', 'strong', 'cite', 'blockquote', 'code', 'ul', 'ol', 'li', 'dl', 'dt', 'dd', 'p');
+      // Loop through our languages.
+      foreach ($entity->field_stanford_event_admission as $lang => $indices) {
+        // Loop through our indices.
+        foreach ($indices as $index => $values) {
+          // Set the format to content_editor_text_format.
+          $entity->field_stanford_event_admission[$lang][$index]['format'] = 'content_editor_text_format';
+          // Filter out XSS tags in the body field.
+          $entity->field_stanford_event_admission[$lang][$index]['value'] = filter_xss($values['value'], $allowed_tags);
+        }
+      }
+    }
+  }
+}

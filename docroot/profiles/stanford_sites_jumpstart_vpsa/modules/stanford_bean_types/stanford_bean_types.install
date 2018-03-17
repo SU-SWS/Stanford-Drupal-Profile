@@ -1,0 +1,49 @@
+<?php
+/**
+ * @file
+ * Stanford Bean Types install file functionality.
+ */
+
+/**
+ * Ensures that any previous modules have the new permissions module enabled
+ * when updating.
+ */
+function stanford_bean_types_update_7100(&$sandbox) {
+
+  if (!module_exists('stanford_bean_types_permissions')) {
+    if (!module_enable(array('stanford_bean_types_permissions'))) {
+      watchdog('stanford_bean_types', 'Could not enable stanford_bean_types_permissions module');
+      throw new DrupalUpdateException("Could not enable stanford_bean_types_permissions module. Please check that the module exists.");
+    }
+    else {
+      watchdog('stanford_bean_types', 'Enabled stanford_bean_types_permissions module.');
+    }
+  }
+
+}
+
+/**
+ * Upgrade path from 1.x -> 2.x.
+ */
+function stanford_bean_types_update_7200(&$sandbox) {
+  // Not sure if have to write or not...
+}
+
+/**
+ * Upgrade path from 2.6 -> 2.7.
+ *
+ * Enable the new bean fields module.
+ */
+function stanford_bean_types_update_7201(&$sandbox) {
+
+  if (!module_exists('ds_bean_fields')) {
+    if (!module_enable(array('ds_bean_fields'))) {
+      watchdog('stanford_bean_types', 'Could not enable ds_bean_fields module');
+      throw new DrupalUpdateException("Could not enable ds_bean_fields module. Please check that the module exists.");
+    }
+    else {
+      watchdog('stanford_bean_types', 'Enabled ds_bean_fields module.');
+    }
+  }
+
+}

@@ -1,0 +1,8 @@
+<?php
+
+/**
+ * @file
+ * Code for the Stanford Bean Types Call to Action Administration feature.
+ */
+
+include_once 'stanford_bean_types_call_to_action_administration.features.inc';

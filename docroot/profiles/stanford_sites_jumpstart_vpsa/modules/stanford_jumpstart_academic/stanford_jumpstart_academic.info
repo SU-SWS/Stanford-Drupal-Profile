@@ -1,0 +1,8 @@
+name = Stanford Jumpstart Academic
+description = For All things custom with the Jumpstart Academic Product
+core = 7.x
+version = 7.x-4.6-dev
+project = stanford_jumpstart_academic
+project status url = https://github.com/SU-SWS/stanford_jumpstart_academic
+dependencies[] = stanford_jumpstart
+stylesheets[all][] = css/jumpstart-academic.css

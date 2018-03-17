@@ -1,0 +1,28 @@
+Stanford Slides x.x-x.x xxxx-xx-xx
+----------------------------------
+
+Stanford Slides 7.x-3.0 2014-11-27
+-----------------------------------------
+- Update and rename README.txt to README.md
+- Update stanford_slides.info to add project status url
+
+Stanford Slides 7.x-3.0-alpha3 2014-05-16
+-----------------------------------------
+- BASIC-761: Fixed menu position
+- BASIC-761: Added Slides VBO
+
+Stanford Slides 7.x-3.0-alpha2 2014-04-01
+-----------------------------------------
+- Got drunk and lost somewhere.
+
+Stanford Slides 7.x-3.0-alpha1 2014-03-31
+-----------------------------------------
+3.x branch is compatible with Features 2.0
+
+Stanford Slides 7.x-2.0-alpha1 2013-04-11
+-----------------------------------------
+First release on the 2.x branch, removes the Views Slideshow View (and therefore the dependency)
+
+Stanford Slides 7.x-1.0-alpha5 2013-03-06
+-----------------------------------------
+This is the inital release of the Stanford Slides module.

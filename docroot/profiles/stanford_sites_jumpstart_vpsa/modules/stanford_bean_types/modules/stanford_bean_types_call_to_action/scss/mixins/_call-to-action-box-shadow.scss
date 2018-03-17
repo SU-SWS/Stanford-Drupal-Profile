@@ -1,0 +1,7 @@
+@charset "UTF-8";
+
+@mixin box-shadow($top: 0, $left: 2px, $blur: 2px, $spread: 0, $color: rgba(0,0,0,0.2)) {
+  -webkit-box-shadow: $top $left $blur $spread $color;
+  -moz-box-shadow: $top $left $blur $spread $color;
+  box-shadow: $top $left $blur $spread $color;
+}

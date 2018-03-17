@@ -1,0 +1,68 @@
+Stanford Bean Types x.x-x.x xxxx-xx-xx
+--------------------------------------
+
+7.x-2.8+3-dev                        2016-02-17
+---------------------------------------------
+- Fix empty H2 element on icon blocks.
+
+7.x-2.8                            2016-01-14
+---------------------------------------------
+- Upgrade hook finilization.
+
+7.x-2.7                            2015-10-19
+---------------------------------------------
+- Added upgrade hook for ds_bean_fields module
+- New image style types
+- New address field
+- New image insert field
+- Removed codeclimate.yml
+
+7.x-2.6                            2015-10-19
+---------------------------------------------
+- Created .codeclimate.yml
+- Added fullwdith banner short view mode on stanford banner
+- Restored testimonial block
+- Added new module ds_bean_fields to support layout for icon-block
+- Added icon-block bean type
+
+7.x-2.5                            2015-06-26
+---------------------------------------------
+- Removed foreign keys from features.
+- Hide irrelevant view modes from view mode select on bean edit form.
+- Sorting order for view modes.
+
+7.x-2.4                            2015-03-19
+---------------------------------------------
+- Rearranged fields on stanford_banner block type.
+- .info file clean up.
+- Fixed bug on path to Bean plugin class.
+- Set dependency on bean 7.x-1.8 or greater.
+
+Stanford Bean Types 7.x-2.3 2014-11-27
+---------------------------------------------
+- Replaced custom bean class with one from the bean module.
+
+Stanford Bean Types 7.x-2.2 2014-11-08
+---------------------------------------------
+- BASIC-1102 | Added missing postcard-right wrapper div
+- BASIC-1102 | Changed testimonial block layout to postcard view by add… …
+- BASIC-967 | Updated permissions
+
+Stanford Bean Types 7.x-2.1 2014-09-26
+---------------------------------------------
+- Refactored permissions
+- Added new bean type: stanford_big_text_block
+- Added new bean type: stanford_testimonial_block
+- New display modes
+- New fields including file and image inserts
+- Update to instagram field.
+
+Stanford Bean Types 7.x-2.0 2014-03-11
+---------------------------------------------
+- Small updates
+
+Stanford Bean Types 7.x-2.0-alpha1 2014-03-11
+---------------------------------------------
+- Features 2.x Compatible Version
+- Split out permissions so module may be used in installation profile
+- Create generic bean class to support all exported beans

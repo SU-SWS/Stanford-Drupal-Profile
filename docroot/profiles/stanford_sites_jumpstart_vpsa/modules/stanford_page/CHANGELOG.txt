@@ -1,0 +1,46 @@
+Stanford Page x.x-x.x xxxx-xx-xx
+--------------------------------
+
+Stanford Page 7.x-2.2-jsvpsa 2015-06-26
+---------------------------------------
+- VPSADEV-146: Added author exposed filter to manage content view and updated with 2.x-dev branch
+- Added Testimonial fields and Context
+- Removed context, added VBO operations
+- Added testimonial block view based on vpsa page
+- VPSADEV-350: Removed specific page render code for a more global fix
+- VPSADEV-296: Hide page title on node template on display suite view mode switch
+- Changed testimonial view block weight so it's at the bottom
+- hide testimonial and author field from node display
+- Rewrite to testimonial field
+- update to vpsa page Context
+- Added testimonial block view based on vpsa page
+
+Stanford Page 7.x-2.1 2015-06-26
+---------------------------------------
+- Removed foreign keys from features export.
+
+Stanford Page 7.x-2.0 2014-11-27
+---------------------------------------
+- BASIC-1030 | Changed default sort order to last updated date
+- Cleanup on field_s_page_file
+- Updating field_s_page_file to default to inserting icon with link
+- Added row to manage view
+- Update stanford_page.info to include project status url
+- Update and rename README.txt to README.md
+- BASIC-767 | Add author to manage content
+- Removed Body from base field and added features exclude so that it does not happen again
+
+Stanford Page 7.x-2.0-alpha3 2014-05-16
+---------------------------------------
+- BASIC-807: Changed exposed filter title on VBO
+- Merge branch '7.x-2.x-dev'
+
+Stanford Page 7.x-2.0-alpha2 2014-04-01
+---------------------------------------
+- Got drunk and lost somewhere.
+
+Stanford Page 7.x-2.0-alpha1 2014-03-11
+---------------------------------------
+- Features 2.x Compatible Version
+- Updates to view modes
+- Comptible with Jumpstart Installation profiles.
