@@ -1,13 +1,40 @@
 <?php
+
 /**
  * @file
- * - Disables PHP block visibility permission and gives status error if a role
- *   has this permission.
- * - Disables the PHP module.
- * - Hides the PHP and paranoia modules from the modules page.
- * - Prevents user/1 editing which could give access to abitrary contrib module
- *   php execution.
+ * Paranoia module file. Provides various extra security features.
  */
+
+/**
+ * Implements hook_menu().
+ */
+function paranoia_menu() {
+  $items['admin/config/system/paranoia'] = array(
+    'title' => 'Paranoia',
+    'description' => 'Configure settings for protecting old accounts that have
+    not been accessed recently.',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('paranoia_admin_form'),
+    'access arguments' => array('administer paranoia'),
+    'file' => 'paranoia.admin.inc',
+    'type' => MENU_NORMAL_ITEM,
+  );
+
+  return $items;
+}
+
+/**
+ * Implements hook_permission().
+ */
+function paranoia_permission() {
+  return array(
+    'administer paranoia' => array(
+      'title' => t('Administer paranoia'),
+      'description' => t('Perform administration tasks for the Paranoia module.'),
+      'restrict access' => TRUE,
+    ),
+  );
+}
 
 /**
  * Implements hook_menu_alter().
@@ -326,7 +353,7 @@ function custom_breadcrumbs_paranoia_hide_permissions() {
 /**
  * Implements hook_paranoia_hide_paths().
  *
- * On behalf of devel.module
+ * On behalf of devel.module.
  */
 function devel_paranoia_hide_paths() {
   return array('devel/php');
@@ -335,7 +362,7 @@ function devel_paranoia_hide_paths() {
 /**
  * Implements hook_paranoia_hide_paths().
  *
- * On behalf of views.module
+ * On behalf of views.module.
  */
 function views_paranoia_hide_paths() {
   return array('admin/structure/views/import');
@@ -345,7 +372,8 @@ function views_paranoia_hide_paths() {
  * Implements hook_form_alter().
  *
  * Hides forms that allow php arrays for importing to avoid RCE.
- * http://heine.familiedeelstra.com/security/unserialize
+ *
+ * @see http://heine.familiedeelstra.com/security/unserialize
  */
 function paranoia_form_alter(&$form, &$form_state, $form_id) {
   $forms_to_disable = module_invoke_all('paranoia_risky_forms');
@@ -375,6 +403,15 @@ function paranoia_form_alter(&$form, &$form_state, $form_id) {
   if ($form_id == "custom_breadcrumbs_form") {
     unset($form['visibility_php']);
   }
+
+  // Disable the ability to use PHP in Views Contextual Filters.
+  // See https://www.drupal.org/docs/7/modules/views/views-howtos/php-contextual-filters for example use cases.
+  if ($form_id == "views_ui_config_item_form") {
+    unset($form['options']['default_argument_type']['#options']['php']);
+    unset($form['options']['validate']['type']['#options']['php']);
+    unset($form['options']['validate']['options']['php']);
+  }
+
 }
 
 /**
@@ -475,5 +512,95 @@ function rules_admin_paranoia_risky_forms() {
  * On behalf of views module.
  */
 function views_paranoia_risky_forms() {
-  return array('views_ui_import_page');
+  return ['views_ui_import_page'];
+}
+
+/**
+ * Implements hook_cron_queue_info().
+ */
+function paranoia_cron_queue_info() {
+  $queues['paranoia_stale_expirations'] = array(
+    'worker callback' => 'paranoia_reset_stale',
+    'time' => variable_get('paranoia_queue_time', 15),
+  );
+  return $queues;
+}
+
+/**
+ * Worker callback for the paranoia_stale_expirations queue.
+ */
+function paranoia_reset_stale($item) {
+  paranoia_reset_password_for_uid($item);
+}
+
+/**
+ * Resets a password on a uid and sends a mail as appropriate.
+ *
+ * @param int $uid
+ *   A user ID that should have their password reset.
+ */
+function paranoia_reset_password_for_uid($uid) {
+  if ($account = user_load($uid)) {
+    // The ZZZ prefix ensures the password comparison will fail until a reset.
+    // See user_check_password().
+    $result = db_query("UPDATE {users} SET pass = CONCAT('ZZZ', SHA(CONCAT(pass, MD5(RAND())))) WHERE uid = :uid", array(':uid' => $account->uid));
+    if ($result) {
+      watchdog('paranoia', 'Password randomized for @user.', array('@user' => $account->name), WATCHDOG_INFO);
+      if (variable_get('paranoia_email_notification', FALSE)) {
+        paranoia_expired_mail_send($account->uid);
+      }
+    }
+    else {
+      watchdog('paranoia', 'Failed to randomize password for uid @uid.', array('@uid' => $uid), WATCHDOG_ERROR);
+    }
+  }
+}
+
+/**
+ * Implements hook_mail().
+ */
+function paranoia_mail($key, &$message, $params) {
+  switch ($key) {
+    case 'paranoia_expired':
+      $account = user_load($params['uid']);
+      $options = array(
+        'langcode' => $message['language']->language,
+      );
+
+      $message['subject'] = t('@site-name account password randomized', array('@site-name' => variable_get('site_name', 'Drupal')), $options);
+      $message['body'][] = t("@name,
+
+As a security precaution, since you have not logged in to your account for
+@threshold days, the password on the account has been randomized.",
+        array(
+          '@name' => $account->name,
+          '@threshold' => variable_get('paranoia_access_threshold', 730),
+        ), $options);
+      $message['body'][] = check_plain($params['message']);
+      break;
+  }
+}
+
+/**
+ * Sends an e-mail if a password has been reset.
+ *
+ * @param int $uid
+ *   The User ID of an account to email, to notify that the account's
+ *   password has been randomized, since the account had not been
+ *   accessed for a long period of time (the default threshold is
+ *   2 years).
+ */
+function paranoia_expired_mail_send($uid) {
+  $account = user_load($uid);
+
+  $params = array('uid' => $account->uid);
+
+  // Send the mail, and check for success.
+  $result = drupal_mail('paranoia', 'paranoia_expired', $account->mail, language_default(), $params);
+  if ($result['result']) {
+    watchdog('paranoia', 'Notification of randomized password sent to @account.', array('@account' => $account->name), WATCHDOG_INFO);
+  }
+  else {
+    watchdog('paranoia', 'There was a problem sending a notification message to @account.', array('@account' => $account->name), WATCHDOG_ERROR);
+  }
 }
