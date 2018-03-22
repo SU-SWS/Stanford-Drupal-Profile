@@ -1,7 +1,7 @@
 #!/bin/bash
 # Run `bash monthly.sh`
 set -Ee
-source includes/common.inc
+source /var/www/html/${AH_SITE_NAME}/scripts/backups/includes/common.inc
 
 # ###################################################
 # VARIABLES
