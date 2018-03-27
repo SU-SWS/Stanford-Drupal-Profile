@@ -392,7 +392,7 @@
     "su-sws/erus": "dev-7.x-1.x-dev",
     "su-sws/stanford_alt_check": "dev-7.x-1.x",
     "su-sws/stanford_bean_types": "dev-7.x-3.x",
-    "su-sws/stanford_capx": "dev-7.x-2.x",
+    "su-sws/stanford_capx": "dev-7.x-3.x",
     "su-sws/stanford_carousel": "dev-7.x-2.x",
     "su-sws/stanford_courses": "dev-7.x-4.x",
     "su-sws/stanford_date_formats": "dev-7.x-1.x-dev",
