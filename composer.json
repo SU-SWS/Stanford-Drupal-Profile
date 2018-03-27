@@ -196,10 +196,6 @@
     },
     {
       "type": "vcs",
-      "url": "https://github.com/SU-SWS/stanford_video"
-    },
-    {
-      "type": "vcs",
       "url": "https://github.com/SU-SWS/stanford_easy_wysiwyg_css"
     },
     {
@@ -391,7 +387,6 @@
       "su-sws/stanford_person": "dev-7.x-5.x-dev",
       "su-sws/stanford_publication": "dev-7.x-2.x-dev",
       "su-sws/stanford_slides": "dev-7.x-3.x-dev",
-      "su-sws/stanford_video": "dev-7.x-2.x-dev",
       "su-sws/stanford_wysiwyg": "dev-7.x-2.x-dev",
       "su-sws/stanford_easy_wysiwyg_css": "dev-7.x-1.x",
       "su-sws/stanford_landing_page": "dev-7.x-1.x",
