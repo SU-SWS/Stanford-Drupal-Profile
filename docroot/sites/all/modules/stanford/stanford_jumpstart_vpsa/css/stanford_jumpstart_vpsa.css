@@ -1,0 +1,436 @@
+/* general VPSA product styles here */
+
+
+/* univseral image borders */
+
+.main .content img {
+    background-color: #e9e6df;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    margin-bottom: 10px;
+    padding: 6px;
+    -moz-box-shadow: 0 4px 3px 0 rgba(0, 0, 0, 0.08);
+    -webkit-box-shadow: 0 4px 3px 0 rgba(0, 0, 0, 0.08);
+    box-shadow: 0 4px 3px 0 rgba(0, 0, 0, 0.08);
+}
+
+.main .well .content img {
+    background-color: #f4f2ef;
+}
+
+.main .content .no-border img,
+.main .well .content .no-border img,
+.main .content .view img,
+.main .content .tile img {
+    background-color: none;
+    padding: 0;
+    -moz-box-shadow: none;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+}
+
+/* landing page column class on cards layout */
+
+.node-type-stanford-landing-page .tile.column {
+    position: relative;
+    background: rgb(140, 21, 21);
+}
+
+.node-type-stanford-landing-page .tile.column .field-name-field-s-lp-item-description {
+    padding: 0 21.6px 5px 21.6px;
+    color: #ffffff;
+}
+
+.node-type-stanford-landing-page .tile.column .tile-link h2 a {
+    padding-top: 0;
+}
+
+.node-type-stanford-landing-page .tile.column .tile-link:hover,
+.node-type-stanford-landing-page .tile.column .tile-link:focus {
+    opacity: 0.9;
+}
+
+@media (max-width: 980px) and (min-width: 768px) {
+    .node-type-stanford-landing-page .tile.column .credits {
+        display: none;
+    }
+    .node-type-stanford-landing-page .tile.column .tile-link h2 a {
+        padding-top: .5em;
+    }
+}
+
+
+/* global VPSA */
+
+body hr {
+    border-top: 1px solid #DEDBD3;
+}
+
+
+/* -------- Homepage layouts ------------- */
+
+
+/* homepage sidebar width */
+
+.front.one-sidebar .sidebar.span3 {
+    width: 370px;
+}
+
+.front.one-sidebar .mc-content.span9 {
+    width: 770px;
+}
+
+@media (max-width: 1199px) {
+    .front.one-sidebar .sidebar.span3 {
+        width: 300px;
+    }
+    .front.one-sidebar .mc-content.span9 {
+        width: 620px;
+    }
+}
+
+@media (max-width: 979px) {
+    .front.one-sidebar .sidebar.span3 {
+        width: 228px;
+    }
+    .front.one-sidebar .mc-content.span9 {
+        width: 476px;
+    }
+}
+
+@media (max-width: 767px) {
+    .front.one-sidebar .sidebar.span3 {
+        width: 100%;
+    }
+    .front.one-sidebar .mc-content.span9 {
+        width: 100%;
+    }
+    /* fix for OFW */
+    .site-sidebar-first .block.well:nth-child(2n+1),
+    .site-sidebar-second .block.well:nth-child(2n+1) {
+        margin-right: 2%;
+    }
+}
+
+
+/* full width banner beans */
+
+.fullwidth .view-mode-stanford-full-width-banner-short img {
+    width: 100%;
+}
+
+
+/* storytelling blocks */
+
+.block.storytelling {
+    font-size: 1.5em;
+    line-height: 1.4em;
+    margin-bottom: 80px;
+    margin-top: 20px;
+    padding: 0 10%;
+    text-align: center;
+}
+
+.block.storytelling h2 {
+    font-weight: 300;
+}
+
+@media (max-width: 767px) {
+    .block.storytelling.span12 {
+        width: 100%;
+    }
+    .block.storytelling {
+        padding: 0;
+        margin-bottom: 60px;
+    }
+}
+
+@media (max-width: 480px) {
+    .block.storytelling {
+        font-size: 1.3em;
+    }
+}
+
+
+/* social media blocks centered */
+
+#block-bean-jumpstart-footer-social-media-0.span12 {
+    text-align: center;
+    margin-bottom: 3em;
+    margin-top: 1em;
+}
+
+.content-body #block-bean-jumpstart-footer-social-media-0.span12 {
+    text-align: left;
+}
+
+#block-bean-jumpstart-footer-social-media-0.span12 h2,
+.content-body #block-bean-jumpstart-footer-social-media-0 h2 {
+    display: inline-block;
+    margin-bottom: 0;
+    margin-right: 10px;
+    margin-top: 0.25em;
+    vertical-align: top;
+}
+
+#block-bean-jumpstart-footer-social-media-0.span12 .content,
+.content-body #block-bean-jumpstart-footer-social-media-0 .content {
+    display: inline-block;
+    vertical-align: top;
+}
+
+#block-bean-jumpstart-footer-social-media-0.span12 .content .field,
+.content-body #block-bean-jumpstart-footer-social-media-0 .content .field {
+    display: inline-block;
+}
+
+
+/* Color blocks */
+
+.block.well.well-green {
+    background: #def1ee;
+}
+
+.block.well.well-purple {
+    background: #e3e9f1;
+}
+
+
+/* Change descriptor class into summary styles on News and Events nodes */
+
+.node-type-stanford-event #node_stanford_event_full_group_descriptor_info.descriptor,
+.node-type-stanford-news-item #node_stanford_news_item_full_group_descriptor_info.descriptor {
+    margin-bottom: 15px;
+    font-weight: 300;
+    font-size: 22px;
+    line-height: 1.4em;
+    text-transform: none;
+    letter-spacing: normal;
+    color: #333;
+}
+
+
+/* Preservce descriptor on the news categories */
+
+.node-stanford-news-item .field-name-field-s-news-categories {
+    text-transform: uppercase;
+    letter-spacing: .04em;
+    font-size: 12px;
+    line-height: 1.5em;
+    color: #585754;
+    font-weight: normal;
+}
+
+
+/* VPSA footer */
+
+#block-bean-vpsa-student-affairs-block div.summary {
+    padding-top: 5px;
+    font-size: 20px;
+}
+
+#footer a,
+#footer a.more-link {
+    font-weight: normal;
+}
+
+#footer a.more-link:hover,
+#footer a.more-link:focus {
+    text-decoration: underline;
+}
+
+#block-bean-vpsa-helpful-links-footer-block .field-type-link-field div a.more-link {
+    font-size: 1em;
+    line-height: 1.4em;
+}
+
+#block-bean-vpsa-helpful-links-footer-block .field-type-link-field div a.more-link:after {
+    content: '';
+}
+
+
+/* Hide username and date on search results. Yea, I know. Should do
+this in the template file but that wasn't a good option in this case */
+
+li.search-result .search-info {
+    display: none;
+}
+
+
+/**
+ * Breakout text styles
+ */
+
+.content p.callout {
+    width: auto;
+    margin: .8em;
+}
+
+.content p.pullquote {
+    margin: .8em;
+    background: #f2f1eb;
+    border: solid 1px #d5d2c5;
+    padding: 1em;
+    line-height: 1.25em;
+    text-indent: 0;
+}
+
+
+/* enabling images with captions */
+
+.float-right,
+.float-left {
+    max-width: 40%;
+    font-style: italic;
+    letter-spacing: 0.01em;
+    color: #928b81;
+    ont-size: 0.8em;
+}
+
+.float-left {
+    margin-right: 30px;
+}
+
+.float-right img,
+.float-left img {
+    width: 100%;
+}
+
+@media (max-width: 480px) {
+    .row-fluid .node .content .float-right,
+    .row-fluid .node .content .float-left {
+        max-width: 100%;
+        width: 100%;
+        margin-right: 0;
+        margin-left: 0;
+    }
+}
+
+/* People */
+
+.node-type-stanford-person .view-mode-default {
+    margin-top: 0;
+    margin-bottom: 10px;
+}
+
+/* Testimonial block */
+
+.quote,
+.views-field-field-s-page-testimonial-author {
+    margin-left: 10%;
+}
+
+/* -------- PRINT STYLESHEETS ----------- */
+
+@media print {
+    #top-logo {
+        display: none;
+    }
+    #header #logo {
+        display: none !important;
+    }
+    #header #name-and-slogan.with-logo {
+        padding-left: 0px;
+    }
+    #name-and-slogan #site-name,
+    #name-and-slogan #site-name a,
+    #name-and-slogan #site-slogan {
+        font-size: 12pt !important;
+    }
+    #footer {
+        display: none;
+    }
+    .element-invisible {
+        position: relative;
+        clip: auto;
+    }
+    html.js fieldset.collapsed .fieldset-wrapper {
+        display: block;
+        margin-bottom: 0px;
+    }
+    html.js fieldset.collapsible .fieldset-legend {
+        padding: 0px;
+        margin-bottom: 0px;
+    }
+    html.js fieldset {
+        margin: 0px;
+        padding: 0px;
+        height: inherit;
+    }
+    html.js legend {
+        margin-bottom: 0px;
+        line-height: 1em;
+        font-size: 1.5em;
+        padding: 0px;
+    }
+    @page {
+        margin: 20mm 10mm;
+    }
+    body {
+        margin: 20mm 10mm;
+        font-size: 10pt;
+    }
+    * {
+        color: #000 !important;
+    }
+    #main-menu,
+    .logged-in .tabs,
+    #footer,
+    #global-footer,
+    #global-header,
+    #admin-shortcuts,
+    .block-menu-block {
+        display: none;
+    }
+    h1.page-title {
+        margin-top: 20px;
+        display: block;
+        clear: both;
+    }
+    img {
+        max-width: 100%;
+    }
+    a[href]:after {
+        font-size: 80%;
+        word-wrap: break-word;
+    }
+    p,
+    h1,
+    h2,
+    h3,
+    h4,
+    li {
+        page-break-after: auto;
+        page-break-before: auto;
+    }
+    h1,
+    h2,
+    h3,
+    h4,
+    li {
+        page-break-inside: avoid;
+    }
+    #header {
+        min-height: auto;
+        padding: 0px;
+        margin-bottom: 10mm;
+    }
+    #header a[href]:after {
+        display: none;
+    }
+    #sidebar-first,
+    #content,
+    #sidebar-second {
+        display: block;
+        width: 100%;
+    }
+    #block-menu-block-stanford-jsvpsa-layouts-4,
+    .workbench-info-block {
+        display: none;
+    }
+    table td,
+    table th {
+        border: 1px solid #000;
+    }
+}

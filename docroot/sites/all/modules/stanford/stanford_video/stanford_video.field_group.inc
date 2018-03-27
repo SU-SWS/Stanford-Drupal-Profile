@@ -13,123 +13,509 @@ function stanford_video_field_group_info() {
   $field_group = new stdClass();
   $field_group->disabled = FALSE; /* Edit this to true to make a default field_group disabled initially */
   $field_group->api_version = 1;
-  $field_group->identifier = 'group_stanford_video_external|node|stanford_video|form';
-  $field_group->group_name = 'group_stanford_video_external';
+  $field_group->identifier = 'group_s_descriptor_info|node|stanford_video|default';
+  $field_group->group_name = 'group_s_descriptor_info';
   $field_group->entity_type = 'node';
   $field_group->bundle = 'stanford_video';
-  $field_group->mode = 'form';
-  $field_group->parent_name = '';
+  $field_group->mode = 'default';
+  $field_group->parent_name = 'group_s_postcard_content';
   $field_group->data = array(
-    'label' => 'External Embedded Video',
+    'label' => 'Descriptor Info',
+    'weight' => '14',
+    'children' => array(
+      0 => 'field_s_video_date',
+      1 => 'group_s_category',
+      2 => 'group_s_speakers',
+    ),
+    'format_type' => 'div',
+    'format_settings' => array(
+      'label' => 'Descriptor Info',
+      'instance_settings' => array(
+        'id' => '',
+        'classes' => 'descriptor',
+        'description' => '',
+        'show_label' => '0',
+        'label_element' => 'h3',
+        'effect' => 'none',
+        'speed' => 'fast',
+      ),
+      'formatter' => 'open',
+    ),
+  );
+  $field_groups['group_s_descriptor_info|node|stanford_video|default'] = $field_group;
+
+  $field_group = new stdClass();
+  $field_group->disabled = FALSE; /* Edit this to true to make a default field_group disabled initially */
+  $field_group->api_version = 1;
+  $field_group->identifier = 'group_s_postcard_content|node|stanford_video|default';
+  $field_group->group_name = 'group_s_postcard_content';
+  $field_group->entity_type = 'node';
+  $field_group->bundle = 'stanford_video';
+  $field_group->mode = 'default';
+  $field_group->parent_name = 'group_s_postcard';
+  $field_group->data = array(
+    'label' => 'Postcard Content',
+    'weight' => '19',
+    'children' => array(
+      0 => 'body',
+      1 => 'field_s_video_embed',
+      2 => 'group_s_postcard_quote',
+      3 => 'group_s_descriptor_info',
+      4 => 'group_s_files',
+    ),
+    'format_type' => 'div',
+    'format_settings' => array(
+      'label' => 'Postcard Content',
+      'instance_settings' => array(
+        'id' => '',
+        'classes' => 'postcard-content',
+        'description' => '',
+        'show_label' => '0',
+        'label_element' => 'h3',
+        'effect' => 'none',
+        'speed' => 'fast',
+      ),
+      'formatter' => 'open',
+    ),
+  );
+  $field_groups['group_s_postcard_content|node|stanford_video|default'] = $field_group;
+
+  $field_group = new stdClass();
+  $field_group->disabled = FALSE; /* Edit this to true to make a default field_group disabled initially */
+  $field_group->api_version = 1;
+  $field_group->identifier = 'group_s_category|node|stanford_video|default';
+  $field_group->group_name = 'group_s_category';
+  $field_group->entity_type = 'node';
+  $field_group->bundle = 'stanford_video';
+  $field_group->mode = 'default';
+  $field_group->parent_name = 'group_s_descriptor_info';
+  $field_group->data = array(
+    'label' => 'Categories:',
     'weight' => '5',
     'children' => array(
-      0 => 'field_stanford_video_external',
+      0 => 'field_s_video_categories',
     ),
-    'format_type' => 'fieldset',
+    'format_type' => 'div',
     'format_settings' => array(
-      'formatter' => 'collapsible',
+      'label' => 'Categories:',
       'instance_settings' => array(
+        'id' => '',
+        'classes' => 'postcard-category',
         'description' => '',
-        'classes' => '',
-        'required_fields' => 1,
+        'show_label' => '1',
+        'label_element' => 'h3',
+        'effect' => 'none',
+        'speed' => 'fast',
       ),
+      'formatter' => 'open',
     ),
   );
-  $field_groups['group_stanford_video_external|node|stanford_video|form'] = $field_group;
+  $field_groups['group_s_category|node|stanford_video|default'] = $field_group;
 
   $field_group = new stdClass();
   $field_group->disabled = FALSE; /* Edit this to true to make a default field_group disabled initially */
   $field_group->api_version = 1;
-  $field_group->identifier = 'group_stanford_video_streaming|node|stanford_video|form';
-  $field_group->group_name = 'group_stanford_video_streaming';
+  $field_group->identifier = 'group_s_category|node|stanford_video|stanford_video_half_width';
+  $field_group->group_name = 'group_s_category';
   $field_group->entity_type = 'node';
   $field_group->bundle = 'stanford_video';
-  $field_group->mode = 'form';
-  $field_group->parent_name = 'group_stanford_web_video';
+  $field_group->mode = 'stanford_video_half_width';
+  $field_group->parent_name = 'group_s_descriptor_info';
   $field_group->data = array(
-    'label' => 'Streaming Video',
+    'label' => 'Categories',
     'weight' => '3',
     'children' => array(
-      0 => 'field_stanford_video_link',
-      1 => 'field_stanford_video_server',
-      2 => 'field_stanford_video_account',
-      3 => 'field_stanford_video_filename',
+      0 => 'field_s_video_categories',
     ),
-    'format_type' => 'fieldset',
+    'format_type' => 'div',
     'format_settings' => array(
-      'formatter' => 'collapsible',
+      'label' => 'Categories',
       'instance_settings' => array(
+        'id' => '',
+        'classes' => 'postcard-category',
         'description' => '',
-        'classes' => '',
-        'required_fields' => 1,
+        'show_label' => '1',
+        'label_element' => 'h3',
+        'effect' => 'none',
+        'speed' => 'fast',
       ),
+      'formatter' => 'open',
     ),
   );
-  $field_groups['group_stanford_video_streaming|node|stanford_video|form'] = $field_group;
+  $field_groups['group_s_category|node|stanford_video|stanford_video_half_width'] = $field_group;
 
   $field_group = new stdClass();
   $field_group->disabled = FALSE; /* Edit this to true to make a default field_group disabled initially */
   $field_group->api_version = 1;
-  $field_group->identifier = 'group_stanford_video_uploaded|node|stanford_video|form';
-  $field_group->group_name = 'group_stanford_video_uploaded';
+  $field_group->identifier = 'group_s_descriptor_info|node|stanford_video|stanford_video_half_width';
+  $field_group->group_name = 'group_s_descriptor_info';
   $field_group->entity_type = 'node';
   $field_group->bundle = 'stanford_video';
-  $field_group->mode = 'form';
-  $field_group->parent_name = 'group_stanford_web_video';
+  $field_group->mode = 'stanford_video_half_width';
+  $field_group->parent_name = 'group_s_postcard_content';
   $field_group->data = array(
-    'label' => 'Uploaded Video',
-    'weight' => '4',
+    'label' => 'Descriptor Info',
+    'weight' => '19',
     'children' => array(
-      0 => 'field_stanford_video_file',
+      0 => 'field_s_video_date',
+      1 => 'group_s_speakers',
+      2 => 'group_s_category',
     ),
-    'format_type' => 'fieldset',
+    'format_type' => 'div',
     'format_settings' => array(
-      'formatter' => 'collapsible',
+      'label' => 'Descriptor Info',
       'instance_settings' => array(
+        'id' => '',
+        'classes' => 'descriptor',
         'description' => '',
-        'classes' => '',
-        'required_fields' => 1,
+        'show_label' => '0',
+        'label_element' => 'h3',
+        'effect' => 'none',
+        'speed' => 'fast',
       ),
+      'formatter' => 'open',
     ),
   );
-  $field_groups['group_stanford_video_uploaded|node|stanford_video|form'] = $field_group;
+  $field_groups['group_s_descriptor_info|node|stanford_video|stanford_video_half_width'] = $field_group;
 
   $field_group = new stdClass();
   $field_group->disabled = FALSE; /* Edit this to true to make a default field_group disabled initially */
   $field_group->api_version = 1;
-  $field_group->identifier = 'group_stanford_web_video|node|stanford_video|form';
-  $field_group->group_name = 'group_stanford_web_video';
+  $field_group->identifier = 'group_s_files|node|stanford_video|default';
+  $field_group->group_name = 'group_s_files';
   $field_group->entity_type = 'node';
   $field_group->bundle = 'stanford_video';
-  $field_group->mode = 'form';
+  $field_group->mode = 'default';
+  $field_group->parent_name = 'group_s_postcard_content';
+  $field_group->data = array(
+    'label' => 'Resources',
+    'weight' => '18',
+    'children' => array(
+      0 => 'field_s_video_file_insert',
+      1 => 'field_s_video_transcript',
+    ),
+    'format_type' => 'div',
+    'format_settings' => array(
+      'label' => 'Resources',
+      'instance_settings' => array(
+        'id' => '',
+        'classes' => 'group-s-files field-group-div',
+        'description' => '',
+        'show_label' => '1',
+        'label_element' => 'h3',
+        'effect' => 'none',
+        'speed' => 'fast',
+      ),
+      'formatter' => 'open',
+    ),
+  );
+  $field_groups['group_s_files|node|stanford_video|default'] = $field_group;
+
+  $field_group = new stdClass();
+  $field_group->disabled = FALSE; /* Edit this to true to make a default field_group disabled initially */
+  $field_group->api_version = 1;
+  $field_group->identifier = 'group_s_files|node|stanford_video|stanford_video_half_width';
+  $field_group->group_name = 'group_s_files';
+  $field_group->entity_type = 'node';
+  $field_group->bundle = 'stanford_video';
+  $field_group->mode = 'stanford_video_half_width';
+  $field_group->parent_name = 'group_s_postcard_content';
+  $field_group->data = array(
+    'label' => 'Resources',
+    'weight' => '23',
+    'children' => array(
+      0 => 'field_s_video_file_insert',
+      1 => 'field_s_video_transcript',
+    ),
+    'format_type' => 'div',
+    'format_settings' => array(
+      'label' => 'Resources',
+      'instance_settings' => array(
+        'id' => '',
+        'classes' => 'group-s-files field-group-div',
+        'description' => '',
+        'show_label' => '1',
+        'label_element' => 'h3',
+        'effect' => 'none',
+        'speed' => 'fast',
+      ),
+      'formatter' => 'open',
+    ),
+  );
+  $field_groups['group_s_files|node|stanford_video|stanford_video_half_width'] = $field_group;
+
+  $field_group = new stdClass();
+  $field_group->disabled = FALSE; /* Edit this to true to make a default field_group disabled initially */
+  $field_group->api_version = 1;
+  $field_group->identifier = 'group_s_postcard_content|node|stanford_video|stanford_video_half_width';
+  $field_group->group_name = 'group_s_postcard_content';
+  $field_group->entity_type = 'node';
+  $field_group->bundle = 'stanford_video';
+  $field_group->mode = 'stanford_video_half_width';
+  $field_group->parent_name = 'group_s_postcard';
+  $field_group->data = array(
+    'label' => 'Postcard Content',
+    'weight' => '30',
+    'children' => array(
+      0 => 'body',
+      1 => 'group_s_descriptor_info',
+      2 => 'group_s_postcard_quote',
+      3 => 'group_s_files',
+    ),
+    'format_type' => 'div',
+    'format_settings' => array(
+      'label' => 'Postcard Content',
+      'instance_settings' => array(
+        'id' => '',
+        'classes' => 'postcard-content',
+        'description' => '',
+        'show_label' => '0',
+        'label_element' => 'h3',
+        'effect' => 'none',
+        'speed' => 'fast',
+      ),
+      'formatter' => 'open',
+    ),
+  );
+  $field_groups['group_s_postcard_content|node|stanford_video|stanford_video_half_width'] = $field_group;
+
+  $field_group = new stdClass();
+  $field_group->disabled = FALSE; /* Edit this to true to make a default field_group disabled initially */
+  $field_group->api_version = 1;
+  $field_group->identifier = 'group_s_postcard_quote|node|stanford_video|default';
+  $field_group->group_name = 'group_s_postcard_quote';
+  $field_group->entity_type = 'node';
+  $field_group->bundle = 'stanford_video';
+  $field_group->mode = 'default';
+  $field_group->parent_name = 'group_s_postcard_content';
+  $field_group->data = array(
+    'label' => 'Postcard Quote',
+    'weight' => '16',
+    'children' => array(
+      0 => 'field_s_video_quote',
+    ),
+    'format_type' => 'div',
+    'format_settings' => array(
+      'label' => 'Postcard Quote',
+      'instance_settings' => array(
+        'id' => '',
+        'classes' => 'postcard-quote',
+        'description' => '',
+        'show_label' => '0',
+        'label_element' => 'h3',
+        'effect' => 'none',
+        'speed' => 'fast',
+      ),
+      'formatter' => 'open',
+    ),
+  );
+  $field_groups['group_s_postcard_quote|node|stanford_video|default'] = $field_group;
+
+  $field_group = new stdClass();
+  $field_group->disabled = FALSE; /* Edit this to true to make a default field_group disabled initially */
+  $field_group->api_version = 1;
+  $field_group->identifier = 'group_s_postcard_quote|node|stanford_video|stanford_video_half_width';
+  $field_group->group_name = 'group_s_postcard_quote';
+  $field_group->entity_type = 'node';
+  $field_group->bundle = 'stanford_video';
+  $field_group->mode = 'stanford_video_half_width';
+  $field_group->parent_name = 'group_s_postcard_content';
+  $field_group->data = array(
+    'label' => 'Postcard Quote',
+    'weight' => '21',
+    'children' => array(
+      0 => 'field_s_video_quote',
+    ),
+    'format_type' => 'div',
+    'format_settings' => array(
+      'label' => 'Postcard Quote',
+      'instance_settings' => array(
+        'id' => '',
+        'classes' => 'postcard-quote',
+        'description' => '',
+        'show_label' => '0',
+        'label_element' => 'h3',
+        'effect' => 'none',
+        'speed' => 'fast',
+      ),
+      'formatter' => 'open',
+    ),
+  );
+  $field_groups['group_s_postcard_quote|node|stanford_video|stanford_video_half_width'] = $field_group;
+
+  $field_group = new stdClass();
+  $field_group->disabled = FALSE; /* Edit this to true to make a default field_group disabled initially */
+  $field_group->api_version = 1;
+  $field_group->identifier = 'group_s_postcard_video|node|stanford_video|stanford_video_half_width';
+  $field_group->group_name = 'group_s_postcard_video';
+  $field_group->entity_type = 'node';
+  $field_group->bundle = 'stanford_video';
+  $field_group->mode = 'stanford_video_half_width';
+  $field_group->parent_name = 'group_s_postcard';
+  $field_group->data = array(
+    'label' => 'Postcard Video',
+    'weight' => '28',
+    'children' => array(
+      0 => 'field_s_video_embed',
+    ),
+    'format_type' => 'div',
+    'format_settings' => array(
+      'label' => 'Postcard Video',
+      'instance_settings' => array(
+        'id' => '',
+        'classes' => 'postcard-video',
+        'description' => '',
+        'show_label' => '0',
+        'label_element' => 'h3',
+        'effect' => 'none',
+        'speed' => 'fast',
+      ),
+      'formatter' => 'open',
+    ),
+  );
+  $field_groups['group_s_postcard_video|node|stanford_video|stanford_video_half_width'] = $field_group;
+
+  $field_group = new stdClass();
+  $field_group->disabled = FALSE; /* Edit this to true to make a default field_group disabled initially */
+  $field_group->api_version = 1;
+  $field_group->identifier = 'group_s_postcard|node|stanford_video|default';
+  $field_group->group_name = 'group_s_postcard';
+  $field_group->entity_type = 'node';
+  $field_group->bundle = 'stanford_video';
+  $field_group->mode = 'default';
   $field_group->parent_name = '';
   $field_group->data = array(
-    'label' => 'Stanford Web Video',
-    'weight' => '4',
+    'label' => 'Postcard',
+    'weight' => '0',
     'children' => array(
-      0 => 'field_stanford_video_caption',
-      1 => 'field_stanford_video_poster',
-      2 => 'group_stanford_video_streaming',
-      3 => 'group_stanford_video_uploaded',
+      0 => 'group_s_postcard_content',
     ),
-    'format_type' => 'fieldset',
+    'format_type' => 'div',
     'format_settings' => array(
-      'formatter' => 'collapsible',
+      'label' => 'Postcard',
       'instance_settings' => array(
+        'id' => '',
+        'classes' => 'postcard',
         'description' => '',
-        'classes' => '',
-        'required_fields' => 1,
+        'show_label' => '0',
+        'label_element' => 'h3',
+        'effect' => 'none',
+        'speed' => 'fast',
       ),
+      'formatter' => 'open',
     ),
   );
-  $field_groups['group_stanford_web_video|node|stanford_video|form'] = $field_group;
+  $field_groups['group_s_postcard|node|stanford_video|default'] = $field_group;
+
+  $field_group = new stdClass();
+  $field_group->disabled = FALSE; /* Edit this to true to make a default field_group disabled initially */
+  $field_group->api_version = 1;
+  $field_group->identifier = 'group_s_postcard|node|stanford_video|stanford_video_half_width';
+  $field_group->group_name = 'group_s_postcard';
+  $field_group->entity_type = 'node';
+  $field_group->bundle = 'stanford_video';
+  $field_group->mode = 'stanford_video_half_width';
+  $field_group->parent_name = '';
+  $field_group->data = array(
+    'label' => 'Postcard',
+    'weight' => '0',
+    'children' => array(
+      0 => 'group_s_postcard_content',
+      1 => 'group_s_postcard_video',
+    ),
+    'format_type' => 'div',
+    'format_settings' => array(
+      'label' => 'Postcard',
+      'instance_settings' => array(
+        'id' => '',
+        'classes' => 'postcard',
+        'description' => '',
+        'show_label' => '0',
+        'label_element' => 'h3',
+        'effect' => 'none',
+        'speed' => 'fast',
+      ),
+      'formatter' => 'open',
+    ),
+  );
+  $field_groups['group_s_postcard|node|stanford_video|stanford_video_half_width'] = $field_group;
+
+  $field_group = new stdClass();
+  $field_group->disabled = FALSE; /* Edit this to true to make a default field_group disabled initially */
+  $field_group->api_version = 1;
+  $field_group->identifier = 'group_s_speakers|node|stanford_video|default';
+  $field_group->group_name = 'group_s_speakers';
+  $field_group->entity_type = 'node';
+  $field_group->bundle = 'stanford_video';
+  $field_group->mode = 'default';
+  $field_group->parent_name = 'group_s_descriptor_info';
+  $field_group->data = array(
+    'label' => 'Speaker(s):',
+    'weight' => '3',
+    'children' => array(
+      0 => 'field_s_video_speakers',
+    ),
+    'format_type' => 'div',
+    'format_settings' => array(
+      'label' => 'Speaker(s):',
+      'instance_settings' => array(
+        'id' => '',
+        'classes' => 'postcard-speakers',
+        'description' => '',
+        'show_label' => '1',
+        'label_element' => 'h3',
+        'effect' => 'none',
+        'speed' => 'fast',
+      ),
+      'formatter' => 'open',
+    ),
+  );
+  $field_groups['group_s_speakers|node|stanford_video|default'] = $field_group;
+
+  $field_group = new stdClass();
+  $field_group->disabled = FALSE; /* Edit this to true to make a default field_group disabled initially */
+  $field_group->api_version = 1;
+  $field_group->identifier = 'group_s_speakers|node|stanford_video|stanford_video_half_width';
+  $field_group->group_name = 'group_s_speakers';
+  $field_group->entity_type = 'node';
+  $field_group->bundle = 'stanford_video';
+  $field_group->mode = 'stanford_video_half_width';
+  $field_group->parent_name = 'group_s_descriptor_info';
+  $field_group->data = array(
+    'label' => 'Speaker(s):',
+    'weight' => '2',
+    'children' => array(
+      0 => 'field_s_video_speakers',
+    ),
+    'format_type' => 'div',
+    'format_settings' => array(
+      'label' => 'Speaker(s):',
+      'instance_settings' => array(
+        'id' => '',
+        'classes' => 'postcard-speakers',
+        'description' => '',
+        'show_label' => '1',
+        'label_element' => 'h3',
+        'effect' => 'none',
+        'speed' => 'fast',
+      ),
+      'formatter' => 'open',
+    ),
+  );
+  $field_groups['group_s_speakers|node|stanford_video|stanford_video_half_width'] = $field_group;
 
   // Translatables
   // Included for use with string extractors like potx.
-  t('External Embedded Video');
-  t('Stanford Web Video');
-  t('Streaming Video');
-  t('Uploaded Video');
+  t('Categories');
+  t('Categories:');
+  t('Descriptor Info');
+  t('Postcard');
+  t('Postcard Content');
+  t('Postcard Quote');
+  t('Postcard Video');
+  t('Resources');
+  t('Speaker(s):');
+  t('Speaker(s):');
 
   return $field_groups;
 }

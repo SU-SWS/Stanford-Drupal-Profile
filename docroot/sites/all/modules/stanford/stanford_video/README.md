@@ -1,26 +1,25 @@
 #[Stanford Video](https://github.com/SU-SWS/stanford_video)
-##### Version: 7.x-2.2
+##### Version: 7.x-3.0
 
-Maintainers: [jbickar](https://github.com/jbickar), [sherakama](https://github.com/sherakama)
+Maintainers: [jbickar](https://github.com/jbickar), [sherakama](https://github.com/sherakama), [josephgknox](https://github.com/josephgknox)
+
 [Changelog.txt](CHANGELOG.txt)
 
-This module creates a custom content type that uses the JWPlayer video player for playing streaming video hosted by Stanford Video (http://stanfordvideo.stanford.edu/streaming), and integrating captions provided by the Stanford Office of Accessible Education's Caption Tool (http://captioning.stanford.edu).
+This module delivers a content type, which allows for the embedding of a video directly into a page as well as the inclusion of other items (i.e., quote and speakers). It includes a view with four display options, and also allows for two page layout options: full width (default) and half width.
 
 Installation
 ---
 
-Install as you would with any other Drupal contributed module. This module requires the JWPlayer Javascript library; download it from http://www.longtailvideo.com/jw-player/download/ and place it in sites/all/libraries.
+Install this module like any other module. [See Drupal Documentation](https://drupal.org/documentation/install/modules-themes/modules-7).
+
+This module requires the [Video Embed Field](https://www.drupal.org/project/video_embed_field) contrib module.
 
 Configuration
 ---
 
 * Create a new video node at node/add/stanford-video
-* You can upload videos directly (.flv, .mp3, .mp4, .m4v, .webm) and attach captions (.srt, .dfxp, .xml)
-* You also can stream videos from an RTMP streamer; the URL for the Stanford Video streaming server is provided by default
-** For more information on streaming video hosting through Stanford Video, visit http://stanfordvideo.stanford.edu/streaming
-** For more information on creating caption files for videos, visit http://captioning.stanford.edu
-* You also can embed videos from third-party providers (YouTube, Vimeo, etc.) by pasting the embed code into the "External Video Embed" field
-** This field relies on the "Full HTML" text format. You should only grant access to that text format to trusted users and roles.
+* You can embed videos directly by inserting the direct URL to a video hosted on YouTube or Vimeo
+* The default page views will be available at videos/recent-videos and /videos/recent-videos/grid (block views can be placed liek any other block views)
 
 Troubleshooting
 ---
@@ -31,9 +30,3 @@ Contribution / Collaboration
 ---
 
 You are welcome to contribute functionality, bug fixes, or documentation to this module. If you would like to suggest a fix or new functionality you may add a new issue to the GitHub issue queue or you may fork this repository and submit a pull request. For more help please see [GitHub's article on fork, branch, and pull requests](https://help.github.com/articles/using-pull-requests)
-
-
-KNOWN ISSUES
-------------
-The JW Player captions plugin is not compatible with the Firefox "HTTPS Everywhere" plugin.
-Captions will not display if you have this Firefox plugin enabled.

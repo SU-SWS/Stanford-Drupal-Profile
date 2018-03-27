@@ -1,0 +1,11 @@
+name = Stanford FAQ Related Show-Hide View
+description = FAQs view with bootstrap collapse (show/hide) classes. Displays FAQs related to the page.
+core = 7.x
+package = Stanford
+version = 7.x-4.1
+project = stanford_faq_related_show_hide_view
+dependencies[] = ctools
+dependencies[] = views
+features[ctools][] = views:views_default:3.0
+features[features_api][] = api:2
+features[views_view][] = stanford_related_show_hide_faqs_block

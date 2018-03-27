@@ -1,0 +1,16 @@
+name = Stanford Subsites Administration Dashboard
+description = Creates a dashboard block at admin/config/subsites/dashboard.
+package = Stanford
+version = 7.x-2.1
+core = 7.x
+
+files[] = "stanford_subsites_admin_dash.pages.inc"
+
+dependencies[] = "menu_block"
+dependencies[] = "stanford_subsites"
+dependencies[] = "views_bulk_operations"
+dependencies[] = "views"
+dependencies[] = "menu"
+dependencies[] = "context"
+dependencies[] = "block"
+

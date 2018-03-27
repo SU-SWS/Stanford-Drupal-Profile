@@ -1,4 +1,4 @@
-#[Stanford Jumpstart](https://github.com/SU-SWS/stanford_jumpstart)
+# [Stanford Jumpstart](https://github.com/SU-SWS/stanford_jumpstart)
 
 Maintainers: [jbickar](https://github.com/jbickar), [sherakama](https://github.com/sherakama)
 

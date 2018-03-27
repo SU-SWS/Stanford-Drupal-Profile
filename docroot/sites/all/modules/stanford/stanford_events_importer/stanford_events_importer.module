@@ -11,23 +11,30 @@ include_once 'stanford_events_importer.features.inc';
  * Implements hook_help().
  */
 function stanford_events_importer_help($path, $arg) {
+  $links = array(
+    '!permissions' => l(t('!url', array('!url' => 'admin/people/permissions')), 'admin/people/permissions'),
+    '!addnode' => l(t('Create a new node'), 'node/add/stanford-event-importer'),
+    '!eventsdrupal' => l(t('!url', array('!url' => 'http://events.stanford.edu/xml/drupal/')), 'http://events.stanford.edu/xml/drupal/'),
+    '!editimporter' => l(t('!url', array('!url' => 'admin/build/feeds/edit/stanford_event_importer')), 'admin/build/feeds/edit/stanford_event_importer'),
+    '!events' => l(t('!url', array('!url' => 'events.stanford.edu')), 'http://events.stanford.edu'),
+    '!import' => l(t('!url', array('!url' => 'node/add/stanford-event-importer')), 'node/add/stanford-event-importer'),
+    '!config' => l(t('the module configuration page'), 'admin/config/stanford/events'),
+  );
+
   switch ($path) {
-    case'admin/help#stanford_events_importer':
+    case'admin/help':
       $output = '<h2>' . t('To Use') . '</h2>';
       $output .= '<ol><li>' . t('Enable the module and all dependencies') . '</li>';
-      $output .= '<li>' . t('Go to !permissions and give selected roles the following permissions:', array('!permissions' => l('admin/people/permissions', 'admin/people/permissions')));
+      $output .= '<li>' . t('Go to !permissions and give selected roles the following permissions:', $links);
       $output .= '<ul><li>' . t('Import Stanford Event Importer feeds') . '</li><li>' . t('Stanford Event: Create new content') . '</li><li>' . t('Stanford Event Importer: Create new content') . '</li></ul></li>';
-      $output .= '<li>' . t('!addnode of the type "Stanford Event Importer". Give it a title (eg, "Featured Events") and choose <strong>either</strong> a Category or an Organization (not one of each).', array('!addnode' => l(t('Create a new node'), 'node/add/stanford-event-importer')));
-      $output .= '<ul><li>' . t('Full documentation of the Stanford Events Drupal Feed Service is available at !eventsdrupal', array('!eventsdrupal' => l('http://events.stanford.edu/xml/drupal/', 'http://events.stanford.edu/xml/drupal/'))) . '</li></ul></li>';
+      $output .= '<li>' . t('!addnode of the type "Stanford Event Importer". Give it a title (eg, "Featured Events") and choose <strong>either</strong> a Category or an Organization (not one of each).', $links);
+      $output .= '<ul><li>' . t('Full documentation of the Stanford Events Drupal Feed Service is available at !eventsdrupal', $links) . '</li></ul></li>';
       $output .= '<li>' . t('Your events will be imported') . '</li>';
       $output .= '<li>' . t('Create a separate Stanford Event Importer node for each category or organization you would like to use to import events');
-      $output .= '<li>' . t('By default, the module will check events.stanford.edu for updates daily, and will import new events and changes. You can set refresh rate and other options at !editimporter (requires enabling the Feeds UI module).', array('!editimporter' => l('admin/build/feeds/edit/stanford_event_importer', 'admin/build/feeds/edit/stanford_event_importer'))) . '</li></ol>';
-      $output .= '<p>' . t('The service at !events maintains lists of categories and organizations.', array('!events' => l('events.stanford.edu', 'http://events.stanford.edu'))) . '';
+      $output .= '<li>' . t('By default, the module will check events.stanford.edu for updates daily, and will import new events and changes. You can set refresh rate and other options at !editimporter (requires enabling the Feeds UI module).', $links) . '</li></ol>';
+      $output .= '<p>' . t('The service at !events maintains lists of categories and organizations.', $links) . '';
       $output .= t('These lists are updated several times daily, and the Drupal module is configured to fetch changes regularly.') . '';
-      $output .= t('If you have recently added an organization and it is not appearing in the list at !import, you can manually refresh the list information at !config.', array(
-        '!import' => l('node/add/stanford-event-importer', 'node/add/stanford-event-importer'),
-        '!config' => l(t('the module configuration page'), 'admin/config/stanford/events'),
-      )) . '</p>';
+      $output .= t('If you have recently added an organization and it is not appearing in the list at !import, you can manually refresh the list information at !config.', $links) . '</p>';
       return $output;
   }
 }
@@ -601,7 +608,7 @@ function stanford_events_importer_field_attach_view_alter(&$output, $context) {
   if (isset($output['field_s_event_speakers_name']) && isset($output['field_s_event_speakers_url'])) {
     $url = $output['field_s_event_speakers_url']['#items'][0]['url'];
     $text = &$output['field_s_event_speakers_name'][0]['#markup'];
-    $text = l(t($text), $url);
+    $text = l($text, $url);
     unset($output['field_s_event_speakers_url']);
     drupal_add_css(drupal_get_path('module', 'stanford_events_importer') . '/css/stanford_events_importer.css');
   }

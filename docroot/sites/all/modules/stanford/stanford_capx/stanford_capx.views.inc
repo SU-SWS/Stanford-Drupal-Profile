@@ -88,6 +88,21 @@ function stanford_capx_views_data() {
     ),
   );
 
+  $data['capx_cfe']['status'] = array(
+    'title' => t('Export Status'),
+    'help' => t('The exportable status of the entity.'),
+    'field' => array(
+      'handler' => 'views_handler_field_cfe_status',
+      'click sortable' => TRUE,
+    ),
+    'filter' => array(
+      'handler' => 'views_handler_filter_numeric',
+    ),
+    'sort' => array(
+      'handler' => 'views_handler_sort',
+    ),
+  );
+
   // Example plain text field.
   $data['capx_cfe']['title'] = array(
     'title' => t('Title'),
@@ -141,6 +156,22 @@ function stanford_capx_views_data() {
     'help' => t('Delete link for mappings'),
     'field' => array(
       'handler' => 'views_handler_field_mapper_delete_link',
+    ),
+  );
+
+  $data['capx_cfe']['mapper_export_link'] = array(
+    'title' => t('Mapping export link'),
+    'help' => t('Export link for mappings'),
+    'field' => array(
+      'handler' => 'views_handler_field_mapper_export_link',
+    ),
+  );
+
+  $data['capx_cfe']['mapper_revert_link'] = array(
+    'title' => t('Mapping revert link'),
+    'help' => t('Revert link for mappings'),
+    'field' => array(
+      'handler' => 'views_handler_field_mapper_revert_link',
     ),
   );
 
@@ -552,4 +583,3 @@ function stanford_capx_views_pre_view(&$view, &$display_id, $args) {
     $view->display_handler->set_option('header', array('text' => $options));
   }
 }
-

@@ -8,6 +8,10 @@ engines:
     checks:
       overqualified-elements:
         enabled: false
+      qualified-headings:
+        enabled: false
+      unique-headings:
+        enabled: false
       order-alphabetical:
         enabled: false
       adjoining-classes:
@@ -155,3 +159,5 @@ exclude_paths:
 - "*.twig"
 - "**.tpl.php"
 - "**.strongarm.inc"
+- "**.feeds_importer_default.inc"
+- "**.feeds_tamper_default.inc"

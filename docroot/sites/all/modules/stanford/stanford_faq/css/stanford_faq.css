@@ -1,0 +1,82 @@
+.view-stanford-show-hide-faq-hierarchy h3 {
+  margin-top: 1.5em;
+}
+
+.view-stanford-show-hide-faq-hierarchy .views-row {
+  margin-bottom: 0.25em;
+  position: relative;
+}
+
+.view-stanford-show-hide-faq-hierarchy .views-row h4 {
+  margin: 0;
+  padding-right: 2em;
+}
+
+.view-stanford-show-hide-faq-hierarchy .views-row .collapse-toggle h4:after {
+  content: "–";
+  font-size: 1.5em;
+  font-weight: 700;
+  color: #999999;
+  position: absolute;
+  right: 1em;
+  top: 0.5em;
+}
+
+.view-stanford-show-hide-faq-hierarchy .views-row .collapse-toggle.collapsed h4:after {
+  content: "+";
+}
+
+.view-stanford-show-hide-faq-hierarchy .views-row>div:first-child a {
+  display: block;
+  padding: 1em;
+}
+
+.view-stanford-show-hide-faq-hierarchy .views-row>div:first-child a.collapsed {
+  background: #eeeeee;
+}
+
+.view-stanford-show-hide-faq-hierarchy .views-row div.views-field-body {
+  padding: 0 1em;
+  background: #ffffff;
+}
+
+.view-stanford-show-hide-faq-hierarchy .views-row>div:first-child a:hover,
+.view-stanford-show-hide-faq-hierarchy .views-row>div:first-child a,
+.view-stanford-show-hide-faq-hierarchy .views-row>div:first-child a.collapsed:hover {
+  background: #ffffff;
+  text-decoration: none;
+}
+
+
+/*** THEME OPTION STYLES ***/
+
+
+/* DARK */
+
+.style-custom-styles-dark .view-stanford-show-hide-faq-hierarchy .views-row>div:first-child a.collapse-toggle.collapsed {
+  background: #232220;
+}
+
+.style-custom-styles-dark .view-stanford-show-hide-faq-hierarchy .views-row>div:first-child a,
+.style-custom-styles-dark .view-stanford-show-hide-faq-hierarchy .views-row div.views-field-body,
+.style-custom-styles-dark .view-stanford-show-hide-faq-hierarchy .views-row>div:first-child a:hover,
+.style-custom-styles-dark .view-stanford-show-hide-faq-hierarchy .views-row>div:first-child a.collapse-toggle.collapsed:hover {
+  background: #fbfbf9;
+}
+
+.style-custom-styles-dark .view-stanford-show-hide-faq-hierarchy .views-row>div:first-child a.collapse-toggle.collapsed h4 {
+  color: #fbfbf9;
+}
+
+.style-custom-styles-dark .view-stanford-show-hide-faq-hierarchy .views-row>div:first-child a:hover h4,
+.style-custom-styles-dark .view-stanford-show-hide-faq-hierarchy .views-row>div:first-child a.collapse-toggle.collapsed:hover h4 {
+  color: #232220;
+}
+
+.style-custom-styles-dark .view-stanford-show-hide-faq-hierarchy .views-row h4 {
+  color: #232220;
+}
+
+.style-custom-styles-dark .view-stanford-show-hide-faq-hierarchy p {
+  color: #232220;
+}

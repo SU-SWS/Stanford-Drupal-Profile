@@ -1,0 +1,21 @@
+<?php
+/**
+ * @file
+ */
+
+/**
+ * Implements hook_menu_alter().
+ */
+function stanford_jumpstart_vpsa_shortcuts_menu_alter(&$items) {
+
+  // Re-arrange the menu items for VPSA.
+
+  $items['admin/stanford/jumpstart/shortcuts/site-actions/clear-cache']['weight'] = -105;
+  $items['admin/stanford/jumpstart/shortcuts/site-actions/manage-content']['weight'] = -104;
+  $items['admin/stanford/jumpstart/shortcuts/site-actions/edit-main-menu']['weight'] = -103;
+  // Content types go here and their weights start at -100 and go up.
+  $items['admin/stanford/jumpstart/shortcuts/site-actions/manage-users']['weight'] = 0;
+  $items['admin/stanford/jumpstart/shortcuts/site-actions/edit-site-name']['weight'] = 1;
+  $items['admin/stanford/jumpstart/shortcuts/site-actions/manage-taxonomies']['weight'] = 2;
+
+}

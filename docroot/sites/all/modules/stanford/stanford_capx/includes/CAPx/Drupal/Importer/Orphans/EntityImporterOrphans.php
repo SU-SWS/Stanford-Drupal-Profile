@@ -148,17 +148,17 @@ class EntityImporterOrphans implements ImporterOrphansInterface {
     $this->processAdoptedMultiple($profiles);
 
     // If we have no orphans after all of that just end.
-    if (empty($orphans)) {
+    if (empty($orphaned)) {
       return;
     }
 
     // Small patch up fix.
     if (isset($orphans["missing"])) {
-      $orphaned = array_merge($orphaned, $orphans["missing"]);
+      $orphaned = $orphaned + $orphans["missing"];
     }
 
     // If no action is required then just skip over this and go to the adopted.
-    if ($action !== "nothing") {
+    if ($action !== "nothing" && is_array($orphaned)) {
       $this->processOrphans($orphaned);
     }
 

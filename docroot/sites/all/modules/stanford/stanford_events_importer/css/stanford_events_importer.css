@@ -22,7 +22,7 @@
 }
 
 .field-name-field-s-event-speakers .field-collection-view .field-name-field-s-event-speakers-name .field-items .field-item:after {
-  content: ",";
+  content: ',';
 }
 
 .field-name-field-s-event-speakers .field-collection-view.field-collection-view-final .field-name-field-s-event-speakers-name .field-items .field-item:after {

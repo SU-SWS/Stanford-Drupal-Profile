@@ -97,4 +97,14 @@ class CFEntity extends \Entity {
     return $this->machine_name;
   }
 
+  /**
+   * Implements isLocked().
+   *
+   * @return bool
+   *   TRUE if the entity is locked.
+   */
+  function isLocked() {
+    return isset($this->status) && empty($this->is_new) && (($this->status & ENTITY_IN_CODE) || ($this->status & ENTITY_FIXED));
+  }
+
 }

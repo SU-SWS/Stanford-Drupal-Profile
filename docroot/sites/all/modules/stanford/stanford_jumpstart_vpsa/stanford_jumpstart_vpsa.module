@@ -1,0 +1,109 @@
+<?php
+/**
+ * @file
+ * This is for all things custom with Jumpstart VPSA
+ */
+
+/**
+ * Implements hook_wysiwyg_editor_settings_alter().
+ */
+
+function stanford_jumpstart_vpsa_wysiwyg_editor_settings_alter(&$settings, $context) {
+  // add editor CSS to fix overflow issue
+  $editor_css = url(drupal_get_path('module', 'stanford_jumpstart_vpsa') . '/css/editor.css');
+  $settings['contentsCss'][] = $editor_css;
+
+  if ($context['profile']->format == "content_editor_text_format") {
+    $settings['stylesSet'][] = array(
+      'name' => t('Breakout Box Dark'),
+      'element' => 'p',
+      'attributes' => array(
+        'class' => 'pullquote',
+      ),
+    );
+
+    // Remove the infotext style.
+    foreach ($settings['stylesSet'] as $k => $values) {
+      if ($values['name'] == "Infotext") {
+        unset($settings['stylesSet'][$k]);
+        break;
+      }
+    }
+
+    // Keys need to be in order for some reason.
+    sort($settings['stylesSet']);
+  }
+}
+
+
+/**
+ * Implements hook_preprocess_page(). to allow collapsible fields on pages
+ */
+
+function stanford_jumpstart_vpsa_preprocess_page($variables) {
+
+  // If admin page. Add colorful buttons.
+  $admin_page = path_is_admin(current_path());
+  if ($admin_page) {
+    drupal_add_css(drupal_get_path("module", "stanford_jumpstart_vpsa") . "/css/admin-color-buttons.css");
+  }
+
+  // If on the stanford_page node then add collapse functions.
+  if (isset($variables['node'])) {
+    $node = $variables['node'];
+    if ($node->type == "stanford_page" || $node->type == "page") {
+      drupal_add_js('misc/collapse.js');
+      drupal_add_js('misc/form.js');
+    }
+  }
+
+}
+
+/**
+ * Implements hook_form_alter().
+ *
+ * @credit: http://cgit.drupalcode.org/promote_disable/tree/promote_disable.module
+ *
+ * Disable, or remove, the promote to front and sticky checkboxes.
+ */
+function stanford_jumpstart_vpsa_form_alter(&$form, &$form_state, $form_id) {
+  // Are we on a node form?
+  if (strpos($form_id, '_node_form') !== FALSE) {
+    // Unset the form element.
+    unset($form['options']['promote']);
+    unset($form['options']['sticky']);
+    // Add a submit function to the start of the #submit array.
+    array_unshift($form['#submit'], 'stanford_jumpstart_vpsa_form_submit');
+  }
+  // Are we on a node type form?
+  elseif ($form_id == 'node_type_form') {
+    // Remove the option.
+    unset($form['workflow']['node_options']['#options']['promote']);
+    unset($form['workflow']['node_options']['#options']['sticky']);
+    $form['workflow']['message']['#markup'] = "<div class=\"messages warning\"><ul><li>" . t("Promote to front and sticky options have been disabled by stanford_jumpstart_vpsa module") . "</li></ul></div>";
+  }
+}
+
+/**
+ * Changes the value of the "promoted" form field if it is set.
+ *
+ * @credit: http://cgit.drupalcode.org/promote_disable/tree/promote_disable.module
+ */
+function stanford_jumpstart_vpsa_form_submit($form, &$form_state) {
+  // Change the appropriate values.
+  $form_state['input']['promote'] = 0;
+  $form_state['values']['promote'] = 0;
+  $form_state['input']['sticky'] = 0;
+  $form_state['values']['sticky'] = 0;
+}
+
+/**
+ * Implements hook_node_presave().
+ *
+ * @credit: http://cgit.drupalcode.org/promote_disable/tree/promote_disable.module
+ */
+function stanford_jumpstart_vpsa_node_presave($node) {
+  $node->promote = 0;
+  $node->sticky = 0;
+}
+

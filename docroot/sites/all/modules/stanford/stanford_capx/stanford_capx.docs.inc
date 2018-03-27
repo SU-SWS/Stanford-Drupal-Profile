@@ -2,8 +2,6 @@
 
 /**
  * @file
- * @author [author] <[email]>
- *
  * A place to put documentation related functionality.
  */
 
@@ -14,11 +12,11 @@ define('STANFORD_CAPX_SAMPLE_PROFILE', 'sample_profile.json');
 
 /**
  * Menu callback to display the CAPx Data Browser.
- * @return [type] [description]
+ *
+ * @return array
+ *   A render array for the data browser block.
  */
 function stanford_capx_admin_config_data_browser() {
-  // @TODO: Add refresh functionality?
-
   $base = drupal_get_path('module', 'stanford_capx');
 
   // Render the refresh schema form button.
@@ -32,7 +30,6 @@ function stanford_capx_admin_config_data_browser() {
 
   // Convert the schema to a jqTree compatible format.
   $jq_tree = stanford_capx_jqTree_get($schema);
-  // @TODO: Cache this?
 
   // Attach the default jsTree CSS.
   $output['#attached']['css'] = array();
@@ -59,12 +56,15 @@ function stanford_capx_admin_config_data_browser() {
 /**
  * Form to clear the cached CAP schema and sample profile data files.
  *
- * @param $form
- * @param $form_state
+ * @param array $form
+ *   The form array.
+ * @param array $form_state
+ *   The form state according to the Drupal api.
  *
  * @return array
+ *   The form array.
  */
-function stanford_capx_admin_config_data_browser_refresh($form, &$form_state) {
+function stanford_capx_admin_config_data_browser_refresh(array $form, array &$form_state) {
   $form = array();
 
   $form['actions']['submit'] = array(
@@ -78,10 +78,12 @@ function stanford_capx_admin_config_data_browser_refresh($form, &$form_state) {
 /**
  * Form submit handler to clear the cached CAP files.
  *
- * @param $form
- * @param $form_state
+ * @param array $form
+ *   The form array.
+ * @param array $form_state
+ *   The form state array.
  */
-function stanford_capx_admin_config_data_browser_refresh_submit($form, &$form_state) {
+function stanford_capx_admin_config_data_browser_refresh_submit(array $form, array &$form_state) {
   stanford_capx_admin_data_browser_schema_flush();
 }
 
@@ -103,9 +105,11 @@ function stanford_capx_admin_data_browser_schema_flush() {
 /**
  * Render the CAP Profile Schema as a jqTree compatible JSON structure.
  *
- * @param [type] [description]
+ * @param string $schema_json
+ *   The json string.
  *
- * @return [type] [description]
+ * @return mixed
+ *   False if there is an error.
  */
 function stanford_capx_jqTree_get($schema_json) {
   $decoded_json = json_decode($schema_json);
@@ -115,12 +119,15 @@ function stanford_capx_jqTree_get($schema_json) {
 /**
  * Traverse the schema and render the desired schema elements.
  *
- * @param [type] [description]
- * @param [type] [description]
+ * @param object $schema
+ *   The schema array.
+ * @param array $parents
+ *   The parents for the schema array.
  *
- * @return [type] [description]
+ * @return array
+ *   The jqtree renderable data.
  */
-function stanford_capx_jqTree_render(&$schema, $parents = array()) {
+function stanford_capx_jqTree_render(&$schema, array $parents = array()) {
   // Initialize variables for collecting the field metadata.
   $branch = array();
   $metadata = array();
@@ -213,9 +220,11 @@ function stanford_capx_jqTree_render(&$schema, $parents = array()) {
 /**
  * Prepare the value(s) returned from querying the sample data.
  *
- * @param [type] [description]
+ * @param array $sample_data
+ *   Sample data to use.
  *
- * @return [type] [description]
+ * @return mixed
+ *   False if there was an error.
  */
 function stanford_capx_sample_data_render($sample_data) {
   // Is there a boolean value in the $sample_data array?
@@ -243,11 +252,12 @@ function stanford_capx_sample_data_render($sample_data) {
 
 /**
  * Fetch, cache and query the sample data profile.
- * @TODO: Separate the concerns.
  *
- * @param [type] [description]
+ * @param string $selector
+ *   The selector.
  *
- * @return [type] [description]
+ * @return string
+ *   The selected data.
  */
 function stanford_capx_sample_data($selector) {
   static $sample_profile;
@@ -265,11 +275,9 @@ function stanford_capx_sample_data($selector) {
       $client = CAPxConnection::getAuthenticatedHTTPClient();
 
       // Profile of "swberg".
-      // @TODO: Make this configurable.
       $response = $client->api('profile')->getRaw(32640);
 
       $json = $response->getBody(TRUE);
-      // @TODO: Expire this at some point. hook_cron?
       file_unmanaged_save_data($json, $file, FILE_EXISTS_REPLACE);
     }
 

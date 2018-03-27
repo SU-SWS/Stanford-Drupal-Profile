@@ -1,0 +1,17 @@
+<?php
+
+/**
+ * @file
+ * Code for the Stanford Events Recap feature.
+ */
+
+include_once 'stanford_events_recap.features.inc';
+
+/**
+ * Implements hook_field_group_pre_render().
+ */
+function stanford_events_recap_field_group_pre_render(&$element, $group, &$form) {
+  if ($group->group_name == 'group_recap_details') {
+    drupal_add_css(drupal_get_path('module', 'stanford_events_recap') . '/css/stanford_events_recap.css');
+  }
+}

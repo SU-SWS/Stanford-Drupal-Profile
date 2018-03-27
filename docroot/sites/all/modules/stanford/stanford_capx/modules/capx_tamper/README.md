@@ -1,5 +1,5 @@
 # Stanford CAPx Tampers
-#### Version 2.0-dev
+#### Version 3.0-dev
 
 CAPx Tampers provide the option to alter the data from the API before saving it to a profile. Much of this functionality is inspired by the feeds_tamper module and additional help can be found at that resource.
 

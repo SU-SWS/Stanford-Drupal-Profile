@@ -1,0 +1,14 @@
+; $Id.
+name = Simple Field Formatter
+description = Simple Field Display Formatter
+core = 7.x
+package = Fields
+dependencies[] = field
+dependencies[] = field_formatter_settings
+files[] = simple_field_formatter.module
+; Information added by Drupal.org packaging script on 2017-03-20
+version = "7.x-2.0-beta5"
+core = "7.x"
+project = "simple_field_formatter"
+datestamp = "1490022486"
+

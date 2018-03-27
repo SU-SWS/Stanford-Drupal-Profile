@@ -330,7 +330,7 @@ function capx_filters_parse_date($string) {
 function capx_filters_entity_presave($entity, $type) {
 
   // We only want to act on importer cfe entities.
-  if ($type !== 'capx_cfe' && $entity->type !== 'importer') {
+  if ($type !== 'capx_cfe' || $entity->type !== 'importer') {
     return NULL;
   }
 

@@ -8,10 +8,13 @@
  * Implements hook_ctools_plugin_api().
  */
 function stanford_video_ctools_plugin_api($module = NULL, $api = NULL) {
-  if ($module == "field_group" && $api == "field_group") {
+  if ($module == "context" && $api == "context") {
+    return array("version" => "3");
+  }
+  if ($module == "ds" && $api == "ds") {
     return array("version" => "1");
   }
-  if ($module == "jw_player" && $api == "jw_player_presets") {
+  if ($module == "field_group" && $api == "field_group") {
     return array("version" => "1");
   }
   if ($module == "strongarm" && $api == "strongarm") {
@@ -32,9 +35,9 @@ function stanford_video_views_api($module = NULL, $api = NULL) {
 function stanford_video_node_info() {
   $items = array(
     'stanford_video' => array(
-      'name' => t('Stanford Web Video'),
+      'name' => t('Stanford Video'),
       'base' => 'node_content',
-      'description' => t('The Stanford Web Video content type is a custom content type that affords the ability to publish a captioned video to your website via direct file upload or remote stream. Streaming video service is available from Stanford Video, <a href="http://stanfordvideo.stanford.edu/streaming/">http://stanfordvideo.stanford.edu/streaming/</a>. Video post-production and transcript generation can be found at <a href="http://captioning.stanford.edu">http://captioning.stanford.edu</a>.'),
+      'description' => '',
       'has_title' => '1',
       'title_label' => t('Title'),
       'help' => '',

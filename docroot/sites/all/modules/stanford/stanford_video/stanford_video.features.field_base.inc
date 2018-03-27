@@ -10,149 +10,83 @@
 function stanford_video_field_default_field_bases() {
   $field_bases = array();
 
-  // Exported field_base: 'field_stanford_video_account'.
-  $field_bases['field_stanford_video_account'] = array(
+  // Exported field_base: 'field_s_video_categories'.
+  $field_bases['field_s_video_categories'] = array(
     'active' => 1,
-    'cardinality' => 1,
+    'cardinality' => -1,
     'deleted' => 0,
     'entity_types' => array(),
-    'field_name' => 'field_stanford_video_account',
+    'field_name' => 'field_s_video_categories',
     'indexes' => array(
-      'format' => array(
-        0 => 'format',
+      'tid' => array(
+        0 => 'tid',
       ),
     ),
     'locked' => 0,
-    'module' => 'text',
+    'module' => 'taxonomy',
     'settings' => array(
-      'max_length' => 255,
-    ),
-    'translatable' => 0,
-    'type' => 'text',
-  );
-
-  // Exported field_base: 'field_stanford_video_caption'.
-  $field_bases['field_stanford_video_caption'] = array(
-    'active' => 1,
-    'cardinality' => 1,
-    'deleted' => 0,
-    'entity_types' => array(),
-    'field_name' => 'field_stanford_video_caption',
-    'indexes' => array(
-      'fid' => array(
-        0 => 'fid',
+      'allowed_values' => array(
+        0 => array(
+          'vocabulary' => 'stanford_video_categories',
+          'parent' => 0,
+        ),
       ),
     ),
-    'locked' => 0,
-    'module' => 'file',
-    'settings' => array(
-      'display_default' => 0,
-      'display_field' => 0,
-      'uri_scheme' => 'public',
-    ),
     'translatable' => 0,
-    'type' => 'file',
+    'type' => 'taxonomy_term_reference',
   );
 
-  // Exported field_base: 'field_stanford_video_external'.
-  $field_bases['field_stanford_video_external'] = array(
+  // Exported field_base: 'field_s_video_date'.
+  $field_bases['field_s_video_date'] = array(
     'active' => 1,
     'cardinality' => 1,
     'deleted' => 0,
     'entity_types' => array(),
-    'field_name' => 'field_stanford_video_external',
-    'indexes' => array(
-      'format' => array(
-        0 => 'format',
-      ),
-    ),
-    'locked' => 0,
-    'module' => 'text',
-    'settings' => array(),
-    'translatable' => 0,
-    'type' => 'text_long',
-  );
-
-  // Exported field_base: 'field_stanford_video_file'.
-  $field_bases['field_stanford_video_file'] = array(
-    'active' => 1,
-    'cardinality' => 1,
-    'deleted' => 0,
-    'entity_types' => array(),
-    'field_name' => 'field_stanford_video_file',
-    'indexes' => array(
-      'fid' => array(
-        0 => 'fid',
-      ),
-    ),
-    'locked' => 0,
-    'module' => 'file',
-    'settings' => array(
-      'display_default' => 0,
-      'display_field' => 0,
-      'uri_scheme' => 'public',
-    ),
-    'translatable' => 0,
-    'type' => 'file',
-  );
-
-  // Exported field_base: 'field_stanford_video_filename'.
-  $field_bases['field_stanford_video_filename'] = array(
-    'active' => 1,
-    'cardinality' => 1,
-    'deleted' => 0,
-    'entity_types' => array(),
-    'field_name' => 'field_stanford_video_filename',
-    'indexes' => array(
-      'format' => array(
-        0 => 'format',
-      ),
-    ),
-    'locked' => 0,
-    'module' => 'text',
-    'settings' => array(
-      'max_length' => 255,
-    ),
-    'translatable' => 0,
-    'type' => 'text',
-  );
-
-  // Exported field_base: 'field_stanford_video_link'.
-  $field_bases['field_stanford_video_link'] = array(
-    'active' => 1,
-    'cardinality' => 1,
-    'deleted' => 0,
-    'entity_types' => array(),
-    'field_name' => 'field_stanford_video_link',
+    'field_name' => 'field_s_video_date',
     'indexes' => array(),
     'locked' => 0,
-    'module' => 'link',
+    'module' => 'date',
     'settings' => array(
-      'attributes' => array(
-        'class' => '',
-        'rel' => '',
-        'target' => 'default',
+      'cache_count' => 4,
+      'cache_enabled' => 0,
+      'granularity' => array(
+        'day' => 'day',
+        'hour' => 0,
+        'minute' => 0,
+        'month' => 'month',
+        'second' => 0,
+        'year' => 'year',
       ),
-      'display' => array(
-        'url_cutoff' => 80,
-      ),
-      'enable_tokens' => 1,
-      'title' => 'optional',
-      'title_maxlength' => 128,
-      'title_value' => '',
-      'url' => 0,
+      'timezone_db' => '',
+      'todate' => '',
+      'tz_handling' => 'none',
     ),
     'translatable' => 0,
-    'type' => 'link_field',
+    'type' => 'datetime',
   );
 
-  // Exported field_base: 'field_stanford_video_poster'.
-  $field_bases['field_stanford_video_poster'] = array(
+  // Exported field_base: 'field_s_video_embed'.
+  $field_bases['field_s_video_embed'] = array(
     'active' => 1,
     'cardinality' => 1,
     'deleted' => 0,
     'entity_types' => array(),
-    'field_name' => 'field_stanford_video_poster',
+    'field_name' => 'field_s_video_embed',
+    'indexes' => array(),
+    'locked' => 0,
+    'module' => 'video_embed_field',
+    'settings' => array(),
+    'translatable' => 0,
+    'type' => 'video_embed_field',
+  );
+
+  // Exported field_base: 'field_s_video_featured_image'.
+  $field_bases['field_s_video_featured_image'] = array(
+    'active' => 1,
+    'cardinality' => 1,
+    'deleted' => 0,
+    'entity_types' => array(),
+    'field_name' => 'field_s_video_featured_image',
     'indexes' => array(
       'fid' => array(
         0 => 'fid',
@@ -168,13 +102,36 @@ function stanford_video_field_default_field_bases() {
     'type' => 'image',
   );
 
-  // Exported field_base: 'field_stanford_video_server'.
-  $field_bases['field_stanford_video_server'] = array(
+  // Exported field_base: 'field_s_video_file_insert'.
+  $field_bases['field_s_video_file_insert'] = array(
+    'active' => 1,
+    'cardinality' => -1,
+    'deleted' => 0,
+    'entity_types' => array(),
+    'field_name' => 'field_s_video_file_insert',
+    'indexes' => array(
+      'fid' => array(
+        0 => 'fid',
+      ),
+    ),
+    'locked' => 0,
+    'module' => 'file',
+    'settings' => array(
+      'display_default' => 0,
+      'display_field' => 1,
+      'uri_scheme' => 'public',
+    ),
+    'translatable' => 0,
+    'type' => 'file',
+  );
+
+  // Exported field_base: 'field_s_video_quote'.
+  $field_bases['field_s_video_quote'] = array(
     'active' => 1,
     'cardinality' => 1,
     'deleted' => 0,
     'entity_types' => array(),
-    'field_name' => 'field_stanford_video_server',
+    'field_name' => 'field_s_video_quote',
     'indexes' => array(
       'format' => array(
         0 => 'format',
@@ -187,6 +144,50 @@ function stanford_video_field_default_field_bases() {
     ),
     'translatable' => 0,
     'type' => 'text',
+  );
+
+  // Exported field_base: 'field_s_video_speakers'.
+  $field_bases['field_s_video_speakers'] = array(
+    'active' => 1,
+    'cardinality' => 1,
+    'deleted' => 0,
+    'entity_types' => array(),
+    'field_name' => 'field_s_video_speakers',
+    'indexes' => array(
+      'format' => array(
+        0 => 'format',
+      ),
+    ),
+    'locked' => 0,
+    'module' => 'text',
+    'settings' => array(
+      'max_length' => 255,
+    ),
+    'translatable' => 0,
+    'type' => 'text',
+  );
+
+  // Exported field_base: 'field_s_video_transcript'.
+  $field_bases['field_s_video_transcript'] = array(
+    'active' => 1,
+    'cardinality' => 1,
+    'deleted' => 0,
+    'entity_types' => array(),
+    'field_name' => 'field_s_video_transcript',
+    'indexes' => array(
+      'fid' => array(
+        0 => 'fid',
+      ),
+    ),
+    'locked' => 0,
+    'module' => 'file',
+    'settings' => array(
+      'display_default' => 1,
+      'display_field' => 1,
+      'uri_scheme' => 'public',
+    ),
+    'translatable' => 0,
+    'type' => 'file',
   );
 
   return $field_bases;

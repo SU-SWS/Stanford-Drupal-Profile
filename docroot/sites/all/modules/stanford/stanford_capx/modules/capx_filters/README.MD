@@ -1,5 +1,5 @@
 # Stanford CAPx Filters
-#### Version 2.0-dev
+#### Version 3.0-dev
 
 CAPx filters provide the option to prevent the importing of certain profiles from the API. Users can configure capx importers to filter out profiles based on nearly any information sent by the API.
 

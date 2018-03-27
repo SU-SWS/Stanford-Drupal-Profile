@@ -1,5 +1,12 @@
 Stanford Events Importer x.x-x.x, xxxx-xx-xx
 --------------------------------------------
+7.x-3.8                                  2017-08-05
+---------------------------------------------------
+- Events view for a dynamic paragraph view. Ideal for paragraphs implementation in stanford_story_page.
+
+7.x-3.7                                  2017-05-17
+---------------------------------------------------
+- Submodule for events recap
 
 7.x-3.6                                  2017-05-01
 ---------------------------------------------------

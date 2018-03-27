@@ -1,0 +1,1225 @@
+<?php
+/**
+ * @file
+ * stanford_subsites.module
+ *
+ * @author (s)
+ *         Shea McKinney / sherakama
+ *
+ * @description
+ * This module provides helper functionality to the Stanford Subsites
+ * feature.
+ *
+ *
+ * @todo :::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+ *  remove all 'Features' and have this whole thing as one module using
+ *  field api.
+ *
+ * :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+ */
+
+// The content type that defines a subsite.
+define('SUBSITE_CONTENT_TYPE', "stanford_subsite");
+// The field that changes the site title.
+define("SUBSITE_NAME_FIELD", "field_stanford_subsite_sname");
+// The field that changes the site title.
+define("SUBSITE_2NDNAME_FIELD", "field_stanford_subsite_2nd_line");
+// The field that changes the site slogan.
+define("SUBSITE_SLOGAN_FIELD", "field_stanford_subsite_slogan");
+// The field that changes the site logo.
+define("SUBSITE_LOGO_FIELD", "field_stanford_subsite_logo");
+// The field that changes $front_page.
+define("SUBSITE_FRONT_PAGE_FIELD", "field_stanford_subsite_front");
+// The field that changes the theme.
+define("SUBSITE_THEME_FIELD", "field_stanford_subsite_theme");
+// The subsite vocabulary machine name.
+define("SUBSITE_VOCAB", "stanford_subsites_sites");
+// The subsite tags field.
+define("SUBSITE_TAGS_FIELD", "field_stanford_subsite_sub_tags");
+// The subsite machine_name field.
+define("SUBSITE_MACHINE_NAME_FIELD", "field_subsite_machine_name");
+
+// Global variable for active subsite.
+global $subsite;
+
+// Load helper files.
+module_load_include('inc', 'stanford_subsites', 'stanford_subsites');
+
+
+/**
+ * Implements hook_help().
+ *
+ * @param string $path
+ *   path to help page
+ * @param array $arg
+ *   args
+ *
+ * @return html
+ *   html output
+ */
+function stanford_subsites_help($path, $arg) {
+  switch ($path) {
+    case 'admin/help#stanford_subsites':
+      $output = '<h2>' . t('To Use') . '</h2>';
+      $output .= '<ol><li>' . t('Enable the module and all dependencies, plus all submodules') . '</li>';
+      $output .= '<li>' . t('!permissions and give selected roles the following permissions:', array('!permissions' => l(t('Go to the permissions page'), 'admin/people/permissions#module-stanford_subsites')));
+      $output .= '<ul><li>' . t('Administer Subsite') . '</li>';
+      $output .= '<li>' . t('Administer Subsite Selection') . '</li></ul></li>';
+      $output .= '<li>' . t('!configpage and:', array('!configpage' => l(t('Go to the configuration page'), 'admin/config/subsites')));
+      $output .= '<ul><li>' . t('Select content types that can be used within subsites') . '</li>';
+      $output .= '<li>' . t('Enable the placement of menu blocks') . '</li>';
+      $output .= '<li>' . t('Select theme regions where the main menu blocks should be placed') . '</li></ul></li>';
+      $output .= '<li>' . t('!createsubsite and choose theme options', array('!createsubsite' => l(t('Create a new subsite'), 'node/add/stanford-subsite'))) . '</li>';
+      $output .= '<li>' . t('!createcontent and select a parent subsite', array('!createcontent' => l(t('Create content'), 'node/add'))) . '</li>';
+      $output .= '</ol>';
+
+      $output .= '<h2>' . t('Known Issues') . '</h2>';
+      $output .= '<p>' . t('If a user creates a new subsite, the main menu for that subsite becomes available for use in all content types that are available for use in a subsite. If a user then creates a new content type, and enables it for use in subsites, it does not "automagically" have access to any main menus for subsites. The workflow that this implies is that an administrator should create all subsites first, then new content types. Subsequently, if a new content type is created (or added by enabling a Features-based module that defines it), the admin will need to go into the menu settings for the content type and enable the subsite menus that should be available for that content type.') . '</p>';
+      return $output;
+  }
+  return;
+}
+
+/**
+ * Implements hook_menu().
+ */
+function stanford_subsites_menu() {
+  $items = array();
+
+  $items['admin/config/subsites'] = array(
+    'title' => 'Subsite Settings',
+    'description' => 'Settings and configuration options for subsite behavior',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('stanford_subsites_admin_config_form'),
+    'file' => 'stanford_subsites.admin.inc',
+    'access arguments' => array('administer sws'),
+  );
+
+  return $items;
+}
+
+/**
+ * Implements hook_permission().
+ */
+function stanford_subsites_permission() {
+  return array(
+    'administer sws' => array(
+      'title' => t('Administer Subsite'),
+      'description' => t('Perform administration tasks for subsites.'),
+    ),
+    'administer subsite selection' => array(
+      'title' => t('Administer Subsite Selection'),
+      'description' => t('Access and change the subsite selection field'),
+    ),
+    'change subsite logo' => array(
+      'title' => t('Change subsite logo'),
+      'description' => t('Access and change the logo on subsite nodes'),
+    ),
+    'change subsite theme' => array(
+      'title' => t('Change subsite theme'),
+      'description' => t('Access and change the theme selection field on subsite nodes'),
+    ),
+  );
+}
+
+/**
+ * Implements hook_custom_theme().
+ */
+function stanford_subsites_custom_theme() {
+
+  // No fancy pants stuff on admin pages.
+  if (path_is_admin(current_path())) {
+    return;
+  }
+
+  // Check to see if this page is a node. If so apply subtheme by node reference.
+  $subsite_node = stanford_subsites_get_active_subsite();
+
+  // Apply the field values.
+  if ($subsite_node &&
+    isset($subsite_node->{SUBSITE_THEME_FIELD}[LANGUAGE_NONE][0]['value'])
+    && $subsite_node->{SUBSITE_THEME_FIELD}[LANGUAGE_NONE][0]['value'] !== "default") {
+    return $subsite_node->{SUBSITE_THEME_FIELD}[LANGUAGE_NONE][0]['value'];
+  }
+
+}
+
+
+/**
+ * Add some additional variables to the preprocess page function.
+ *
+ * For use in the theme templates like $vars['site_name'];
+ *
+ * @param array $vars
+ *   An array or variables
+ * @param string $hook
+ *   A string of the hook name
+ */
+function stanford_subsites_preprocess_html(&$vars, $hook) {
+
+  $vars['site_name'] = variable_get('site_name');
+  $vars['subsite_site_name_text'] = FALSE;
+  $vars['subsite_site_name_html'] = FALSE;
+
+  // Check to see if this page is a node. If so apply subtheme by node reference.
+  $subsite_node = stanford_subsites_get_active_subsite();
+
+  if ($subsite_node) {
+    $vars['subsite_site_name_text'] = $subsite_node->{SUBSITE_NAME_FIELD}[LANGUAGE_NONE][0]["safe_value"];
+    $vars['subsite_site_name_html'] = l($vars['subsite_site_name_text'], "<front>");
+    $vars["classes_array"][] = "subsite-is-active";
+    $vars['classes_array'][] = "subsite-" . $subsite_node->nid;
+
+    // Add the subsite to the css classes array.
+    $full_name = "subsite-";
+    if (isset($subsite_node->{SUBSITE_NAME_FIELD}[LANGUAGE_NONE][0]["safe_value"])) {
+      $full_name .= $subsite_node->{SUBSITE_NAME_FIELD}[LANGUAGE_NONE][0]["safe_value"];
+    }
+    if (isset($subsite_node->field_stanford_subsite_2nd_line[LANGUAGE_NONE][0]["safe_value"])) {
+      $full_name .= " " . $subsite_node->field_stanford_subsite_2nd_line[LANGUAGE_NONE][0]["safe_value"];
+    }
+
+    $full_name = strtolower(html_entity_decode($full_name));
+    $clean_css_class = drupal_clean_css_identifier($full_name);
+    $vars["classes_array"][] = $clean_css_class;
+
+  }
+  else {
+    $vars['subsite_site_name_html'] = l($vars['site_name'], "<front>");
+  }
+
+}
+
+
+
+/**
+ * Implements hook_preprocess_page().
+ *
+ * In order to do the logo, title, and slogan switching we need to generate and
+ * change a number of page.tpl variables.
+ *
+ * @param array $vars
+ *   Already defined page template vars.
+ *
+ */
+function stanford_subsites_preprocess_page(&$vars) {
+
+  // Some variables need to be persistent.
+  $vars['subsite_logo_html'] = FALSE; // the subsite logo full html and link
+  $vars['subsite_site_name_html'] = FALSE; // the subsite name full html and link
+  $vars['subsite_site_name_text'] = FALSE; // the subsite name plain text
+  $vars['subsite_name_logo_setting'] = "default";
+  $vars['alt'] = $vars['site_name']; // the alt text for the logo image
+  $vars['logo_title'] = $vars['site_name']; // The title text for the logo image
+  $vars['subsite_is_front'] = FALSE; // boolean value if current type is subsite
+  $vars['subsite_front'] = FALSE; // string of the path to the active subsite
+  $vars['site_title_second_line'] = "";
+
+  // Check to see if this page is a subsite node type. If it is then we are at
+  // a subsite 'front'.
+  if (isset($vars['node']) && $vars['node']->type == SUBSITE_CONTENT_TYPE) {
+    $vars['subsite_is_front'] = TRUE;
+  }
+
+  // Apply the subsite.
+  $subsite_node = stanford_subsites_get_active_subsite();
+
+  if ($subsite_node) {
+    stanford_subsites_apply_subsite($subsite_node, $vars);
+  }
+  else {
+    if ($vars['logo']) {
+      $img = theme("image",
+        array(
+          'path' => $vars['logo'],
+          'role' => 'presentation',
+          'alt' => check_plain($vars['alt']),
+          'title' => check_plain($vars['site_name']),
+          'attributes' => array(
+            'class' => 'subsite-logo',
+          ),
+        )
+      );
+      $vars['subsite_logo_html'] = l($img, "<front>", array('html' => TRUE));
+    }
+    $vars['subsite_site_name_html'] = l($vars['site_name'], "<front>");
+  }
+  // End else if subsite.
+
+}
+
+/**
+ * Apply a subsite after the page that is being viewed is validated as such.
+ *
+ * @param object $node
+ *   The subsite node object.
+ * @param array $vars
+ *   The variables array from hook_preprocess_page.
+ *
+ * Function tasks:
+ *   1. Change $title [if set]
+ *   2. Change $logo [if set]
+ *   3. Change the $front_page url [if set]
+ *   4. Create new $logo_title & $alt template variables
+ *   5. Create completely new $subsite_logo and $subsite_title
+ *      variables with links
+ *   6. Override the site_logo variable with subsite logo if present.
+ */
+function stanford_subsites_apply_subsite($node, &$vars) {
+
+
+  // Change the site title.
+  if (isset($node->{SUBSITE_NAME_FIELD}[LANGUAGE_NONE][0]["safe_value"])
+    && !empty($node->{SUBSITE_NAME_FIELD}[LANGUAGE_NONE][0]["safe_value"])) {
+    $vars['site_name'] = $node->{SUBSITE_NAME_FIELD}[LANGUAGE_NONE][0]["safe_value"];
+    $vars['my_site_title'] = $vars['site_title_first_line'] = $vars['site_name'];
+  }
+
+  if (isset($node->field_stanford_subsite_2nd_line[LANGUAGE_NONE][0]["safe_value"])
+    && !empty($node->field_stanford_subsite_2nd_line[LANGUAGE_NONE][0]["safe_value"])) {
+    $vars['site_title_second_line'] = $node->field_stanford_subsite_2nd_line[LANGUAGE_NONE][0]["safe_value"];
+  }
+
+  // Create new $logo_title and $alt variables for use in the page.tpl.php
+  $vars['alt'] = $vars['site_name'];
+  $vars['logo_title'] = $vars['site_name'];
+
+  // Change the site logo.
+  if (isset($node->{SUBSITE_LOGO_FIELD}[LANGUAGE_NONE][0]["uri"])
+    && !empty($node->{SUBSITE_LOGO_FIELD}[LANGUAGE_NONE][0]["uri"])) {
+    $vars['logo'] = file_create_url($node->{SUBSITE_LOGO_FIELD}[LANGUAGE_NONE][0]["uri"]);
+
+    // Check for alt and title information on the image field.
+    if (isset($node->{SUBSITE_LOGO_FIELD}[LANGUAGE_NONE][0]['alt']) &&
+      !empty($node->{SUBSITE_LOGO_FIELD}[LANGUAGE_NONE][0]['alt'])) {
+      $vars['alt'] = t($node->{SUBSITE_LOGO_FIELD}[LANGUAGE_NONE][0]['alt']);
+    }
+
+    // Title.
+    if (isset($node->{SUBSITE_LOGO_FIELD}[LANGUAGE_NONE][0]['title']) &&
+      !empty($node->{SUBSITE_LOGO_FIELD}[LANGUAGE_NONE][0]['title'])) {
+      $vars['logo_title'] = t($node->{SUBSITE_LOGO_FIELD}[LANGUAGE_NONE][0]['title']);
+    }
+  }
+
+  // Setup subsite logo and title vars
+  // ///////////////////////////////////////////////////////////////////////////
+
+  // Handle the linkage to the subsite logo and title.
+  if (isset($node->{SUBSITE_FRONT_PAGE_FIELD}[LANGUAGE_NONE][0]["value"])) {
+
+    // Set the link setting as a variable for page.tpl.php
+    $vars['subsite_front_page'] = $node->{SUBSITE_FRONT_PAGE_FIELD}[LANGUAGE_NONE][0]["value"];
+    $vars['subsite_name_logo_setting'] = $node->{SUBSITE_FRONT_PAGE_FIELD}[LANGUAGE_NONE][0]["value"];
+
+    // Support default themes
+    // Change the front page variable to link to the subsite.
+    if ($node->{SUBSITE_FRONT_PAGE_FIELD}[LANGUAGE_NONE][0]["value"] == "subsite") {
+      $vars['front_page'] = url('node/' . $node->nid, array('absolute' => TRUE));
+    }
+
+    // Support customized themes
+    // Render the HTML for the logo.
+    if ($vars['logo']) {
+      $img = theme("image", array(
+        'path' => $vars['logo'],
+        'role' => 'presentation',
+        'alt' => check_plain($vars['alt']),
+        'title' => check_plain($vars['site_name']),
+        'attributes' => array('class' => 'subsite-logo')
+        )
+      );
+    }
+
+
+    // What the active subsite setting is.
+    switch ($node->{SUBSITE_FRONT_PAGE_FIELD}[LANGUAGE_NONE][0]["value"]) {
+
+      // Link the logo and the title to the subsite.
+      case "subsite":
+        if ($vars['logo']) {
+          $vars['subsite_logo'] = l($img, "node/" . $node->nid, array('html' => TRUE));
+        }
+        $vars['subsite_site_name_html'] = l($vars['site_name'], "node/" . $node->nid);
+
+        // Set the variable as well for use in the theme.
+        break;
+
+      // Link the title to the subsite and the logo to the main site.
+      case "split":
+        if ($vars['logo']) {
+          $vars['subsite_logo_html'] = l($img, "<front>", array('html' => TRUE));
+        }
+        $vars['subsite_site_name_html'] = l($vars['site_name'], "node/" . $node->nid);
+        $vars['subsite_front'] = url('node/' . $node->nid, array('absolute' => TRUE));
+        $vars['subsite_front_page'] = url('node/' . $node->nid, array('absolute' => TRUE));
+        break;
+
+      // Link both to main site.
+      default:
+        if ($vars['logo']) {
+          $vars['subsite_logo_html'] = l($img, "<front>", array('html' => TRUE));
+        }
+        $vars['subsite_site_name_html'] = l($vars['site_name'], "<front>");
+    }
+
+  }
+
+  // SUBSITE SLOGAN
+  // ///////////////////////////////////////////////////////////////////////////
+
+  if (isset($node->{SUBSITE_SLOGAN_FIELD}[LANGUAGE_NONE][0]["value"])) {
+    $vars['site_slogan'] = t($node->{SUBSITE_SLOGAN_FIELD}[LANGUAGE_NONE][0]["value"]);
+  }
+
+  // FRONT Variables
+  // ///////////////////////////////////////////////////////////////////////////
+
+  // Set the url for use in the theme to the active subsite.
+  $vars['subsite_front'] = url(
+    'node/' . $node->nid,
+    array('absolute' => TRUE)
+  );
+
+}
+
+/**
+ * Implements hook_node_submit().
+ *
+ * @param object $node
+ *   The node object being updated in response to a form submission.
+ * @param array $form
+ *   The form being used to edit the node.
+ * @param array $form_state
+ *   The form state array.
+ *
+ * Utiltity tasks for saving nodes of various types
+ * 1. Clear path caches for subsites
+ */
+function stanford_subsites_node_submit($node, $form, &$form_state) {
+
+  // If we are saveing a subsite content type clear path cache
+  // and perform subsite specific handling.
+  if ($node->type == SUBSITE_CONTENT_TYPE) {
+    // Clear all path caches.
+    cache_clear_all('stanford_subsites_subsite_paths', 'cache', TRUE);
+  }
+
+}
+
+/**
+ * Handles the insert of a new subsite content type.
+ *
+ * @param object $node
+ *   The node object
+ *
+ * Tasks:
+ * 1. Create subsite term
+ * 2. Check for subsite ref in order to set active workspace
+ */
+function stanford_subsites_node_insert($node) {
+
+  // We have a new subsite content type.
+  if ($node->type == SUBSITE_CONTENT_TYPE) {
+
+    // Storage for passing arguments to subsequential functions.
+    $args = array();
+
+    // If menu/menublock creation is enabled do it!
+    if (variable_get("stanford_subsite_enabled_menus", FALSE)) {
+      $args += stanford_subsites_create_subsite_menu_and_menublock($node);
+      stanford_subsites_enable_menu_for_subsite_content_types($args['menu']);
+    }
+
+    // Create a subsite context for this subsite.
+    stanford_subsites_create_subsite_context($node, $args);
+
+    $tid = $node->{SUBSITE_TAGS_FIELD}[LANGUAGE_NONE][0]['tid'];
+    $menu = $args['menu']['menu_name'];
+    $context = $args['context'];
+
+    // Machine name
+    $machine_name = $node->{SUBSITE_MACHINE_NAME_FIELD}[LANGUAGE_NONE][0]['value'];
+
+    // Log all of this info.
+    stanford_subsite_index_insert($node->nid, $tid, $menu, $context->name, $machine_name);
+  }
+
+}
+
+/**
+ * Implements hook_node_delete().
+ *
+ * Remove all the extra fluff we can when we delete a subsite.
+ */
+function stanford_subsites_node_delete($node) {
+
+  $index = stanford_subsite_index_get("nid", $node->nid);
+
+  // Clear out the working space. Just cuz.
+  module_load_include("inc", "stanford_subsites", "stanford_subsites");
+  stanford_subsites_clear_subsite_workingspace();
+
+  // Remove all of the things.
+  if ($index) {
+
+    if ($index->menu) {
+      // Kill the menu & menu block.
+      $menu_block_info = menu_block_block_info();
+      foreach ($menu_block_info as $delta => $menu_block) {
+        $length = strlen($index->menu);
+        $length *= -1;
+        if (substr($menu_block['info'], $length) == $index->menu) {
+          module_load_include("inc", "menu_block", "menu_block.admin");
+
+          $form = array();
+          $form_state = array();
+          $form_state['values']['delta'] = $delta;
+          $form_state['values']['block_title'] =  _menu_block_format_title(menu_block_get_config($delta));
+
+          // Work in menu_block 2.7
+          menu_block_delete_form_submit($form, $form_state);
+
+        }
+      }
+
+      menu_delete(array("menu_name" => $index->menu));
+    }
+
+    // Kill the context with fire.
+    $context = context_load($index->context);
+    context_delete($context);
+
+    // Remove the taxonomy term.
+    taxonomy_term_delete($index->tid);
+  }
+
+  db_delete("subsite_index")
+  ->condition("nid", $node->nid)
+  ->execute();
+}
+
+/**
+ * Index insert is a wrapper for drupal_write_record to the subsite_index schema.
+ *
+ * Inserts a new record into the subsite_index scheam
+ *
+ * @param int $nid
+ *   The subsite nid
+ * @param int $tid
+ *   The subsite's term's id.
+ * @param string $menu
+ *   The name of the menu for the subsite menu block.
+ * @param string $context
+ *   The name of the context for the whole subsite.
+ * @param string $machine_name
+ *   The unique value name
+ *
+ * @return boolean
+ *   True for success.
+ */
+function stanford_subsite_index_insert($nid, $tid, $menu = "", $context = "", $machine_name = "") {
+  $record = array(
+    'nid' => $nid,
+    'tid' => $tid,
+    'menu' => $menu,
+    'context' => $context,
+    'machine_name' => $machine_name
+  );
+  return drupal_write_record('subsite_index', $record);
+}
+
+/**
+ * Update a record in the subsite_index schema.
+ *
+ * This function wraps a drupal_write_record call in order to update a subsite
+ * record when something changes.
+ *
+ * @param int $nid
+ *   The subsite nid
+ * @param int $tid
+ *   The subsite's term's id
+ * @param string $menu
+ *   The subsite's menu name
+ * @param string $context
+ *   The subsite's context name.
+ *
+ * @return bool
+ *   True for success
+ */
+function stanford_subsite_index_update($nid, $tid = NULL, $menu = NULL, $context = NULL, $machine_name = NULL) {
+  $record = array(
+    'nid' => $nid,
+  );
+
+  if (!is_null($tid)) {
+    $record['tid'] = $tid;
+  }
+
+  if (!is_null($menu)) {
+    $record['menu'] = $menu;
+  }
+
+  if (!is_null($context)) {
+    $record['context'] = $context;
+  }
+
+  if (!is_null($machine_name)) {
+    $record['machine_name'] = $machine_name;
+  }
+
+  $keys = array('nid');
+  return drupal_write_record('subsite_index', $record, $keys);
+}
+
+/**
+ * Get a subsite index record from one of the many keys.
+ * @param string $type
+ *   Key name of subsite_index table cell.
+ * @param mixed $value
+ *   The value for the subsite index get search.
+ *
+ * @return mixed
+ *   The result object or false if none.
+ */
+function stanford_subsite_index_get($type = "nid", $value = NULL) {
+
+  if (is_null($value)) {
+    return FALSE;
+  }
+
+  try {
+    $result = db_select("subsite_index", 'si')
+      ->fields("si")
+      ->condition($type, $value)
+      ->range(0, 1)
+      ->execute()
+      ->fetchObject();
+  } catch (Exception $e) {
+    drupal_set_message($e->getMessage(), 'error');
+    return FALSE;
+  }
+
+  return $result;
+}
+
+/**
+ * Implements hook_node_update().
+ *
+ * @param object $node
+ *   The node object.
+ *
+ * 1. Clears the path cache for subsite nodes
+ * 2. Checks for subsite ref field in order to set the active subsite workspace
+ */
+function stanford_subsites_node_update($node) {
+
+   if ($node->type !== SUBSITE_CONTENT_TYPE) {
+    return;
+  }
+
+  // Clear out all of the subsite paths so they get updated.
+  cache_clear_all('stanford_subsites_subsite_paths', 'cache', TRUE);
+
+}
+
+
+/**
+ * Implements pathauto_alias_alter().
+ *
+ * @param string $alias
+ *   The subsite alias
+ * @param object $context
+ *   The context object.
+ *
+ * Prepends the pathalias of the subsite to a node being referenced to one
+ */
+function stanford_subsites_pathauto_alias_alter(&$alias, $context) {
+  $node = (isset($context['data']['node'])) ? $context['data']['node'] : FALSE;
+  $original_alias = $alias;
+
+  // A taxonomy term or a user or the subsite itself or pathauto is off.
+  if (!$node) {
+    return;
+  }
+
+  $node_type = $node->type;
+  $workbench_var = "workbench_access_node_type_" . $node_type;
+
+  // If workbench moderation is not available and pathauto is disabled for this node just end.
+  if (!module_exists("workbench_moderation")) {
+    if (!isset($node->path['pathauto']) || $node->path['pathauto'] === 0) {
+      return;
+    }
+  }
+
+  // If workbench is enabled and working on the live revision check the pathauto settings.
+  if (module_exists("workbench_moderation") && variable_get($workbench_var, FALSE) && isset($node->workbench_moderation['updating_live_revision'])) {
+    if (!isset($node->path['pathauto']) || $node->path['pathauto'] === 0) {
+      return;
+    }
+  }
+
+  // Alter the subsite pathauto alias to include the second line name.
+  if ($node->type == SUBSITE_CONTENT_TYPE) {
+    if (!empty($node->{SUBSITE_2NDNAME_FIELD}[LANGUAGE_NONE][0]['value']) && preg_match("/field_stanford_subsite_sname/", $context["pattern"])) {
+      $alias .= "-" . check_plain(drupal_clean_css_identifier(strtolower($node->{SUBSITE_2NDNAME_FIELD}[LANGUAGE_NONE][0]['value'])));
+    }
+    return;
+  }
+
+  // Only work on 'enabled' subsite content types.
+  $enabled_types = variable_get('stanford_subsite_content_types', array());
+  if (!in_array($node->type, $enabled_types)) {
+    return;
+  }
+
+  // If there is a reference to a subsite then alter the pathauto_alias.
+  if (isset($node->{SUBSITE_TAGS_FIELD}[LANGUAGE_NONE][0]["tid"])) {
+
+    $tid = $node->{SUBSITE_TAGS_FIELD}[LANGUAGE_NONE][0]["tid"];
+    $term = taxonomy_term_load($tid);
+
+    // Not a valid term. Die.
+    if (!$term) {
+      return;
+    }
+
+    $subsite = stanford_subsites_get_subsite_node_by_term($term);
+
+    // Not a valid subsite. Die.
+    if (!$subsite) {
+      return;
+    }
+
+    $subsite_alias = drupal_get_path_alias("node/" . $subsite->nid);
+
+    // Check to see if the original alias already contains the subsite alias.
+    // If the subsite alias already exists then do nothing.
+    if (strpos($original_alias, $subsite_alias) !== FALSE) {
+      return;
+    }
+
+    // Wrap the subsite's alias into this node's alias.
+    $alias = $subsite_alias . "/" . $original_alias;
+  }
+
+}
+
+/**
+ * Implements hook_form_alter().
+ *
+ * Add the active theme options to the theme field
+ */
+function stanford_subsites_form_node_form_alter(&$form, &$form_state, $form_id) {
+
+  // ONLY Subsite content types.
+  // ---------------------------------------------------------------------------
+  if ($form_id == SUBSITE_CONTENT_TYPE . "_node_form") {
+    stanford_subsites_form_node_form_alter_subsite_node($form, $form_state, $form_id);
+    return;
+  }
+
+  // All other content types.
+  // ---------------------------------------------------------------------------
+
+  // Move the subsite's tags field to a vertical tab if available.
+  if (isset($form[SUBSITE_TAGS_FIELD]) && !empty($form['menu'])) {
+    stanford_subsites_form_node_form_alter_menu_vt($form, $form_state, $form_id);
+  }
+
+  // Multiple node form handles things differently...
+  if (isset($form[SUBSITE_TAGS_FIELD]) && module_exists('multiple_node_menu') && !empty($form['multiple_node_menu'])) {
+    stanford_subsites_form_node_form_alter_menu_vt_mnm($form, $form_state, $form_id);
+  }
+
+}
+
+/**
+ * [stanford_subsites_form_node_form_alter_menu_vt_mnm description]
+ * @param  [type] $form       [description]
+ * @param  [type] $form_state [description]
+ * @param  [type] $form_id    [description]
+ * @return [type]             [description]
+ */
+function stanford_subsites_form_node_form_alter_menu_vt_mnm(&$form, &$form_state, $form_id) {
+
+  // Get a default value from the url.
+  if (arg(1) == "add" && isset($_GET[SUBSITE_TAGS_FIELD]) && is_numeric($_GET[SUBSITE_TAGS_FIELD])) {
+    $form[SUBSITE_TAGS_FIELD][LANGUAGE_NONE]["#default_value"] = check_plain($_GET[SUBSITE_TAGS_FIELD]);
+  }
+
+  // Add a description.
+  if (empty($form[SUBSITE_TAGS_FIELD]["#description"])) {
+    $form[SUBSITE_TAGS_FIELD][LANGUAGE_NONE]["#description"] = t("Please select the subsite that this node belongs to by adding the appropriate tag. The menu options and url alias will be effected by your subsite choice.");
+  }
+
+  // Copy field over to menu VT.
+  $form['multiple_node_menu'][SUBSITE_TAGS_FIELD] = $form[SUBSITE_TAGS_FIELD];
+  $form['multiple_node_menu'][SUBSITE_TAGS_FIELD]['#weight'] = 0;
+  $form['multiple_node_menu'][SUBSITE_TAGS_FIELD][LANGUAGE_NONE]["#multiple"] = FALSE;
+  $form['multiple_node_menu'][SUBSITE_TAGS_FIELD][LANGUAGE_NONE]["#type"] = "select";
+
+  // Hide dupe tags field and add submit handler.
+  $form[SUBSITE_TAGS_FIELD]["#access"] = FALSE;
+  $form["#submit"][] = "stanford_subsites_form_node_submit_save_tags_field";
+
+  // Add ajax handling to the tags field that is not just the select.
+  $form['multiple_node_menu']['link']['add_link']['parent']['#prefix'] = "<div id=\"parent-ajaxy-replacy-div\" >";
+  $form['multiple_node_menu']['link']['add_link']['parent']['#suffix'] = "</div>";
+
+  $form['multiple_node_menu'][SUBSITE_TAGS_FIELD][LANGUAGE_NONE]['#ajax'] = array(
+    'callback' => 'stanford_subsites_menu_change_callback',
+    'event' => "change",
+    'wrapper' => "parent-ajaxy-replacy-div",
+  );
+
+  // Alter menu link field values to only show the main menu and the subsite
+  // that this node belongs to.
+  $form['multiple_node_menu']['link']['add_link']['parent'] = stanford_subsites_menu_change_callback($form, $form_state);
+
+}
+
+/**
+ * [stanford_subsites_form_node_form_alter_menu_vt description]
+ * @param  [type] &$form       [description]
+ * @param  [type] &$form_state [description]
+ * @param  [type] $form_id     [description]
+ * @return [type]              [description]
+ */
+function stanford_subsites_form_node_form_alter_menu_vt(&$form, &$form_state, $form_id) {
+
+  // Get a default value from the url.
+  if (arg(1) == "add" && isset($_GET[SUBSITE_TAGS_FIELD]) && is_numeric($_GET[SUBSITE_TAGS_FIELD])) {
+    $form[SUBSITE_TAGS_FIELD][LANGUAGE_NONE]["#default_value"] = check_plain($_GET[SUBSITE_TAGS_FIELD]);
+  }
+
+  // Copy field over to menu VT.
+  $form['menu'][SUBSITE_TAGS_FIELD] = $form[SUBSITE_TAGS_FIELD];
+  $form['menu'][SUBSITE_TAGS_FIELD]['#weight'] = -10;
+  $form['menu'][SUBSITE_TAGS_FIELD][LANGUAGE_NONE]["#multiple"] = FALSE;
+
+  // Add a description.
+  if (empty($form['menu'][SUBSITE_TAGS_FIELD]["#description"])) {
+    $form['menu'][SUBSITE_TAGS_FIELD][LANGUAGE_NONE]["#description"] = t("Please select the subsite that this node belongs to by adding the appropriate tag. The menu options and url alias will be effected by your subsite choice.");
+  }
+
+  // Remove the original so we do not show duplicates.
+  // unset($form[SUBSITE_TAGS_FIELD]);
+  $form[SUBSITE_TAGS_FIELD]["#access"] = FALSE;
+
+  $form["#submit"][] = "stanford_subsites_form_node_submit_save_tags_field";
+
+
+  // Add ajax handling to the tags field that is not just the select.
+  $form['menu']['link']['parent']['#prefix'] = "<div id=\"parent-ajaxy-replacy-div\" >";
+  $form['menu']['link']['parent']['#suffix'] = "</div>";
+
+  $form['menu'][SUBSITE_TAGS_FIELD][LANGUAGE_NONE]['#ajax'] = array(
+    'callback' => 'stanford_subsites_menu_change_callback',
+    'event' => "change",
+    'wrapper' => "parent-ajaxy-replacy-div",
+  );
+
+  // Alter menu link field values to only show the main menu and the subsite
+  // that this node belongs to.
+  $form['menu']['link']['parent'] = stanford_subsites_menu_change_callback($form, $form_state);
+}
+
+/**
+ * A callback function for an ajax request regarding menus.
+ *
+ * Return a list of menu options that are limited to a subsite selection for the
+ * node edit form.
+ *
+ * @return array
+ *   The part of the node edit form that handles the menu options filtered by
+ *   the subsite that is selected.
+ */
+function stanford_subsites_menu_change_callback($form, $form_state) {
+
+  $menus = menu_get_menus();
+  $item = 0; // or bundle type name
+  $type = ''; // bundle type name
+  $default = "";
+  $subsite_tid = NULL;
+
+  // This function is called on the initial form alter and on the ajax callback
+  // so the subsite tid may be a form_state value or it will be the default_val
+  // from the form array.
+  if (module_exists('multiple_node_menu')) {
+    if (!empty($form_state['values']['multiple_node_menu'][SUBSITE_TAGS_FIELD])) {
+      $subsite_tid = $form_state['values']['multiple_node_menu'][SUBSITE_TAGS_FIELD][LANGUAGE_NONE][0]['tid'];
+    }
+    else if (isset($form['multiple_node_menu'][SUBSITE_TAGS_FIELD][LANGUAGE_NONE])) {
+      $subsite_tid = $form['multiple_node_menu'][SUBSITE_TAGS_FIELD][LANGUAGE_NONE]["#default_value"];
+    }
+    else {
+      return;
+    }
+  }
+  else {
+    $subsite_tid = !empty($form_state['values']['menu'][SUBSITE_TAGS_FIELD]) ? $form_state['values']['menu'][SUBSITE_TAGS_FIELD][LANGUAGE_NONE][0]['tid'] : $form['menu'][SUBSITE_TAGS_FIELD][LANGUAGE_NONE]["#default_value"];
+  }
+
+  if (is_array($subsite_tid)) {
+    $subsite_tid = array_pop($subsite_tid);
+  }
+
+  $record = stanford_subsite_index_get("tid", $subsite_tid);
+
+  if (isset($record->menu)) {
+    $menus = array();
+    $menu = menu_load($record->menu);
+    $menus[$record->menu] = $menu['title'];
+  }
+
+  $type = $item = $form['#node']->type;
+
+  // menu_parent_options() is goofy and can actually handle either a menu link
+  // or a node type both as second argument. Pick based on whether there is
+  // a link already (menu_node_prepare() sets mlid default to 0).
+  $options = menu_parent_options($menus, $item, $type);
+
+  if (module_exists("multiple_node_menu")) {
+    $form['multiple_node_menu']['link']['add_link']['parent']['#options'] = $options;
+    return $form['multiple_node_menu']['link']['add_link']['parent'];
+  }
+  else {
+    $form['menu']['link']['parent']['#options'] = $options;
+    return $form['menu']['link']['parent'];
+  }
+
+}
+
+/**
+ * Save values correctly after move in node_edit form.
+ *
+ * Form alter moves the tags field to somewhere it does not belong. We need to
+ * move those values back so that they get saved.
+ *
+ * @param array $form
+ *   The form array.
+ * @param array $form_values
+ *   The form_values array
+ */
+function stanford_subsites_form_node_submit_save_tags_field($form, &$form_values) {
+
+  // Move the values for the subsite tags back where they belong.
+  if (isset($form_values['values']["menu"][SUBSITE_TAGS_FIELD])) {
+    $form_values['values'][SUBSITE_TAGS_FIELD] = $form_values['values']["menu"][SUBSITE_TAGS_FIELD];
+    unset($form_values['values']["menu"][SUBSITE_TAGS_FIELD]);
+  }
+  // Multiple node menu module is enabled.
+  if (isset($form_values['values']["multiple_node_menu"][SUBSITE_TAGS_FIELD])) {
+    $form_values['values'][SUBSITE_TAGS_FIELD] = $form_values['values']["multiple_node_menu"][SUBSITE_TAGS_FIELD];
+    unset($form_values['values']["multiple_node_menu"][SUBSITE_TAGS_FIELD]);
+  }
+
+}
+
+
+/**
+ * Alter the subsite node on form.
+ *
+ * @param array $form
+ *   The form array
+ * @param array $form_state
+ *   The submitted form state
+ * @param int $form_id
+ *   The form idate(format)
+ */
+function stanford_subsites_form_node_form_alter_subsite_node(&$form, &$form_state, $form_id) {
+  $node = $form['#node'];
+
+  // Change the title field to a machine_name field.
+  $form['field_subsite_machine_name'][LANGUAGE_NONE][0]['value']['#type'] = "machine_name";
+  $form['field_subsite_machine_name'][LANGUAGE_NONE][0]['value']['#description'] = t('A unique name for the subsite. It must only contain lowercase letters, numbers and hyphens.');
+  $form['field_subsite_machine_name'][LANGUAGE_NONE][0]['value']['#machine_name'] = array(
+    'exists' => 'stanford_subsites_machine_name_exits',
+    'source' => array(SUBSITE_NAME_FIELD, 'und', '0', 'value'),
+  );
+  $form['field_subsite_machine_name'][LANGUAGE_NONE][0]['value']['#disabled'] = isset($form['field_subsite_machine_name'][LANGUAGE_NONE][0]['value']['#default_value']);
+
+  // Add only enabled themes to the theme drop down options...
+  $themes = list_themes();
+  foreach ($themes as $k => $theme) {
+    if (!$theme->status) {
+      continue;
+    }
+    $form[SUBSITE_THEME_FIELD][LANGUAGE_NONE]['#options'][$k] = $k;
+  }
+
+  // Set the default value.
+  $form[SUBSITE_THEME_FIELD][LANGUAGE_NONE]['#default_value'] = (isset($node->{SUBSITE_THEME_FIELD}[LANGUAGE_NONE][0]['value'])) ? $node->{SUBSITE_THEME_FIELD}[LANGUAGE_NONE][0]['value'] : "default";
+
+  // Add a link to enable more themes below the field.
+  $form[SUBSITE_THEME_FIELD][LANGUAGE_NONE]["#description"] = l(t('Enable more themes here'), "admin/appearance");
+
+  // Add a validation hook.
+  $form['#validate'][] = "stanford_subsites_form_node_form_alter_subsite_node_validate";
+
+  // Add a submit hook.
+  $form['#submit'][] = "stanford_subsites_form_node_form_alter_subsite_node_submit";
+
+}
+
+/**
+ * Validate hook for node submit.
+ *
+ * @param array $form
+ *   The form array.
+ * @param array $form_state
+ *   The form_state array.
+ */
+function stanford_subsites_form_node_form_alter_subsite_node_validate(&$form, &$form_state) {
+  $values = $form_state['values'];
+  $lang = LANGUAGE_NONE;
+
+  // If this is a new node ...
+  if (empty($values['nid'])) {
+    $term_name = $values[SUBSITE_TAGS_FIELD][$lang][0]['name'];
+    $found = taxonomy_get_term_by_name($term_name, SUBSITE_VOCAB);
+    if ($found) {
+      form_set_error(SUBSITE_TAGS_FIELD, "Subsite term name not unqiue. Please choose another name.");
+    }
+  }
+
+}
+
+/**
+ * Submit hook for node submit on subsites.
+ *
+ * Change the subsite term name when the user changes the subsite tag instead of
+ * creating a whole new erm.
+ *
+ * @param array $form
+ *   The form array
+ * @param array $form_state
+ *   The form_state array
+ *
+ */
+function stanford_subsites_form_node_form_alter_subsite_node_submit(&$form, &$form_state) {
+  $values = $form_state['values'];
+  $lang = LANGUAGE_NONE;
+
+  // Don't allow the user to change the subsite term but allow them to change
+  // the label. So we allow editing of the tags field but want to make sure that
+  // a new term is not created.
+
+  if ($values[SUBSITE_TAGS_FIELD][$lang][0]["tid"] == "autocreate" && !empty($values['nid'])) {
+    $new_label = $values[SUBSITE_TAGS_FIELD][$lang][0]['name'];
+    $original_tid = $form["#node"]->{SUBSITE_TAGS_FIELD}[$lang][0]["tid"];
+    $term = taxonomy_term_load($original_tid);
+    $term->name = $new_label;
+    taxonomy_term_save($term);
+    form_set_value($form[SUBSITE_TAGS_FIELD], array(0 => (array) $term), $form_state);
+  }
+
+}
+
+/**
+ * [stanford_subsites_machine_name_exits description]
+ * @param  [type] $name [description]
+ * @return [type]       [description]
+ */
+function stanford_subsites_machine_name_exits($name) {
+
+  $result = db_select('field_data_field_subsite_machine_name', 'fdfsmn')
+              ->fields('fdfsmn', array('field_subsite_machine_name_value'))
+              ->condition('field_subsite_machine_name_value', $name)
+              ->execute();
+  $count = $result->rowCount();
+
+  // We found a match!
+  if ($count > 0) {
+    return TRUE;
+  }
+
+  // Nothing by the passed in name.
+  return FALSE;
+}
+
+// Fields.
+// ////////////////////////////////////////////////////////////////////////////
+
+/**
+ * Implements hook_field_access().
+ */
+function stanford_subsites_field_access($op, $field, $entity_type, $entity, $account) {
+
+  // Check to see if user can edit the subsite selection field.
+  if ($field['field_name'] == SUBSITE_TAGS_FIELD && $op == 'edit') {
+    return user_access('administer subsite selection', $account);
+  }
+  elseif ($field['field_name'] == SUBSITE_LOGO_FIELD && $op == 'edit') {
+    return user_access('change subsite logo', $account);
+  }
+  elseif ($field['field_name'] == SUBSITE_THEME_FIELD && $op == 'edit') {
+    return user_access('change subsite theme', $account);
+  }
+
+  return TRUE;
+}
+
+// Tokens.
+// ////////////////////////////////////////////////////////////////////////////
+
+/**
+ * Implements hook_token_info().
+ */
+function stanford_subsites_token_info() {
+
+  // Active subsite specific tokens.
+  $types['stanford_subsites'] = array(
+    'name' => t("Stanford Subsites"),
+    'description' => t("The Stanford Subsite Project."),
+  );
+
+  // Active subsite page title $node->title
+  $stanford_subsites['active_subsite_page_title'] = array(
+    'name' => t("Active Subsite Page Title"),
+    'description' => t("The Active Subsite Page Title"),
+  );
+
+  // Active subsite site name $node->field_stanford_subsite_site_name
+  $stanford_subsites['active_subsite_site_name'] = array(
+    'name' => t("The Active Subsite Site Name"),
+    'description' => t("The site name of the active subsite."),
+  );
+
+  // The absolute url path to the active subsite.
+  $stanford_subsites['active_subsite_url'] = array(
+    'name' => t("The Active Subsite Url Path"),
+    'description' => t("The url path to the active subsite."),
+  );
+
+  // The node id of the active subsite. $node->nid
+  $stanford_subsites['active_subsite_node_id'] = array(
+    'name' => t("The Active Subsite Node ID"),
+    'description' => t("The node ID of the active subsite."),
+  );
+
+  return array(
+    'types' => $types,
+    'tokens' => array(
+      'stanford_subsites' => $stanford_subsites,
+    ),
+  );
+}
+
+
+/**
+ * Implements hook_tokens().
+ */
+function stanford_subsites_tokens_tokens($type, $tokens, array $data = array(), array $options = array()) {
+  $subsite = stanford_subsites_get_active_subsite();
+
+  // If there is no active subsite do not return anything.
+  if (!$subsite) {
+    return array();
+  }
+
+  $replacements = array();
+
+  if ($type == 'stanford_subsites') {
+    foreach ($tokens as $name => $original) {
+      switch ($name) {
+        case 'active_subsite_page_title':
+          $replacements[$original] = t($subsite->title);
+          break;
+
+        case 'active_subsite_site_name':
+          $replacements[$original] = t($subsite->{SUBSITE_NAME_FIELD}[LANGUAGE_NONE][0]['safe_value']);
+          break;
+
+        case 'active_subsite_url':
+          $replacements[$original] = url('node/' . $subsite->nid, array('absolute' => TRUE));
+          break;
+
+        case 'active_subsite_node_id':
+          $replacements[$original] = $subsite->nid;
+          break;
+      }
+    }
+  }
+
+  return $replacements;
+}
+
+
+// ////////////////////////////////////////////////////////////////////////////
+// VIEWS PLUGINS and OTHER //
+// ////////////////////////////////////////////////////////////////////////////
+
+/**
+ * Implments hook_views_api().
+ */
+function stanford_subsites_views_api() {
+  return array("version" => "3.0");
+}
+
+// More in views.inc
+
+
+
+// ////////////////////////////////////////////////////////////////////////////
+// CONTEXT PLUGINS //
+// ////////////////////////////////////////////////////////////////////////////
+
+/**
+ * Implements hook_context_plugins().
+ *
+ * To define your plugins, classes, and class hierarchy.
+ *
+ * @return array
+ *   An array of plugin information
+ */
+function stanford_subsites_context_plugins() {
+  $plugins = array();
+  $plugins['context_condition_active_subsite'] = array(
+    'handler' => array(
+      'path' => drupal_get_path('module', 'stanford_subsites') . '/plugins',
+      'file' => 'context_condition_active_subsite.inc',
+      'class' => 'context_condition_active_subsite',
+      'parent' => 'context_condition',
+    ),
+  );
+  return $plugins;
+}
+
+/**
+ * Implements hook_context_registry().
+ *
+ * To define your conditions and/or reactions and map them to plugins.
+ *
+ * @return array
+ *   An array of configuration values.
+ */
+function stanford_subsites_context_registry() {
+  return array(
+    'conditions' => array(
+      'active_subsite' => array(
+        'title' => t('Active Subsite'),
+        'plugin' => 'context_condition_active_subsite',
+      ),
+    ),
+  );
+}
+
+/**
+ * Execute Context active subsite conditions.
+ *
+ * Allows modules to hook into Context's hook_page_build to execute their
+ * conditions at an appropriate time before the firing of reactions.
+ */
+function stanford_subsites_context_page_condition() {
+
+  $plugin = context_get_plugin('condition', 'active_subsite');
+  if ($plugin) {
+    $plugin->execute();
+  }
+
+}
+
+

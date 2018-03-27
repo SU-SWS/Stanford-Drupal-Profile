@@ -1,0 +1,13 @@
+name = Stanford Video Layouts
+description = Contexts and other layout information for Stanford Video
+core = 7.x
+package = Stanford
+version = 7.x-3.0
+dependencies[] = context
+dependencies[] = stanford_video
+dependencies[] = stanford_video_administration
+dependencies[] = views
+features[context][] = videos_grid
+features[context][] = videos_recent
+features[ctools][] = context:context:3
+features[features_api][] = api:2

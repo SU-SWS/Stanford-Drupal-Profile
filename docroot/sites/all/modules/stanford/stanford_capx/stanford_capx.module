@@ -71,17 +71,17 @@ function stanford_capx_permission() {
       'title' => t('Administer CAPx'),
       'description' => t('Administer and configure CAPx settings.'),
     ),
-    // 'capx administer importers' => array(
-    //   'title' => t('Administer CAPx Importers'),
-    //   'description' => t('Administer and configure CAPx importers.'),
-    // ),
-    // 'capx administer mappers' => array(
-    //   'title' => t('Administer CAPx Mappers'),
-    //   'description' => t('Administer and configure CAPx mappers.'),
-    // ),
+    'capx administer importers' => array(
+      'title' => t('Administer CAPx Importers'),
+      'description' => t('Administer and configure CAPx importers.'),
+    ),
+    'capx administer mappers' => array(
+      'title' => t('Administer CAPx Mappers'),
+      'description' => t('Administer and configure CAPx mappers.'),
+    ),
     'capx advanced administrator' => array(
       'title' => t('Administer Advanced CAPx settings'),
-      'description' => t('Administer and Ccnfigure CAPx advanced settings.'),
+      'description' => t('Administer and Configure CAPx advanced settings.'),
     ),
   );
 }
@@ -106,6 +106,49 @@ function stanford_capx_node_access($node, $op, $account) {
  */
 function stanford_capx_views_api() {
   return array("version" => "3.0");
+}
+
+/**
+ * Implements hook_features_api().
+ *
+ * Define the components that we want to make exportable, in this case
+ * CFE Entities.
+ */
+function stanford_capx_features_api() {
+  return array(
+    'capx_cfe' => array(
+      'name' => 'CAPx Mappers & Importers',
+      // CANNOT implement file as it conflicts with entity API.
+      // 'file' => drupal_get_path('module', 'stanford_capx') . '/stanford_capx.features.inc',
+      'feature_source' => TRUE,
+      // Can't seem to get the below setting to work. Ctools is not loading it
+      // and the default hook never gets fired.
+      // 'default_file' => FEATURES_DEFAULTS_INCLUDED,
+      'default_hook' => 'default_capx_cfe',
+    ),
+  );
+}
+
+/**
+ * Something is wrong here.
+ *
+ * This is a patch up function for duplication on the component array.
+ */
+function stanford_capx_features_api_alter(&$components) {
+
+  // It seems that the Entity API is fighting with me and is duplicating my
+  // efforts here. Pop off my items in the array.
+
+  if (!isset($components['capx_cfe'])) {
+    return;
+  }
+
+  foreach ($components['capx_cfe'] as $key => $value) {
+    if (is_array($value)) {
+      $components['capx_cfe'][$key] = array_pop($value);
+    }
+  }
+
 }
 
 /**
@@ -253,6 +296,38 @@ function stanford_capx_menu() {
   // ---------------------------------------------------------------------------
 
   // In views now...
+
+  // Exportables / Presets
+  // ---------------------------------------------------------------------------
+
+  $items['admin/config/capx/preset/export/%/%'] = array(
+    'title' => 'Export Configuration',
+    'page callback' => 'stanford_capx_preset_export',
+    'page arguments' => array(5, 6),
+    'access arguments' => array(
+      'capx advanced administrator',
+    ),
+    'type' => MENU_CALLBACK,
+  );
+
+  $items['admin/config/capx/preset/revert/%/%'] = array(
+    'title' => 'Export Configuration',
+    'page callback' => 'stanford_capx_preset_revert',
+    'page arguments' => array(5, 6),
+    'access arguments' => array(
+      'capx advanced administrator',
+    ),
+    'type' => MENU_CALLBACK,
+  );
+
+  $items['admin/config/capx/preset/import'] = array(
+    'title' => 'Import Configuration',
+    'page callback' => 'stanford_capx_preset_import',
+    'access arguments' => array(
+      'capx advanced administrator',
+    ),
+    'type' => MENU_CALLBACK,
+  );
 
   // MISC
   // ---------------------------------------------------------------------------
@@ -494,6 +569,22 @@ function stanford_capx_autocomplete_orgs($string) {
 // END AUTOCOMPLETE
 // /////////////////////////////////////////////////////////////////////////////
 
+// FEATURES & CTOOLS
+// /////////////////////////////////////////////////////////////////////////////
+
+/**
+ * Implements hook_features_export().
+ */
+function stanford_capx_features_export($data, &$export, $module_name) {
+  $pipe = array();
+
+  $export['dependencies']['stanford_capx'] = 'stanford_capx';
+  foreach ($data as $component) {
+    $export['features']['stanford_capx'][$component] = $component;
+  }
+
+  return $pipe;
+}
 
 // SCHEMA (API)
 // /////////////////////////////////////////////////////////////////////////////
@@ -640,8 +731,16 @@ function stanford_capx_profile_update($profile_id, $importer) {
   }
 
   $client = $importer->getClient();
-
   $profile = $client->api('profile')->get($profile_id);
+
+  // If profile is not an array that means it is no longer in the API and should
+  // be an orphan.
+  if (!is_array($profile)) {
+    watchdog('stanford_capx_profile_force_update', "Could not fetch information from the API.", array(), WATCHDOG_INFO);
+    drupal_set_message(t("FAILED to update. Could not fetch information from the API. Please check that the profile exists."), 'error');
+    drupal_goto();
+    return;
+  }
 
   // Allow altering of the results.
   drupal_alter('capx_preprocess_profile_update', $profile, $importer);
@@ -718,4 +817,262 @@ function stanford_capx_form_taxonomy_form_term_alter(&$form, &$form_state) {
   if ($user->uid != 1 && isset($form_state['term']->capx) && !empty($form_state['term']->capx['sync'])) {
     $form['actions']['delete']['#disabled'] = TRUE;
   }
+}
+
+// IMPORT / EXPORT / PRESETS
+// /////////////////////////////////////////////////////////////////////////////
+
+/**
+ * [stanford_capx_preset_export description]
+ * @param  [type] $type         [description]
+ * @param  [type] $machine_name [description]
+ * @return [type]               [description]
+ */
+function stanford_capx_preset_export($type, $machine_name) {
+  $output = array();
+  $code = "";
+  $cfe = capx_cfe_load_by_machine_name($machine_name, $type);
+
+  // Failed to load. Show a 404.
+  if (!$cfe) {
+    drupal_not_found();
+    return;
+  }
+
+  $object_title = $cfe->title;
+  if (is_array($cfe->settings)) {
+    foreach ($cfe->settings as $key => $v) {
+      unset($cfe->{$key});
+    }
+  }
+  $code = entity_export('capx_cfe', $cfe);
+  unset($cfe->uid);
+  unset($cfe->created);
+  unset($cfe->changed);
+
+  $output['ctools'] = drupal_get_form('ctools_export_form', $code, $object_title);
+  return $output;
+}
+
+/**
+ * [stanford_capx_exportables_import description]
+ * @return [type] [description]
+ */
+function stanford_capx_preset_import() {
+  $output = array();
+  $output['import'] = drupal_get_form('stanford_capx_preset_import_form');
+  return $output;
+}
+
+/**
+ * [stanford_capx_preset_import_form description]
+ * @param [type] $form       [description]
+ * @param [type] $form_state [description]
+ */
+function stanford_capx_preset_import_form($form, &$form_state) {
+
+  $form['code'] = array(
+    '#title' => t('Code'),
+    '#description' => t('Paste the code from the export in to this field.'),
+    '#type' => 'textarea',
+    '#rows' => 20,
+    '#default_value' => isset($form_state['values']['code']) ? $form_state['values']['code'] : "",
+  );
+
+  $form['override'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Replace existing.'),
+    '#description' => t('Check this box to override an existing preset on import.'),
+  );
+
+  $form['submit'] = array(
+    '#type' => 'submit',
+    '#value' => t('Submit'),
+  );
+
+  return $form;
+}
+
+/**
+ * Validate a few items before saving.
+ * @param [type] $form       [description]
+ * @param [type] $form_state [description]
+ */
+function stanford_capx_preset_import_form_validate($form, &$form_state) {
+
+  // Try to convert the code in to an object.
+  $code = $form_state['values']['code'];
+  $item = entity_import('capx_cfe', $code);
+  $info = entity_get_info();
+  $entities = array_keys($info);
+  $bundles = array();
+  foreach ($info as $entity) {
+    if (isset($entity['bundles'])) {
+      $keys = array_keys($entity['bundles']);
+      $bundles = array_merge($bundles, $keys);
+    }
+  }
+
+  // Does the code turn in to an object?
+  if (!is_object($item)) {
+    form_set_error('code', "Invalid code supplied. Please check the syntax.");
+    return;
+  }
+
+  // Check for a couple of fields...
+  if (!isset($item->type) || !isset($item->machine_name)) {
+    form_set_error('code', "Missing properties type or machine name");
+    return;
+  }
+
+  // It is one of our bundles?
+  if (!in_array($item->type, array_keys($bundles))) {
+    form_set_error('code', "Invalid bundle type.");
+    return;
+  }
+
+  // Does it already exist?
+  if (!$form_state['values']['override']) {
+    $exists = capx_cfe_load_by_machine_name($item->machine_name, $item->type);
+    if ($exists) {
+      form_set_error("code", "Cannot import. Item already exists. Please check the override option to force import.");
+      return;
+    }
+  }
+
+  // If importing an importer one must check for the existance of the mapper.
+  if ($item->type == "importer") {
+    $mapper = capx_cfe_load_by_machine_name($item->settings['mapper'], "mapper");
+    if (!$mapper) {
+      form_set_error("code", "Could not find the mapper: " . $item->settings['mapper'] . ". Please import that item first.");
+      return;
+    }
+  }
+
+  // MAPPER Validation.
+  if ($item->type == "mapper") {
+
+    // If it is a mapper validate that the entity and bundle is available.
+    $info = entity_get_info($item->settings['entity_type']);
+    if (!$info) {
+      form_set_error("code", "Mapper entity type does not exist.");
+      return;
+    }
+
+    if (!isset($info['bundles']) || !in_array($item->settings['bundle_type'], array_keys($info['bundles']))) {
+      form_set_error("code", $item->settings['bundle_type'] . " bundle type does not exist.");
+      return;
+    }
+
+  }
+
+  // If there are filters that are attached ensure the module is enabled.
+  if (isset($item->filters) && !module_exists("capx_filters")) {
+    form_set_error("code", "This importer includes filters. Please enable the capx_filters module before importing.");
+    return;
+  }
+
+  // If there are filters that are attached ensure the module is enabled.
+  if (isset($item->tamper) && !module_exists("capx_tamper")) {
+    form_set_error("code", "This mapper includes tampers. Please enable the capx_tamper module before importing.");
+    return;
+  }
+
+}
+
+/**
+ * [stanford_capx_preset_import_form_submit description]
+ * @param [type] $form       [description]
+ * @param [type] $form_state [description]
+ */
+function stanford_capx_preset_import_form_submit($form, &$form_state) {
+  $code = $form_state['values']['code'];
+  $item = entity_import('capx_cfe', $code);
+
+  if (!is_object($item)) {
+    drupal_set_message("Could not import item.", "error");
+    return;
+  }
+
+  // entity_import does not actually save the item.
+  // Check to see if this is a replace or a new item.
+  $cfe = capx_cfe_load_by_machine_name($item->machine_name, $item->type);
+  if ($cfe) {
+    capx_cfe_delete($cfe);
+  }
+
+  capx_cfe_save($item);
+  drupal_set_message("Item imported successfully", "status");
+
+  $form_state['redirect'] = "admin/config/capx/mapper";
+}
+
+/**
+ * [stanford_capx_preset_revert description]
+ * @param [type] $type         [description]
+ * @param [type] $machine_name [description]
+ */
+function stanford_capx_preset_revert($type, $machine_name) {
+  $output = array();
+  $code = "";
+  $cfe = capx_cfe_load_by_machine_name($machine_name, $type);
+
+  // Failed to load. Show a 404.
+  if (!$cfe) {
+    drupal_not_found();
+    return;
+  }
+
+  $output['form'] = drupal_get_form("stanford_capx_preset_revert_form", $type, $machine_name);
+
+  return $output;
+}
+
+/**
+ * [stanford_capx_preset_revert_form description]
+ * @param [type] $form         [description]
+ * @param [type] $form_sate    [description]
+ * @param [type] $type         [description]
+ * @param [type] $machine_name [description]
+ */
+function stanford_capx_preset_revert_form($form, $form_sate, $type, $machine_name) {
+
+  $cfe = capx_cfe_load_by_machine_name($machine_name, $type);
+  $label = $cfe->title;
+
+  // Always save a few of these values.
+  $form['bundle_type'] = array(
+    '#type' => 'value',
+    '#value' => $type,
+  );
+
+  $form['machine_name'] = array(
+    '#type' => 'value',
+    '#value' => $machine_name,
+  );
+
+  $form['label'] = array(
+    '#type' => 'value',
+    '#value' => $label,
+  );
+
+  $confirm_question = t('Are you sure you want to revert %label?', array('%label' => $label));
+  return confirm_form($form, $confirm_question, "admin/config/capx/$type");
+}
+
+/**
+ * [stanford_capx_preset_revert_submit description]
+ * @param [type] $form       [description]
+ * @param [type] $form_state [description]
+ */
+function stanford_capx_preset_revert_form_submit($form, $form_state) {
+  $type = $form_state['values']['bundle_type'];
+  $machine_name = $form_state['values']['machine_name'];
+  $label = $form_state['values']['label'];
+
+  $cfe = capx_cfe_load_by_machine_name($machine_name, $type);
+  capx_cfe_delete($cfe);
+
+  watchdog($type, 'Reverted %label to the defaults.', array('%label' => $label), WATCHDOG_NOTICE);
+  drupal_set_message(t('Reverted %label to the defaults.', array('%label' => $label)), 'status');
 }

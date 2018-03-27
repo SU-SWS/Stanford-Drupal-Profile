@@ -1,0 +1,7 @@
+<?php
+/**
+ * @file
+ * Code for the Stanford Video Administration Feature.
+ */
+
+include_once 'stanford_video_administration.features.inc';

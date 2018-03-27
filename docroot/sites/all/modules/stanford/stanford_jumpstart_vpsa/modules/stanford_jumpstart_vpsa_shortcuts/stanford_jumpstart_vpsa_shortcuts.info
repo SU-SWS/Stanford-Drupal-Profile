@@ -1,0 +1,6 @@
+name = Stanford Jumpstart VPSA Shortcuts
+description = Creates helpful "administrative shortcuts" for Stanford Jumpstart VPSA
+core = 7.x
+package = Stanford Jumpstart VPSA
+version = 7.x-4.6+8-dev
+dependencies[] = menu

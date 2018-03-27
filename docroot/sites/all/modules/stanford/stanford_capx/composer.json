@@ -1,7 +1,7 @@
 {
     "name": "su-sws/stanford_capx",
     "description": "Stanford Career Academic Profiles API integration Module",
-    "type": "stanford-module",
+    "type": "drupal-custom-module",
     "license": "GPL-2.0+",
     "authors": [
         {

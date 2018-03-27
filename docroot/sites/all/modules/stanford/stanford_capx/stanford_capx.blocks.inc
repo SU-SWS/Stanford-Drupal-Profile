@@ -1,12 +1,10 @@
 <?php
+
 /**
  * @file
- * @author [author] <[email]>
- *
  * A place to put your blocks.
  */
 
-use CAPx\Drupal\Util\CAPx;
 use CAPx\Drupal\Util\CAPxConnection;
 use CAPx\Drupal\Util\CAPxImporter;
 use CAPx\Drupal\Util\CAPxMapper;
@@ -15,7 +13,7 @@ use CAPx\Drupal\Util\CAPxMapper;
  * Implements hook_block_info().
  */
 function stanford_capx_block_info() {
-  $block = array();
+  $blocks = array();
 
   $blocks['connection_status'] = array(
     'info' => t('Connection Status'),
@@ -104,6 +102,7 @@ function stanford_capx_block_view($delta = '') {
  * Connection status block content callback.
  *
  * Tests the API connection and outputs a text message.
+ *
  * @return string
  *   Block content.
  */
@@ -167,8 +166,11 @@ function stanford_capx_connection_status_block() {
 
 /**
  * Data browser launch block content callback.
+ *
  * Creates the blocks contents for the mapping edit/new page.
- * @return [type] [description]
+ *
+ * @return string
+ *   HTML rendering.
  */
 function stanford_capx_data_browser_launch_block() {
   $output = "";
@@ -181,8 +183,8 @@ function stanford_capx_data_browser_launch_block() {
     'admin/config/capx/data-browser', array(
       'attributes' => array(
         'class' => 'btn button',
-        'target' => '_blank'
-      )
+        'target' => '_blank',
+      ),
     ));
   $output .= "<p>" . $browser_link . "</p>";
 
@@ -196,14 +198,14 @@ function stanford_capx_data_browser_launch_block() {
   $rows[] = array('Email', '$.primaryContact.email');
   $rows[] = array('Profiles URL', '$.meta.links[1].href');
   $rows[] = array('-------------', "--------------");
-  // $rows[] = array('Cohort', '$.maintainers.*.title');
+  // $rows[] = array('Cohort', '$.maintainers.*.title');.
   $rows[] = array('Affiliations', '$.affiliations');
   $rows[] = array('Job title short', '$.shortTitle.label.text');
   $rows[] = array('Job title long', '$.longTitle.title');
-  // $rows[] = array('Dissertation title', '');
+  // $rows[] = array('Dissertation title', '');.
   $rows[] = array('Degrees / education', '$.education.*.label.text');
   $rows[] = array('Title and department', '$.longTitle.title');
-  // $rows[] = array('Faculty status', '');
+  // $rows[] = array('Faculty status', '');.
   $rows[] = array('Fax', '$.primaryContact.fax');
   $rows[] = array('CV - file', '$.documents.cv');
   $rows[] = array('CV - link', '$.documents.cv.url');
@@ -224,13 +226,21 @@ function stanford_capx_data_browser_launch_block() {
   $rows[] = array('Mailing address city', '$.primaryContact.city');
   $rows[] = array('Mailing address state', '$.primaryContact.state');
   $rows[] = array('Mailing address zip', '$.primaryContact.zip');
-  // $rows[] = array('Office hours', '');
+  // $rows[] = array('Office hours', '');.
   $rows[] = array('Office', '$.primaryContact.officeName');
   $rows[] = array('Phone', '$.primaryContact.phoneNumbers.*');
   $rows[] = array('Staff type', '$.titles.*.type');
   $rows[] = array('Field of study', '$.education.*.fieldOfStudy');
   $rows[] = array('Type', '$.titles.*.type');
-  $output .= theme('table', array('rows' => $rows, 'header' => $header, 'sticky' => FALSE));
+
+  // Render all the rows.
+  $output .= theme('table',
+    array(
+      'rows' => $rows,
+      'header' => $header,
+      'sticky' => FALSE,
+    )
+  );
 
   return $output;
 }
@@ -238,8 +248,8 @@ function stanford_capx_data_browser_launch_block() {
 /**
  * Creates and displays the importer in use block.
  *
- * @return string
- *   HTML representation of the page.
+ * @return mixed
+ *   HTML representation of the page or false if there is an issue.
  */
 function stanford_capx_importer_in_use_block() {
   $output = "";
@@ -281,17 +291,15 @@ function stanford_capx_importer_in_use_block() {
       ),
     ),
   );
-
 }
-
 
 /**
  * Creates the mapper in use block hook_view().
  *
  * Creates a render array of information to use on a mapper page.
  *
- * @return array
- *   A render array of block information.
+ * @return mixed
+ *   A render array of block information or false if there is an issue.
  */
 function stanford_capx_mapper_in_use_block() {
   $output = "";
@@ -319,7 +327,7 @@ function stanford_capx_mapper_in_use_block() {
   $output .= t("This mapping is currently used by: ");
 
   $porters = array();
-  foreach ($importers as $k => $importer) {
+  foreach ($importers as $importer) {
     $porters[] = l(t("!title", array("!title" => $importer->title)), "admin/config/capx/importer/edit/" . $importer->identifier());
   }
 
@@ -343,6 +351,7 @@ function stanford_capx_mapper_in_use_block() {
  * Returns the administrative menu items for CAPx.
  *
  * Returns a renderable array of html and attachments.
+ *
  * @return array
  *   Render array of markup
  */
@@ -373,7 +382,7 @@ function stanford_capx_management_menu_block() {
   $rendered = "<div class=\"capx-menu-block\">" . drupal_render($menu_items) . "</div>";
 
   $output['#markup'] = $rendered;
-  $output['#attached']['css'][] = drupal_get_path("module", "stanford_capx") .  "/css/stanford_capx.admin.css";
+  $output['#attached']['css'][] = drupal_get_path("module", "stanford_capx") . "/css/stanford_capx.admin.css";
 
   return $output;
 }

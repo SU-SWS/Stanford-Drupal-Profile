@@ -116,12 +116,31 @@ function stanford_capx_schema() {
   // Configuration Entity.
   $schema['capx_cfe'] = array(
     'description' => 'The base table for configuration entities.',
+    'export' => array(
+      'key' => 'machine_name',
+      'key name' => 'Machine Name',
+      'primary key' => 'cfid',
+      'identifier' => 'cfe',
+      'default hook' => 'default_capx_cfe',
+      'admin_title' => 'title',
+      'can disable' => FALSE,
+      'object' => 'CFEntity',
+      'load callback' => 'capx_cfe_load_by_machine_name',
+      'export type string' => 'export_type',
+      'api' => array(
+        'current_version' => 1,
+        'minimum_version' => 1,
+        'owner' => 'stanford_capx',
+        'api' => 'capx_cfe',
+      ),
+    ),
     'fields' => array(
       'cfid' => array(
         'description' => 'The primary identifier for the cfe.',
         'type' => 'serial',
         'unsigned' => TRUE,
         'not null' => TRUE,
+        'no export' => TRUE,
       ),
       'machine_name' => array(
         'description' => 'The machine-readable name of this type.',
@@ -147,18 +166,21 @@ function stanford_capx_schema() {
         'description' => 'ID of Drupal user creator.',
         'type' => 'int',
         'not null' => TRUE,
+        'no export' => TRUE,
       ),
       'created' => array(
         'description' => 'The Unix timestamp when the cfe was created.',
         'type' => 'int',
         'not null' => TRUE,
         'default' => 0,
+        'no export' => TRUE,
       ),
       'changed' => array(
         'description' => 'The Unix timestamp when the cfe was most recently saved.',
         'type' => 'int',
         'not null' => TRUE,
         'default' => 0,
+        'no export' => TRUE,
       ),
       'settings' => array(
         'description' => 'The configuration settings',
@@ -174,11 +196,26 @@ function stanford_capx_schema() {
         'not null' => TRUE,
         'serialize' => TRUE,
       ),
+      'status' => array(
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 0x01,
+        'size' => 'tiny',
+        'description' => 'The exportable status of the entity.',
+        'no export' => TRUE,
+      ),
+      'module' => array(
+        'description' => 'The name of the providing module if the entity has been defined in code.',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => FALSE,
+        'no export' => TRUE,
+      ),
     ),
     'primary key' => array('cfid'),
   );
 
-  // CFE Types
+  // CFE Types.
   $schema['capx_cfe_type'] = array(
     'description' => 'Stores information about all defined cfe types.',
     'fields' => array(
@@ -207,7 +244,22 @@ function stanford_capx_schema() {
         'size' => 'medium',
         'translatable' => TRUE,
       ),
-    ) + entity_exportable_schema_fields(),
+      'status' => array(
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 0x01,
+        'size' => 'tiny',
+        'description' => 'The exportable status of the entity.',
+        'no export' => TRUE,
+      ),
+      'module' => array(
+        'description' => 'The name of the providing module if the entity has been defined in code.',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => FALSE,
+        'no export' => TRUE,
+      ),
+    ),
     'primary key' => array('id'),
     'unique keys' => array(
       'type' => array('type'),
@@ -309,6 +361,10 @@ function stanford_capx_update_7201() {
  * Resave each mapper so they get the new default config keys.
  */
 function stanford_capx_update_7202() {
+  // When updating from before this to 3.x we need to add fields to prevent
+  // errors.
+  stanford_capx_update_7300();
+
   $mappers = CAPxMapper::loadAllMappers();
   foreach ($mappers as $mapper) {
     $mapper->settings['multiple'] = FALSE;
@@ -316,4 +372,39 @@ function stanford_capx_update_7202() {
     $mapper->settings['guuidquery'] = '';
     $mapper->save();
   }
+}
+
+/**
+ * Upgrade path from 2.x - 3.x
+ */
+function stanford_capx_update_7300() {
+  // db_add_field($table, $field, $spec, $keys_new = array())
+  $status_spec = array(
+    'type' => 'int',
+    'not null' => TRUE,
+    'default' => 0x01,
+    'size' => 'tiny',
+    'description' => 'The exportable status of the entity.',
+  );
+
+  $module_spec = array(
+    'description' => 'The name of the providing module if the entity has been defined in code.',
+    'type' => 'varchar',
+    'length' => 255,
+    'not null' => FALSE,
+  );
+
+  if (!db_field_exists("capx_cfe", "status")) {
+    db_add_field("capx_cfe", "status", $status_spec);
+  }
+  if (!db_field_exists("capx_cfe", "module")) {
+    db_add_field("capx_cfe", "module", $module_spec);
+  }
+  if (!db_field_exists("capx_cfe_type", "status")) {
+    db_add_field("capx_cfe_type", "status", $status_spec);
+  }
+  if (!db_field_exists("capx_cfe_type", "module")) {
+    db_add_field("capx_cfe_type", "module", $module_spec);
+  }
+
 }

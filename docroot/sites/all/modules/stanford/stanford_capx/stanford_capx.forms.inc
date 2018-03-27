@@ -1,15 +1,15 @@
 <?php
+
 /**
  * @file
- * @author [author] <[email]>
- *
- * A collection of forms
+ * A collection of forms.
  */
 
 use CAPx\Drupal\Util\CAPx;
 use CAPx\Drupal\Util\CAPxConnection;
 use CAPx\Drupal\Util\CAPxMapper;
 use CAPx\Drupal\Util\CAPxImporter;
+use CAPx\Drupal\Organizations\Orgs as Orgs;
 use \Peekmo\JsonPath\JsonStore as JsonParser;
 
 /**
@@ -19,15 +19,11 @@ use \Peekmo\JsonPath\JsonStore as JsonParser;
  *   The form array.
  * @param array $form_state
  *   The form state array.
- *
- * @return NULL
- *    Nothing as the form values are passed by reference.
  */
 function stanford_capx_forms_connect_form_validate($form, &$form_state) {
 
   $username = $form_state['values']['stanford_capx_username'];
   $password = $form_state['values']['stanford_capx_password'];
-  $endpoint = $form_state['values']['stanford_capx_api_base_url'];
   $authpoint = $form_state['values']['stanford_capx_api_auth_uri'];
 
   // Do not process a change on an empty password. Re-apply the password from
@@ -52,9 +48,6 @@ function stanford_capx_forms_connect_form_validate($form, &$form_state) {
  *   The form array.
  * @param array $form_state
  *   The form state array.
- *
- * @return NULL
- *    Nothing as the form values are passed by reference.
  */
 function stanford_capx_forms_connect_form_submit($form, &$form_state) {
 
@@ -86,18 +79,25 @@ function stanford_capx_forms_connect_form_submit($form, &$form_state) {
 
 // /////////////////////////////////////////////////////////////////////////////
 // END CONNECT FORM
-// /////////////////////////////////////////////////////////////////////////////
+// ////////////////////////////////////////////////////////////////////////////.
 
 
 // /////////////////////////////////////////////////////////////////////////////
 // MAPPER FORMS
-// /////////////////////////////////////////////////////////////////////////////
+// ////////////////////////////////////////////////////////////////////////////.
 
 /**
- * [stanford_capx_mapper_form description]
- * @param  [type] $form       [description]
- * @param  [type] $form_state [description]
- * @return [type]             [description]
+ * The main mapping form.
+ *
+ * Generates a very large form full of the mapping options.
+ *
+ * @param array $form
+ *   The form array.
+ * @param array $form_state
+ *   The form state array.
+ *
+ * @return array
+ *   The form array.
  */
 function stanford_capx_mapper_form($form, &$form_state, $mapper = NULL) {
 
@@ -114,7 +114,7 @@ function stanford_capx_mapper_form($form, &$form_state, $mapper = NULL) {
   if (isset($mapper)) {
     $form['actions']['delete'] = array(
       '#markup' => l(t('Delete'), 'admin/config/capx/mapper/delete/' . $mapper->getMachineName(), array("attributes" => array("class" => array("button")))),
-   );
+    );
   }
   $form['actions']['cancel'] = array(
     '#markup' => l(t('Cancel'), 'admin/config/capx/mapper'),
@@ -124,10 +124,15 @@ function stanford_capx_mapper_form($form, &$form_state, $mapper = NULL) {
 }
 
 /**
- * [stanford_capx_mapper_form_get_machine_name_form description]
- * @param  [type] $form       [description]
- * @param  [type] $form_state [description]
- * @return [type]             [description]
+ * Get machine name form function callback.
+ *
+ * @param array $form
+ *   The form array.
+ * @param array $form_state
+ *   The form state array.
+ *
+ * @return array
+ *   The form array.
  */
 function stanford_capx_mapper_form_get_machine_name_form($form, &$form_state, $mapper = NULL) {
 
@@ -155,7 +160,7 @@ function stanford_capx_mapper_form_get_machine_name_form($form, &$form_state, $m
     '#description' => isset($mapper->machine_name) ? t("This field has been disabled and cannot change once it has been set.") : t('A unique name for the mapping. It must only contain lowercase letters, numbers and hyphens.'),
     '#machine_name' => array(
       'exists' => 'stanford_capx_mapper_machine_name_exits',
-      'source' => array('naming','title'),
+      'source' => array('naming', 'title'),
     ),
     '#disabled' => isset($mapper->machine_name),
   );
@@ -164,10 +169,15 @@ function stanford_capx_mapper_form_get_machine_name_form($form, &$form_state, $m
 }
 
 /**
- * [stanford_capx_mapper_form_get_entity_mapping_form description]
- * @param  [type] $form       [description]
- * @param  [type] $form_state [description]
- * @return [type]             [description]
+ * Entity mapping form callback.
+ *
+ * @param array $form
+ *   The form array.
+ * @param array $form_state
+ *   The form state array.
+ *
+ * @return array
+ *   The form array.
  */
 function stanford_capx_mapper_form_get_entity_mapping_form($form, &$form_state, $mapper = NULL) {
 
@@ -179,7 +189,7 @@ function stanford_capx_mapper_form_get_entity_mapping_form($form, &$form_state, 
     $entity_options[$entity_name] = $values['label'];
     $bundle_options[$entity_name] = array();
 
-    foreach($values['bundles'] as $bundle_machine_name => $bundle_info) {
+    foreach ($values['bundles'] as $bundle_machine_name => $bundle_info) {
       $bundle_options[$entity_name][$bundle_machine_name] = $bundle_info['label'];
     }
 
@@ -196,7 +206,7 @@ function stanford_capx_mapper_form_get_entity_mapping_form($form, &$form_state, 
   $form['entity-mapping']['entity-type'] = array(
     '#type' => 'select',
     '#title' => t("Select entity type"),
-    '#description' => isset($mapper->machine_name) ? t("This field has been disabled and cannot change once it has been set.") : t(''),
+    '#description' => isset($mapper->machine_name) ? t("This field has been disabled and cannot change once it has been set.") : '',
     '#options' => $entity_options,
     '#default_value' => isset($mapper->entity_type) ? $mapper->entity_type : 'node',
     '#disabled' => isset($mapper->machine_name),
@@ -205,10 +215,10 @@ function stanford_capx_mapper_form_get_entity_mapping_form($form, &$form_state, 
   // Build out the bundles options.
   foreach ($bundle_options as $entity_name => $bundle_opts) {
 
-    $form['entity-mapping']['bundle-'.$entity_name] = array(
+    $form['entity-mapping']['bundle-' . $entity_name] = array(
       '#type' => 'select',
       '#title' => t('Select bundle'),
-      '#description' => isset($mapper->machine_name) ? t("This field has been disabled and cannot change once it has been set.") : t(''),
+      '#description' => isset($mapper->machine_name) ? t("This field has been disabled and cannot change once it has been set.") : '',
       '#options' => $bundle_opts,
       '#default_value' => isset($mapper->bundle_type) ? $mapper->bundle_type : 'stanford_person',
       '#states' => array(
@@ -254,13 +264,17 @@ function stanford_capx_mapper_form_get_entity_mapping_form($form, &$form_state, 
 }
 
 /**
- * [stanford_capx_mapper_form_get_field_mapping_form description]
+ * Field mapping form callback function.
  *
- * @todo: Refactor this stupidly long function.
+ * @param array $form
+ *   The form array.
+ * @param array $form_state
+ *   The form state array.
  *
- * @param  [type] $form       [description]
- * @param  [type] $form_state [description]
- * @return [type]             [description]
+ * @return array
+ *   The form array.
+ *
+ * @todo: Refactor this stupidly long function. NPath complexity of 118340. :( .
  */
 function stanford_capx_mapper_form_get_field_mapping_form($form, &$form_state, $mapper = NULL) {
 
@@ -269,14 +283,14 @@ function stanford_capx_mapper_form_get_field_mapping_form($form, &$form_state, $
   $references = array();
   global $CAP_RESTRICTED_FIELD_PROPERTIES;
 
-  // Add some styles and javascript
+  // Add some styles and javascript.
   $form["#attached"]["css"][] = drupal_get_path("module", "stanford_capx") . "/css/stanford_capx.mapper.form.css";
   $form["#attached"]["js"][] = drupal_get_path("module", "stanford_capx") . "/js/stanford_capx.mapper.form.js";
 
   $form['field-mapping'] = array(
     '#type' => 'fieldset',
     '#title' => t('Field Mapping'),
-    '#description' => t(''),
+    '#description' => '',
     '#collapsed' => FALSE,
     '#collapsible' => FALSE,
     '#tree' => TRUE,
@@ -285,13 +299,12 @@ function stanford_capx_mapper_form_get_field_mapping_form($form, &$form_state, $
   $form['field-mapping']['help']['#markup'] = "<p>" . t("Using the fields below you are able to pull in data from the CAP API into your site. You do not have to input a setting for every field. Only use the fields that you want. The fields that you are importing data from the CAP API into will be locked and can only be changed by changing the data on the CAP website.") . "</p>";
   $form['field-mapping']['help']['#markup'] .= "<p>" . t('Use the data browser to find the information you would like to map into the various different properties and fields below. You will need to use JSONPath syntax. For more information on JSONPath please read the documentation. ') . l('JSONPath Documentation →', 'http://goessner.net/articles/JsonPath/', array('attributes' => array('target' => '_blank'))) . "</p>";
 
-
   // ******************************************************
   // **** WARNING ***** BIG HEAVY FORM ***** WARNING ******
-  // ******************************************************
+  // ******************************************************.
 
   // PROPERTIES
-  // ---------------------------------------------------------------------
+  // ---------------------------------------------------------------------.
   foreach ($entity_types as $entity_machine_name => $entity_info_values) {
 
     // If this is an edit mapper form (mapper exists) do not render the other
@@ -310,7 +323,7 @@ function stanford_capx_mapper_form_get_field_mapping_form($form, &$form_state, $
     $form['field-mapping'][$property_container] = array(
       '#type' => 'fieldset',
       '#title' => t('@name Properties', array("@name" => $entity_machine_name)),
-      '#description' => t(''),
+      '#description' => '',
       '#collapsed' => TRUE,
       '#collapsible' => TRUE,
       '#states' => array(
@@ -325,7 +338,7 @@ function stanford_capx_mapper_form_get_field_mapping_form($form, &$form_state, $
       $properties = stanford_capx_filter_properties($entity_machine_name, $properties);
     }
 
-    foreach($properties as $property_machine_name => $prop_info) {
+    foreach ($properties as $property_machine_name => $prop_info) {
 
       $form['field-mapping'][$property_container][$property_machine_name] = array(
         '#type' => 'container',
@@ -341,7 +354,11 @@ function stanford_capx_mapper_form_get_field_mapping_form($form, &$form_state, $
         '#description' => check_plain($prop_info['description']),
         '#default_value' => isset($mapper->properties[$property_machine_name]) ? $mapper->properties[$property_machine_name] : '',
         '#field_info' => $prop_info,
-        '#parents' => array('field-mapping', $property_container, $property_machine_name),
+        '#parents' => array(
+          'field-mapping',
+          $property_container,
+          $property_machine_name,
+        ),
       );
 
       if (isset($prop_info['required'])) {
@@ -353,7 +370,7 @@ function stanford_capx_mapper_form_get_field_mapping_form($form, &$form_state, $
   }
 
   // FIELDS
-  // ---------------------------------------------------------------------
+  // ---------------------------------------------------------------------.
   foreach ($entity_types as $entity_machine_name => $entity_info_values) {
 
     // If this is an edit mapper form (mapper exists) do not render the other
@@ -385,7 +402,7 @@ function stanford_capx_mapper_form_get_field_mapping_form($form, &$form_state, $
       $form['field-mapping'][$field_container] = array(
         '#type' => 'fieldset',
         '#title' => t("@var Fields", array("@var" => $bundle_machine_name)),
-        '#description' => t(''),
+        '#description' => '',
         '#collapsed' => TRUE,
         '#collapsible' => TRUE,
         '#states' => array(
@@ -433,7 +450,7 @@ function stanford_capx_mapper_form_get_field_mapping_form($form, &$form_state, $
   } // end field looop
 
   // FIELD COLLECTIONS
-  // ----------------------------------------------------------------------
+  // ----------------------------------------------------------------------.
 
   foreach ($field_collections as $entity_machine_name => $bundles) {
     foreach ($bundles as $bundle_machine_name => $fields) {
@@ -445,7 +462,7 @@ function stanford_capx_mapper_form_get_field_mapping_form($form, &$form_state, $
         $form['field-mapping'][$collection_container][$field_machine_name] = array(
           '#type' => 'fieldset',
           '#title' => t('@name Field Collection', array("@name" => $field_machine_name)),
-          '#description' => t(''),
+          '#description' => '',
           '#collapsed' => TRUE,
           '#collapsible' => TRUE,
           '#states' => array(
@@ -478,7 +495,7 @@ function stanford_capx_mapper_form_get_field_mapping_form($form, &$form_state, $
   }
 
   // ENTITY REFERENCES
-  // ----------------------------------------------------------------------
+  // ----------------------------------------------------------------------.
 
   foreach ($references as $entity_machine_name => $bundles) {
     foreach ($bundles as $bundle_machine_name => $fields) {
@@ -490,7 +507,7 @@ function stanford_capx_mapper_form_get_field_mapping_form($form, &$form_state, $
       $form['field-mapping'][$reference_container] = array(
         '#type' => 'fieldset',
         '#title' => t('Entity References', array("@name" => $field_machine_name)),
-        '#description' => t(''),
+        '#description' => '',
         '#collapsed' => TRUE,
         '#collapsible' => TRUE,
         '#states' => array(
@@ -528,13 +545,20 @@ function stanford_capx_mapper_form_get_field_mapping_form($form, &$form_state, $
 }
 
 /**
- * [stanford_capx_mapper_form_get_fields_fields description]
- * @param  [type] $form             [description]
- * @param  [type] $form_state       [description]
- * @param  [type] $field_info_field [description]
- * @param  [type] $field_container  [description]
- * @param  [type] $mapper           [description]
- * @return [type]                   [description]
+ * Mapper form function for field fieldset.
+ *
+ * Returns a from array for the fields portion of the mapping form.
+ *
+ * @param array $form_tree
+ *   The form tree to work within.
+ * @param array $form_state
+ *   The form state according to Drupal.
+ * @param array $field_info_field
+ *   The field info array from the Drupal api.
+ * @param string $field_machine_name
+ *   The name of the field.
+ * @param object $mapper
+ *   The mapper if this is not a new mapper form.
  */
 function stanford_capx_mapper_form_get_fields_fields(&$form_tree, &$form_state, $field_info_field, $field_instance_info, $field_machine_name, $mapper) {
 
@@ -564,7 +588,7 @@ function stanford_capx_mapper_form_get_fields_fields(&$form_tree, &$form_state, 
   }
 
   // ENTITY REFERENCE FIELDS
-  // ---------------------------------------------------------------------------
+  // --------------------------------------------------------------------------.
   if ($field_info_field['type'] == "entityreference") {
 
     $importers = CAPxImporter::getAllEntityImporters();
@@ -582,9 +606,8 @@ function stanford_capx_mapper_form_get_fields_fields(&$form_tree, &$form_state, 
     return;
   }
 
-
   // ALL OTHER FIELDS
-  // ---------------------------------------------------------------------------
+  // --------------------------------------------------------------------------.
 
   foreach ($field_info_field['columns'] as $column_key => $column_info) {
     if (!in_array($column_key, $CAP_RESTRICTED_FIELD_PROPERTIES)) {
@@ -615,28 +638,34 @@ function stanford_capx_mapper_form_get_fields_fields(&$form_tree, &$form_state, 
 }
 
 /**
- * [stanford_capx_key_name_array_map description]
- * @param  [type] $keys      [description]
- * @param  [type] $importers [description]
- * @return [type]            [description]
+ * Some sort of helper function to get the importer title.
+ *
+ * @param object $importer
+ *   The importer object.
+ *
+ * @return string
+ *   The importer object's title.
  */
 function stanford_capx_key_name_array_map($importer) {
   return $importer->getImporter()->title;
 }
 
-
 /**
- * [stanford_capx_mapper_machine_name_exits description]
- * @param  [type] $name [description]
- * @return [type]       [description]
+ * Machine name check function for the mapper form.
+ *
+ * @param string $name
+ *   The machine name to check for.
+ *
+ * @return bool
+ *   True if exists.
  */
 function stanford_capx_mapper_machine_name_exits($name) {
 
   $result = db_select('capx_cfe', 'cfe')
-              ->fields('cfe', array('machine_name'))
-              ->condition('machine_name', $name)
-              ->condition('type', 'mapper')
-              ->execute();
+    ->fields('cfe', array('machine_name'))
+    ->condition('machine_name', $name)
+    ->condition('type', 'mapper')
+    ->execute();
   $count = $result->rowCount();
 
   // We found a match!
@@ -649,12 +678,20 @@ function stanford_capx_mapper_machine_name_exits($name) {
 }
 
 /**
+ * Filter out the properties that are not valid.
+ *
  * Takes in an array of properties and filters out the ones that users should
  * never map to. Things like nid, vid, comments, etc.
- * @param  array  $properties [description]
- * @return [type]             [description]
+ *
+ * @param string $entity_type
+ *   The entity type name if only want a single set.
+ * @param array $properties
+ *   An array of properties attached to an entity type.
+ *
+ * @return array
+ *   An array of allowed properties.
  */
-function stanford_capx_filter_properties($entity_type, $properties = array()) {
+function stanford_capx_filter_properties($entity_type = NULL, $properties = array()) {
 
   $blacklist = array();
   $property_keys = array_keys($properties);
@@ -670,7 +707,8 @@ function stanford_capx_filter_properties($entity_type, $properties = array()) {
   $blacklist['bean'][] = "created";
   $blacklist['bean'][] = "changed";
   $blacklist['bean'][] = "data";
-  $blacklist['bean'][] = "body"; // body is not a property!
+  // Body is not a property!
+  $blacklist['bean'][] = "body";
 
   // Field collection item.
   $blacklist['field_collection_item'][] = "item_id";
@@ -705,7 +743,8 @@ function stanford_capx_filter_properties($entity_type, $properties = array()) {
   $blacklist['node'][] = "uuid";
   $blacklist['node'][] = "vuuid";
   $blacklist['node'][] = "log";
-  $blacklist['node'][] = "body"; // body is not a property!
+  // Body is not a property!
+  $blacklist['node'][] = "body";
 
   // Terms.
   $blacklist['taxonomy_term'][] = "tid";
@@ -717,7 +756,8 @@ function stanford_capx_filter_properties($entity_type, $properties = array()) {
   $blacklist['taxonomy_term'][] = "parents_all";
   $blacklist['taxonomy_term'][] = "created";
   $blacklist['taxonomy_term'][] = "changed";
-  $blacklist['taxonomy_term'][] = "body"; // body is not a property!
+  // Body is not a property!
+  $blacklist['taxonomy_term'][] = "body";
 
   // User.
   $blacklist['user'][] = "uid";
@@ -730,7 +770,8 @@ function stanford_capx_filter_properties($entity_type, $properties = array()) {
   $blacklist['user'][] = "theme";
   $blacklist['user'][] = "created";
   $blacklist['user'][] = "changed";
-  $blacklist['user'][] = "body"; // body is not a property!
+  // Body is not a property!
+  $blacklist['user'][] = "body";
 
   // Anything we don't know about.
   $blacklist['unknown'][] = "id";
@@ -740,8 +781,8 @@ function stanford_capx_filter_properties($entity_type, $properties = array()) {
   $blacklist['unknown'][] = "uid";
   $blacklist['unknown'][] = "changed";
   $blacklist['unknown'][] = "created";
-  $blacklist['unknown'][] = "body"; // body is not a property!
-
+  // Body is not a property!
+  $blacklist['unknown'][] = "body";
 
   if (!isset($blacklist[$entity_type])) {
     $entity_type = "unknown";
@@ -757,9 +798,11 @@ function stanford_capx_filter_properties($entity_type, $properties = array()) {
 
 /**
  * Validation function for the mapper form.
- * @param  [type] $form       [description]
- * @param  [type] $form_state [description]
- * @return [type]             [description]
+ *
+ * @param array $form
+ *   The form array.
+ * @param array $form_state
+ *   The form state array.
  */
 function stanford_capx_mapper_form_validate($form, $form_state) {
   // Recursively validate json selectors for mapped fields and properties.
@@ -776,7 +819,7 @@ function stanford_capx_mapper_form_validate($form, $form_state) {
   }
 
   // Only some have field collections.
-  if (isset($form_state['values']['field-mapping'][$entity . "-" . $bundle .  "-collections"])) {
+  if (isset($form_state['values']['field-mapping'][$entity . "-" . $bundle . "-collections"])) {
     stanford_capx_mapper_form_validate_element($form_state['values']['field-mapping'][$entity . "-" . $bundle . "-collections"], array('field-mapping'));
   }
 
@@ -799,9 +842,9 @@ function stanford_capx_mapper_form_validate($form, $form_state) {
  * we do not want them. They still need to be filled out.
  *
  * @param array $form
- *   Form array
+ *   Form array.
  * @param array $form_state
- *   Form state array
+ *   Form state array.
  * @param string $entity
  *   The machine name of the entity type to be validated.
  * @param string $bundle
@@ -844,7 +887,6 @@ function stanford_capx_mapper_form_validate_required_fields(&$form, &$form_state
         continue;
       }
 
-
       $columns = $form_state['values']['field-mapping'][$entity . "-" . $bundle . "-fields"][$field_name];
 
       // Loop through the columns and check for values.
@@ -866,9 +908,10 @@ function stanford_capx_mapper_form_validate_required_fields(&$form, &$form_state
  * Validate the user input from the mapper form by checking to see if the
  * selector finds something in the API schema.
  *
- * @param  [type] $element [description]
- * @param  array  $parents [description]
- * @return [type]          [description]
+ * @param array $element
+ *   The element array.
+ * @param array $parents
+ *   The parent array.
  */
 function stanford_capx_mapper_form_validate_element($element, $parents = array()) {
   static $json_parser;
@@ -898,9 +941,6 @@ function stanford_capx_mapper_form_validate_element($element, $parents = array()
       }
       catch (\Exception $e) {
         // Catch any Exception from JsonParser or the condition above.
-        // @TODO: Enable validation when the schema is consistent with the data.
-        // form_set_error(implode('][', $parents));
-
         if ($name == "title") {
           $field_name = "title";
         }
@@ -919,40 +959,12 @@ function stanford_capx_mapper_form_validate_element($element, $parents = array()
 }
 
 /**
- * Sets the message for the element validation.
- */
-// function stanford_capx_mapper_form_validate_element_set_messages() {
-//   $form_error = &drupal_static("stanford_capx_mapper_form_validate_element_error", FALSE);
-//   $form_field_warnings = &drupal_static("stanford_capx_mapper_form_validate_element_warnings", FALSE);
-
-//   // Set the error message once when the recursive calls have finished.
-//   if ($form_error) {
-//     $field_warnings_list = theme('item_list', array(
-//       'title' => '',
-//       'items' => $form_field_warnings,
-//       'type' => 'ul',
-//       'attributes' => array()
-//     ));
-//     $browser_link = l(t('Data Browser'),
-//       'admin/config/capx/data-browser', array(
-//         'attributes' => array('target' => '_blank')
-//       ));
-
-//     drupal_set_message(
-//       t('The following selectors did not match an element in the profile schema but may be valid. If you know the selector is valid please disregard this message. Try using the !databrowser to find a valid selector.!warnings',
-//         array(
-//           '!warnings' => $field_warnings_list,
-//           '!databrowser' => $browser_link,
-//         )
-//       ), 'warning');
-//   }
-// }
-
-/**
  * Submit handler for the mapper form. Create and save the mapper entity.
- * @param  [type] $form       [description]
- * @param  [type] $form_state [description]
- * @return [type]             [description]
+ *
+ * @param array $form
+ *   The form array.
+ * @param array $form_state
+ *   The form state array.
  */
 function stanford_capx_mapper_form_submit($form, $form_state) {
 
@@ -1088,9 +1100,14 @@ function stanford_capx_mapper_form_submit($form, $form_state) {
 
 /**
  * Delete the mapper by first prompting for a confirmation form.
- * @param  [type] $form       [description]
- * @param  [type] $form_state [description]
- * @return [type]             [description]
+ *
+ * @param array $form
+ *   The form array.
+ * @param array $form_state
+ *   The form state array.
+ *
+ * @return array
+ *   The form array.
  */
 function stanford_capx_admin_config_mapper_delete($form, $form_state, $machine_name) {
   $form = array();
@@ -1127,7 +1144,6 @@ function stanford_capx_admin_config_mapper_delete($form, $form_state, $machine_n
     '#value' => $mapper->machine_name,
   );
 
-
   $form = confirm_form($form, $question, $path, $description, 'Yes, please delete', 'Cancel', $name);
 
   if (count($items)) {
@@ -1139,9 +1155,11 @@ function stanford_capx_admin_config_mapper_delete($form, $form_state, $machine_n
 
 /**
  * Delete the mapper.
- * @param  [type] $form       [description]
- * @param  [type] $form_state [description]
- * @return [type]             [description]
+ *
+ * @param array $form
+ *   The form array.
+ * @param array $form_state
+ *   The form state array.
  */
 function stanford_capx_admin_config_mapper_delete_submit($form, $form_state) {
   $mapper = capx_cfe_load_by_machine_name($form_state['values']['machine-name'], 'mapper');
@@ -1150,30 +1168,36 @@ function stanford_capx_admin_config_mapper_delete_submit($form, $form_state) {
   drupal_goto('admin/config/capx/mapper');
 }
 
-
 // /////////////////////////////////////////////////////////////////////////////
 // IMPORTER FORMS
-// /////////////////////////////////////////////////////////////////////////////
-
+// ////////////////////////////////////////////////////////////////////////////.
 
 /**
- * [stanford_capx_importer_form description]
- * @param  [type] $form       [description]
- * @param  [type] $form_state [description]
- * @return [type]             [description]
+ * Importer form callback.
+ *
+ * The main form callback for the importer form ui.
+ * This needs a refactor: NPath complexity of 14155776.
+ *
+ * @param array $form
+ *   The form array.
+ * @param array $form_state
+ *   The form state array.
+ *
+ * @return array
+ *   The importer form.
  */
 function stanford_capx_importer_form($form, &$form_state, $importer = NULL) {
 
   // Do a check to see if the organization codes are available. If not, prompt
   // the user to update them.
-  $has_orgs = \CAPx\Drupal\Organizations\Orgs::checkOrgs();
+  $has_orgs = Orgs::checkOrgs();
   if (!$has_orgs) {
-    $link = l('Sync with the API now.', 'admin/config/capx/organizations/sync', array('query' => array('destination' => current_path())));
+    $link = l(t('Sync with the API now.'), 'admin/config/capx/organizations/sync', array('query' => array('destination' => current_path())));
     drupal_set_message(t('The organization codes are not available. !link', array("!link" => $link)), 'warning');
   }
 
   // Configuration group
-  // -–-–-–-–-–-–-–-–-–-–-
+  // -–-–-–-–-–-–-–-–-–-–-.
 
   $form['naming'] = array(
     '#title' => t('Configuration'),
@@ -1201,7 +1225,7 @@ function stanford_capx_importer_form($form, &$form_state, $importer = NULL) {
     '#description' => isset($importer->machine_name) ? t("This field has been disabled and cannot change once it has been set.") : t('A unique name for the importer. It must only contain lowercase letters, numbers and hyphens.'),
     '#machine_name' => array(
       'exists' => 'stanford_capx_importer_machine_name_exits',
-      'source' => array('naming','title'),
+      'source' => array('naming', 'title'),
     ),
     '#disabled' => isset($importer->machine_name),
   );
@@ -1228,7 +1252,7 @@ function stanford_capx_importer_form($form, &$form_state, $importer = NULL) {
     '#empty_option' => t('--Please select--'),
     '#ajax' => array(
       'wrapper' => 'orphan-action-wrapper',
-      'callback' => '_stanford_capx_importer_form_mapper_ajax_callback'
+      'callback' => '_stanford_capx_importer_form_mapper_ajax_callback',
     ),
   );
 
@@ -1262,7 +1286,7 @@ function stanford_capx_importer_form($form, &$form_state, $importer = NULL) {
   $action_options['delete'] = t('Delete');
 
   // Cron Settings
-  // -–-–-–-–-–-–-–-–-–-–-
+  // -–-–-–-–-–-–-–-–-–-–-.
 
   $form['cron'] = array(
     '#title' => t('Automatic synchronization options (CRON)'),
@@ -1308,7 +1332,8 @@ function stanford_capx_importer_form($form, &$form_state, $importer = NULL) {
       "thursday" => t("Thursday"),
       "friday" => t("Friday"),
       "saturday" => t("Saturday"),
-      "sunday" => t("Sunday")),
+      "sunday" => t("Sunday"),
+    ),
     "#default_value" => isset($importer->cron_option_day_week) ? $importer->cron_option_day_week : "Sunday",
     "#states" => array(
       "visible" => array(
@@ -1338,7 +1363,20 @@ function stanford_capx_importer_form($form, &$form_state, $importer = NULL) {
     "#type" => "select",
     "#title" => t("At month of the year"),
     "#description" => t("Select the month of the year you wish to sync on."),
-    "#options" => array(t("January"), t("February"), t("March"), t("April"), t("May"), t("June"), t("July"), t("August"), t("September"), t("October"), t("November"), t("December")),
+    "#options" => array(
+      t("January"),
+      t("February"),
+      t("March"),
+      t("April"),
+      t("May"),
+      t("June"),
+      t("July"),
+      t("August"),
+      t("September"),
+      t("October"),
+      t("November"),
+      t("December"),
+    ),
     "#default_value" => isset($importer->cron_option_month) ? $importer->cron_option_month : "January",
     "#states" => array(
       "visible" => array(
@@ -1360,7 +1398,7 @@ function stanford_capx_importer_form($form, &$form_state, $importer = NULL) {
   );
 
   // Profile group
-  // -–-–-–-–-–-–-–-–-–-–-
+  // -–-–-–-–-–-–-–-–-–-–-.
 
   $form['groups'] = array(
     '#title' => t('Add groups and individuals'),
@@ -1377,7 +1415,7 @@ function stanford_capx_importer_form($form, &$form_state, $importer = NULL) {
     '#title' => t('Organization(s)'),
     '#description' => t('Please select the name(s) of the organization(s) you wish to import. Enter multiple organizations by separating them with a comma ",".') . "<br />" . t('Learn more about !orgchart.', array('!orgchart' => $link)),
     '#default_value' => isset($importer->organization) ? $importer->organization : '',
-    '#autocomplete_path' => 'admin/config/capx/autocomplete/orgs', // @todo: this.
+    '#autocomplete_path' => 'admin/config/capx/autocomplete/orgs',
   );
 
   $form['groups']['child_orgs'] = array(
@@ -1395,14 +1433,6 @@ function stanford_capx_importer_form($form, &$form_state, $importer = NULL) {
     '#default_value' => isset($importer->workgroup) ? $importer->workgroup : '',
   );
 
-  // $form['individuals'] = array(
-  //   '#title' => t('Add individuals'),
-  //   '#type' => 'fieldset',
-  //   '#collapsed' => FALSE,
-  //   '#collapsible' => FALSE,
-  //   '#description' => t(''),
-  // );
-
   $form['groups']['sunet_id'] = array(
     '#type' => 'textarea',
     '#title' => t('SUNet IDs'),
@@ -1417,11 +1447,10 @@ function stanford_capx_importer_form($form, &$form_state, $importer = NULL) {
   );
 
   if (isset($importer)) {
-     $form['actions']['delete'] = array(
+    $form['actions']['delete'] = array(
       '#markup' => l(t('Delete'), 'admin/config/capx/importer/delete/' . $importer->getMachineName(), array("attributes" => array("class" => array("button")))),
-   );
+    );
   }
-
 
   $form['actions']['saveandimport'] = array(
     '#type' => 'button',
@@ -1438,10 +1467,17 @@ function stanford_capx_importer_form($form, &$form_state, $importer = NULL) {
 }
 
 /**
- * [stanford_capx_config_settings_data_sync_form description]
- * @param  [type] $form       [description]
- * @param  [type] $form_state [description]
- * @return [type]             [description]
+ * Data sync form callback.
+ *
+ * Returns a form for the data sync.
+ *
+ * @param array $form
+ *   The form array.
+ * @param array $form_state
+ *   The form state array.
+ *
+ * @return array
+ *   The form array for data sync.
  */
 function stanford_capx_config_settings_data_sync_form($form, $form_state) {
   $form['orggroup'] = array(
@@ -1467,10 +1503,8 @@ function stanford_capx_config_settings_data_sync_form($form, $form_state) {
     '#type' => 'button',
     '#value' => 'Get schema information',
     '#op' => 'submit',
-    // '#element_validate' => array("stanford_capx_schema_refresh"), // Yes, I know this is abuse.
   );
 
-  // $form['#submit'][] = "stanford_capx_schema_refresh";
   return $form;
 }
 
@@ -1482,18 +1516,23 @@ function _stanford_capx_importer_form_mapper_ajax_callback($form, $form_state) {
 }
 
 /**
- * [stanford_capx_importer_machine_name_exits description]
- * @todo refactor this with the mapper_machine_name_exists function.
- * @param  [type] $name [description]
- * @return [type]       [description]
+ * Importer machine name check callback.
+ *
+ * Checks for the existance of a machine name id string.
+ *
+ * @param string $name
+ *   The machine name id to look up.
+ *
+ * @return bool
+ *   True if the name exists.
  */
 function stanford_capx_importer_machine_name_exits($name) {
 
   $result = db_select('capx_cfe', 'cfe')
-              ->fields('cfe', array('machine_name'))
-              ->condition('machine_name', $name)
-              ->condition('type', 'importer')
-              ->execute();
+    ->fields('cfe', array('machine_name'))
+    ->condition('machine_name', $name)
+    ->condition('type', 'importer')
+    ->execute();
   $count = $result->rowCount();
 
   // We found a match!
@@ -1506,20 +1545,12 @@ function stanford_capx_importer_machine_name_exits($name) {
 }
 
 /**
- * [stanford_capx_importer_form_validate description]
- * @param  [type] $form       [description]
- * @param  [type] $form_state [description]
- * @return [type]             [description]
- */
-function stanford_capx_importer_form_validate($form, &$form_state) {
-  // @todo: validate options
-}
-
-/**
- * [stanford_capx_importer_form_submit description]
- * @param  [type] $form       [description]
- * @param  [type] $form_state [description]
- * @return [type]             [description]
+ * Importer form submit handler.
+ *
+ * @param array $form
+ *   The form array.
+ * @param array $form_state
+ *   The form state array.
  */
 function stanford_capx_importer_form_submit($form, &$form_state) {
   $values = $form_state['values'];
@@ -1586,8 +1617,12 @@ function stanford_capx_importer_form_submit($form, &$form_state) {
 }
 
 /**
- * Submit callback function that runs the batch api import for this importer
- * @return [type] [description]
+ * Submit callback function that runs the batch api import for this importer.
+ *
+ * @param array $form
+ *   The form array.
+ * @param array $form_state
+ *   The form state array.
  */
 function stanford_capx_importer_form_submit_run_import($form, $form_state) {
   $values = $form_state['values'];
@@ -1617,15 +1652,18 @@ function stanford_capx_importer_form_submit_run_import($form, $form_state) {
  * Form callback confirms the action of deleting and allows the user to choose
  * what they want to do with the profiles that are associated with it.
  *
- * @param  [type] $form       [description]
- * @param  [type] $form_state [description]
- * @return [type]             [description]
+ * @param array $form
+ *   The form array.
+ * @param array $form_state
+ *   The form state array.
+ *
+ * @return array
+ *   The form array.
  */
 function stanford_capx_admin_config_importer_delete($form, &$form_state, $machine_name) {
 
   // Get the importer.
   $importer = CAPxImporter::loadEntityImporter($machine_name);
-
 
   // No importer, no need to continue.
   if (!$importer) {
@@ -1647,7 +1685,6 @@ function stanford_capx_admin_config_importer_delete($form, &$form_state, $machin
   $form['profile_action'] = array(
     '#type' => 'select',
     '#title' => t('What would you like to do with the items that are associated with this importer?'),
-    //    '#description' => t('Perform an action on all of the items that have been imported by this importer.'),
     '#options' => array(
       'nothing' => t('Do nothing and leave the items as they are'),
       'delete' => t('Delete all of the items'),
@@ -1675,9 +1712,10 @@ function stanford_capx_admin_config_importer_delete($form, &$form_state, $machin
  * If the importer was confirmed to be deleted we need to take action on the
  * profiles.
  *
- * @param  [type] $form       [description]
- * @param  [type] $form_state [description]
- * @return [type]             [description]
+ * @param array $form
+ *   The form array.
+ * @param array $form_state
+ *   The form state array.
  */
 function stanford_capx_admin_config_importer_delete_submit($form, $form_state) {
 
@@ -1733,7 +1771,7 @@ function stanford_capx_admin_config_importer_delete_submit($form, $form_state) {
 
 // /////////////////////////////////////////////////////////////////////////////
 // FORM ALTERS
-// /////////////////////////////////////////////////////////////////////////////
+// ////////////////////////////////////////////////////////////////////////////.
 
 /**
  * Implements hook_form_alter().
@@ -1752,6 +1790,13 @@ function stanford_capx_form_alter(&$form, &$form_state, $form_id) {
 
 /**
  * Figure out entity type.
+ *
+ * @param array $form
+ *   The form array.
+ * @param array $form_state
+ *   The form state array.
+ * @param string $form_id
+ *   The form identifier.
  *
  * @return array
  *   Entity type and entity of
@@ -1787,6 +1832,15 @@ function _stanford_capx_entity_form_get_entity(&$form, &$form_state, $form_id) {
 
 /**
  * Adds CAPx info to supported entity forms.
+ *
+ * @param array $form
+ *   The form array.
+ * @param array $form_state
+ *   The form state array.
+ * @param string $entity_type
+ *   The entity type name.
+ * @param object $entity
+ *   The entity object.
  */
 function stanford_capx_entity_form_add_vt(&$form, &$form_state, $entity_type, $entity) {
 
@@ -1805,12 +1859,12 @@ function stanford_capx_entity_form_add_vt(&$form, &$form_state, $entity_type, $e
   // Create a fieldset that will be included in the vertical tab.
   $form['capx_vertical_tab'] = array(
     '#type' => 'fieldset',
-    '#title' => t('CAPx Information'),
+    '#title' => 'CAPx Information',
     '#collapsible' => TRUE,
     '#collapsed' => FALSE,
     '#tree' => TRUE,
     '#weight' => -99,
-    '#description' => t(''),
+    '#description' => '',
     '#summary' => t('summary'),
     // The #group value must match the name of the vertical tabs element.
     // In most cases, this is 'additional_settings'.
@@ -1834,8 +1888,8 @@ function stanford_capx_entity_form_add_vt(&$form, &$form_state, $entity_type, $e
   $mapper_label = entity_label('capx_cfe', $mapper);
   $mapper_path = 'admin/config/capx/mapper/edit/' . $importer->mapper;
   $vars = array(
-    '!importer' => l(check_plain($importer_label), $importer_path),
-    '!mapper' => l(check_plain($mapper_label), $mapper_path),
+    '!importer' => l($importer_label, $importer_path),
+    '!mapper' => l($mapper_label, $mapper_path),
   );
   $form['capx_vertical_tab']['importer'] = array(
     '#prefix' => '<p class="importer"><span class="label">' . t('Imported by:') . '</span><span class="info">',
@@ -1849,11 +1903,11 @@ function stanford_capx_entity_form_add_vt(&$form, &$form_state, $entity_type, $e
     $options = array(
       'attributes' => array(
         'class' => array('button'),
-        ),
+      ),
       'query' => array(
         'destination' => $_GET['q'],
-        ),
-      );
+      ),
+    );
     $form['capx_vertical_tab']['update']['#markup'] = "<p>" . l(t('Update this profile from CAP'), $path, $options) . "<br />";
     $form['capx_vertical_tab']['update']['#markup'] .= t("Clicking on the above button will update this profile with date from the CAP API whether or not sync is enabled or disabled") . "</p>";
   }
@@ -1864,7 +1918,6 @@ function stanford_capx_entity_form_add_vt(&$form, &$form_state, $entity_type, $e
     '#markup' => $status,
     '#suffix' => '</span></p>',
   );
-
 
   if (user_access('administer capx')) {
     $sync = empty($entity->capx['sync']) ? TRUE : FALSE;
@@ -1886,6 +1939,15 @@ function stanford_capx_entity_form_add_vt(&$form, &$form_state, $entity_type, $e
 
 /**
  * Disable all fields that have mapped data.
+ *
+ * @param array $form
+ *   The form array.
+ * @param array $form_state
+ *   The form state array.
+ * @param string $entity_type
+ *   The entity type name.
+ * @param object $entity
+ *   The entity object.
  */
 function stanford_capx_entity_form_disable_mapped_fields(&$form, &$form_state, $entity_type, $entity) {
 
@@ -1945,17 +2007,19 @@ function stanford_capx_entity_form_disable_mapped_fields(&$form, &$form_state, $
           }
           $form[$field_name][LANGUAGE_NONE][$key][$fc_field_name]["#disabled"] = TRUE;
           $form[$field_name][LANGUAGE_NONE][$key][$fc_field_name][LANGUAGE_NONE][0]['#description'] = $description;
-         }
+        }
       }
     }
   }
 }
 
 /**
- * [stanford_capx_views_exposed_form_alter description]
- * @param  [type] $form       [description]
- * @param  [type] $form_state [description]
- * @return [type]             [description]
+ * Views exposed form alter.
+ *
+ * @param array $form
+ *   The form array.
+ * @param array $form_state
+ *   The form state array.
  */
 function stanford_capx_form_views_exposed_form_alter(&$form, &$form_state) {
 
@@ -1993,15 +2057,21 @@ function stanford_capx_form_views_exposed_form_alter(&$form, &$form_state) {
 
 // /////////////////////////////////////////////////////////////////////////////
 // End Form Alters
-// /////////////////////////////////////////////////////////////////////////////
+// ////////////////////////////////////////////////////////////////////////////.
 
 /**
+ * Schema information.
+ *
  * Recursively callled function that provides an array of information that is
  * used in the mapper form validation callback.
- * @see stanford_capx_mapper_form_validate_element()
- * @param [type] [description]
  *
- * @return [type] [description]
+ * @param array $schema
+ *   The api endpoint schema.
+ *
+ * @return array|string
+ *   The formatted schema.
+ *
+ * @see stanford_capx_mapper_form_validate_element()
  */
 function stanford_capx_schema_format_validation($schema = NULL) {
   $formatted_schema = array();
@@ -2097,6 +2167,12 @@ function stanford_capx_config_auth_settings_form($form, &$form_state) {
     '#required' => TRUE,
   );
 
+  $form['advanced']['stanford_capx_ignore_ssl'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Ignore included certification file'),
+    '#default_value' => variable_get("stanford_capx_ignore_ssl", FALSE),
+  );
+
   $form['#validate'][] = "stanford_capx_forms_connect_form_validate";
   $form['#submit'][] = "stanford_capx_forms_connect_form_submit";
 
@@ -2121,7 +2197,7 @@ function stanford_capx_config_settings_form($form, &$form_state) {
     '#description' => t('The number of items to process on one sync operation.'),
     '#type' => 'textfield',
     '#required' => TRUE,
-    '#default_value' => variable_get("stanford_capx_batch_limit", 100),
+    '#default_value' => variable_get("stanford_capx_batch_limit", 50),
   );
 
   $options = array();
@@ -2143,13 +2219,16 @@ function stanford_capx_config_settings_form($form, &$form_state) {
 }
 
 /**
- * Submit function for stanford_capx_config_settings_form
- * @param  [type] $form        [description]
- * @param  [type] &$form_state [description]
- * @return [type]              [description]
+ * Submit function for stanford_capx_config_settings_form.
+ *
+ * @param array $form
+ *   The form array.
+ * @param array $form_state
+ *   The form state array.
  */
 function stanford_capx_config_settings_form_submit($form, &$form_state) {
   $values = $form_state["values"];
+  variable_set("stanford_capx_ignore_ssl", $values['stanford_capx_ignore_ssl']);
   variable_set("stanford_capx_batch_limit", check_plain($values['stanford_capx_batch_limit']));
   variable_set("stanford_capx_default_field_format", check_plain($values['stanford_capx_default_field_format']));
 }
@@ -2160,7 +2239,7 @@ function stanford_capx_config_settings_form_submit($form, &$form_state) {
  * @param string $path
  *   The path being looked up.
  * @param object $parser
- *   The JSONParser object
+ *   The JSONParser object.
  *
  * @return bool
  *   True for valid and False for invalid.
@@ -2181,7 +2260,7 @@ function _stanford_capx_mapper_is_valid_path($path, $parser) {
     return TRUE;
   }
 
-  // If the path matches any of our patterns then return TRUE;
+  // If the path matches any of our patterns then return TRUE.
   foreach ($valid_patterns as $pattern) {
     if (preg_match($pattern, $trimmed_path)) {
       return TRUE;
@@ -2190,7 +2269,6 @@ function _stanford_capx_mapper_is_valid_path($path, $parser) {
 
   return FALSE;
 }
-
 
 /**
  * Returns list of known valid JSONPaths not described in schema.

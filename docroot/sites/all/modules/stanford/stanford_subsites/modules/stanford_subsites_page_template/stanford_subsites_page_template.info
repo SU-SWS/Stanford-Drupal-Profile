@@ -1,0 +1,6 @@
+name = Stanford Subsites Page Template
+description = Stanford Subsites Page Template for Stanford Framework
+core = 7.x
+package = Stanford
+version = 7.x-2.1
+dependencies[] = stanford_subsites

@@ -1,0 +1,30 @@
+MAINTAINERS.txt
+
+# Numerous always-ignore extensions
+*.diff
+*.err
+*.orig
+*.log
+*.rej
+*.swo
+*.swp
+*.vi
+*~
+
+# OS or Editor folders
+.DS_Store
+.cache
+.idea
+.sass-cache
+.project
+.settings
+.tmproj
+nbproject
+Thumbs.db
+config.rb
+
+# Folders to ignore
+.hg
+.svn
+.CVS
+cgi-bin

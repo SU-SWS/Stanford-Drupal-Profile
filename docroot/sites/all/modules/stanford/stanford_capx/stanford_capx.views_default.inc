@@ -93,24 +93,51 @@ function stanford_capx_views_default_views() {
   $handler->display->display_options['fields']['settings_1']['format'] = 'bundle_title';
   $handler->display->display_options['fields']['settings_1']['key'] = 'bundle_type';
   $handler->display->display_options['fields']['settings_1']['mapper'] = 0;
-  /* Field: Configuration Entity: Mapper delete link */
+  /* Field: Configuration Entity: Mapping delete link */
   $handler->display->display_options['fields']['mapper_delete_link']['id'] = 'mapper_delete_link';
   $handler->display->display_options['fields']['mapper_delete_link']['table'] = 'capx_cfe';
   $handler->display->display_options['fields']['mapper_delete_link']['field'] = 'mapper_delete_link';
   $handler->display->display_options['fields']['mapper_delete_link']['exclude'] = TRUE;
+  $handler->display->display_options['fields']['mapper_delete_link']['alter']['alter_text'] = TRUE;
+  $handler->display->display_options['fields']['mapper_delete_link']['alter']['text'] = '| [mapper_delete_link] ';
   $handler->display->display_options['fields']['mapper_delete_link']['text'] = 'Delete';
-  /* Field: Configuration Entity: Mapper edit link */
+  /* Field: Configuration Entity: Mapping edit link */
   $handler->display->display_options['fields']['mapper_edit_link']['id'] = 'mapper_edit_link';
   $handler->display->display_options['fields']['mapper_edit_link']['table'] = 'capx_cfe';
   $handler->display->display_options['fields']['mapper_edit_link']['field'] = 'mapper_edit_link';
   $handler->display->display_options['fields']['mapper_edit_link']['exclude'] = TRUE;
   $handler->display->display_options['fields']['mapper_edit_link']['text'] = 'Edit';
+  /* Field: Configuration Entity: Export Status */
+  $handler->display->display_options['fields']['status']['id'] = 'status';
+  $handler->display->display_options['fields']['status']['table'] = 'capx_cfe';
+  $handler->display->display_options['fields']['status']['field'] = 'status';
+  $handler->display->display_options['fields']['status']['label'] = 'Status';
+  /* Field: Configuration Entity: Mapping export link */
+  $handler->display->display_options['fields']['mapper_export_link']['id'] = 'mapper_export_link';
+  $handler->display->display_options['fields']['mapper_export_link']['table'] = 'capx_cfe';
+  $handler->display->display_options['fields']['mapper_export_link']['field'] = 'mapper_export_link';
+  $handler->display->display_options['fields']['mapper_export_link']['label'] = '';
+  $handler->display->display_options['fields']['mapper_export_link']['exclude'] = TRUE;
+  $handler->display->display_options['fields']['mapper_export_link']['alter']['alter_text'] = TRUE;
+  $handler->display->display_options['fields']['mapper_export_link']['alter']['text'] = '| [mapper_export_link] ';
+  $handler->display->display_options['fields']['mapper_export_link']['element_label_colon'] = FALSE;
+  $handler->display->display_options['fields']['mapper_export_link']['text'] = 'Export';
+  /* Field: Configuration Entity: Mapping revert link */
+  $handler->display->display_options['fields']['mapper_revert_link']['id'] = 'mapper_revert_link';
+  $handler->display->display_options['fields']['mapper_revert_link']['table'] = 'capx_cfe';
+  $handler->display->display_options['fields']['mapper_revert_link']['field'] = 'mapper_revert_link';
+  $handler->display->display_options['fields']['mapper_revert_link']['label'] = '';
+  $handler->display->display_options['fields']['mapper_revert_link']['exclude'] = TRUE;
+  $handler->display->display_options['fields']['mapper_revert_link']['alter']['alter_text'] = TRUE;
+  $handler->display->display_options['fields']['mapper_revert_link']['alter']['text'] = '| [mapper_revert_link] ';
+  $handler->display->display_options['fields']['mapper_revert_link']['element_label_colon'] = FALSE;
+  $handler->display->display_options['fields']['mapper_revert_link']['text'] = 'Revert';
   /* Field: Global: Custom text */
   $handler->display->display_options['fields']['nothing_2']['id'] = 'nothing_2';
   $handler->display->display_options['fields']['nothing_2']['table'] = 'views';
   $handler->display->display_options['fields']['nothing_2']['field'] = 'nothing';
   $handler->display->display_options['fields']['nothing_2']['label'] = 'Actions';
-  $handler->display->display_options['fields']['nothing_2']['alter']['text'] = '[mapper_edit_link] | [mapper_delete_link] ';
+  $handler->display->display_options['fields']['nothing_2']['alter']['text'] = '[mapper_edit_link] [mapper_export_link][mapper_revert_link][mapper_delete_link] ';
   /* Sort criterion: Configuration Entity: Title */
   $handler->display->display_options['sorts']['title']['id'] = 'title';
   $handler->display->display_options['sorts']['title']['table'] = 'capx_cfe';

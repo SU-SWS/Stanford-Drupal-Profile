@@ -1,7 +1,16 @@
 <?php
+
 /**
  * @file
  * Code for the Stanford Events Views feature.
  */
 
 include_once 'stanford_events_views.features.inc';
+
+/**
+ * Implements hook_views_pre_build().
+ */
+function stanford_events_views_views_pre_build(&$view) {
+  drupal_add_css(drupal_get_path('module', 'stanford_events_views') . '/css/stanford_events_views.css');
+  drupal_add_js(drupal_get_path('module', 'stanford_events_views') . '/js/stanford_events_views.js');
+}

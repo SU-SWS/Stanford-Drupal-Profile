@@ -1,17 +1,12 @@
 <?php
+
 /**
  * @file
- *
  * A file to tie into Drupal module and core hooks.
- *
- * @author [author] <[email]>
  */
 
 use CAPx\Drupal\Util\CAPx;
-use CAPx\Drupal\Entities\CFEntity;
-use CAPx\Drupal\Entities\CFEControllerExportable;
-
-
+use CAPx\Drupal\Organizations\Orgs as Orgs;
 
 /**
  * Implements hook_entity_info().
@@ -25,8 +20,11 @@ function stanford_capx_entity_info() {
       'plural label' => t('Configuration Entities'),
       'entity class' => '\CAPx\Drupal\Entities\CFEntity',
       'controller class' => '\CAPx\Drupal\Entities\CFEControllerExportable',
+      'features controller class' => 'CFEFeaturesController',
       'base table' => 'capx_cfe',
       'fieldable' => TRUE,
+      'exportable' => TRUE,
+      'default hook' => 'default_capx_cfe',
       'entity keys' => array(
         'id' => 'cfid',
         'bundle' => 'type',
@@ -53,7 +51,8 @@ function stanford_capx_entity_info() {
   );
 
   // The type entity allows us to create bundles for the above entity. You can
-  // find additional bundle type information in the stanford_capx_cfe_types hook
+  // find additional bundle type information in the stanford_capx_cfe_types
+  // hook.
   $return['capx_cfe_type'] = array(
     'label' => t('Configuration Entity Type'),
     'entity class' => '\CAPx\Drupal\Entities\CFEntityType',
@@ -61,7 +60,6 @@ function stanford_capx_entity_info() {
     'base table' => 'capx_cfe_type',
     'fieldable' => FALSE,
     'bundle of' => 'capx_cfe',
-    'exportable' => TRUE,
     'entity keys' => array(
       'id' => 'id',
       'name' => 'type',
@@ -78,13 +76,15 @@ function stanford_capx_entity_info() {
  * List of task Types.
  */
 function stanford_capx_get_types($type_name = NULL) {
-  $types = entity_load_multiple_by_name('capx_cfe_type', isset($type_name) ? array($type_name) : FALSE);
+  $types = entity_load_multiple_by_name('capx_cfe_type', isset($type_name) ? array($type_name) : array());
   return isset($type_name) ? reset($types) : $types;
 }
 
 /**
  * The configuration entity bundle types.
- * @return [type] [description]
+ *
+ * @return array
+ *   An array of CFE types.
  */
 function stanford_capx_default_capx_cfe_type() {
   $items = array();
@@ -107,9 +107,9 @@ function stanford_capx_default_capx_cfe_type() {
 }
 
 /**
-* Implements hook_entity_info_alter().
-*/
-function stanford_capx_entity_info_alter(&$entity_info) {
+ * Implements hook_entity_info_alter().
+ */
+function stanford_capx_entity_info_alter(array &$entity_info) {
   foreach (stanford_capx_get_types() as $type => $info) {
     $entity_info['capx_cfe']['bundles'][$type] = array(
       'label' => $info->label,
@@ -118,14 +118,24 @@ function stanford_capx_entity_info_alter(&$entity_info) {
 }
 
 /**
- * Loads a cfe by machine name
- * @param  [type] $machine_name [description]
- * @param  [type] $type The bundle type. eg: mapper, importer
- * @return [type]               [description]
+ * Loads a cfe by machine name.
+ *
+ * @param string $machine_name
+ *   Machine name key.
+ * @param string $type
+ *   The bundle type. eg: mapper, importer.
+ *
+ * @return mixed
+ *   A CFE or false.
  */
-function capx_cfe_load_by_machine_name($machine_name, $type = null) {
+function capx_cfe_load_by_machine_name($machine_name, $type = NULL) {
+
   if (is_null($type)) {
     throw new Exception("\$type is required in capx_cfe_load_by_machine_name");
+  }
+
+  if (!is_string($machine_name)) {
+    throw new Exception("Machine name required for loading by machine name");
   }
 
   $cfes = entity_load_multiple_by_name('capx_cfe', array($machine_name), array('type' => $type));
@@ -134,11 +144,17 @@ function capx_cfe_load_by_machine_name($machine_name, $type = null) {
   if (is_array($cfes)) {
     return array_pop($cfes);
   }
+
   return FALSE;
 }
 
 /**
  * Load a cfe.
+ *
+ * @param int $cfid
+ *   The entity id.
+ * @param bool $reset
+ *   Wether to reset the cache or not.
  */
 function capx_cfe_load($cfid, $reset = FALSE) {
   $cfes = capx_cfe_load_multiple(array($cfid), array(), $reset);
@@ -151,8 +167,18 @@ function capx_cfe_load($cfid, $reset = FALSE) {
 
 /**
  * Load multiple cfes based on certain conditions.
+ *
+ * @param mixed $cfids
+ *   False or an array of integers.
+ * @param array $conditions
+ *   An array of sql conditions.
+ * @param bool $reset
+ *   Wether to reset the cache or not.
+ *
+ * @return mixed
+ *   An entity object or false.
  */
-function capx_cfe_load_multiple($cfids = FALSE, $conditions = array(), $reset = FALSE) {
+function capx_cfe_load_multiple($cfids = FALSE, array $conditions = array(), $reset = FALSE) {
   return entity_load('capx_cfe', $cfids, $conditions, $reset);
 }
 
@@ -165,8 +191,9 @@ function capx_cfe_save($cfe) {
 
 /**
  * Wrapper function for capx_cfe_save for mappers.
- * @param  [type] $mapper [description]
- * @return [type]         [description]
+ *
+ * @param object $mapper
+ *   The mapper object to save.
  */
 function capx_mapper_save($mapper) {
   capx_cfe_save($mapper);
@@ -174,8 +201,9 @@ function capx_mapper_save($mapper) {
 
 /**
  * Wrapper function for capx_cfe_save for importers.
- * @param  [type] $mapper [description]
- * @return [type]         [description]
+ *
+ * @param object $importer
+ *   The importer object to save.
  */
 function capx_importer_save($importer) {
   capx_cfe_save($importer);
@@ -183,6 +211,9 @@ function capx_importer_save($importer) {
 
 /**
  * Delete single task.
+ *
+ * @param object $cfe
+ *   The configuration entity to delete.
  */
 function capx_cfe_delete($cfe) {
   entity_delete('capx_cfe', entity_id('capx_cfe', $cfe));
@@ -197,38 +228,14 @@ function capx_cfe_delete_multiple($cfids) {
 
 // hook_entity_[action]()
 // /////////////////////////////////////////////////////////////////////////////
-// /////////////////////////////////////////////////////////////////////////////
+// ////////////////////////////////////////////////////////////////////////////.
 
 /**
- * implements hook_entity_delete
- * @param  [type] $entity [description]
- * @param  [type] $type   [description]
- * @return [type]         [description]
+ * Implements hook_entity_delete().
  */
 function stanford_capx_entity_delete($entity, $type) {
   $entity = entity_metadata_wrapper($type, $entity);
   CAPx::deleteProfileRecord($entity);
-}
-
-/**
- * [stanford_capx_entity_insert description]
- * @param  [type] $entity [description]
- * @param  [type] $type   [description]
- * @return [type]         [description]
- */
-function stanford_capx_entity_insert($entity, $type) {
-
-}
-
-
-/**
- * [stanford_capx_entity_update description]
- * @param  [type] $entity [description]
- * @param  [type] $type   [description]
- * @return [type]         [description]
- */
-function stanford_capx_entity_update($entity, $type) {
-
 }
 
 /**
@@ -238,41 +245,60 @@ function stanford_capx_entity_update($entity, $type) {
  * rather than fields. So instead of making a number of calls. Call once and
  * static cache.
  *
- * @param  [type] $entities [description]
- * @param  [type] $type     [description]
- * @return [type]           [description]
+ * @param array $entities
+ *   An array of entities to load keyed by id.
+ * @param string $type
+ *   The entity type.
  */
 function stanford_capx_entity_load($entities, $type) {
 
   $ids = array_keys($entities);
-  $meta = &drupal_static(__FUNCTION__, NULL);
+  $meta = &drupal_static(__FUNCTION__, array());
 
-  if (empty($meta)) {
-    $meta = db_select("capx_profiles", 'capx')
+  if (!isset($meta[$type])) {
+    $meta[$type] = array();
+  }
+
+  // Some sites have wwaaayyy too many items in the capx_profiles table for this
+  // to load with an appropriate amount of memory. You can thank Zach Chandler
+  // for finding out this edge case. As such, we will apply two different
+  // stategies for fetching the CAPx metadata. If the amount of profile entries
+  // are over a value then switch from one big cached call to multiple pings of
+  // the database. We are trading PHP memory for hammering the DB with multiple
+  // queries.
+  $count = db_select('capx_profiles')
+    ->fields(NULL, array('id'))
+    ->countQuery()
+    ->execute()
+    ->fetchField();
+
+  if ($count > variable_get('stanford_capx_entity_load_limit', 10000)) {
+    $query_entities = array_diff_key($entities, $meta[$type]);
+    $query_results = db_select("capx_profiles", 'capx')
       ->fields('capx')
+      ->condition('entity_type', $type)
+      ->condition('entity_id', array_keys($query_entities))
       ->execute()
       ->fetchAllAssoc('entity_id');
+
+    $meta[$type] = $meta[$type] + $query_results;
+  }
+  else {
+    if (empty($meta[$type])) {
+      $meta[$type] = db_select("capx_profiles", 'capx')
+        ->fields('capx')
+        ->execute()
+        ->fetchAllAssoc('entity_id');
+    }
   }
 
   // Add the capx information if it matches.
   foreach ($ids as $entity_id) {
     // If we do not find a match then carry on.
-    if (isset($meta[$entity_id]) && $meta[$entity_id]->entity_type == $type) {
-      $entities[$entity_id]->capx = (array) $meta[$entity_id];
+    if (isset($meta[$type][$entity_id]) && $meta[$type][$entity_id]->entity_type == $type && isset($entities[$entity_id])) {
+      $entities[$entity_id]->capx = (array) $meta[$type][$entity_id];
     }
   }
-
-}
-
-/**
- * [stanford_capx_entity_view description]
- * @param  [type] $entity    [description]
- * @param  [type] $type      [description]
- * @param  [type] $view_mode [description]
- * @param  [type] $langcode  [description]
- * @return [type]            [description]
- */
-function stanford_capx_entity_view($entity, $type, $view_mode, $langcode) {
 
 }
 
@@ -280,23 +306,27 @@ function stanford_capx_entity_view($entity, $type, $view_mode, $langcode) {
  * Add additional data to the organizations vocabulary terms.
  *
  * We need to track the organization aliases in order to find orphaned profiles.
- * @param  [type] $terms [description]
- * @return [type]        [description]
+ *
+ * @param array $terms
+ *   An array of term objects keyed by the term id.
+ *
+ * @return array
+ *   The same array that was passed in but with capx data amended.
  */
 function stanford_capx_taxonomy_term_load($terms) {
 
   // The tids of all the terms being loaded.
   $keys = array_keys($terms);
-  $aliases = \CAPx\Drupal\Organizations\Orgs::getAliasesByTid($keys);
+  $aliases = Orgs::getAliasesByTid($keys);
 
   // Just end if nothing to do.
   if (empty($aliases)) {
-    return;
+    return $terms;
   }
 
-  $vocab_name = \CAPx\Drupal\Organizations\Orgs::getVocabularyMachineName();
+  $vocab_name = Orgs::getVocabularyMachineName();
   // For each term add the aliases to them if they are a part of the org vocab.
-  foreach($terms as &$term) {
+  foreach ($terms as &$term) {
     if ($term->vocabulary_machine_name == $vocab_name) {
       $term->capx = array("aliases" => $aliases);
     }
@@ -307,9 +337,6 @@ function stanford_capx_taxonomy_term_load($terms) {
 
 /**
  * Implements hook_taxonomy_term_save().
- *
- * @param  [type] $terms [description]
- * @return [type]        [description]
  */
 function stanford_capx_taxonomy_term_insert($term) {
   stanford_capx_taxonomy_term_update($term);
@@ -317,8 +344,6 @@ function stanford_capx_taxonomy_term_insert($term) {
 
 /**
  * Implements hook_taxonomy_term_update.
- * @param  [type] $term [description]
- * @return [type]       [description]
  */
 function stanford_capx_taxonomy_term_update($term) {
   if (empty($term->capx['aliases'])) {
@@ -342,14 +367,15 @@ function stanford_capx_taxonomy_term_update($term) {
 
 }
 
-
 // Helper & Util
 // /////////////////////////////////////////////////////////////////////////////
-// /////////////////////////////////////////////////////////////////////////////
+// ////////////////////////////////////////////////////////////////////////////.
 
 /**
  * Wrapper for entity_get_info() with restricted types removed.
- * @return [type] [description]
+ *
+ * @return array
+ *   An array of entity type information.
  */
 function capx_entity_get_info() {
   global $CAP_RESTRICTED_ENTITY_TYPES;

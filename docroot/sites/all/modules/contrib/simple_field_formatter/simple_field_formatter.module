@@ -1,0 +1,274 @@
+<?php
+
+/**
+ * Implements hook_field_formatter_info_alter().
+ */
+function simple_field_formatter_field_formatter_info_alter(&$info) {
+  // added to ALL formatters...
+  foreach ($info as $formatter_key => &$formatter) {
+    // Added in case a field formatter is not created with primary settings.
+    if (!isset($formatter['settings'])) {
+      $formatter['settings'] = array();
+    }
+
+    $formatter['settings'] = array_merge($formatter['settings'], array(
+      'custom_link_to_entity' => '',
+      'custom_prefix' => '', //give a default value for when the form is first loaded
+      'custom_suffix' => '', //ditto
+      'custom_reverse' => '',
+      'custom_trim' => '',
+      'custom_strtolower' => '',
+      'custom_strtoupper' => '',
+      'custom_ucfirst' => '',
+      'custom_ucwords' => '',
+      'custom_strip_tags' => '',
+      'custom_strip_preserve' => '',
+    ));
+  }
+}
+
+/**
+ * Implements hook_field_formatter_settings_summary_alter().
+ */
+function simple_field_formatter_field_formatter_settings_summary_alter(&$summary, $context) {
+
+  $display = $context['instance']['display'][$context['view_mode']];
+  $settings = $display['settings'];
+
+  if (empty($settings)) {
+    return;
+  }
+
+  // Build up all our settings in separate translatable strings.
+  $items[] = !empty($settings['custom_link_to_entity']) ? t('Link to Entity: @param', array('@param' => $settings['custom_link_to_entity'])) : NULL;
+  $items[] = !empty($settings['custom_prefix']) ? t('Prefix: @param', array('@param' => $settings['custom_prefix'])) : NULL;
+  $items[] = !empty($settings['custom_suffix']) ? t('Suffix: @param', array('@param' => $settings['custom_suffix'])) : NULL;
+  $items[] = !empty($settings['custom_reverse']) ? t('Reverse: @param', array('@param' => $settings['custom_reverse'])) : NULL;
+  $items[] = !empty($settings['custom_trim']) ? t('Trim: @param', array('@param' => $settings['custom_trim'])) : NULL;
+  $items[] = !empty($settings['custom_strtolower']) ? t('Lowercase: @param', array('@param' => $settings['custom_strtolower'])) : NULL;
+  $items[] = !empty($settings['custom_strtoupper']) ? t('Upercase: @param', array('@param' => $settings['custom_strtoupper'])) : NULL;
+  $items[] = !empty($settings['custom_ucfirst']) ? t('Uppercase First: @param', array('@param' => $settings['custom_ucfirst'])) : NULL;
+  $items[] = !empty($settings['custom_ucwords']) ? t('Uppercase Words: @param', array('@param' => $settings['custom_ucwords'])) : NULL;
+  $items[] = !empty($settings['custom_strip_tags']) ? t('Strip Tags: @param', array('@param' => $settings['custom_strip_tags'])) : NULL;
+
+  // Tack any that are set onto the display.
+  foreach ($items as $item) {
+    if (!is_null($item)) {
+      $summary .= '<br />' . $item;
+    }
+  }
+
+}
+
+/**
+ * Get the formatter settings for a field instance and display.
+ *
+ * @param string $field_name
+ * @param string $display
+ * @param string $bundle
+ * @param string $display
+ *
+ * @return array
+ */
+function simple_field_formatter_formatter_info($field_name, $entity_type, $bundle, $display) {
+
+  $info = _field_info_collate_fields();
+  // There is no bundle for this entity type so the bundle name is the
+  // entity_type name.
+  if (empty($bundle)) {
+    $bundle = $entity_type;
+  }
+
+  $field_display = $info['instances'][$entity_type][$bundle][$field_name]['display'];
+  $default = $field_display['default']['settings'];
+  if (isset($field_display[$display]['settings'])) {
+    return $field_display[$display]['settings'] + $default;
+  }
+  return $default;
+}
+
+/**
+ * Implements hook_field_attach_view_alter().
+ *
+ */
+function simple_field_formatter_field_attach_view_alter(&$output, $context) {
+    foreach (element_children($output) as $field_name) {
+      $element = &$output[$field_name];
+      //watchdog('formatter',print_r($element,TRUE));
+      if(isset($element['#entity_type']) && isset($element['#bundle'])){
+        $instance = field_info_instance($element['#entity_type'], $field_name, $element['#bundle']);
+        $display = isset($instance['display'][$context['view_mode']]) ? $instance['display'][$context['view_mode']] : $instance['display']['default'];
+        $settings = $display['settings'];
+        // Get field type.
+        $field_type = $instance['widget']['type'];
+        // Get formatter settings.
+
+        $custom_link = isset($settings['custom_link_to_entity']) ? $settings['custom_link_to_entity'] : NULL;
+        $custom_prefix = isset($settings['custom_prefix']) ? $settings['custom_prefix'] : NULL;
+        $custom_suffix = isset($settings['custom_suffix']) ? $settings['custom_suffix'] : NULL;
+        $custom_reverse = isset($settings['custom_reverse']) ? $settings['custom_reverse'] : NULL;
+        $custom_trim = isset($settings['custom_trim']) ? $settings['custom_trim'] : NULL;
+        $custom_strtolower = isset($settings['custom_strtolower']) ? $settings['custom_strtolower'] : NULL;
+        $custom_strtoupper = isset($settings['custom_strtoupper']) ? $settings['custom_strtoupper'] : NULL;
+        $custom_ucfirst = isset($settings['custom_ucfirst']) ? $settings['custom_ucfirst'] : NULL;
+        $custom_ucwords = isset($settings['custom_ucwords']) ? $settings['custom_ucwords'] : NULL;
+        $custom_strip_tags = isset($settings['custom_strip_tags']) ? $settings['custom_strip_tags'] : NULL;
+        $custom_strip_preserve = isset($settings['custom_strip_preserve']) ? $settings['custom_strip_preserve'] : NULL;
+
+        foreach ($element['#items'] as $delta => $item) {
+          // Get the original value based on the field type.
+          switch ($field_type) {
+            case 'link_field':
+              if(isset($item['title'])){
+                $original_value = $item['title'];
+              }
+              break;
+            case 'text_textfield':
+              if(isset($item['safe_value'])){
+                $original_value = $item['safe_value'];
+              }elseif(isset($item['value'])){
+                $original_value = $item['value'];
+              }else{
+                $original_value = NULL;
+              }
+              break;
+            case 'text_textarea_with_summary':
+              if(isset($item['safe_value'])){
+                $original_value = $item['safe_value'];
+              }elseif(isset($item['value'])){
+                $original_value = $item['value'];
+              }else{
+                $original_value = NULL;
+              }
+              break;
+            default:
+              $original_value = NULL;
+              break;
+          }
+
+          if (isset($original_value)) {
+            $modified_value = $original_value;
+            if ($custom_reverse) {
+              $modified_value = strrev($modified_value);
+            }
+            if ($custom_trim) {
+              $modified_value = trim($modified_value);
+            }
+            if ($custom_strtolower) {
+              $modified_value = mb_strtolower($modified_value, 'UTF-8');
+            }
+            if ($custom_strtoupper) {
+              $modified_value = mb_strtoupper($modified_value, 'UTF-8');
+            }
+            if ($custom_ucfirst) {
+              $modified_value = ucfirst($modified_value);
+            }
+            if ($custom_ucwords) {
+              $modified_value = ucwords($modified_value);
+            }
+            if ($custom_strip_tags) {
+              $modified_value = strip_tags($modified_value, $custom_strip_preserve);
+            }
+            if ($custom_link) {
+              $entity_type = $context['entity_type'];
+              $entity = $context['entity'];
+              $entity_ids = entity_extract_ids($entity_type, $entity);
+              $modified_value = l($modified_value, $entity_type . '/' . $entity_ids[0], array('html' => TRUE));
+            }
+            if ($modified_value != $original_value) {
+              // Replace the original value with the modified value.
+              if ($field_type == 'link_field') {
+                $element[$delta]['#element']['title'] = $modified_value;
+              }
+              else {
+                $element[$delta]['#markup'] = $modified_value;
+              }
+            }
+          }
+          if (!empty($custom_suffix)) {
+            $element[$delta]['#suffix'] = $custom_suffix;
+          }
+          if (!empty($custom_prefix)) {
+            $element[$delta]['#prefix'] = $custom_prefix;
+          }
+        }
+      }
+    }
+}
+
+function simple_field_formatter_field_formatter_settings_form_alter(&$settings_form, $context) {
+
+  $display = $context['instance']['display'][$context['view_mode']];
+  $settings = $display['settings'];
+
+  $settings_form['custom_link_to_entity'] = array(
+    '#title' => t('Link this field to the original piece of content'),
+    '#description' => t("Enable to override and Link to the original piece of content"),
+    '#type' => 'checkbox',
+    '#default_value' => $settings['custom_link_to_entity'], // Get the value if it's already been set
+  );
+
+  $settings_form['custom_prefix'] = array(
+    '#type' => 'textarea', // Use a textbox
+    '#title' => t('Prefix'), // Widget label
+    '#description' => t('Prefix will display before the content.'), // helper text
+    '#default_value' => $settings['custom_prefix'], // Get the value if it's already been set
+    '#rows' => 2,
+  );
+  $settings_form['custom_suffix'] = array(
+    '#type' => 'textarea', // Use a textbox
+    '#title' => t('Suffix'), // Widget label
+    '#description' => t('Suffix will display after the content.'), // helper text
+    '#default_value' => $settings['custom_suffix'], // Get the value if it's already been set
+    '#rows' => 2,
+  );
+  $settings_form['custom_reverse'] = array(
+    '#type' => 'checkbox', // Use a textbox
+    '#title' => t('Reverse'), // Widget label
+    '#description' => t('Reverses the Content.'), // helper text
+    '#default_value' => $settings['custom_reverse'], // Get the value if it's already been set
+  );
+  $settings_form['custom_trim'] = array(
+    '#type' => 'checkbox', // Use a textbox
+    '#title' => t('Trim'), // Widget label
+    '#description' => t('Removes Leading & trailing spaces from the Content.'), // helper text
+    '#default_value' => $settings['custom_trim'], // Get the value if it's already been set
+  );
+  $settings_form['custom_strtolower'] = array(
+    '#type' => 'checkbox', // Use a textbox
+    '#title' => t('strtolower'), // Widget label
+    '#description' => t('Converts a string to lowercase letters.'), // helper text
+    '#default_value' => $settings['custom_strtolower'], // Get the value if it's already been set
+  );
+  $settings_form['custom_strtoupper'] = array(
+    '#type' => 'checkbox', // Use a textbox
+    '#title' => t('strtoupper'), // Widget label
+    '#description' => t('Converts a string to uppercase letters.'), // helper text
+    '#default_value' => $settings['custom_strtoupper'], // Get the value if it's already been set
+  );
+  $settings_form['custom_ucfirst'] = array(
+    '#type' => 'checkbox', // Use a textbox
+    '#title' => t('ucfirst'), // Widget label
+    '#description' => t('Converts the first character of a string to uppercase.'), // helper text
+    '#default_value' => $settings['custom_ucfirst'], // Get the value if it's already been set
+  );
+  $settings_form['custom_ucwords'] = array(
+      '#type' => 'checkbox', // Use a textbox
+      '#title' => t('ucwords'), // Widget label
+      '#description' => t('Converts the first character of each word in a string to uppercase.'), // helper text
+      '#default_value' => $settings['custom_ucwords'], // Get the value if it's already been set
+  );
+  $settings_form['custom_strip_tags'] = array(
+    '#type' => 'checkbox', // Use a textbox
+    '#title' => t('strip_tags'), // Widget label
+    '#description' => t('Strips a string from HTML. http://www.w3schools.com/php/func_string_strip_tags.asp'), // helper text
+    '#default_value' => $settings['custom_strip_tags'], // Get the value if it's already been set
+  );
+  $settings_form['custom_strip_preserve'] = array(
+    '#type' => 'textarea', // Use a textbox
+    '#title' => t('Allowable tags'), // Widget label
+    '#description' => t('Specifies allowable tags. These tags will not be removed.'), // helper text
+    '#default_value' => $settings['custom_strip_preserve'], // Get the value if it's already been set
+    '#rows' => 2,
+  );
+}

@@ -1,0 +1,24 @@
+<?php
+/**
+ * @file
+ * Overrides the theme registry for Stanford Framework based sites to declare
+ * it's own page.tpl.php file.
+ */
+
+
+/**
+ * Implements hook_theme_registry_alter().
+ */
+function stanford_subsites_page_template_theme_registry_alter(&$theme_registry) {
+  global $theme;
+
+  // Do not change the template path for admin themes.
+  if ($theme == "stanford_seven" || $theme == "seven") {
+    return;
+  }
+
+  // Change the path to the module directory.
+  $module_path = drupal_get_path('module', 'stanford_subsites_page_template');
+  $templates_path = $module_path . "/templates";
+  $theme_registry['page']['path'] = $templates_path;
+}

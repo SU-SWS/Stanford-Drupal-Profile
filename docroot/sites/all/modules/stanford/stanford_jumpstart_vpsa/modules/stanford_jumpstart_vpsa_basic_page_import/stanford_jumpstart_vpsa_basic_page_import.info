@@ -1,0 +1,10 @@
+name = Stanford Jumpstart VPSA Basic Page Import
+core = 7.x
+package = Stanford Jumpstart VPSA
+version = 7.x-4.6+8-dev
+dependencies[] = ctools
+dependencies[] = feeds
+dependencies[] = feeds_xpathparser
+features[ctools][] = feeds:feeds_importer_default:1
+features[features_api][] = api:1
+features[feeds_importer][] = basic_page_import

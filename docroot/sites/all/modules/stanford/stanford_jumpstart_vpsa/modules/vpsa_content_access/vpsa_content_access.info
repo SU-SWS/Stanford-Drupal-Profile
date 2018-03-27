@@ -1,0 +1,14 @@
+name = VPSA Content Access
+description = Content Access configuration for VPSA websites
+core = 7.x
+package = Stanford Jumpstart VPSA
+version = 7.x-4.6+8-dev
+project = vpsa_content_access
+dependencies[] = content_access
+dependencies[] = ctools
+dependencies[] = strongarm
+features[ctools][] = strongarm:strongarm:1
+features[features_api][] = api:2
+features[variable][] = content_access_page
+features[variable][] = content_access_stanford_page
+features[variable][] = content_access_stanford_video

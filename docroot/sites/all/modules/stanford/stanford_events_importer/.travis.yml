@@ -18,15 +18,23 @@
 # ENABLE_MODULES:
 # Enter as a space separated string, modules and submodules that you
 # would like to enable after the installation profile has run. Useful
-# for adding additional items.
+# for adding additional items. You do not need to include the module
+# being tested. You can include a specific module version or stanford
+# module branch name.
 # Example:
-# stanford_gallery nobots
+# stanford_gallery-7.x-2.x nobots-7.x-1.x-dev stanford_page
 #
 # DISABLE_MODULES:
 # Enter as a space separated string, modules you would like disabled after the
 # installation profile has run.
 # Example:
 # webauth webauth_extras
+#
+# ONLY_TEST:
+# This is an experimental feature for make files. So that we can test deployer
+# and Drupal Profile builds.
+# Example:
+# field_collection
 #
 # DEPLOYER_BRANCH:
 # Leave blank to use the default stanford-jumpstart-deployer branch.
@@ -48,13 +56,16 @@
 
 env:
   global:
-#    - PRODUCT_NAME=""
-    - ENABLE_MODULES="stanford_events_importer stanford_events_export stanford_events_views stanford_events_and_deadlines_calendar feeds_ui"
+    - PRODUCT_NAME=""
+    - ENABLE_MODULES="stanford_events_importer stanford_events_recap stanford_events_export stanford_events_views stanford_events_and_deadlines_calendar feeds_ui"
     - DISABLE_MODULES="webauth"
-#    - DEPLOYER_BRANCH=""
-#    - DRUPAL_PROFILE_BRANCH=""
-#    - CLICKY_BRANCH=""
-#    - SCRIPTS_BRANCH=""
+    - ONLY_TEST=""
+    - DEPLOYER_BRANCH=""
+    - DRUPAL_PROFILE_BRANCH=""
+    - CLICKY_BRANCH=""
+    - SCRIPTS_BRANCH=""
+
+dist: precise
 
 language: php
 php:

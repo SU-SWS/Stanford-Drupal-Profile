@@ -38,7 +38,6 @@ class views_handler_field_mapper_edit_link extends views_handler_field_entity {
   }
 
   function render_link($mapper) {
-
     $this->options['alter']['make_link'] = TRUE;
     $this->options['alter']['path'] = "admin/config/capx/mapper/edit/" . $mapper->getMachineName();
     $this->options['alter']['query'] = drupal_get_destination();
