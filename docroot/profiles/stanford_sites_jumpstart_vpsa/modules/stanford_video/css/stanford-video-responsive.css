@@ -1,0 +1,21 @@
+/* video element */ 
+.jwplayer-video object {
+  max-width: 100%;
+}
+
+/* Container element */
+/*.jwplayer-video {
+  position: relative;
+  padding-bottom: 56.25%;
+  padding-top: 30px;
+  height: 0;
+  overflow: hidden;
+}*/
+/* Object element */
+/* .jwplayer-video object {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;  
+}*/
