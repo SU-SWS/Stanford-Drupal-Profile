@@ -1,7 +1,7 @@
 core = 7.x
 
 api = 2
-projects[drupal][version] = "7.57"
+projects[drupal][version] = "7.58"
 
 ; Contributed modules
 projects[admin_menu][subdir] = "contrib"
@@ -104,6 +104,8 @@ projects[google_analytics][subdir] = "contrib"
 projects[google_analytics][version] = "2.3"
 projects[hires_images][subdir] = "contrib"
 projects[hires_images][version] = "1.1"
+projects[honeypot][subdir] = "contrib"
+projects[honeypot][version] = "1.24"
 projects[insert][subdir] = "contrib"
 projects[insert][version] = "1.3"
 projects[job_scheduler][subdir] = "contrib"
