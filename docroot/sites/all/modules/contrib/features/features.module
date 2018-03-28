@@ -1292,3 +1292,21 @@ function features_features_ignore($component) {
   }
   return $ignores;
 }
+
+/**
+ * Replacement for eval().
+ *
+ * Writes code to a temporary file and loads it in dynamically.
+ *
+ * See https://gonzalo123.com/2012/03/12/how-to-use-eval-without-using-eval-in-php/.
+ */
+function features_fake_eval($code) {
+  $tmpdir = variable_get('file_temporary_path', '/tmp');
+  $tmpfname = tempnam($tmpdir, "features_fake_eval");
+  $handle = fopen($tmpfname, "w+");
+  fwrite($handle, "<?php\n" . $code);
+  fclose($handle);
+  include $tmpfname;
+  unlink($tmpfname);
+  return get_defined_vars();
+}

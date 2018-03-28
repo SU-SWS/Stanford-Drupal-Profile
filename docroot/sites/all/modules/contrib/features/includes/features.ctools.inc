@@ -29,7 +29,7 @@ function ctools_features_declare_functions($reset = FALSE) {
       if (!function_exists("{$component}_features_revert")) {
         $code .= 'function '. $component .'_features_revert($module) { return ctools_component_features_revert("'. $component .'", $module); }';
       }
-      eval($code);
+      extract(features_fake_eval($code));
     }
   }
 }

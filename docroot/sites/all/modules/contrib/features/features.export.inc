@@ -746,7 +746,7 @@ function features_get_normal($component, $module_name, $reset = FALSE) {
       $default_hook = features_get_default_hooks($component);
       if ($module && $default_hook && isset($module->info['features'][$component]) && features_hook($component, 'features_export_render')) {
         $code = features_invoke($component, 'features_export_render', $module_name, $module->info['features'][$component], NULL);
-        $cache[$module_name][$component] = isset($code[$default_hook]) ? eval($code[$default_hook]) : FALSE;
+        $cache[$module_name][$component] = isset($code[$default_hook]) ? extract(features_fake_eval($code[$default_hook])) : FALSE;
       }
     }
 
@@ -1088,13 +1088,6 @@ function _features_is_assoc($array) {
  *   returns a copy of the object or array with recursion removed
  */
 function features_remove_recursion($o) {
-  static $replace;
-  if (!isset($replace)) {
-    $replace = create_function(
-      '$m',
-      '$r="\x00{$m[1]}ecursion_features";return \'s:\'.strlen($r.$m[2]).\':"\'.$r.$m[2].\'";\';'
-    );
-  }
   if (is_array($o) || is_object($o)) {
     $re = '#(r|R):([0-9]+);#';
     $serialize = serialize($o);
@@ -1104,7 +1097,9 @@ function features_remove_recursion($o) {
         $chunk = substr($serialize, $last, $pos - $last);
         if (preg_match($re, $chunk)) {
           $length = strlen($chunk);
-          $chunk = preg_replace_callback($re, $replace, $chunk);
+          $chunk_matches = array();
+          preg_match_all($re, $chunk, $chunk_matches);
+          $chunk = _features_remove_recursion_replace($chunk_matches);
           $serialize = substr($serialize, 0, $last) . $chunk . substr($serialize, $last + ($pos - $last));
           $pos += strlen($chunk) - $length;
         }
@@ -1114,11 +1109,26 @@ function features_remove_recursion($o) {
         $last += 4 + $length;
         $pos = $last;
       }
-      $serialize = substr($serialize, 0, $last) . preg_replace_callback($re, $replace, substr($serialize, $last));
+
+      $chunk_replace = array();
+      preg_match_all($r, substr($serialize, $last), $chunk_replace);
+      $chunk_replace = _features_remove_recursion_replace($chunk_replace);
+
+      $serialize = substr($serialize, 0, $last) . $chunk_replace;
       $o = unserialize($serialize);
     }
   }
   return $o;
+}
+
+/**
+ * @param mixed $m
+ *
+ * @return string
+ */
+function _features_remove_recursion_replace($m) {
+  $r = "\x00{$m[1][0]}ecursion_features";
+  return 's:' . strlen($r . $m[2][0]) . ':"' . $r . $m[2][0] . '";';
 }
 
 /**
