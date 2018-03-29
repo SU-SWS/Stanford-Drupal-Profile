@@ -30,3 +30,17 @@ projects[pathauto][patch][] = "https://drupal.org/files/pathauto_admin.patch"
 ; https://www.drupal.org/node/550428 No empty tags patch.
 ; Has not been committed as of 9.19.2016 - jbickar
 projects[wysiwyg][patch][] = "https://drupal.org/files/wysiwyg-non-empty-tags.550428.79.patch"
+
+; For ACSF
+
+; https://www.drupal.org/project/features/issues/2957125 - Features replace eval().
+projects[features][patch][] = "https://www.drupal.org/files/issues/2018-03-29/features-replace_eval_anonymous_functions.patch"
+
+; Remove usage of deprecated create_function() calls for PHP 7.2+ future proofing
+projects[context][patch][] = "https://www.drupal.org/files/issues/context-support_php_72-2946595-3.patch"
+
+; https://www.drupal.org/project/paranoia/issues/2313945 - block some "import foo" boxes that use php arrays as a data structure
+projects[paranoia][patch][] = "https://www.drupal.org/files/issues/2018-03-28/paranoia-block_additional_forms-2313945-33.patch"
+
+; https://stanfordits.atlassian.net/browse/SITES-330 - Force Paranoia always to be enabled.
+projects[drupal][patch][] = "https://raw.githubusercontent.com/SU-SWS/acsf-cardinald7/SITES-330-hack-core/patches/enforce-paranoia.patch?token=AAyHcutKMbOAId8FJkVOMasWuyZBD8rkks5axolywA%3D%3D"

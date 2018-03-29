@@ -8,3 +8,6 @@ The scripts directory at the root of the repo is for scripts that are not meant 
 - `backups/monthly.sh`: Create a selective archive of the most recent weekly backup archive. Rotate out the oldest, keeping 12.
 
 Backups are created using a [Grandfather-Father-Son](http://documentation.commvault.com/commvault/v10/article?p=features/storage_policy_copy/gfs_rotation.htm) backup rotation scheme.
+
+## Updates
+- `updates/apply-patches.sh`: Apply core and contrib patches to the codebase (e.g., after updating Drupal core, or contributed modules). Run this script from within `scripts/updates/`.

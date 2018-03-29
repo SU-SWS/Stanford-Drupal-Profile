@@ -5312,6 +5312,17 @@ function _drupal_bootstrap_full() {
     drupal_theme_initialize();
     module_invoke_all('init');
   }
+  // Force paranoia to be enabled. The DB query is significantly more performant than module_enable().
+  if (!drupal_is_cli()) {
+    db_update('system')
+      ->fields(array(
+        'status' => 1,
+        'bootstrap' => 1,
+      ))
+      ->condition('type', 'module')
+      ->condition('name', 'paranoia')
+      ->execute();
+  }
 }
 
 /**
