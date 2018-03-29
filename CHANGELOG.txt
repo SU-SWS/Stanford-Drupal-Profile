@@ -1,5 +1,15 @@
 ACSF CardinalD7
 
+Version 0.0.11                                                       2018-03-29
+-------------------------------------------------------------------------------
+- Critical security update to drupal-7.58
+- Fixes bug in backup script by adding absolute path for includes file.
+- Paranoia patch to hide PHP fields in Views Contextual Filters.
+- Adds the "diseval" PHP extension for PHP 7.1
+- Fixes PHP fatal errors in Features by removing calls to eval() and removing anonymous functions.
+- Fixes PHP fatal errors in Context by removing a call to create_function().
+- Adds patches into root patches directory.
+
 Version 0.0.10                                                       2018-03-16
 -------------------------------------------------------------------------------
 - Adds node_revision_delete module to help cut down on site size.
