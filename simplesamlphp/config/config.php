@@ -19,20 +19,19 @@
  *   - 'session_store': Define the session storage service to use in each
  *     Acquia environment ("memcache" or "database").
  */
-$ah_options = [
+$ah_options = array(
   'database_name' => $_ENV['AH_SITE_GROUP'],
-  'session_store' => [
+  'session_store' => array(
     '02live' => 'database',
     '02test' => 'database',
     '02dev'  => 'database',
-  ],
-];
+  ),
+);
 
 // PHP 7
 if (!is_array($config)) {
-  $config = [];
+  $config = array();
 }
-
 // Set some security and other configs that are set above, however we
 // overwrite them here to keep all changes in one area.
 $config['technicalcontact_name'] = "Stanford Web Services";
@@ -44,53 +43,41 @@ $config['auth.adminpassword'] = '6hwuzew6csdjwam';
 
 
 $config['authproc.sp'] = array(
-        10 => array(
-          'class'                 => 'core:AttributeMap',
-          'oid2name',
-        ),
-         // convert : and / in group names to _
-        50 => array(
-          'class'       => 'core:AttributeAlter',
-          'subject'     => 'eduPersonEntitlement',
-          'pattern'     => '/[\/\:]/',
-          'replacement' => '_',
-        ),
+  10 => array(
+    'class'                 => 'core:AttributeMap',
+    'oid2name',
+  ),
+  // convert : and / in group names to _
+  50 => array(
+    'class'       => 'core:AttributeAlter',
+    'subject'     => 'eduPersonEntitlement',
+    'pattern'     => '/[\/\:]/',
+    'replacement' => '_',
+  ),
 
-        90 => 'core:LanguageAdaptor',
-      );
+  90 => 'core:LanguageAdaptor',
+);
+
 
 /**
  * Multi-site installs.
  *
  * Support multi-site installations at different base URLs.
  */
-//$config['baseurlpath'] = "https://{$_SERVER['SERVER_NAME']}/simplesaml/";
-
-// Prevent Varnish from interfering with SimpleSAMLphp.
-
-// SSL terminated at the ELB/balancer so we correctly set the SERVER_PORT
-
-// and HTTPS for SimpleSAMLphp baseurl configuration.
+# $config['baseurlpath'] = "https://{$_SERVER['SERVER_NAME']}/simplesaml/";
 
 $protocol = 'http://';
 
 $port = ':80';
 
 if (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https') {
-
   $_SERVER['SERVER_PORT'] = 443;
-
   $_SERVER['HTTPS'] = 'true';
-
   $protocol = 'https://';
-
   $port = ':' . $_SERVER['SERVER_PORT'];
-
 }
 
 $config['baseurlpath'] = $protocol . $_SERVER['HTTP_HOST'] . $port . '/simplesaml/';
-//$config['baseurlpath'] = $protocol . $_SERVER['HTTP_HOST'] . '/simplesaml/';
-//$config['baseurlpath'] = $protocol . $_SERVER['SERVER_NAME'] . $port . '/simplesaml/';
 
 /**
  * Cookies No Cache.
@@ -146,6 +133,7 @@ if (!function_exists('acquia_logging_config')) {
     return $config;
   }
 }
+
 /**
  * Get memcache session storage config.
  *
@@ -164,6 +152,7 @@ if (!function_exists('mc_session_store')) {
     return $config;
   }
 }
+
 /**
  * Get memcache information.
  *
@@ -174,14 +163,14 @@ if (!function_exists('mc_info')) {
   function mc_info() {
     $creds_json = file_get_contents('/var/www/site-php/' . getenv('AH_SITE_NAME') . '/creds.json');
     $creds = json_decode($creds_json, TRUE);
-    $mc_server = [];
-    $mc_pool = [];
+    $mc_server = array();
+    $mc_pool = array();
     foreach ($creds['memcached_servers'] as $fqdn) {
       $mc_server['hostname'] = preg_replace('/:.*?$/', '', $fqdn);
       array_push($mc_pool, $mc_server);
     }
 
-    return [$mc_pool];
+    return array($mc_pool);
   }
 }
 
@@ -228,6 +217,7 @@ if (!function_exists('db_info')) {
     return $db;
   }
 }
+
 /**
  * Get the SQL database current host.
  *
