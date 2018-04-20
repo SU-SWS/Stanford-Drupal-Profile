@@ -122,17 +122,7 @@ function relation_rules_get_endpoints($relation, array $options, $property_name,
  * Entity-type specific property getter callback.
  */
 function relation_rules_get_specific_endpoints($relation, array $options, $property_name, $entity_type, $info) {
-  if ($info['endpoint_type'] == 'source') {
-    if ($info['relation_directional']) {
-      $endpoints = array($relation->endpoints[LANGUAGE_NONE][0]);
-    }
-    else {
-      $endpoints = $relation->endpoints[LANGUAGE_NONE];
-    }
-  }
-  else {
-    $endpoints = array_slice($relation->endpoints[LANGUAGE_NONE], 1);
-  }
+  $endpoints = relation_get_endpoints_by_endpoint_type($relation, $info['endpoint_type']);
 
   $array = array();
   foreach ($endpoints as $endpoint) {
@@ -186,7 +176,6 @@ function relation_rules_get_related_entities($entity, array $options, $name, $ty
   $source_entity_id = $source_entity->getIdentifier();
   $results = relation_query($source_entity_type, $source_entity_id)
     ->entityCondition('bundle', $info['relation_type'])
-    ->range(0, 50)
     ->execute();
   $rids = array_keys($results);
   $entities_ids = array();
@@ -274,7 +263,7 @@ function relation_rules_load_related($source_entity, $relation_type, $entity_typ
           if (empty($entity_type_op) || $entity_type_op == $property['target_type']) {
             $endpoint_wrapper = entity_metadata_wrapper($property['target_type'], $related_entity);
             if ($endpoint_wrapper->type() != $source_entity_type || $endpoint_wrapper->getIdentifier() != $source_entity_id) {
-              $endpoints[] = $related_entity;
+              $endpoints[] = $endpoint_wrapper;
             }
           }
         }
@@ -437,7 +426,16 @@ function relation_rules_fetch_endpoint($relation, $entity_type, $number = 1) {
     }
   }
   if ($entity_ids) {
-    $return = entity_load($entity_type, $entity_ids);
+    // Rules expects items in a list to be indexed from zero not by the entity ID as entity_load()
+    // provides the list. array_values($entities) works, but the order should match that of the
+    // endpoint field which cannot be guaranteed from entity_load(). As such a new list is created
+    // for the entities in the expected order.
+    $entities = entity_load($entity_type, $entity_ids);
+    $return = array();
+    foreach ($entity_ids as $entities_id) {
+      $return[] = $entities[$entities_id];
+    }
+
     // Return a list unless we are only supposed to return a single entity.
     if (1 == $number) {
       $return = reset($return);

@@ -1,5 +1,5 @@
 #[Stanford Courses](https://github.com/SU-SWS/stanford_courses)
-##### Version: 7.x-4.0
+##### version: 7.x-4.x
 
 Maintainers: [jbickar](https://github.com/jbickar), [sherakama](https://github.com/sherakama)
 
@@ -31,6 +31,9 @@ This module contains a view for the stanford_manage feature. It provides a bulk 
 
 **[Stanford Course Link To Page](modules/stanford_courses_link_to_page)**
 This is a simple module that changes both the Stanford views and the Stanford person reference views to link to the course node instead of the explore courses entry for that node. It is recommended that you enable the Stanford Courses Node View module in order to have an aesthetically pleasing layout.
+
+**[Stanford Courses Matrix](modules/stanford_courses_matrix)**
+Uses [views matrix](https://www.drupal.org/project/views_matrix) module to display course details in a more usable way.
 
 **[Stanford Courses Node View](modules/stanford_courses_node_display)**
 This feature module contains a display suite view mode for the Stanford course content type. With out it the course node does not have much structure. If you are planning on using the Stanford Course Link To Page feature you should enable this module as well.

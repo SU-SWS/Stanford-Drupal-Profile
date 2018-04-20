@@ -11,7 +11,7 @@ function stanford_landing_page_field_default_field_instances() {
   $field_instances = array();
 
   // Exported field_instance:
-  // 'field_collection_item-field_landing_page_item-field_s_lp_2nd_links'
+  // 'field_collection_item-field_landing_page_item-field_s_lp_2nd_links'.
   $field_instances['field_collection_item-field_landing_page_item-field_s_lp_2nd_links'] = array(
     'bundle' => 'field_landing_page_item',
     'default_value' => NULL,
@@ -37,6 +37,13 @@ function stanford_landing_page_field_default_field_instances() {
         'settings' => array(),
         'type' => 'link_default',
         'weight' => 5,
+      ),
+      'stanford_6_col_banner' => array(
+        'label' => 'hidden',
+        'module' => 'link',
+        'settings' => array(),
+        'type' => 'link_default',
+        'weight' => 6,
       ),
       'stanford_medium_square' => array(
         'label' => 'hidden',
@@ -83,7 +90,7 @@ function stanford_landing_page_field_default_field_instances() {
   );
 
   // Exported field_instance:
-  // 'field_collection_item-field_landing_page_item-field_s_lp_item_description'
+  // 'field_collection_item-field_landing_page_item-field_s_lp_item_description'.
   $field_instances['field_collection_item-field_landing_page_item-field_s_lp_item_description'] = array(
     'bundle' => 'field_landing_page_item',
     'default_value' => NULL,
@@ -110,6 +117,13 @@ function stanford_landing_page_field_default_field_instances() {
         'settings' => array(),
         'type' => 'text_default',
         'weight' => 4,
+      ),
+      'stanford_6_col_banner' => array(
+        'label' => 'hidden',
+        'module' => 'text',
+        'settings' => array(),
+        'type' => 'text_default',
+        'weight' => 3,
       ),
       'stanford_block' => array(
         'label' => 'hidden',
@@ -200,7 +214,7 @@ function stanford_landing_page_field_default_field_instances() {
   );
 
   // Exported field_instance:
-  // 'field_collection_item-field_landing_page_item-field_s_lp_item_image'
+  // 'field_collection_item-field_landing_page_item-field_s_lp_item_image'.
   $field_instances['field_collection_item-field_landing_page_item-field_s_lp_item_image'] = array(
     'bundle' => 'field_landing_page_item',
     'deleted' => 0,
@@ -235,6 +249,16 @@ function stanford_landing_page_field_default_field_instances() {
         ),
         'type' => 'stanford_landing_page_fc_link_formatter',
         'weight' => 3,
+      ),
+      'stanford_6_col_banner' => array(
+        'label' => 'hidden',
+        'module' => 'image',
+        'settings' => array(
+          'image_link' => '',
+          'image_style' => 'page-width',
+        ),
+        'type' => 'image',
+        'weight' => 0,
       ),
       'stanford_block' => array(
         'label' => 'hidden',
@@ -365,7 +389,7 @@ function stanford_landing_page_field_default_field_instances() {
   );
 
   // Exported field_instance:
-  // 'field_collection_item-field_landing_page_item-field_s_lp_item_link'
+  // 'field_collection_item-field_landing_page_item-field_s_lp_item_link'.
   $field_instances['field_collection_item-field_landing_page_item-field_s_lp_item_link'] = array(
     'bundle' => 'field_landing_page_item',
     'default_value' => NULL,
@@ -391,6 +415,13 @@ function stanford_landing_page_field_default_field_instances() {
         'settings' => array(),
         'type' => 'link_default',
         'weight' => 4,
+      ),
+      'stanford_6_col_banner' => array(
+        'label' => 'hidden',
+        'module' => 'link',
+        'settings' => array(),
+        'type' => 'link_default',
+        'weight' => 5,
       ),
       'stanford_block' => array(
         'label' => 'hidden',
@@ -471,7 +502,7 @@ function stanford_landing_page_field_default_field_instances() {
   );
 
   // Exported field_instance:
-  // 'field_collection_item-field_landing_page_item-field_s_lp_item_title'
+  // 'field_collection_item-field_landing_page_item-field_s_lp_item_title'.
   $field_instances['field_collection_item-field_landing_page_item-field_s_lp_item_title'] = array(
     'bundle' => 'field_landing_page_item',
     'default_value' => NULL,
@@ -504,6 +535,13 @@ function stanford_landing_page_field_default_field_instances() {
         ),
         'type' => 'stanford_landing_page_fc_link_heading_formatter',
         'weight' => 2,
+      ),
+      'stanford_6_col_banner' => array(
+        'label' => 'hidden',
+        'module' => 'text',
+        'settings' => array(),
+        'type' => 'text_default',
+        'weight' => 1,
       ),
       'stanford_block' => array(
         'label' => 'hidden',
@@ -595,7 +633,7 @@ function stanford_landing_page_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-stanford_landing_page-body'
+  // Exported field_instance: 'node-stanford_landing_page-body'.
   $field_instances['node-stanford_landing_page-body'] = array(
     'bundle' => 'stanford_landing_page',
     'default_value' => NULL,
@@ -640,7 +678,7 @@ function stanford_landing_page_field_default_field_instances() {
   );
 
   // Exported field_instance:
-  // 'node-stanford_landing_page-field_landing_page_item'
+  // 'node-stanford_landing_page-field_landing_page_item'.
   $field_instances['node-stanford_landing_page-field_landing_page_item'] = array(
     'bundle' => 'stanford_landing_page',
     'default_value' => NULL,
@@ -679,7 +717,7 @@ function stanford_landing_page_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-stanford_landing_page-field_s_image_info'
+  // Exported field_instance: 'node-stanford_landing_page-field_s_image_info'.
   $field_instances['node-stanford_landing_page-field_s_image_info'] = array(
     'bundle' => 'stanford_landing_page',
     'default_value' => NULL,
@@ -723,7 +761,7 @@ function stanford_landing_page_field_default_field_instances() {
   );
 
   // Exported field_instance:
-  // 'node-stanford_landing_page-field_s_landing_page_layout'
+  // 'node-stanford_landing_page-field_s_landing_page_layout'.
   $field_instances['node-stanford_landing_page-field_s_landing_page_layout'] = array(
     'bundle' => 'stanford_landing_page',
     'default_value' => array(
@@ -765,7 +803,7 @@ function stanford_landing_page_field_default_field_instances() {
   );
 
   // Exported field_instance:
-  // 'node-stanford_landing_page-field_s_landing_page_lead_text'
+  // 'node-stanford_landing_page-field_s_landing_page_lead_text'.
   $field_instances['node-stanford_landing_page-field_s_landing_page_lead_text'] = array(
     'bundle' => 'stanford_landing_page',
     'default_value' => NULL,

@@ -1,0 +1,16 @@
+
+.entity-bean.unpublished {
+  border: 2px dashed #f7dcec;
+}
+
+.entity-bean.unpublished:before {
+  content: 'Unpublished';
+  background: #f9e8f2;
+  display: block;
+  padding: 20px;
+  text-align: center;
+}
+
+.group-s-fw-image-image-container img {
+  width: 100%;
+}

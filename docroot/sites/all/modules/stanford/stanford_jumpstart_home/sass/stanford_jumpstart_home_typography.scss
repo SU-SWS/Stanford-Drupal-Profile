@@ -186,59 +186,6 @@ body #main-menu {
     font-size: 0.9em;
   }
 
-  // CAROUSEL
-
-  .view.carousel .carousel-caption.carousel-position-left,
-  .view.carousel .carousel-caption.carousel-position-right {
-    width: 100%;
-    max-width: 100%;
-  }
-
-  .carousel .carousel-caption {
-    position: static;
-    background-color: rgba(0, 0, 0, 1);
-  }
-
-  .view.carousel .carousel-caption.carousel-light {
-    background-color: rgba(255, 255, 255, 1);
-  }
-
-  @media (max-width: 979px) and (min-width: 768px) {
-    .view.carousel .carousel-caption.carousel-dark {
-      background: #000;
-    }
-  }
-
-  @media (max-width: 630px) {
-    .view.carousel .carousel-caption.carousel-dark {
-      background: #000;
-    }
-  }
-
-  @media (max-width: 979px) and (min-width: 768px) {
-    .view.carousel .carousel-caption.carousel-dark,
-    .view.carousel .carousel-caption.carousel-dark .more-link a:focus,
-    .view.carousel .carousel-caption.carousel-dark .more-link a:hover,
-    .view.carousel .carousel-caption.carousel-dark .slide-caption a,
-    .view.carousel .carousel-caption.carousel-dark a.more-link:focus,
-    .view.carousel .carousel-caption.carousel-dark a.more-link:hover,
-    .view.carousel .carousel-caption.carousel-dark h2 a {
-      color: #fff;
-    }
-  }
-
-  @media (max-width: 630px) {
-    .view.carousel .carousel-caption.carousel-dark,
-    .view.carousel .carousel-caption.carousel-dark .more-link a:focus,
-    .view.carousel .carousel-caption.carousel-dark .more-link a:hover,
-    .view.carousel .carousel-caption.carousel-dark .slide-caption a,
-    .view.carousel .carousel-caption.carousel-dark a.more-link:focus,
-    .view.carousel .carousel-caption.carousel-dark a.more-link:hover,
-    .view.carousel .carousel-caption.carousel-dark h2 a {
-      color: #fff;
-    }
-  }
-
   // WELL BLOCKS
 
   .well .more-link a,

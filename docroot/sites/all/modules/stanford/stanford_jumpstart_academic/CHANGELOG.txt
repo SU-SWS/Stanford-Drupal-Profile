@@ -1,5 +1,13 @@
 Stanford Sites Jumpstart Academic x.x-x.x xxxx-xx-xx
 -------------------------------------------
+7.x-5.1-alpha5                                 2018-04-16
+---------------------------------------------------------
+- added permissions to access alt check pages
+
+7.x-5.1-alpha4                                 2018-04-16
+---------------------------------------------------------
+- Added composer.json file
+- remove permissions to administer beans
 
 7.x-5.1-alpha3                                 2017-12-08
 ---------------------------------------------------------

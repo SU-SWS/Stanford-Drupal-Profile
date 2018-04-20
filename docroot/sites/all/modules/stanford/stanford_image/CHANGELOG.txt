@@ -1,6 +1,17 @@
 Stanford Image x.x-x.x xxxx-xx-xx
 --------------------------------------
 
+7.x-3.5+10-dev          2016-01-20
+---------------------------------
+- Changed max_resolution to 3200x3200 for image field collection
+
+7.x-3.5+6-dev          2016-05-30
+---------------------------------
+- Added new view modes:
+  - stanford_banner_fw_short_credits
+  - stanford_header_150_width_left
+  - stanford_sm_landscape_scaled
+
 7.x-3.5                2016-05-30
 ---------------------------------
 - Added stanford_banner_850x400 view mode and style

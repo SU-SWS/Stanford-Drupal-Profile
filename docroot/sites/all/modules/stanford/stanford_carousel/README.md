@@ -1,5 +1,5 @@
 #[Stanford Carousel](https://github.com/SU-SWS/stanford_carousel)
-##### Version: 7.x-2.3
+##### Version: 7.x-2.3-dev
 
 Maintainers: [jbickar](https://github.com/jbickar), [meganem](https://github.com/meganem)
 [Changelog.txt](CHANGELOG.txt)

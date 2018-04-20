@@ -1,0 +1,136 @@
+<?php
+
+/**
+ * @file
+ * Code for the Stanford Icon Grid Block feature.
+ */
+
+include_once 'stanford_icon_grid.features.inc';
+
+/**
+ * Implements hook_preprocess_field().
+ */
+function stanford_icon_grid_preprocess_field(&$vars) {
+  if ($vars['element']['#field_name'] == 'field_s_icon_ext_columns') {
+    $vars['theme_hook_suggestions'][] = 'field__field_collection__field_s_icon_ext_columns';
+    $object = $vars['element']['#object'];
+
+    $num_per_row = 3;
+    if (!empty($object->field_s_icon_ext_num_row)) {
+      $num_per_row = $object->field_s_icon_ext_num_row[LANGUAGE_NONE][0]['value'];
+    }
+
+    // Use chuncks to group spans togeather.
+    $vars['item_chunks'] = array_chunk($vars['items'], $num_per_row);
+    $vars['partial_offset'] = FALSE;
+
+    foreach ($vars['item_chunks'] as $delta => $chunk) {
+      $vars['offsets'][$delta] = '';
+
+      // Use this to apply an offset to the first of each row.
+      if (count($chunk) % $num_per_row) {
+        $offset = (12 - (12 / $num_per_row * count($chunk))) / 2;
+        if ($offset != floor($offset)) {
+          $offset = floor($offset);
+          $vars['partial_offset'] = TRUE;
+        }
+        $vars['offsets'][$delta] = "offset$offset";
+      }
+    }
+    $vars['span_per_item'] = ' span' . 12 / $num_per_row;
+  }
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function stanford_icon_grid_form_bean_form_alter(&$form, &$form_state, $form_id) {
+  if ($form['#bundle'] == 'stanford_icon_grid') {
+    $form['#attached']['js'][] = drupal_get_path('module', 'stanford_icon_grid') . '/js/stanford_icon_grid.js';
+  }
+}
+
+/**
+ * Implements hook_field_attach_validate().
+ */
+function stanford_icon_grid_field_attach_validate($entity_type, $entity, &$errors) {
+  if ($entity_type == 'field_collection_item' && $entity->field_name == 'field_s_icon_ext_columns') {
+    if ($entity->field_s_icon_ext_columns_style[LANGUAGE_NONE][0]['value'] == 'text' && !empty($entity->field_s_icon_ext_columns_bg_colo)) {
+
+      $background = $entity->field_s_icon_ext_columns_bg_colo[LANGUAGE_NONE][0]['value'];
+
+      $bad_contrast = array(
+        '#d5d0c0,#ffffff',
+        '#eaab00,#ffffff',
+        '#e98300,#ffffff',
+      );
+
+      // To prevent a user from an inaccessible color choice, display an error
+      // with invalid choices.
+      if (in_array($background, $bad_contrast)) {
+        $errors['field_s_icon_ext_columns_bg_colo'][LANGUAGE_NONE][0][] = array(
+          'error' => 'field_example_invalid',
+          'message' => t('Invalid background color choice. Please choose one with greater contrast for the text.'),
+        );
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_preprocess_entity().
+ */
+function stanford_icon_grid_preprocess_entity(&$vars) {
+  $entity = $vars['elements']['#entity'];
+  if ($vars['entity_type'] != 'field_collection_item' || $entity->field_name != 'field_s_icon_ext_columns') {
+    return;
+  }
+  drupal_add_css(drupal_get_path('module', 'stanford_icon_grid') . '/css/stanford_icon_grid.css');
+
+  $colors = $entity->field_s_icon_ext_columns_bg_colo[LANGUAGE_NONE][0]['value'];
+  if (strpos($colors, ',') !== FALSE) {
+    list($background, $font) = explode(',', $colors);
+    $vars['classes_array'][] = 'color-icon-' . trim($font, ', #');
+  }
+  else {
+    $background = $colors;
+  }
+
+  $vars['classes_array'][] = 'background-icon-' . trim($background, ', #');
+}
+
+/**
+ * Implements hook_entity_view_mode_alter().
+ */
+function stanford_icon_grid_entity_view_mode_alter(&$view_mode, $context) {
+  if ($context['entity_type'] == 'field_collection_item' && $context['entity']->field_name == 'field_s_icon_ext_columns') {
+    if (!empty($context['entity']->field_s_icon_ext_columns_style)) {
+      switch ($context['entity']->field_s_icon_ext_columns_style[LANGUAGE_NONE][0]['value']) {
+        case 'image':
+          $view_mode = 'stanford_block';
+          break;
+
+        case 'text':
+          $view_mode = 'stanford_list';
+          break;
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_theme_registry_alter().
+ *
+ * @see https://www.drupal.org/docs/7/creating-custom-modules/howtos/using-template-tplphp-files-in-your-own-module
+ */
+function stanford_icon_grid_theme_registry_alter(&$theme_registry) {
+  $module_path = drupal_get_path('module', 'stanford_icon_grid');
+  $template_objects = drupal_find_theme_templates($theme_registry, '.tpl.php', $module_path);
+  foreach ($template_objects as $key => $template_object) {
+    if (!isset($theme_registry[$key]['theme path']) || !preg_match('#/themes/#', $theme_registry[$key]['theme path'])) {
+      $theme_registry[$key]['theme path'] = $module_path;
+      $theme_registry[$key] = array_merge($theme_registry[$key], $template_object);
+      $theme_registry[$key]['type'] = 'module';
+    }
+  }
+}

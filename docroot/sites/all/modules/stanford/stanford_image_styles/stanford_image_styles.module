@@ -19,3 +19,13 @@ function stanford_image_styles_preprocess_image_style(array &$vars) {
   }
   $vars['attributes']['class'][] = "image-style-" . drupal_clean_css_identifier($vars['style_name']);
 }
+
+/**
+ * Implements hook_preprocess_image().
+ */
+function stanford_image_styles_preprocess_image(&$variables) {
+  if (empty($variables['alt'])) {
+    // Make sure alt text is always set even if its empty.
+    $variables['alt'] = '';
+  }
+}

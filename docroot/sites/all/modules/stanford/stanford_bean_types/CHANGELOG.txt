@@ -1,6 +1,43 @@
 Stanford Bean Types x.x-x.x xxxx-xx-xx
 --------------------------------------
 
+7.x-3.3                          2017-07-14
+-------------------------------------------
+- HSDO-918 Branding overlay for hero block
+- Bug fix for curtain reveal on safari
+
+7.x-3.2                          2017-06-19
+-------------------------------------------
+- HSDO-557 Added text/number field to icon grid
+- Changed icon grid to use view modes & css sheets instead of inline styles.
+- HSDO-873 Added caption field to icon grid
+- HSDO-812 Hero bean type with scrool/curtain reveal
+- Added module enable for stanford_field_formatters
+- Added ability to change the number of icons per row in the icon grid
+
+7.x-3.2-alpha2                   2017-04-21
+---------------------------------------------
+- Extended social connect bean type with color options
+- New stanford_fw_image bean type
+
+7.x-3.2-alpha1                   2017-04-21
+---------------------------------------------
+- Bean status options
+
+7.x-3.1-alpha2                   2017-03-17
+---------------------------------------------
+- fix Notice: Undefined index: content
+
+7.x-3.1-alpha1                   2017-03-02
+---------------------------------------------
+- Added new icon grid bean type.
+- Travis.ci integration
+
+7.x-3.0+8-dev                      2016-09-16
+---------------------------------------------
+- Added new view mode: stanford_header_150_width_left
+- Added .codeclimate.yml
+
 7.x-3.0                            2016-05-30
 ---------------------------------------------
 - Modified permissions module to install directly to database

@@ -125,7 +125,7 @@ function stanford_courses_update_7200(&$sandbox) {
   // possible the user is trying to upgrade without enabling field
   // collections. Do it here or die.
   if (drupal_is_cli()) {
-    if(!_require_helper('field_collection')) {
+    if (!_require_helper('field_collection')) {
       throw new DrupalUpdateException('Missing Field Collection Dependency');
       return FALSE;
     }
@@ -157,27 +157,27 @@ function stanford_courses_update_7200(&$sandbox) {
   module_load_include('php', 'stanford_courses', 'inc/delete_all.inc');
   _stanford_courses_delete_all_normal(array(
     'stanford_course_section',
-    'stanford_course_section_importer'
+    'stanford_course_section_importer',
   ));
 
   // current field name => new field name
   $fields = array(
-    'field_stanford_course_code'      => 'field_s_course_code',
-    'field_stanford_course_ger'       => 'field_s_course_ger',
-    'field_stanford_course_subject'   => 'field_s_course_subject',
-    'field_stanford_course_year'      => 'field_s_course_year',
+    'field_stanford_course_code' => 'field_s_course_code',
+    'field_stanford_course_ger' => 'field_s_course_ger',
+    'field_stanford_course_subject' => 'field_s_course_subject',
+    'field_stanford_course_year' => 'field_s_course_year',
     'field_stanford_course_course_id' => 'field_s_course_id',
-    'field_stanford_course_tag_org'   => 'field_s_course_tag_org',
-    'field_stanford_course_tag_name'  => 'field_s_course_tag_name',
-    'field_stanford_course_scid'      => 'field_s_course_scid',
-    'field_stanford_course_ec_link'   => 'field_s_course_ec_link',
+    'field_stanford_course_tag_org' => 'field_s_course_tag_org',
+    'field_stanford_course_tag_name' => 'field_s_course_tag_name',
+    'field_stanford_course_scid' => 'field_s_course_scid',
+    'field_stanford_course_ec_link' => 'field_s_course_ec_link',
   );
 
   // Loop through each of the fields/tables with the old name and change them
-  foreach($fields as $field_name => $new_field_name) {
+  foreach ($fields as $field_name => $new_field_name) {
 
     // First check that field_name exists
-    if(!db_table_exists('field_data_' . $field_name)) {
+    if (!db_table_exists('field_data_' . $field_name)) {
       // If we cannot find a data table then just continue.
       continue;
     }
@@ -186,7 +186,7 @@ function stanford_courses_update_7200(&$sandbox) {
     // this code triggers the feature to create the new tables. Lets check to
     // see if they already exist and kill em.
 
-    if(db_table_exists('field_data_' . $new_field_name)) {
+    if (db_table_exists('field_data_' . $new_field_name)) {
       db_drop_table('field_data_' . $new_field_name);
       db_drop_table('field_revision_' . $new_field_name);
     }
@@ -198,9 +198,9 @@ function stanford_courses_update_7200(&$sandbox) {
     $storage_details = $field_info['storage']['details'];
 
     // The storage for each field has unique configuration. Must follow.
-    foreach($storage_details['sql']['FIELD_LOAD_CURRENT'] as $field) {
+    foreach ($storage_details['sql']['FIELD_LOAD_CURRENT'] as $field) {
       // Change the field names.
-      foreach($field as $key => $value) {
+      foreach ($field as $key => $value) {
 
         // Rename the field table columns and preserve existing spec. Let
         // features take care of any configuration changes.
@@ -255,29 +255,32 @@ function stanford_courses_update_7200(&$sandbox) {
   $minor = intval($minors[0]);
 
   if ($minor <= 1) {
-   features_revert(
-    array('stanford_courses' => array(
-        'field',
-        'ctools',
-        'feeds_importer',
-        'feeds_tamper',
-        'node',
-        'variable',
-        )
+    features_revert(
+      array(
+        'stanford_courses' => array(
+          'field',
+          'ctools',
+          'feeds_importer',
+          'feeds_tamper',
+          'node',
+          'variable',
+        ),
       )
     );
-  } else {
+  }
+  else {
     features_revert(
-    array('stanford_courses' => array(
-        'field',
-        'field_base',
-        'field_instance',
-        'ctools',
-        'feeds_importer',
-        'feeds_tamper',
-        'node',
-        'variable',
-        )
+      array(
+        'stanford_courses' => array(
+          'field',
+          'field_base',
+          'field_instance',
+          'ctools',
+          'feeds_importer',
+          'feeds_tamper',
+          'node',
+          'variable',
+        ),
       )
     );
   }
@@ -295,7 +298,7 @@ function stanford_courses_update_7200(&$sandbox) {
   db_update('feeds_item')
     ->fields(
       array(
-        'hash' => 'nullified'
+        'hash' => 'nullified',
       )
     )
     ->condition('id', 'stanford_course_importer')
@@ -306,12 +309,13 @@ function stanford_courses_update_7200(&$sandbox) {
   // just be dropped.
 
   $configs = db_select('feeds_source', 'fs')
-  ->fields('fs',
-    array(
-    'feed_nid','config'
-    ))
-  ->condition('id', 'stanford_course_importer')
-  ->execute();
+    ->fields('fs',
+      array(
+        'feed_nid',
+        'config',
+      ))
+    ->condition('id', 'stanford_course_importer')
+    ->execute();
 
   // Loop through each of the configured nodes and drop the xpathparser config.
   while ($values = $configs->fetchAssoc()) {
@@ -348,23 +352,24 @@ function stanford_courses_update_7200(&$sandbox) {
 
 /**
  * Dump the exported views from (views/*) folder into the DB
+ *
  * @return True if dumped, False if not dumped.
  */
 function _stanford_courses_dump_views() {
 
   // Require views module. Yes really.
-  if(!_require_helper('views')) {
+  if (!_require_helper('views')) {
     return FALSE;
   }
 
   // Look for a view in the DB.
   $result = db_select('views_view', 'vw')
-            ->fields('vw', array('name'))
-            ->condition('name', 'stanford_courses')
-            ->execute();
+    ->fields('vw', array('name'))
+    ->condition('name', 'stanford_courses')
+    ->execute();
 
   // There should only ever be 1 or none.
-  if($result->rowCount()) {
+  if ($result->rowCount()) {
     drupal_set_message(t('You have modified the stanford_course View. This View will need to be updated to reflect the new content type structure. You should go change this now: ') . l('Views Admin', 'admin/structure/views/stanford_courses'), 'warning');
     return FALSE;
   }
@@ -374,7 +379,7 @@ function _stanford_courses_dump_views() {
 
   // Save the views.
   $views = stanford_courses_get_views();
-  foreach($views as $view_name => $view_object) {
+  foreach ($views as $view_object) {
     $view_object->save();
   }
 
@@ -409,7 +414,7 @@ function stanford_courses_update_7300(&$sandbox) {
         'feeds_tamper',
         'node',
         'variable',
-      )
+      ),
     )
   );
 
@@ -447,8 +452,10 @@ function stanford_courses_update_7401(&$sandbox) {
  * Checks to see if a module exists and is enabled. If the module is not
  * enabled it trys to enable it. Failing that it returns false and logs a
  * watchdog message
+ *
  * @param [string] $module_name The name of the module to enable
  * @param bool $clear_caches true to clear all caches.
+ *
  * @return bool True if successfully enabled or is already enabled.
  */
 function _require_helper($module_name, $clear_caches = TRUE) {
@@ -481,4 +488,68 @@ function stanford_courses_update_7402(&$sandbox) {
     variable_set("stanford_feeds_helper_limit_field_collections", $limit);
   }
   variable_del("stanford_courses_limit_field_collections");
+}
+
+/**
+ * Creates the new date computed field.
+ */
+function stanford_courses_update_7403() {
+  if (!field_info_instance('field_collection_item', 'field_s_course_year_computed', 'field_s_course_section_info')) {
+    if (!field_info_field('field_s_course_year_computed')) {
+      module_load_include('inc', 'stanford_courses', 'stanford_courses.features.field_base');
+      $fields = stanford_courses_field_default_field_bases();
+      field_create_field($fields['field_s_course_year_computed']);
+    }
+
+    module_load_include('inc', 'stanford_courses', 'stanford_courses.features.field_instance');
+    $instances = stanford_courses_field_default_field_instances();
+    field_create_instance($instances['field_collection_item-field_s_course_section_info-field_s_course_year_computed']);
+  }
+}
+
+/**
+ * Resave all courses to populate computed field.
+ */
+function stanford_courses_update_7404(&$sandbox) {
+  if (!isset($sandbox['ids'])) {
+    $sandbox['ids'] = array();
+
+    $collection_ids = db_select('field_collection_item', 'f')
+      ->fields('f', array('item_id'))
+      ->condition('field_name', 'field_s_course_section_info')
+      ->execute();
+
+    while ($collection_id = $collection_ids->fetchField()) {
+      $sandbox['ids'][$collection_id] = $collection_id;
+    }
+
+    $sandbox['total'] = count($sandbox['ids']);
+  }
+
+  // Chunk the nodes into 10 per execution.
+  $chunks = array_chunk($sandbox['ids'], 50, TRUE);
+
+  foreach (field_collection_item_load_multiple(array_keys($chunks[0])) as $item_id => $field_collection) {
+    /** @var FieldCollectionViewMode $field_collection */
+    $year = field_get_items('field_collection_item', $field_collection, 'field_s_course_section_year');
+    if ($year) {
+      $field_collection->field_s_course_year_computed[LANGUAGE_NONE][0] = array(
+        'value' => ($year[0]['value'] + 1) . "-01-01 00:00:00",
+        'timezone' => 'America/Los_Angeles',
+        'timezone_db' => 'America/Los_Angeles',
+        'date_type' => 'datetime',
+      );
+      try {
+        $field_collection->save();
+      }
+      catch (Exception $e) {
+        watchdog('stanford_courses', 'Unable to save field collection !id', array('id' => $item_id));
+      }
+    }
+  }
+
+  foreach (array_keys($chunks[0]) as $item_id) {
+    unset($sandbox['ids'][$item_id]);
+  }
+  $sandbox['#finished'] = 1 - (count($sandbox['ids']) / $sandbox['total']);
 }

@@ -1,0 +1,148 @@
+.field-name-field-s-icon-ext-columns {
+  text-align: center;
+  line-height: 1em;
+
+  .more-link a {
+    display: block;
+    text-align: center;
+  }
+}
+
+.field-name-field-s-icon-ext-columns-title {
+  margin: 20px 0;
+}
+
+.field-name-field-s-icon-ext-columns-links a {
+  margin-bottom: 10px;
+}
+
+.field-name-field-s-icon-ext-columns-caption {
+  margin-bottom: 20px;
+}
+
+.field-name-field-s-icon-ext-columns-caption {
+  line-height: 1.2em;
+}
+
+.field-name-field-s-icon-ext-columns-fa-icon,
+.field-name-field-s-icon-ext-columns-up-icon,
+.field-name-field-s-icon-ext-columns-text {
+  font-size: 80px;
+  height: 200px;
+  width: 200px;
+  border-radius: 100px;
+  position: relative;
+  margin: 0 auto;
+  display: table;
+
+  a {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    border-radius: 100px;
+    left: 0;
+    top: 0;
+    display: table;
+    line-height: 200px;
+
+    > * {
+      display: table-cell;
+      vertical-align: middle;
+    }
+  }
+
+  > div {
+    display: table-cell;
+    vertical-align: middle;
+  }
+
+  i {
+    font-size: 100px;
+  }
+
+  img {
+    max-height: 140px;
+    max-width: 140px;
+  }
+
+  .color-icon-ffffff & {
+    color: #fff;
+
+    a {
+      color: #fff;
+
+      &:hover,
+      &:focus {
+        background: rgba(255, 255, 255, .2);
+        text-decoration: none;
+      }
+    }
+  }
+
+  .color-icon-000000 & {
+    color: #000;
+
+    a {
+      color: #000;
+
+      &:hover,
+      &:focus {
+        background: rgba(255, 255, 255, .2);
+        text-decoration: none;
+      }
+    }
+  }
+
+  .background-icon-8c1515 & {
+    background-color: #8c1515;
+  }
+
+  .background-icon-000000 & {
+    background-color: #000;
+  }
+
+  .background-icon-ffffff & {
+    background-color: #fff;
+  }
+
+  .background-icon-4d4f53 & {
+    background-color: #4d4f53;
+  }
+
+  .background-icon-928b81 & {
+    background-color: #928b81;
+  }
+
+  .background-icon-d5d0c0 & {
+    background-color: #d5d0c0;
+  }
+
+  .background-icon-006374 & {
+    background-color: #006374;
+  }
+
+  .background-icon-53284f & {
+    background-color: #53284f;
+  }
+
+  .background-icon-009b76 & {
+    background-color: #009b76;
+  }
+
+  .background-icon-0f6c91 & {
+    background-color: #0f6c91;
+  }
+
+  .background-icon-eaab00 & {
+    background-color: #eaab00;
+  }
+
+  .background-icon-e98300 & {
+    background-color: #e98300;
+  }
+
+}
+
+.partial-offset:last-child > [class*="span"] {
+  padding-left: 8.5%;
+}

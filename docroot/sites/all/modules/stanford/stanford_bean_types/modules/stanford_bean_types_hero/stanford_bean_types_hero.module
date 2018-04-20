@@ -1,0 +1,52 @@
+<?php
+
+/**
+ * @file
+ * Code for the Stanford Bean Types Hero feature.
+ */
+
+include_once 'stanford_bean_types_hero.features.inc';
+
+/**
+ * Implements hook_entity_view().
+ */
+function stanford_bean_types_hero_entity_view($entity, $type, $view_mode, $langcode) {
+  if ($type == 'bean' && $entity->type == 'stanford_hero_block') {
+    $setting = array(
+      'stanford_bean_types_hero' => array(
+        'heroMenu' => variable_get('stanford_bean_types_hero_menu', FALSE),
+      ),
+    );
+    drupal_add_js($setting, array('type' => 'setting'));
+    $path = drupal_get_path('module', 'stanford_bean_types_hero');
+    $entity->content['#attached']['css'][] = "$path/css/stanford_bean_types_hero.css";
+    $entity->content['#attached']['js'][] = "$path/js/stanford_bean_types_hero.js";
+  }
+}
+
+/**
+ * Implements hook_entity_view_mode_alter().
+ */
+function stanford_bean_types_hero_entity_view_mode_alter(&$view_mode, $context) {
+  if ($context['entity_type'] == 'bean' && $context['entity']->type == 'stanford_hero_block') {
+    switch ($context['entity']->field_hero_block_style[LANGUAGE_NONE][0]['value']) {
+      case 'static':
+        $view_mode = 'stanford_12_col_banner_tall';
+        break;
+
+      case 'scroll':
+        $view_mode = 'large_landscape';
+        break;
+    }
+  }
+
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function stanford_bean_types_hero_form_bean_form_alter(&$form, &$form_state, $form_id) {
+  if ($form['#bundle'] == 'stanford_hero_block') {
+    $form['title']['#type'] = $form['view_mode']['#type'] = 'hidden';
+  }
+}

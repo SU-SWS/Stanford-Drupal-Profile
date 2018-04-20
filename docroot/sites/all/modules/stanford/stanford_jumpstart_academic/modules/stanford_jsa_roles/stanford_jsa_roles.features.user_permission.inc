@@ -20,6 +20,16 @@ function stanford_jsa_roles_user_default_permissions() {
     'module' => 'system',
   );
 
+  // Exported permission: 'access alt check page'.
+  $permissions['access alt check page'] = array(
+    'name' => 'access alt check page',
+    'roles' => array(
+      'administrator' => 'administrator',
+      'site owner' => 'site owner',
+    ),
+    'module' => 'stanford_alt_check',
+  );
+
   // Exported permission: 'access bean overview'.
   $permissions['access bean overview'] = array(
     'name' => 'access bean overview',
@@ -124,8 +134,6 @@ function stanford_jsa_roles_user_default_permissions() {
     'name' => 'administer beans',
     'roles' => array(
       'administrator' => 'administrator',
-      'editor' => 'editor',
-      'site owner' => 'site owner',
     ),
     'module' => 'bean',
   );

@@ -1,5 +1,16 @@
-Stanford Image Styles x.x-x.x xxxx-xx-xx
+Stanford Image Styles
 --------------------------------------
+7.x-4.3-alpha1                2017-12-18
+----------------------------------------
+- SOE-2510: Added facebook share image style
+
+7.x-4.2                       2017-09-11
+----------------------------------------
+- SOE-1949: Added square_370_x_370
+- HSDO-955 added new header image style
+- SOE-1738: created full_width_banner_tall image style
+
+
 7.x-4.1                       2017-05-18
 ----------------------------------------
 - Bug fix when classes is a string vs array

@@ -26,6 +26,7 @@ class RelationTestCase extends DrupalWebTestCase {
       'create page content',
       'administer relation types',
       'administer relations',
+      'administer fields',
       'use relation import',
       'access relations',
       'create relations',
@@ -404,6 +405,12 @@ class RelationAPITestCase extends RelationTestCase {
           ->execute()
           ->fetchAllAssoc('rid');
       $this->assertTrue(array_key_exists($rid, $revision), 'Relation revision created.');
+      // Confirm ability to save relation multiple times in code without reload.
+      $rid = $relation->rid;
+      $vid = $relation->vid;
+      relation_save($relation);
+      $this->assertEqual($relation->rid, $rid, 'Each revision has the same rid.');
+      $this->assertNotIdentical($relation->vid, $vid, 'Each revision has a different vid.');
     }
   }
 

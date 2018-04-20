@@ -38,8 +38,9 @@
     "drupal/drupal": "~7.0",
     "drupal/acsf": "~1.43",
     "drupal/newrelic_appname": "~1.0-alpha1",
-    "drupal/paranoia": "~1.7",
-    "drupal/node_revision_delete": "~3.0"
+    "drupal/paranoia": "dev-1.x",
+    "drupal/node_revision_delete": "~3.0",
+    "drupal/honeypot": "~1.24"
   },
   "conflict": {
     "drupal/core": "8.*"
@@ -90,7 +91,24 @@
     "enable-patching": true,
     "patches": {
       "cweagans/composer-patches": {
-        "Call the preserve paths hooks" : "https://github.com/SebCorbin/composer-patches/commit/1cb9bacba51f8bba0c5f3f322c3bb61e4ceae974.patch"
+        "Call the preserve paths hooks":
+        "https://github.com/SebCorbin/composer-patches/commit/1cb9bacba51f8bba0c5f3f322c3bb61e4ceae974.patch"
+      },
+      "drupal/features": {
+        "Features replace eval().":
+        "https://www.drupal.org/files/issues/2018-03-29/features-replace_eval_anonymous_functions.patch"
+      },
+      "drupal/context": {
+        "Remove usage of deprecated create_function() calls for PHP 7.2+ future proofing":
+        "https://www.drupal.org/files/issues/context-support_php_72-2946595-3.patch"
+      },
+      "drupal/paranoia": {
+        "block some import foo boxes that use php arrays as a data structure":
+        "https://www.drupal.org/files/issues/2018-03-28/paranoia-block_additional_forms-2313945-33.patch"
+      },
+      "drupal/drupal": {
+        "Force Paranoia always to be enabled":
+        "patches/enforce-paranoia.patch"
       }
     },
     "merge-plugin": {

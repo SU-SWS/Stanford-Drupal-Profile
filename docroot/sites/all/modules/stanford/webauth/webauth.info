@@ -1,9 +1,0 @@
-name = WebAuth
-description = Authenticates users through WebAuth.
-version = 7.x-3.4
-core = 7.x
-project = "webauth"
-package = "Stanford"
-configure = admin/config/webauth
-project status url = "https://drupalfeatures.stanford.edu/fserver/webauth/7.x"
-files[] = WebAuthSession.inc

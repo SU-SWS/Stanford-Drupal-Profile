@@ -18,19 +18,13 @@ class RelationViewsTestCase extends RelationTestCase {
   }
 
   function setUp() {
-    parent::setUp('relation', 'relation_entity_collector');
-    // While setUp fails for non-existing modules, module_enable() doesn't.
-    module_enable(array('views'));
+    parent::setUp('views', 'relation', 'relation_entity_collector');
   }
 
   /**
    * Tests views with relations as a base table.
    */
   function testRelationsAsBaseTable() {
-    if (!module_exists('views')) {
-      return;
-    }
-
     foreach (array('symmetric', 'directional', 'octopus') as $relation_type) {
       $view = new view;
       $view->base_table = 'relation';
@@ -90,10 +84,6 @@ class RelationViewsTestCase extends RelationTestCase {
    * Tests views with symmetric relations.
    */
   function testSymmetricRelations() {
-    if (!module_exists('views')) {
-      return;
-    }
-
     foreach (array(FALSE, TRUE) as $required) {
       $view = new view;
       $handler = $view->new_display('default');
@@ -146,10 +136,6 @@ class RelationViewsTestCase extends RelationTestCase {
    * Tests views with directional relations to source, to target and to both.
    */
   function testDirectionalRelations() {
-    if (!module_exists('views')) {
-      return;
-    }
-
     foreach (array(FALSE, TRUE) as $required) {
       for ($r_index = -1; $r_index < 2; $r_index++) {
         $view = new view;
@@ -225,10 +211,6 @@ class RelationViewsTestCase extends RelationTestCase {
    * both with the same entities types.
    */
   function testForwardDirectionalSameEntityRelations() {
-    if (!module_exists('views')) {
-      return;
-    }
-
     for ($r_index = -1; $r_index < 2; $r_index++) {
       $view = new view;
       $view->base_table = 'node';

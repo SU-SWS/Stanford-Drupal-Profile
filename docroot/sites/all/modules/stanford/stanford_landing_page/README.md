@@ -1,15 +1,14 @@
 #[Stanford Landing Page](https://github.com/SU-SWS/stanford_landing_page)
-##### Version: 7.x-1.4+3-dev
+##### Version: 7.x-1.5-dev
 
 Maintainers: [sherakama](https://github.com/sherakama), [jbickar](https://github.com/jbickar)
 [Changelog.txt](CHANGELOG.txt)
 
-This module provides a content type that supports dynamic layouts. With mulitple view modes users can choose which layout they want to on a per node basis. Included view modes are:
+This module provides a content type that supports dynamic layouts. With multiple view modes, site builders can choose which layout they want to use on a per-node basis. Included view modes are:
 
-* Large Landscape
-* Blocks
 * List
-* Titles only
+* Blocks
+* Cards
 
 Additional included modules
 ---

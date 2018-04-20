@@ -438,7 +438,9 @@ function stanford_courses_field_default_field_instances() {
     'widget' => array(
       'active' => 1,
       'module' => 'options',
-      'settings' => array(),
+      'settings' => array(
+        'apply_chosen' => '',
+      ),
       'type' => 'options_select',
       'weight' => 0,
     ),
@@ -749,6 +751,49 @@ function stanford_courses_field_default_field_instances() {
       ),
       'type' => 'text_textfield',
       'weight' => 13,
+    ),
+  );
+
+  // Exported field_instance:
+  // 'field_collection_item-field_s_course_section_info-field_s_course_year_computed'.
+  $field_instances['field_collection_item-field_s_course_section_info-field_s_course_year_computed'] = array(
+    'bundle' => 'field_s_course_section_info',
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 12,
+      ),
+    ),
+    'entity_type' => 'field_collection_item',
+    'field_name' => 'field_s_course_year_computed',
+    'label' => 'Academic Year Computed',
+    'required' => 0,
+    'settings' => array(
+      'default_value' => 'blank',
+      'default_value2' => 'same',
+      'default_value_code' => '',
+      'default_value_code2' => '',
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'date',
+      'settings' => array(
+        'display_all_day' => 0,
+        'increment' => 15,
+        'input_format' => 'M j Y - H:i:s',
+        'input_format_custom' => '',
+        'label_position' => 'above',
+        'no_fieldset' => 0,
+        'text_parts' => array(),
+        'year_range' => '1900:2100',
+      ),
+      'type' => 'date_select',
+      'weight' => 14,
     ),
   );
 
@@ -1627,6 +1672,7 @@ function stanford_courses_field_default_field_instances() {
   // Translatables
   // Included for use with string extractors like potx.
   t('Academic Year');
+  t('Academic Year Computed');
   t('Choose the start and end dates of the Quarter.');
   t('Class ID');
   t('Co Instructor');

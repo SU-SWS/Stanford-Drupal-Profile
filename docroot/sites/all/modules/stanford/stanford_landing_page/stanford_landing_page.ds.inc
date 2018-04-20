@@ -42,6 +42,21 @@ function stanford_landing_page_ds_field_settings_info() {
 
   $ds_fieldsetting = new stdClass();
   $ds_fieldsetting->api_version = 1;
+  $ds_fieldsetting->id = 'field_collection_item|field_landing_page_item|stanford_6_col_banner';
+  $ds_fieldsetting->entity_type = 'field_collection_item';
+  $ds_fieldsetting->bundle = 'field_landing_page_item';
+  $ds_fieldsetting->view_mode = 'stanford_6_col_banner';
+  $ds_fieldsetting->settings = array(
+    'stanford_display_title' => array(
+      'weight' => '1',
+      'label' => 'hidden',
+      'format' => 'default',
+    ),
+  );
+  $export['field_collection_item|field_landing_page_item|stanford_6_col_banner'] = $ds_fieldsetting;
+
+  $ds_fieldsetting = new stdClass();
+  $ds_fieldsetting->api_version = 1;
   $ds_fieldsetting->id = 'field_collection_item|field_landing_page_item|stanford_medium_square';
   $ds_fieldsetting->entity_type = 'field_collection_item';
   $ds_fieldsetting->bundle = 'field_landing_page_item';

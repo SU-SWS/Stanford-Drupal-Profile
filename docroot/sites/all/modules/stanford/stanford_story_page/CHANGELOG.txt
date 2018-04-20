@@ -1,5 +1,10 @@
-Stanford Story Page x.x-x.x xxxx-xx-xx
+Stanford Story Page
 --------------------------------
+7.x-1.2              2018-04-16
+-------------------------------
+- some css fixes
+- added composer.json file
+
 7.x-1.1              2017-08-16
 -------------------------------
 - HSDO-970: Removed the page template in favor of context and css to make the

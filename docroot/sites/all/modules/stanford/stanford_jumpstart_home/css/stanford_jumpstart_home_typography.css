@@ -144,50 +144,6 @@ body #main-menu {
 .big-text-styles .span6 .banner-overlay p {
   font-size: 0.9em;
 }
-.big-text-styles .view.carousel .carousel-caption.carousel-position-left,
-.big-text-styles .view.carousel .carousel-caption.carousel-position-right {
-  width: 100%;
-  max-width: 100%;
-}
-.big-text-styles .carousel .carousel-caption {
-  position: static;
-  background-color: black;
-}
-.big-text-styles .view.carousel .carousel-caption.carousel-light {
-  background-color: white;
-}
-@media (max-width: 979px) and (min-width: 768px) {
-  .big-text-styles .view.carousel .carousel-caption.carousel-dark {
-    background: #000000;
-  }
-}
-@media (max-width: 630px) {
-  .big-text-styles .view.carousel .carousel-caption.carousel-dark {
-    background: #000000;
-  }
-}
-@media (max-width: 979px) and (min-width: 768px) {
-  .big-text-styles .view.carousel .carousel-caption.carousel-dark,
-  .big-text-styles .view.carousel .carousel-caption.carousel-dark .more-link a:focus,
-  .big-text-styles .view.carousel .carousel-caption.carousel-dark .more-link a:hover,
-  .big-text-styles .view.carousel .carousel-caption.carousel-dark .slide-caption a,
-  .big-text-styles .view.carousel .carousel-caption.carousel-dark a.more-link:focus,
-  .big-text-styles .view.carousel .carousel-caption.carousel-dark a.more-link:hover,
-  .big-text-styles .view.carousel .carousel-caption.carousel-dark h2 a {
-    color: #ffffff;
-  }
-}
-@media (max-width: 630px) {
-  .big-text-styles .view.carousel .carousel-caption.carousel-dark,
-  .big-text-styles .view.carousel .carousel-caption.carousel-dark .more-link a:focus,
-  .big-text-styles .view.carousel .carousel-caption.carousel-dark .more-link a:hover,
-  .big-text-styles .view.carousel .carousel-caption.carousel-dark .slide-caption a,
-  .big-text-styles .view.carousel .carousel-caption.carousel-dark a.more-link:focus,
-  .big-text-styles .view.carousel .carousel-caption.carousel-dark a.more-link:hover,
-  .big-text-styles .view.carousel .carousel-caption.carousel-dark h2 a {
-    color: #ffffff;
-  }
-}
 .big-text-styles .well .more-link a,
 .big-text-styles .well a.more-link {
   font-size: 20px;

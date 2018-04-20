@@ -1,3 +1,8 @@
+stanford_gallery 7.x-2.3 2018-02-08
+-----------------------------------
+- Accessibility fix in colorbox captions during navigation
+- Automatic image alt text from caption when not available
+
 stanford_gallery 7.x-2.2 2016-08-30
 -----------------------------------
 - Accessibility fix in CSS for caption contrast

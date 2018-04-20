@@ -2,7 +2,7 @@ name = Stanford Feeds Helper
 description = Adds extended functionality for field collections to feeds.
 core = 7.x
 package = Stanford
-version = 7.x-1.2+5-dev
+version = 7.x-1.2-dev
 project = stanford_feeds_helper
 dependencies[] = feeds (>=2.0-alpha8)
 dependencies[] = feeds_tamper

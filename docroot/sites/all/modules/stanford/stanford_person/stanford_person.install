@@ -156,7 +156,7 @@ function stanford_person_uninstall() {
 }
 
 /**
- * Implements hook_update_N().
+ * Set the Display Suite region block values.
  */
 function stanford_person_update_7501(&$sandbox) {
   stanford_person_set_ds_region_blocks();

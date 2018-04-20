@@ -330,6 +330,46 @@ function stanford_image_styles_image_default_styles() {
     ),
   );
 
+  // Exported image style: full_width_banner_shorts_scale_and_crop_1600x400.
+  $styles['full_width_banner_shorts_scale_and_crop_1600x400'] = array(
+    'label' => 'full_width_banner_shorts_scale_and_crop_1600x400',
+    'effects' => array(
+      2 => array(
+        'name' => 'image_scale_and_crop',
+        'data' => array(
+          'width' => 3200,
+          'height' => 800,
+        ),
+        'weight' => 1,
+      ),
+      3 => array(
+        'name' => 'image_hires',
+        'data' => array(),
+        'weight' => 2,
+      ),
+    ),
+  );
+
+  // Exported image style: full_width_banner_tall.
+  $styles['full_width_banner_tall'] = array(
+    'label' => 'Full Width Banner Tall',
+    'effects' => array(
+      1 => array(
+        'name' => 'image_scale_and_crop',
+        'data' => array(
+          'width' => 3200,
+          'height' => 1505,
+        ),
+        'weight' => 1,
+      ),
+      2 => array(
+        'name' => 'image_hires',
+        'data' => array(),
+        'weight' => 2,
+      ),
+    ),
+  );
+
   // Exported image style: half-page-profile.
   $styles['half-page-profile'] = array(
     'label' => 'Half Page Profile (Scale and Crop 600x700)',
@@ -343,6 +383,46 @@ function stanford_image_styles_image_default_styles() {
         'weight' => 1,
       ),
       74 => array(
+        'name' => 'image_hires',
+        'data' => array(),
+        'weight' => 2,
+      ),
+    ),
+  );
+
+  // Exported image style: header_370_x_170.
+  $styles['header_370_x_170'] = array(
+    'label' => 'Header (scale and crop 370 x 170)',
+    'effects' => array(
+      3 => array(
+        'name' => 'image_scale_and_crop',
+        'data' => array(
+          'width' => 740,
+          'height' => 340,
+        ),
+        'weight' => 1,
+      ),
+      4 => array(
+        'name' => 'image_hires',
+        'data' => array(),
+        'weight' => 2,
+      ),
+    ),
+  );
+
+  // Exported image style: header_370_x_240.
+  $styles['header_370_x_240'] = array(
+    'label' => 'Header (scale and crop 370 x 240)',
+    'effects' => array(
+      45 => array(
+        'name' => 'image_scale_and_crop',
+        'data' => array(
+          'width' => 740,
+          'height' => 480,
+        ),
+        'weight' => 1,
+      ),
+      46 => array(
         'name' => 'image_hires',
         'data' => array(),
         'weight' => 2,
@@ -792,6 +872,46 @@ function stanford_image_styles_image_default_styles() {
     ),
   );
 
+  // Exported image style: square_370_x_370.
+  $styles['square_370_x_370'] = array(
+    'label' => 'Square (scale and crop 370 x 370)',
+    'effects' => array(
+      1 => array(
+        'name' => 'image_scale_and_crop',
+        'data' => array(
+          'width' => 740,
+          'height' => 740,
+        ),
+        'weight' => 1,
+      ),
+      2 => array(
+        'name' => 'image_hires',
+        'data' => array(),
+        'weight' => 2,
+      ),
+    ),
+  );
+
+  // Exported image style: square_scale_and_crop_270_x_270.
+  $styles['square_scale_and_crop_270_x_270'] = array(
+    'label' => 'Square (scale and crop 270 x 270)',
+    'effects' => array(
+      1 => array(
+        'name' => 'image_scale_and_crop',
+        'data' => array(
+          'width' => 540,
+          'height' => 540,
+        ),
+        'weight' => 1,
+      ),
+      2 => array(
+        'name' => 'image_hires',
+        'data' => array(),
+        'weight' => 2,
+      ),
+    ),
+  );
+
   // Exported image style: thmb-landscape.
   $styles['thmb-landscape'] = array(
     'label' => 'thmb-landscape',
@@ -848,6 +968,21 @@ function stanford_image_styles_image_default_styles() {
         'name' => 'image_hires',
         'data' => array(),
         'weight' => 2,
+      ),
+    ),
+  );
+
+  // Exported image style: facebook_share_image.
+  $styles['facebook_share_image'] = array(
+    'label' => 'Facebook Share Image',
+    'effects' => array(
+      1 => array(
+        'name' => 'image_scale_and_crop',
+        'data' => array(
+          'width' => 1200,
+          'height' => 630,
+        ),
+        'weight' => 1,
       ),
     ),
   );

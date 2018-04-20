@@ -10,7 +10,7 @@
 function stanford_news_field_default_field_bases() {
   $field_bases = array();
 
-  // Exported field_base: 'field_s_news_attachment'
+  // Exported field_base: 'field_s_news_attachment'.
   $field_bases['field_s_news_attachment'] = array(
     'active' => 1,
     'cardinality' => -1,
@@ -33,7 +33,7 @@ function stanford_news_field_default_field_bases() {
     'type' => 'file',
   );
 
-  // Exported field_base: 'field_s_news_categories'
+  // Exported field_base: 'field_s_news_categories'.
   $field_bases['field_s_news_categories'] = array(
     'active' => 1,
     'cardinality' => -1,
@@ -59,7 +59,7 @@ function stanford_news_field_default_field_bases() {
     'type' => 'taxonomy_term_reference',
   );
 
-  // Exported field_base: 'field_s_news_date'
+  // Exported field_base: 'field_s_news_date'.
   $field_bases['field_s_news_date'] = array(
     'active' => 1,
     'cardinality' => 1,
@@ -88,7 +88,7 @@ function stanford_news_field_default_field_bases() {
     'type' => 'datetime',
   );
 
-  // Exported field_base: 'field_s_news_featured'
+  // Exported field_base: 'field_s_news_featured'.
   $field_bases['field_s_news_featured'] = array(
     'active' => 1,
     'cardinality' => 1,
@@ -113,7 +113,7 @@ function stanford_news_field_default_field_bases() {
     'type' => 'list_boolean',
   );
 
-  // Exported field_base: 'field_s_news_image_insert'
+  // Exported field_base: 'field_s_news_image_insert'.
   $field_bases['field_s_news_image_insert'] = array(
     'active' => 1,
     'cardinality' => -1,
@@ -135,7 +135,7 @@ function stanford_news_field_default_field_bases() {
     'type' => 'image',
   );
 
-  // Exported field_base: 'field_s_news_link'
+  // Exported field_base: 'field_s_news_link'.
   $field_bases['field_s_news_link'] = array(
     'active' => 1,
     'cardinality' => 1,
@@ -164,7 +164,7 @@ function stanford_news_field_default_field_bases() {
     'type' => 'link_field',
   );
 
-  // Exported field_base: 'field_s_news_source'
+  // Exported field_base: 'field_s_news_source'.
   $field_bases['field_s_news_source'] = array(
     'active' => 1,
     'cardinality' => 1,

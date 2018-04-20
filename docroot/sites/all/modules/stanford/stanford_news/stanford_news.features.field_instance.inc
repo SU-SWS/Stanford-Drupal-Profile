@@ -10,7 +10,7 @@
 function stanford_news_field_default_field_instances() {
   $field_instances = array();
 
-  // Exported field_instance: 'node-stanford_news_item-body'
+  // Exported field_instance: 'node-stanford_news_item-body'.
   $field_instances['node-stanford_news_item-body'] = array(
     'bundle' => 'stanford_news_item',
     'default_value' => NULL,
@@ -30,6 +30,13 @@ function stanford_news_field_default_field_instances() {
         'settings' => array(),
         'type' => 'text_default',
         'weight' => 4,
+      ),
+      'stanford_extras_single_region' => array(
+        'label' => 'hidden',
+        'module' => 'text',
+        'settings' => array(),
+        'type' => 'text_default',
+        'weight' => 8,
       ),
       'stanford_news_extras' => array(
         'label' => 'hidden',
@@ -73,11 +80,11 @@ function stanford_news_field_default_field_instances() {
         'summary_rows' => 5,
       ),
       'type' => 'text_textarea_with_summary',
-      'weight' => 5,
+      'weight' => 4,
     ),
   );
 
-  // Exported field_instance: 'node-stanford_news_item-field_s_image_info'
+  // Exported field_instance: 'node-stanford_news_item-field_s_image_info'.
   $field_instances['node-stanford_news_item-field_s_image_info'] = array(
     'bundle' => 'stanford_news_item',
     'default_value' => NULL,
@@ -109,6 +116,19 @@ function stanford_news_field_default_field_instances() {
         ),
         'type' => 'field_collection_view',
         'weight' => 7,
+      ),
+      'stanford_extras_single_region' => array(
+        'label' => 'hidden',
+        'module' => 'field_collection',
+        'settings' => array(
+          'add' => '',
+          'delete' => '',
+          'description' => 0,
+          'edit' => '',
+          'view_mode' => 'stanford_banner_850x400',
+        ),
+        'type' => 'field_collection_view',
+        'weight' => 5,
       ),
       'stanford_news_extras' => array(
         'label' => 'hidden',
@@ -155,11 +175,11 @@ function stanford_news_field_default_field_instances() {
       'module' => 'field_collection',
       'settings' => array(),
       'type' => 'field_collection_embed',
-      'weight' => 4,
+      'weight' => 1,
     ),
   );
 
-  // Exported field_instance: 'node-stanford_news_item-field_s_news_attachment'
+  // Exported field_instance: 'node-stanford_news_item-field_s_news_attachment'.
   $field_instances['node-stanford_news_item-field_s_news_attachment'] = array(
     'bundle' => 'stanford_news_item',
     'deleted' => 0,
@@ -178,6 +198,12 @@ function stanford_news_field_default_field_instances() {
         'settings' => array(),
         'type' => 'file_default',
         'weight' => 6,
+      ),
+      'stanford_extras_single_region' => array(
+        'label' => 'hidden',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 10,
       ),
       'stanford_news_extras' => array(
         'label' => 'hidden',
@@ -260,11 +286,11 @@ function stanford_news_field_default_field_instances() {
         'progress_indicator' => 'throbber',
       ),
       'type' => 'file_generic',
-      'weight' => 8,
+      'weight' => 6,
     ),
   );
 
-  // Exported field_instance: 'node-stanford_news_item-field_s_news_categories'
+  // Exported field_instance: 'node-stanford_news_item-field_s_news_categories'.
   $field_instances['node-stanford_news_item-field_s_news_categories'] = array(
     'bundle' => 'stanford_news_item',
     'default_value' => NULL,
@@ -291,6 +317,12 @@ them, and integrate them with the site architecture.',
         ),
         'type' => 'ds_taxonomy_separator',
         'weight' => 11,
+      ),
+      'stanford_extras_single_region' => array(
+        'label' => 'hidden',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 22,
       ),
       'stanford_news_extras' => array(
         'label' => 'hidden',
@@ -324,11 +356,11 @@ them, and integrate them with the site architecture.',
       'module' => 'options',
       'settings' => array(),
       'type' => 'options_buttons',
-      'weight' => 3,
+      'weight' => 17,
     ),
   );
 
-  // Exported field_instance: 'node-stanford_news_item-field_s_news_date'
+  // Exported field_instance: 'node-stanford_news_item-field_s_news_date'.
   $field_instances['node-stanford_news_item-field_s_news_date'] = array(
     'bundle' => 'stanford_news_item',
     'deleted' => 0,
@@ -361,6 +393,20 @@ them, and integrate them with the site architecture.',
         ),
         'type' => 'date_default',
         'weight' => 5,
+      ),
+      'stanford_extras_single_region' => array(
+        'label' => 'hidden',
+        'module' => 'date',
+        'settings' => array(
+          'format_type' => 'stanford_month_date_year',
+          'fromto' => 'both',
+          'multiple_from' => '',
+          'multiple_number' => '',
+          'multiple_to' => '',
+          'show_remaining_days' => 0,
+        ),
+        'type' => 'date_default',
+        'weight' => 6,
       ),
       'stanford_news_extras' => array(
         'label' => 'hidden',
@@ -425,7 +471,7 @@ them, and integrate them with the site architecture.',
     ),
   );
 
-  // Exported field_instance: 'node-stanford_news_item-field_s_news_featured'
+  // Exported field_instance: 'node-stanford_news_item-field_s_news_featured'.
   $field_instances['node-stanford_news_item-field_s_news_featured'] = array(
     'bundle' => 'stanford_news_item',
     'default_value' => array(
@@ -447,6 +493,12 @@ them, and integrate them with the site architecture.',
         'settings' => array(),
         'type' => 'hidden',
         'weight' => 20,
+      ),
+      'stanford_extras_single_region' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 26,
       ),
       'stanford_news_extras' => array(
         'label' => 'above',
@@ -481,12 +533,12 @@ them, and integrate them with the site architecture.',
         'display_label' => 1,
       ),
       'type' => 'options_onoff',
-      'weight' => 1,
+      'weight' => 22,
     ),
   );
 
   // Exported field_instance:
-  // 'node-stanford_news_item-field_s_news_image_insert'
+  // 'node-stanford_news_item-field_s_news_image_insert'.
   $field_instances['node-stanford_news_item-field_s_news_image_insert'] = array(
     'bundle' => 'stanford_news_item',
     'deleted' => 0,
@@ -507,6 +559,12 @@ them, and integrate them with the site architecture.',
         'settings' => array(),
         'type' => 'hidden',
         'weight' => 0,
+      ),
+      'stanford_extras_single_region' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 23,
       ),
       'stanford_news_extras' => array(
         'label' => 'above',
@@ -597,11 +655,11 @@ them, and integrate them with the site architecture.',
         'progress_indicator' => 'throbber',
       ),
       'type' => 'image_image',
-      'weight' => 7,
+      'weight' => 5,
     ),
   );
 
-  // Exported field_instance: 'node-stanford_news_item-field_s_news_link'
+  // Exported field_instance: 'node-stanford_news_item-field_s_news_link'.
   $field_instances['node-stanford_news_item-field_s_news_link'] = array(
     'bundle' => 'stanford_news_item',
     'default_value' => NULL,
@@ -621,6 +679,13 @@ them, and integrate them with the site architecture.',
         'settings' => array(),
         'type' => 'link_default',
         'weight' => 5,
+      ),
+      'stanford_extras_single_region' => array(
+        'label' => 'hidden',
+        'module' => 'link',
+        'settings' => array(),
+        'type' => 'link_default',
+        'weight' => 9,
       ),
       'stanford_news_extras' => array(
         'label' => 'hidden',
@@ -671,11 +736,11 @@ them, and integrate them with the site architecture.',
       'module' => 'link',
       'settings' => array(),
       'type' => 'link_field',
-      'weight' => 6,
+      'weight' => 7,
     ),
   );
 
-  // Exported field_instance: 'node-stanford_news_item-field_s_news_source'
+  // Exported field_instance: 'node-stanford_news_item-field_s_news_source'.
   $field_instances['node-stanford_news_item-field_s_news_source'] = array(
     'bundle' => 'stanford_news_item',
     'default_value' => NULL,
@@ -695,6 +760,13 @@ them, and integrate them with the site architecture.',
         'settings' => array(),
         'type' => 'link_default',
         'weight' => 6,
+      ),
+      'stanford_extras_single_region' => array(
+        'label' => 'hidden',
+        'module' => 'link',
+        'settings' => array(),
+        'type' => 'link_default',
+        'weight' => 5,
       ),
       'stanford_news_extras' => array(
         'label' => 'hidden',

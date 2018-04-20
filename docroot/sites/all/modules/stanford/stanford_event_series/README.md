@@ -1,5 +1,5 @@
 #[Stanford Event Series](https://github.com/SU-SWS/stanford_image)
-##### Version: 7.x-1.1
+##### Version: 7.x-1.x
 
 Maintainers: [cjwest](https://github.com/cjwest)
 

@@ -1,5 +1,11 @@
 Stanford Events Importer x.x-x.x, xxxx-xx-xx
 --------------------------------------------
+
+7.x-3.9                                  2018-04-16
+---------------------------------------------------
+- Changed the class on a view to make it more re-useable when a view is cloned
+- Added composer.json file.
+
 7.x-3.8                                  2017-08-05
 ---------------------------------------------------
 - Events view for a dynamic paragraph view. Ideal for paragraphs implementation in stanford_story_page.

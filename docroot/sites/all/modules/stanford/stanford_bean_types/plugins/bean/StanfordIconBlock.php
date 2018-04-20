@@ -22,7 +22,7 @@ class StanfordIconBlock extends BeanDefault {
   public function view($bean, $content, $view_mode = 'default', $langcode = NULL) {
 
     if (!isset($content['bean'][$bean->delta]['field_s_icon_icon'])) {
-      drupal_set_message("Could not find field_s_icon_icon on icon block", "error", TRUE);
+      drupal_set_message(t("Could not find field_s_icon_icon on icon block"), "error", TRUE);
       return $content;
     }
 

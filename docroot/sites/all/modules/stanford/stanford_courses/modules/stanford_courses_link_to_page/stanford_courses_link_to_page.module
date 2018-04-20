@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * This file overrides the default course views to change their link from
@@ -6,41 +7,14 @@
  */
 
 /**
- * hook_field_views_data_alter
- * hook_field_views_data_views_data_alter
- * hook_views_data_alter
- *
- * hook_views_pre_execute
- * hook_views_query_alter
- *
- * hook_views_pre_view
- */
-
-/**
- * Alter all the things!
- * @param  [type] $view [description]
- * @return [type]       [description]
+ * Implements hook_views_pre_build().
  */
 function stanford_courses_link_to_page_views_pre_build(&$view) {
-
-    $allowed = sucl_is_allowed_display($view);
-    if (!$allowed) {
-      return;
-    }
-
-    // Initial attempt was to disable the rewrite and set the 'link to node' setting.
-    // Somewhere this breaks and does not render any link
-
-    //  $view->field['title']->options['alter']['make_link'] = 0;
-    //  $view->field['title']->options['alter']['absolute'] = 0;
-    //  $view->field['title']->options['alter']['external'] = 1;
-    //  $view->field['title']->options['alter']['path'] = '';
-    //  $view->field['title']->options['link_to_node'] = 1;
-
+  return sucl_is_allowed_display($view);
 }
 
 /**
- * @param $view
+ * Implements hook_views_pre_render().
  */
 function stanford_courses_link_to_page_views_pre_render(&$view) {
 
@@ -53,7 +27,7 @@ function stanford_courses_link_to_page_views_pre_render(&$view) {
     return;
   }
 
-  foreach ($view->result as $k => &$result) {
+  foreach ($view->result as &$result) {
     $path = drupal_get_path_alias('node/' . $result->nid);
     $result->field_field_s_course_ec_link[0]['rendered'] = url($path, array('absolute' => TRUE));
     $result->field_field_s_course_ec_link[0]['raw']['url'] = url($path, array('absolute' => TRUE));
@@ -62,29 +36,25 @@ function stanford_courses_link_to_page_views_pre_render(&$view) {
 
 }
 
-
 /**
- * @param $view
+ * Chweck if sucl is allowed.
+ *
+ * @param object $view
+ *   View to check.
+ *
  * @return bool
+ *   If allowed.
  */
 function sucl_is_allowed_display($view) {
-    $name = $view->name;
-    $display = $view->current_display;
-    $allowed_views = array(
-        'courses',
-        'courses_reference',
-    );
-    $allowed_displays = array(
-        'current_courses_page',
-    );
+  $name = $view->name;
+  $allowed_views = array(
+    'courses',
+    'courses_reference',
+  );
 
-    // if (in_array($name, $allowed_views) && in_array($display, $allowed_displays)) {
-    //     return true;
-    // }
+  if (in_array($name, $allowed_views)) {
+    return TRUE;
+  }
 
-    if (in_array($name, $allowed_views)) {
-      return true;
-    }
-
-    return false;
+  return FALSE;
 }

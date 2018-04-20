@@ -330,7 +330,7 @@ function workbench_access_field_extra_fields() {
  */
 function workbench_access_load_include($module = NULL) {
   if (!is_null($module)) {
-    $file = drupal_get_path('module', 'workbench_access') . '/modules/' . $module . '.workbench_access.inc';
+    $file = DRUPAL_ROOT. DIRECTORY_SEPARATOR . drupal_get_path('module', 'workbench_access') . '/modules/' . $module . '.workbench_access.inc';
     if (file_exists($file)) {
       include_once($file);
     }
@@ -340,7 +340,7 @@ function workbench_access_load_include($module = NULL) {
     return;
   }
   // Load all includes.
-  foreach (file_scan_directory(drupal_get_path('module', 'workbench_access') . '/modules', '/.inc$/') as $file) {
+  foreach (file_scan_directory(DRUPAL_ROOT. DIRECTORY_SEPARATOR . drupal_get_path('module', 'workbench_access') . '/modules', '/.inc$/') as $file) {
     include_once($file->uri);
   }
 }

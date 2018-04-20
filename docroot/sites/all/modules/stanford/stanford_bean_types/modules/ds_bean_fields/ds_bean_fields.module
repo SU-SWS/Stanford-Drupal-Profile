@@ -36,8 +36,14 @@ function ds_bean_fields_ds_fields_info($entity_type) {
         'entity_render_key' => 'title',
         'settings' => array(
           'link' => array('type' => 'select', 'options' => array('no', 'yes')),
-          'wrapper' => array('type' => 'textfield', 'description' => t('Eg: h1, h2, p')),
-          'class' => array('type' => 'textfield', 'description' => t('Put a class on the wrapper. Eg: block-title')),
+          'wrapper' => array(
+            'type' => 'textfield',
+            'description' => t('Eg: h1, h2, p'),
+          ),
+          'class' => array(
+            'type' => 'textfield',
+            'description' => t('Put a class on the wrapper. Eg: block-title'),
+          ),
         ),
         'default' => array('wrapper' => 'h2', 'link' => 0, 'class' => ''),
       ),
@@ -133,6 +139,7 @@ function _ds_bean_fields_render_html($field, $html) {
  * Hyphenate a text string.
  */
 function ds_bean_fields_hyphenate($text, $langcode = NULL) {
+  $patterns = NULL;
   $pattern = &drupal_static(__FUNCTION__);
   if (!isset($langcode)) {
     $langcode = i18n_langcode();

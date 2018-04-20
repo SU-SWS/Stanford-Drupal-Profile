@@ -60,7 +60,6 @@ function stanford_courses_field_multiple_values_form($importer, $element_key, $s
 function stanford_courses_field_multiple_values_callback($source, $item_key, $element_key, &$field, $settings) {
 
   // Storage
-  $new_field = array();
   $values = array();
 
   // Check for single and multiple value results from previous XPath.
@@ -78,7 +77,7 @@ function stanford_courses_field_multiple_values_callback($source, $item_key, $el
   else {
     // Turn raw result xml to a workable format.
     try {
-      $values[] = new SimpleXMLElement($field);
+      $values[] = new SimpleXMLElement((string) $field);
     } catch(Exception $e) {
       // Could not parse field we need to continue.
       return;

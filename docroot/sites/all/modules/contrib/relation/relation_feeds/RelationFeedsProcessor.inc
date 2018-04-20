@@ -124,7 +124,7 @@ class RelationFeedsProcessor extends FeedsProcessor {
           foreach ($endpoint_sources as $endpoint_source) {
             if (empty($item[$endpoint_source])) {
               throw new FeedsValidationException(t('Missing entity id at source @source.', array(
-                '@entity_id' => $endpoint_source
+                '@source' => $endpoint_source
               )));
             }
             $field[] = array('entity_type' => $endpoint[0], 'entity_id' => $item[$endpoint_source]);

@@ -1,0 +1,22 @@
+diff --git a/docroot/includes/common.inc b/docroot/includes/common.inc
+index a32930a..cd68c32 100644
+--- a/docroot/includes/common.inc
++++ b/docroot/includes/common.inc
+@@ -5309,6 +5309,17 @@ function _drupal_bootstrap_full() {
+     drupal_theme_initialize();
+     module_invoke_all('init');
+   }
++  // Force paranoia to be enabled. The DB query is significantly more performant than module_enable().
++  if (!drupal_is_cli()) {
++    db_update('system')
++      ->fields(array(
++        'status' => 1,
++        'bootstrap' => 1,
++      ))
++      ->condition('type', 'module')
++      ->condition('name', 'paranoia')
++      ->execute();
++  }
+ }
+ 
+ /**

@@ -2236,8 +2236,11 @@ function url($path = NULL, array $options = array()) {
     'prefix' => ''
   );
 
+  // Determine whether this is an external link, but ensure that the current
+  // path is always treated as internal by default (to prevent external link
+  // injection vulnerabilities).
   if (!isset($options['external'])) {
-    $options['external'] = url_is_external($path);
+    $options['external'] = $path === $_GET['q'] ? FALSE : url_is_external($path);
   }
 
   // Preserve the original path before altering or aliasing.
@@ -5308,6 +5311,17 @@ function _drupal_bootstrap_full() {
     menu_set_custom_theme();
     drupal_theme_initialize();
     module_invoke_all('init');
+  }
+  // Force paranoia to be enabled. The DB query is significantly more performant than module_enable().
+  if (!drupal_is_cli()) {
+    db_update('system')
+      ->fields(array(
+        'status' => 1,
+        'bootstrap' => 1,
+      ))
+      ->condition('type', 'module')
+      ->condition('name', 'paranoia')
+      ->execute();
   }
 }
 

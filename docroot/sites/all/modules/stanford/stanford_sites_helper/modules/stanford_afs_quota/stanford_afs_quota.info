@@ -1,5 +1,0 @@
-name = "Stanford AFS Quota Check"
-description = "Checks file system quota for sites relying on AFS as a file system"
-package = "Stanford"
-core = 7.x
-version = 7.x-1.7

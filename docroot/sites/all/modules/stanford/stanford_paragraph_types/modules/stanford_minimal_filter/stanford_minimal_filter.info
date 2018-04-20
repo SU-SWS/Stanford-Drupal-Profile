@@ -1,7 +1,7 @@
 name = Stanford Minimal Filter
 core = 7.x
 package = Stanford
-version = 7.x-1.2
+version = 7.x-1.x
 dependencies[] = features
 dependencies[] = pathologic
 dependencies[] = wysiwyg

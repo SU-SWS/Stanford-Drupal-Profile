@@ -1,9 +1,7 @@
 <?php
 
 require_once dirname(__FILE__) . '/relation.rules.inc';
-if (module_exists('ctools')) {
-  require_once dirname(__FILE__) . '/relation.ctools.inc';
-}
+require_once dirname(__FILE__) . '/relation.ctools.inc';
 
 /**
  * @file
@@ -16,6 +14,7 @@ if (module_exists('ctools')) {
 function relation_entity_info() {
   $entities['relation'] = array(
     'label' => t('Relation'),
+    'label callback' => 'relation_label',
     'base table' => 'relation',
     'revision table' => 'relation_revision',
     'fieldable' => TRUE,
@@ -618,13 +617,19 @@ function relation_save($relation, $account = NULL) {
   if (!isset($account)) {
     $account = $GLOBALS['user'];
   }
-  global $user;
   try {
     field_attach_validate('relation', $relation);
   }
   catch (FieldValidationException $e) {
-    watchdog_exception('relation', $e, t('Field validation failed.'), NULL,
-      WATCHDOG_ERROR);
+    foreach ($e->errors as $field_name => $field_errors) {
+      foreach ($field_errors as $langcode => $multiple_errors) {
+        foreach ($multiple_errors as $delta => $item_errors) {
+          foreach ($item_errors as $item_error) {
+            watchdog_exception('relation', $e, $item_error['message']);
+          }
+        }
+      }
+    }
     return FALSE;
   }
   // Determine if we will be inserting a new relation.
@@ -665,6 +670,10 @@ function relation_save($relation, $account = NULL) {
   module_invoke_all('entity_' . $op, $relation, 'relation');
   module_invoke('rules', 'invoke_event', 'relation_' . $op, $relation);
   relation_clear_related_entities_cache($endpoints);
+
+  // Clear internal properties.
+  unset($relation->is_new);
+  unset($relation->original);
 
   return $relation->rid;
 }
@@ -727,6 +736,15 @@ function relation_delete_multiple($rids) {
 }
 
 /**
+ * Gets a relation's label.
+ *
+ * @see entity_label()
+ */
+function relation_label($relation) {
+  return t('Relation !id', array('!id' => $relation->rid));
+}
+
+/**
  * Gets a relation's URI.
  *
  * @see entity_uri()
@@ -755,30 +773,76 @@ function relation_query($entity_type = NULL, $entity_id = NULL, $r_index = NULL)
 }
 
 /**
- * Return endpoint entities.
+ * Returns endpoint entities (or entity IDs).
  *
- * @param $relation
+ * @param object $relation
  *   Full relation object containing the endpoints
+ * @param string $entity_type
+ *   (optional) If set, filter by entity type; else return all endpoints.
+ * @param string $endpoint_type
+ *   (optional) If set, filter by endpoint type, either 'source' or 'target';
+ *   else return all endpoints.
+ * @param boolean $load_entities
+ *   (optional) Whether to return entities or entity IDs.
  *
- * @param $entity_type
- *   (optional) Filter endpoints by entity type. Return all endpoint entities
- *   if empty.
+ * @return array
+ *   The endpoint entities (or entity IDs).
  */
-function relation_get_endpoints($relation, $entity_type = NULL) {
-  $entities = array();
-  foreach ($relation->endpoints[LANGUAGE_NONE] as $endpoint) {
-    if (!empty($entity_type) && $endpoint['entity_type'] != $entity_type) {
-      continue;
+function relation_get_endpoints($relation, $entity_type = NULL, $endpoint_type = NULL, $load_entities = TRUE) {
+  $items = array();
+  $endpoints = relation_get_endpoints_by_endpoint_type($relation, $endpoint_type);
+  foreach ($endpoints as $endpoint) {
+    if (empty($entity_type) || $endpoint['entity_type'] == $entity_type) {
+      $items[$endpoint['entity_type']][] = $endpoint['entity_id'];
     }
-    $entities[$endpoint['entity_type']][] = $endpoint['entity_id'];
   }
-  if (empty($entities)) {
-    return FALSE;
+
+  if ($load_entities) {
+    foreach ($items as $entity_type => $ids) {
+      $items[$entity_type] = entity_load($entity_type, $ids);
+    }
   }
-  foreach ($entities as $entity_type => $ids) {
-    $entities[$entity_type] = entity_load($entity_type, $ids);
+  return $items;
+}
+
+/**
+ * Returns the endpoints of a specific endpoint type.
+ *
+ * @param object $relation
+ *   A relation object containing the endpoints.
+ * @param string $endpoint_type
+ *   (optional) The endpoint type, either 'source' or 'target'.
+ *
+ * @return array
+ *   The endpoints.
+ */
+function relation_get_endpoints_by_endpoint_type($relation, $endpoint_type = 'source') {
+  if (empty($endpoint_type)) {
+    return $relation->endpoints[LANGUAGE_NONE];
   }
-  return $entities;
+  if (!in_array($endpoint_type, array('source', 'target'))) {
+    return array();
+  }
+
+  $relation_type = relation_type_load($relation->relation_type);
+  $endpoint_type = $relation_type->directional ? $endpoint_type : 'source';
+
+  // At present, relation only supports a 1-to-many directional relation. In
+  // other words, a directional relation may only have one source endpoint; all
+  // other endpoints are target endpoints.
+  if ($endpoint_type == 'source') {
+    if ($relation_type->directional) {
+      $endpoints = array($relation->endpoints[LANGUAGE_NONE][0]);
+    }
+    else {
+      $endpoints = $relation->endpoints[LANGUAGE_NONE];
+    }
+  }
+  else {
+    $endpoints = array_slice($relation->endpoints[LANGUAGE_NONE], 1);
+  }
+
+  return $endpoints;
 }
 
 /**

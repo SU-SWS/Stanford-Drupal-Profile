@@ -275,7 +275,10 @@ function drush_acsf_get_factory_creds() {
   if (drush_get_context('DRUSH_PIPE')) {
     drush_print_pipe($output);
   }
-  drush_print($output);
+  else {
+    drush_print($output);
+  }
+
 }
 
 /**

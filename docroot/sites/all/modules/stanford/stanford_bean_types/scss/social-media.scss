@@ -1,0 +1,138 @@
+.bean-stanford-social-media-connect {
+  .field-type-link-field a {
+    color: transparent;
+    display: inline-block;
+    font-size: 0;
+    height: 48px;
+    margin-bottom: 5px;
+    margin-right: 5px;
+    width: 48px;
+    opacity: 0.9;
+    filter: alpha(opacity = 40);
+
+    &:hover {
+      opacity: 1;
+      filter: alpha(opacity = 100);
+    }
+  }
+
+  .field-name-field-s-smc-links {
+    .field-item {
+      display: inline-block;
+    }
+  }
+
+  .field-type-fontawesome-icon {
+    a {
+      border: 1px solid #808080;
+      width: 45px;
+      height: 45px;
+      text-align: center;
+      border-radius: 25px;
+      font-size: 25px;
+      display: table;
+      color: #ffffff;
+      margin: 0 4px;
+      opacity: 1;
+
+      &:hover,
+      &:focus {
+        opacity: .7;
+        text-decoration: none;
+      }
+    }
+
+    i {
+      display: table-cell;
+      vertical-align: middle;
+    }
+
+    &.color-white {
+      a {
+        color: #000;
+      }
+    }
+
+    &.color-facebook a {
+      background: #3b5998;
+    }
+
+    &.color-twitter a {
+      background: #1da1f2;
+    }
+
+    &.color-google a {
+      background: #03a9f4;
+    }
+
+    &.color-linkedin a {
+      background: #0084bf;
+    }
+
+    &.color-instagram a {
+      background: #3897f0;
+    }
+
+    &.color-youtube a {
+      background: #cc181e;
+    }
+
+    &.color-vimeo a {
+      background: #00adef;
+    }
+
+    &.color-tumblr a {
+      background: #36465d;
+    }
+
+    &.color-pinterest a {
+      background: #bd081c;
+    }
+
+    &.color-red a {
+      background: #8c1515;
+    }
+
+    &.color-black a {
+      background: #000000;
+    }
+
+    &.color-cool-gray a {
+      background: #4d4f53;
+    }
+
+    &.color-dark-taupe a {
+      background: #928b81;
+    }
+
+    &.color-light-taupe a {
+      background: #d5d0c0;
+      color: #000;
+    }
+
+    &.color-deep-blue a {
+      background: #006374;
+    }
+
+    &.color-deep-purple a {
+      background: #53284f;
+    }
+
+    &.color-bright-green a {
+      background: #009b76;
+    }
+
+    &.color-bright-blue a {
+      background: #0f6c91;
+    }
+
+    &.color-bright-yellow a {
+      background: #eaab00;
+    }
+
+    &.color-bright-orange a {
+      background: #e98300;
+    }
+  }
+}
+

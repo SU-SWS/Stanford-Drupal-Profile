@@ -1,5 +1,14 @@
-Stanford Carousel x.x-x.x xxxx-xx-xx
+Stanford Carousel
 ------------------------------------
+7.x-2.4-alpha2                   2017-06-19
+-------------------------------------------
+- Added composer.json file
+- Some style changes to correct the overlay
+
+7.x-2.4-alpha1                   2017-06-19
+-------------------------------------------
+- Fixed next & previous buttons on mobile
+- HSDO-623 Fix broken html with caption
 
 Stanford Carousel 7.x-2.3       2016-05-30
 -------------------------------------------

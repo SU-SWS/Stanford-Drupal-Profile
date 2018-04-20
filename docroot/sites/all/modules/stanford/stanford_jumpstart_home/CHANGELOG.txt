@@ -1,5 +1,10 @@
 Stanford Jumpstart Home
 -------------------------------------------------------------------
+7.x-1.8                                                   2018-04-16
+--------------------------------------------------------------------
+- Added composer.json file
+- removed carousel styles to move them to the carousel feature.
+
 7.x-1.7                                                   2017-10-11
 --------------------------------------------------------------------
 - Added class to body tag to indicate big text.

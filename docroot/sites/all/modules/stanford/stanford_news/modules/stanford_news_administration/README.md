@@ -1,5 +1,5 @@
-Stanford News Administration  
-----------------------------
+# [Stanford New Administration](https://github.com/SU-SWS/stanford_news)
+
 This sub module contains a manage content view for administering news items.
 
 * **Manage Content**   

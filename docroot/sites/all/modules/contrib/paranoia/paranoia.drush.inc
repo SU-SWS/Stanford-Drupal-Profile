@@ -6,7 +6,7 @@
  */
 
 /**
- * Implements hook_drush_command().
+ * Implements hook_drush_sql_sync_sanitize().
  */
 function paranoia_drush_sql_sync_sanitize($site) {
   // Don't use DBTNG here so this mostly workis across old versions of Drupal.
@@ -74,4 +74,67 @@ function paranoia_drush_sql_sync_sanitize($site) {
   drush_sql_register_post_sync_op('core_cache_tables',
     dt('Truncate core cache tables.'),
     $trucate_caches_query);
+}
+
+/**
+ * Implements hook_drush_help().
+ */
+function paranoia_drush_help($command) {
+  switch ($command) {
+    case 'drush:paranoia-reset-stale-accounts':
+      return dt('Queue accounts to have their passwords reset if they have not logged in recently.');
+  }
+}
+
+/**
+ * Implements hook_drush_command().
+ */
+function paranoia_drush_command() {
+  return array(
+    'paranoia-reset-stale-accounts' => array(
+      'description' => dt('Queue accounts to have their passwords reset if they have not logged in recently.'),
+      'options' => array(
+        'limit' => dt('Limit the number of accounts to queue in one run.'),
+      ),
+    ),
+  );
+}
+
+/**
+ * Drush callback to queue stale accounts to have their passwords reset.
+ */
+function drush_paranoia_reset_stale_accounts() {
+  $queue = DrupalQueue::get('paranoia_stale_expirations');
+  $limit = drush_get_option('limit', FALSE);
+
+  // Don't add to the queue if there are remaining items to be processed, to
+  // avoid duplicate queue items if the cron queue iterator from a previous
+  // cron run has not gotten through all of its queued items.
+  if ($queue->numberOfItems() > 0) {
+    watchdog('paranoia', 'Skipping adding items to the queue as stale expiration items already exist.');
+    return;
+  }
+
+  // Check for accounts whose last access time is older than the threshold,
+  // which defaults to 2 years (365 * 2 = 730 days).
+  $offset = REQUEST_TIME - (variable_get('paranoia_access_threshold', 730) * 60 * 60 * 24);
+  $query = db_select('users', 'u')
+    ->fields('u', ['uid'])
+    ->condition('uid', 0, '>')
+    ->condition('created', $offset, '<')
+    ->condition('access', $offset, '<')
+    ->condition('login', $offset, '<')
+    ->condition('pass', 'ZZZ%', 'NOT LIKE');
+  if ($limit !== FALSE) {
+    $query->range($limit);
+  }
+  $result = $query->execute();
+
+  $count = 0;
+  foreach ($result as $record) {
+    $count++;
+    $queue->createItem($record->uid);
+  }
+  drush_log(dt('Queued @count users to have their password reset', array('@count' => $count)), 'ok');
+  watchdog('paranoia', 'Queued @count users to have their password reset', array('@count' => $count));
 }

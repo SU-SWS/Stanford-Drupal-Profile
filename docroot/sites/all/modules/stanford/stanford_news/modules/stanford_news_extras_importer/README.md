@@ -1,5 +1,4 @@
-# [Stanford News Extras Importer](https://github.com/SU-SWS/stanford_news)
-##### Version: 7.x-3.2-dev
+# [Stanford News Extras Importer](https://github.com/SU-SWS/stanford_news) 
 
 Stanford News Extras Importer feature provides an out of the box solution for importing news content on your website. This feature requires fields from the Stanford News Extras feature
 

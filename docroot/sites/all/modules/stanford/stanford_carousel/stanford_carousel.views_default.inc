@@ -58,7 +58,7 @@ function stanford_carousel_views_default_views() {
     </div>
   <div class="offscreen">Carousel End</div>';
   $handler->display->display_options['footer']['area']['format'] = 'full_html';
-  /* Relationship: Content: Image (field_s_image_info) */
+  /* Relationship: Field: Image (field_s_image_info) */
   $handler->display->display_options['relationships']['field_s_image_info_value']['id'] = 'field_s_image_info_value';
   $handler->display->display_options['relationships']['field_s_image_info_value']['table'] = 'field_data_field_s_image_info';
   $handler->display->display_options['relationships']['field_s_image_info_value']['field'] = 'field_s_image_info_value';
@@ -152,6 +152,7 @@ function stanford_carousel_views_default_views() {
   $handler->display->display_options['fields']['field_s_image_caption']['alter']['strip_tags'] = TRUE;
   $handler->display->display_options['fields']['field_s_image_caption']['alter']['trim'] = TRUE;
   $handler->display->display_options['fields']['field_s_image_caption']['alter']['preserve_tags'] = '<em> <strong>';
+  $handler->display->display_options['fields']['field_s_image_caption']['alter']['html'] = TRUE;
   $handler->display->display_options['fields']['field_s_image_caption']['element_label_colon'] = FALSE;
   /* Field: Content: Edit link */
   $handler->display->display_options['fields']['edit_node']['id'] = 'edit_node';
@@ -313,6 +314,7 @@ function stanford_carousel_views_default_views() {
   $handler->display->display_options['fields']['field_s_image_caption']['alter']['strip_tags'] = TRUE;
   $handler->display->display_options['fields']['field_s_image_caption']['alter']['trim'] = TRUE;
   $handler->display->display_options['fields']['field_s_image_caption']['alter']['preserve_tags'] = '<em> <strong>';
+  $handler->display->display_options['fields']['field_s_image_caption']['alter']['html'] = TRUE;
   $handler->display->display_options['fields']['field_s_image_caption']['element_label_colon'] = FALSE;
   /* Field: Content: Edit link */
   $handler->display->display_options['fields']['edit_node']['id'] = 'edit_node';
@@ -443,6 +445,7 @@ function stanford_carousel_views_default_views() {
   $handler->display->display_options['fields']['field_s_image_caption']['alter']['strip_tags'] = TRUE;
   $handler->display->display_options['fields']['field_s_image_caption']['alter']['trim'] = TRUE;
   $handler->display->display_options['fields']['field_s_image_caption']['alter']['preserve_tags'] = '<em> <strong>';
+  $handler->display->display_options['fields']['field_s_image_caption']['alter']['html'] = TRUE;
   $handler->display->display_options['fields']['field_s_image_caption']['element_label_colon'] = FALSE;
   /* Field: Content: Edit link */
   $handler->display->display_options['fields']['edit_node']['id'] = 'edit_node';
@@ -586,6 +589,7 @@ function stanford_carousel_views_default_views() {
   $handler->display->display_options['fields']['field_s_image_caption']['alter']['strip_tags'] = TRUE;
   $handler->display->display_options['fields']['field_s_image_caption']['alter']['trim'] = TRUE;
   $handler->display->display_options['fields']['field_s_image_caption']['alter']['preserve_tags'] = '<em> <strong>';
+  $handler->display->display_options['fields']['field_s_image_caption']['alter']['html'] = TRUE;
   $handler->display->display_options['fields']['field_s_image_caption']['element_label_colon'] = FALSE;
   /* Field: Content: Edit link */
   $handler->display->display_options['fields']['edit_node']['id'] = 'edit_node';
@@ -749,6 +753,7 @@ function stanford_carousel_views_default_views() {
   $handler->display->display_options['fields']['field_s_image_caption']['alter']['strip_tags'] = TRUE;
   $handler->display->display_options['fields']['field_s_image_caption']['alter']['trim'] = TRUE;
   $handler->display->display_options['fields']['field_s_image_caption']['alter']['preserve_tags'] = '<em> <strong>';
+  $handler->display->display_options['fields']['field_s_image_caption']['alter']['html'] = TRUE;
   $handler->display->display_options['fields']['field_s_image_caption']['element_label_colon'] = FALSE;
   /* Field: Content: Edit link */
   $handler->display->display_options['fields']['edit_node']['id'] = 'edit_node';

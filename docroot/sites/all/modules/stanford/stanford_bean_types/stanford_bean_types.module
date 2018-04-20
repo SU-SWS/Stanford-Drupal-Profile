@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * Code for the Stanford Bean Types feature.
@@ -7,12 +8,11 @@
 include_once 'stanford_bean_types.features.inc';
 
 /**
- * Implements hook_bean_types.
+ * Implements hook_bean_types().
+ *
  * This function exists only for installation purposes and beans are
  * exported and managed through the ui.
  * See: https://drupal.org/node/1897834 for issue details.
- *
- * @return array of bean types
  */
 function stanford_bean_types_bean_types() {
   include_once "stanford_bean_types.bean.inc";
@@ -23,7 +23,7 @@ function stanford_bean_types_bean_types() {
   foreach ($types as $k => $bean_type) {
     $plugins[$k] = array(
       'label' => $bean_type->name,
-      'description' => t($bean_type->description),
+      'description' => $bean_type->description,
       'handler' => array(
         'class' => 'BeanDefault',
         'parent' => 'bean',
@@ -42,105 +42,40 @@ function stanford_bean_types_bean_types() {
   return $plugins;
 }
 
-
 /**
  * Implements template_preprocess_field().
  */
 function stanford_bean_types_preprocess_field(&$variables) {
   $field_name = $variables['element']['#field_name'];
-  $module_path = drupal_get_path('module', 'stanford_bean_types');
-  if ($field_name == 'field_s_smc_facebook') {
-    global $base_url;
-    $fb_logo = $base_url . '/' . $module_path . '/images/facebook.png';
-    $markup = '<a href="' . $variables['element']['#items'][0]['display_url'] . '">';
-    $markup .= '<img src="' . $fb_logo . '" alt="' . $variables['element']['#items'][0]['title'] . '" title="' . $variables['element']['#items'][0]['title'] . '" /></a>';
-    $variables['items'][0]['#markup'] = $markup;
-
-    return;
+  if ($field_name == 'field_s_smc_icon') {
+    $field_collection = $variables['element']['#object'];
+    $variables['classes_array'][] = $field_collection->field_s_smc_color[LANGUAGE_NONE][0]['value'];
   }
-  if ($field_name == 'field_s_smc_flickr') {
-    global $base_url;
-    $fl_logo = $base_url . '/' . $module_path . '/images/flickr.png';
-    $markup = '<a href="' . $variables['element']['#items'][0]['display_url'] . '">';
-    $markup .= '<img src="' . $fl_logo . '" alt="' . $variables['element']['#items'][0]['title'] . '" title="' . $variables['element']['#items'][0]['title'] . '" /></a>';
-    $variables['items'][0]['#markup'] = $markup;
 
-    return;
-  }
-  if ($field_name == 'field_s_smc_googleplus') {
-    global $base_url;
-    $go_logo = $base_url . '/' . $module_path . '/images/google.png';
-    $markup = '<a href="' . $variables['element']['#items'][0]['display_url'] . '">';
-    $markup .= '<img src="' . $go_logo . '" alt="' . $variables['element']['#items'][0]['title'] . '" title="' . $variables['element']['#items'][0]['title'] . '" /></a>';
-    $variables['items'][0]['#markup'] = $markup;
+  $fields = array(
+    'field_s_smc_facebook' => 'facebook.png',
+    'field_s_smc_flickr' => 'flickr.png',
+    'field_s_smc_googleplus' => 'google.png',
+    'field_s_smc_linkedin' => 'linkedin.png',
+    'field_s_smc_pinterest' => 'pinterest.png',
+    'field_s_smc_tumblr' => 'tumblr.png',
+    'field_s_smc_twitter' => 'twitter.png',
+    'field_s_smc_vimeo' => 'vimeo.png',
+    'field_s_smc_youtube' => 'youtube.png',
+    'field_s_smc_instagram' => 'instagram.png',
+    'field_s_smc_mail' => 'mail.png',
+  );
 
-    return;
-  }
-  if ($field_name == 'field_s_smc_linkedin') {
+  if (array_key_exists($field_name, $fields)) {
+    $module_path = drupal_get_path('module', 'stanford_bean_types');
     global $base_url;
-    $li_logo = $base_url . '/' . $module_path . '/images/linkedin.png';
+    $image = $fields[$field_name];
+    $logo = "$base_url/$module_path/images/$image";
     $markup = '<a href="' . $variables['element']['#items'][0]['display_url'] . '">';
-    $markup .= '<img src="' . $li_logo . '" alt="' . $variables['element']['#items'][0]['title'] . '" title="' . $variables['element']['#items'][0]['title'] . '" /></a>';
-    $variables['items'][0]['#markup'] = $markup;
-
-    return;
-  }
-  if ($field_name == 'field_s_smc_pinterest') {
-    global $base_url;
-    $pi_logo = $base_url . '/' . $module_path . '/images/pinterest.png';
-    $markup = '<a href="' . $variables['element']['#items'][0]['display_url'] . '">';
-    $markup .= '<img src="' . $pi_logo . '" alt="' . $variables['element']['#items'][0]['title'] . '" title="' . $variables['element']['#items'][0]['title'] . '" /></a>';
-    $variables['items'][0]['#markup'] = $markup;
-
-    return;
-  }
-  if ($field_name == 'field_s_smc_tumblr') {
-    global $base_url;
-    $tu_logo = $base_url . '/' . $module_path . '/images/tumblr.png';
-    $markup = '<a href="' . $variables['element']['#items'][0]['display_url'] . '">';
-    $markup .= '<img src="' . $tu_logo . '" alt="' . $variables['element']['#items'][0]['title'] . '" title="' . $variables['element']['#items'][0]['title'] . '" /></a>';
-    $variables['items'][0]['#markup'] = $markup;
-
-    return;
-  }
-  if ($field_name == 'field_s_smc_twitter') {
-    global $base_url;
-    $tw_logo = $base_url . '/' . $module_path . '/images/twitter.png';
-    $markup = '<a href="' . $variables['element']['#items'][0]['display_url'] . '">';
-    $markup .= '<img src="' . $tw_logo . '" alt="' . $variables['element']['#items'][0]['title'] . '" title="' . $variables['element']['#items'][0]['title'] . '" /></a>';
-    $variables['items'][0]['#markup'] = $markup;
-
-    return;
-  }
-  if ($field_name == 'field_s_smc_vimeo') {
-    global $base_url;
-    $vi_logo = $base_url . '/' . $module_path . '/images/vimeo.png';
-    $markup = '<a href="' . $variables['element']['#items'][0]['display_url'] . '">';
-    $markup .= '<img src="' . $vi_logo . '" alt="' . $variables['element']['#items'][0]['title'] . '" title="' . $variables['element']['#items'][0]['title'] . '" /></a>';
-    $variables['items'][0]['#markup'] = $markup;
-
-    return;
-  }
-  if ($field_name == 'field_s_smc_youtube') {
-    global $base_url;
-    $vi_logo = $base_url . '/' . $module_path . '/images/youtube.png';
-    $markup = '<a href="' . $variables['element']['#items'][0]['display_url'] . '">';
-    $markup .= '<img src="' . $vi_logo . '" alt="' . $variables['element']['#items'][0]['title'] . '" title="' . $variables['element']['#items'][0]['title'] . '" /></a>';
-    $variables['items'][0]['#markup'] = $markup;
-
-    return;
-  }
-  if ($field_name == 'field_s_smc_instagram') {
-    global $base_url;
-    $vi_logo = $base_url . '/' . $module_path . '/images/instagram.png';
-    $markup = '<a href="' . $variables['element']['#items'][0]['display_url'] . '">';
-    $markup .= '<img src="' . $vi_logo . '" alt="' . $variables['element']['#items'][0]['title'] . '" title="' . $variables['element']['#items'][0]['title'] . '" /></a>';
-    $variables['items'][0]['#markup'] = $markup;
-
-    return;
+    $markup .= '<img src="' . $logo . '" alt="' . $variables['element']['#items'][0]['title'] . '" title="' . $variables['element']['#items'][0]['title'] . '" /></a>';
+    $variables['items'][0] = array('#markup' => $markup);
   }
 }
-
 
 /**
  * Implements hook_block_view_alter().
@@ -149,11 +84,12 @@ function stanford_bean_types_block_view_alter(&$data, $block) {
 
   // If the block is an icon block we want to remove the subject.
   if ($block->module == "bean") {
-    if ($data["content"]["bean"][$block->delta]["#bundle"] == "stanford_icon_block") {
-      $data["subject"] = "";
+    if (isset($data["content"])) {
+      if ($data["content"]["bean"][$block->delta]["#bundle"] == "stanford_icon_block") {
+        $data["subject"] = "";
+      }
     }
   }
-
 }
 
 /**
@@ -165,18 +101,52 @@ function stanford_bean_types_block_view_alter(&$data, $block) {
  * with irrelevant view modes that do not necessarily apply to this bean.
  */
 function stanford_bean_types_form_bean_form_alter(&$form, $form_state, $form_id) {
+  if ($form_state['bean']->type == 'stanford_fw_image_block') {
+    // Hide title field so a user can't change it.
+    $form['title']['#type'] = 'hidden';
+    $form['title']['#value'] = $form['title']['#default_value'];
+  }
+
+  // Bean additional settings similar to node form.
+  // @see node_form().
+  $bean = $form_state['bean'];
+
+  $form['additional_settings'] = array(
+    '#type' => 'vertical_tabs',
+    '#weight' => 99,
+  );
+
+  $form['options'] = array(
+    '#type' => 'fieldset',
+    '#access' => user_access('administer beans'),
+    '#title' => t('Publishing options'),
+    '#collapsible' => TRUE,
+    '#collapsed' => TRUE,
+    '#group' => 'additional_settings',
+    '#attributes' => array(
+      'class' => array('node-form-options'),
+    ),
+    '#attached' => array(
+      'js' => array(drupal_get_path('module', 'node') . '/node.js'),
+    ),
+    '#weight' => 95,
+  );
+  $form['options']['status'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Published'),
+    '#default_value' => isset($bean->status) ? $bean->status : 1,
+  );
 
   // Change the label and title fields description.
-  $form['title']['#description'] = t('The title displays when the block is displayed on a page. Leave it blank if you don\'t want a title.');
+  $form['title']['#description'] = t("The title displays when the block is displayed on a page. Leave it blank if you don't want a title.");
   $form['label']['#description'] = t('The label identifies the block for administration purposes. It is <em>not displayed</em> when the block is displayed on a page. It is displayed in the admin interface and when the block is edited.');
 
-  // Fix the view_mode select option to only show view modes with custom settings.
+  // Fix the view_mode select option to only show view modes with custom
+  // settings.
   $options = array();
 
   // Always have default.
   $options['default'] = t("Default");
-
-  $entity = FALSE;
 
   if (isset($form['#entity_type']) && isset($form[$form['#entity_type']]["#value"])) {
     $entity = entity_metadata_wrapper($form['#entity_type'], $form[$form['#entity_type']]["#value"]);
@@ -185,12 +155,12 @@ function stanford_bean_types_form_bean_form_alter(&$form, $form_state, $form_id)
   elseif (isset($form["#entity"])) {
     $entity = entity_metadata_wrapper($form['#entity']->type, $form["#entity"]);
   }
-
-  // If we cannot find an entity to work on then just go away.
-  if (!$entity) {
+  else {
+    // If we cannot find an entity to work on then just go away.
     return;
   }
 
+  /** @var EntityDrupalWrapper $entity */
   $bean_info = $entity->entityInfo();
   $view_mode_settings = field_view_mode_settings('bean', $entity->getBundle());
   $enabled = array();
@@ -205,8 +175,108 @@ function stanford_bean_types_form_bean_form_alter(&$form, $form_state, $form_id)
   $options = array_merge($options, $enabled);
 
   $form['view_mode']['#options'] = $options;
-
 }
 
+/**
+ * Implements hook_entity_insert().
+ */
+function stanford_bean_types_entity_insert($entity, $type) {
+  if ($type == 'bean') {
+    _stanford_bean_types_bean_status_set($entity);
+  }
+}
 
+/**
+ * Implements hook_entity_update().
+ */
+function stanford_bean_types_entity_update($entity, $type) {
+  if ($type == 'bean') {
+    _stanford_bean_types_bean_status_set($entity);
+  }
+}
 
+/**
+ * Implements hook_entity_delete().
+ */
+function stanford_bean_types_entity_delete($entity, $type) {
+  if ($type == 'bean') {
+    $entity->status = 0;
+    _stanford_bean_types_bean_status_set($entity);
+  }
+}
+
+/**
+ * Sets a variable if the bean is set to unpublished.
+ *
+ * @param object $bean
+ *   Bean object.
+ */
+function _stanford_bean_types_bean_status_set($bean) {
+  if (isset($bean->status)) {
+    $unpublished = variable_get('stanford_bean_types_unpublished', array());
+    if (!$bean->status) {
+      $unpublished[$bean->bid] = TRUE;
+    }
+    else {
+      unset($unpublished[$bean->bid]);
+    }
+    variable_set('stanford_bean_types_unpublished', $unpublished);
+  }
+}
+
+/**
+ * Implements hook_entity_load().
+ */
+function stanford_bean_types_entity_load($entities, $type) {
+  if ($type == 'bean') {
+    $unpublished = variable_get('stanford_bean_types_unpublished', array());
+    foreach ($entities as &$entity) {
+
+      $entity->status = 1;
+      if (isset($unpublished[$entity->bid])) {
+        $entity->status = 0;
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_bean_access().
+ */
+function stanford_bean_types_bean_access($bean, $operation, $account) {
+  if ($operation == "view" && isset($bean->status) && !$bean->status) {
+    return FALSE;
+  }
+  return TRUE;
+}
+
+/**
+ * Implements hook_preprocess_entity().
+ */
+function stanford_bean_types_preprocess_entity(&$vars) {
+  if ($vars['entity_type'] == 'bean') {
+    drupal_add_css(drupal_get_path('module', 'stanford_bean_types') . '/css/stanford_bean_types.css');
+
+    if (!$vars['bean']->status) {
+      $vars['classes_array'][] = 'unpublished';
+    }
+  }
+}
+
+/**
+ * Implements hook_field_attach_form().
+ */
+function stanford_bean_types_field_attach_form($entity_type, $entity, &$form, &$form_state, $langcode) {
+  if (isset($form['field_s_smc_color'])) {
+    drupal_add_css(drupal_get_path('module', 'stanford_bean_types') . '/css/stanford_bean_types.admin.css');
+  }
+}
+
+/**
+ * Implements hook_field_widget_form_alter().
+ */
+function stanford_bean_types_field_widget_form_alter(&$element, &$form_state, $context) {
+  if (isset($element['field_s_smc_color'])) {
+    $element['field_s_smc_color'][LANGUAGE_NONE]['#chosen'] = FALSE;
+  }
+}

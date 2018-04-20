@@ -1,0 +1,10 @@
+{
+  "name": "su-sws/stanford_easy_wysiwyg_css",
+  "description": "A Drupal feature.",
+  "type": "drupal-custom-module",
+  "license": "GPL-2.0+",
+  "minimum-stability": "dev",
+  "require": {
+      "composer/installers": "^1.2"
+  }
+}

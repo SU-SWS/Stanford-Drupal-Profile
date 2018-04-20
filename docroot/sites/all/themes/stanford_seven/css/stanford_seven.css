@@ -1,6 +1,6 @@
 /* ----- Admin Shortcuts -------- */
 .admin-shortcuts {font-size:12px; }
-#admin-shortcuts {background: #4D4F53; margin: 0px; padding: 3px 10px;}
+#admin-shortcuts {background: #4D4F53; margin: 0px; padding: 3px 10px; font-family: "Lucida Grande", "Lucida Sans Unicode", sans-serif;  }
 #admin-shortcuts .nav {margin: 0; padding: 0;}
 #admin-shortcuts .content a {background: #4D4F53; color: #fff; padding: 3px 10px; display:block;}
 #admin-shortcuts .content a:hover, #admin-shortcuts .block a:active {background: #222; -webkit-border-radius: 10px; -moz-border-radius: 10px; border-radius: 10px; text-decoration: none;}

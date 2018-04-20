@@ -11,6 +11,7 @@ Drupal.behaviors.stanford_gallery = {
       rel : "group",
       scalePhotos : true,
       returnFocus : true,
+      trapFocus: true,
       maxWidth : "98%",
       maxHeight : "90%",
       title: function() {
@@ -56,4 +57,9 @@ StanfordGallery.caption = function(element) {
   return caption;
 };
 
-
+// Add spoken feedback to the next/prev buttons.
+jQuery(document).bind('cbox_complete', function() {
+  jQuery("#cboxTitle .caption")
+    .attr("role", "status")
+    .attr("aria-live", "assertive");
+});

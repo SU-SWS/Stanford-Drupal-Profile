@@ -1,11 +1,14 @@
 <?php
+
 /**
  * @file
- * This module has a plugin for allowing direct string replacement from a table
- * in the database. It is primarily used on the new field in this module. The new
- * field is appended to stanford_course content types to allow for a translation
- * between the tags that come from explorecourses.stanford.edu and the end user.
+ * stanford_courses_tag_translate.module
  *
+ * This module has a plugin for allowing direct string replacement from a table
+ *   in the database. It is primarily used on the new field in this module. The
+ *   new field is appended to stanford_course content types to allow for a
+ *   translation between the tags that come from explorecourses.stanford.edu
+ *   and the end user.
  */
 
 include_once 'stanford_courses_tag_translate.features.inc';
@@ -142,10 +145,10 @@ function stanford_courses_tag_translate_get_translation_table() {
  */
 function stanford_courses_tag_translate_get_all_translations() {
   $results = db_select("stanford_courses_tag", "sct")
-              ->fields("sct", array("ctag", "chuman", "ctid"))
-              ->orderBy("ctag")
-              ->execute()
-              ->fetchAllAssoc("ctag");
+    ->fields("sct", array("ctag", "chuman", "ctid"))
+    ->orderBy("ctag")
+    ->execute()
+    ->fetchAllAssoc("ctag");
 
   // Tags are in a weird THIS::3that format and needs some fancy sorting.
   ksort($results, SORT_NATURAL | SORT_FLAG_CASE);
@@ -179,11 +182,11 @@ function stanford_courses_tag_translate_get_all_translations_array() {
  */
 function stanford_courses_tag_translate_get_translation($id) {
   $results = db_select("stanford_courses_tag", "sct")
-              ->fields("sct", array("ctag", "chuman", "ctid"))
-              ->condition("ctid", $id)
-              ->orderBy("ctag")
-              ->execute()
-              ->fetchAllAssoc("ctid");
+    ->fields("sct", array("ctag", "chuman", "ctid"))
+    ->condition("ctid", $id)
+    ->orderBy("ctag")
+    ->execute()
+    ->fetchAllAssoc("ctid");
 
   return $results[$id];
 }

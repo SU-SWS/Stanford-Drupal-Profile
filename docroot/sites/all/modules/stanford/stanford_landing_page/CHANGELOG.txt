@@ -1,10 +1,16 @@
 Stanford Landing Page
 ------------------------------------------------------
 
+7.x-1.6-beta1                              2017-02-23
+------------------------------------------------------
+- Added a checkered layout option for alternating
+  images from left to right.
 
-7.x-1.4+3-dev                              2016-06-08
+7.x-1.5                                     2017-01-05
 ------------------------------------------------------
 - BASIC-2027: Fix up column class for titles
+- Minor documenation edits
+- Code Climate Integration
 
 7.x-1.4                                    2015-11-10
 ------------------------------------------------------

@@ -8,7 +8,7 @@
  * Implements hook_field_group_info().
  */
 function stanford_person_field_group_info() {
-  $export = array();
+  $field_groups = array();
 
   $field_group = new stdClass();
   $field_group->disabled = FALSE; /* Edit this to true to make a default field_group disabled initially */
@@ -39,7 +39,7 @@ function stanford_person_field_group_info() {
       'formatter' => 'open',
     ),
   );
-  $export['group_morelink_group|node|stanford_person|full'] = $field_group;
+  $field_groups['group_morelink_group|node|stanford_person|full'] = $field_group;
 
   $field_group = new stdClass();
   $field_group->disabled = FALSE; /* Edit this to true to make a default field_group disabled initially */
@@ -71,7 +71,7 @@ function stanford_person_field_group_info() {
       'formatter' => 'open',
     ),
   );
-  $export['group_s_about|node|stanford_person|stanford_cap'] = $field_group;
+  $field_groups['group_s_about|node|stanford_person|stanford_cap'] = $field_group;
 
   $field_group = new stdClass();
   $field_group->disabled = FALSE; /* Edit this to true to make a default field_group disabled initially */
@@ -107,7 +107,7 @@ function stanford_person_field_group_info() {
       'formatter' => 'open',
     ),
   );
-  $export['group_s_contact|node|stanford_person|stanford_cap'] = $field_group;
+  $field_groups['group_s_contact|node|stanford_person|stanford_cap'] = $field_group;
 
   $field_group = new stdClass();
   $field_group->disabled = FALSE; /* Edit this to true to make a default field_group disabled initially */
@@ -138,7 +138,7 @@ function stanford_person_field_group_info() {
       'formatter' => 'open',
     ),
   );
-  $export['group_s_image_border_style|node|stanford_person|full'] = $field_group;
+  $field_groups['group_s_image_border_style|node|stanford_person|full'] = $field_group;
 
   $field_group = new stdClass();
   $field_group->disabled = FALSE; /* Edit this to true to make a default field_group disabled initially */
@@ -170,7 +170,7 @@ function stanford_person_field_group_info() {
       'formatter' => 'open',
     ),
   );
-  $export['group_s_image_border_style|node|stanford_person|stanford_cap'] = $field_group;
+  $field_groups['group_s_image_border_style|node|stanford_person|stanford_cap'] = $field_group;
 
   $field_group = new stdClass();
   $field_group->disabled = FALSE; /* Edit this to true to make a default field_group disabled initially */
@@ -202,7 +202,7 @@ function stanford_person_field_group_info() {
       'formatter' => 'open',
     ),
   );
-  $export['group_s_interest_style|node|stanford_person|stanford_cap'] = $field_group;
+  $field_groups['group_s_interest_style|node|stanford_person|stanford_cap'] = $field_group;
 
   $field_group = new stdClass();
   $field_group->disabled = FALSE; /* Edit this to true to make a default field_group disabled initially */
@@ -233,7 +233,7 @@ function stanford_person_field_group_info() {
       'formatter' => 'open',
     ),
   );
-  $export['group_s_person_about|node|stanford_person|default'] = $field_group;
+  $field_groups['group_s_person_about|node|stanford_person|default'] = $field_group;
 
   $field_group = new stdClass();
   $field_group->disabled = FALSE; /* Edit this to true to make a default field_group disabled initially */
@@ -265,7 +265,7 @@ function stanford_person_field_group_info() {
       'formatter' => 'open',
     ),
   );
-  $export['group_s_person_about|node|stanford_person|full'] = $field_group;
+  $field_groups['group_s_person_about|node|stanford_person|full'] = $field_group;
 
   $field_group = new stdClass();
   $field_group->disabled = FALSE; /* Edit this to true to make a default field_group disabled initially */
@@ -294,7 +294,7 @@ function stanford_person_field_group_info() {
       'formatter' => 'collapsed',
     ),
   );
-  $export['group_s_person_advanced|node|stanford_person|form'] = $field_group;
+  $field_groups['group_s_person_advanced|node|stanford_person|form'] = $field_group;
 
   $field_group = new stdClass();
   $field_group->disabled = FALSE; /* Edit this to true to make a default field_group disabled initially */
@@ -327,7 +327,7 @@ function stanford_person_field_group_info() {
       'formatter' => 'open',
     ),
   );
-  $export['group_s_person_basic|node|stanford_person|form'] = $field_group;
+  $field_groups['group_s_person_basic|node|stanford_person|form'] = $field_group;
 
   $field_group = new stdClass();
   $field_group->disabled = FALSE; /* Edit this to true to make a default field_group disabled initially */
@@ -358,7 +358,7 @@ function stanford_person_field_group_info() {
       'formatter' => 'collapsed',
     ),
   );
-  $export['group_s_person_bio|node|stanford_person|form'] = $field_group;
+  $field_groups['group_s_person_bio|node|stanford_person|form'] = $field_group;
 
   $field_group = new stdClass();
   $field_group->disabled = FALSE; /* Edit this to true to make a default field_group disabled initially */
@@ -393,7 +393,7 @@ function stanford_person_field_group_info() {
       'formatter' => 'collapsed',
     ),
   );
-  $export['group_s_person_contact|node|stanford_person|form'] = $field_group;
+  $field_groups['group_s_person_contact|node|stanford_person|form'] = $field_group;
 
   $field_group = new stdClass();
   $field_group->disabled = FALSE; /* Edit this to true to make a default field_group disabled initially */
@@ -422,7 +422,7 @@ function stanford_person_field_group_info() {
       'formatter' => 'collapsed',
     ),
   );
-  $export['group_s_person_faculty|node|stanford_person|form'] = $field_group;
+  $field_groups['group_s_person_faculty|node|stanford_person|form'] = $field_group;
 
   $field_group = new stdClass();
   $field_group->disabled = FALSE; /* Edit this to true to make a default field_group disabled initially */
@@ -450,7 +450,7 @@ function stanford_person_field_group_info() {
       'formatter' => 'collapsed',
     ),
   );
-  $export['group_s_person_staff|node|stanford_person|form'] = $field_group;
+  $field_groups['group_s_person_staff|node|stanford_person|form'] = $field_group;
 
   $field_group = new stdClass();
   $field_group->disabled = FALSE; /* Edit this to true to make a default field_group disabled initially */
@@ -481,7 +481,7 @@ function stanford_person_field_group_info() {
       'formatter' => 'open',
     ),
   );
-  $export['group_s_person_status_style|node|stanford_person|taxonomy'] = $field_group;
+  $field_groups['group_s_person_status_style|node|stanford_person|taxonomy'] = $field_group;
 
   $field_group = new stdClass();
   $field_group->disabled = FALSE; /* Edit this to true to make a default field_group disabled initially */
@@ -513,7 +513,7 @@ function stanford_person_field_group_info() {
       'formatter' => 'collapsed',
     ),
   );
-  $export['group_s_person_student|node|stanford_person|form'] = $field_group;
+  $field_groups['group_s_person_student|node|stanford_person|form'] = $field_group;
 
   $field_group = new stdClass();
   $field_group->disabled = FALSE; /* Edit this to true to make a default field_group disabled initially */
@@ -544,7 +544,7 @@ function stanford_person_field_group_info() {
       'formatter' => 'open',
     ),
   );
-  $export['group_s_person_style_interests|node|stanford_person|full'] = $field_group;
+  $field_groups['group_s_person_style_interests|node|stanford_person|full'] = $field_group;
 
   $field_group = new stdClass();
   $field_group->disabled = FALSE; /* Edit this to true to make a default field_group disabled initially */
@@ -576,7 +576,7 @@ function stanford_person_field_group_info() {
       'formatter' => 'open',
     ),
   );
-  $export['group_s_personal_link_style|node|stanford_person|stanford_cap'] = $field_group;
+  $field_groups['group_s_personal_link_style|node|stanford_person|stanford_cap'] = $field_group;
 
   $field_group = new stdClass();
   $field_group->disabled = FALSE; /* Edit this to true to make a default field_group disabled initially */
@@ -607,7 +607,7 @@ function stanford_person_field_group_info() {
       'formatter' => 'open',
     ),
   );
-  $export['group_s_postcard_col1|node|stanford_person|default'] = $field_group;
+  $field_groups['group_s_postcard_col1|node|stanford_person|default'] = $field_group;
 
   $field_group = new stdClass();
   $field_group->disabled = FALSE; /* Edit this to true to make a default field_group disabled initially */
@@ -638,7 +638,7 @@ function stanford_person_field_group_info() {
       'formatter' => 'open',
     ),
   );
-  $export['group_s_postcard_col1|node|stanford_person|full'] = $field_group;
+  $field_groups['group_s_postcard_col1|node|stanford_person|full'] = $field_group;
 
   $field_group = new stdClass();
   $field_group->disabled = FALSE; /* Edit this to true to make a default field_group disabled initially */
@@ -670,7 +670,7 @@ function stanford_person_field_group_info() {
       'formatter' => 'open',
     ),
   );
-  $export['group_s_postcard_col1|node|stanford_person|stanford_cap'] = $field_group;
+  $field_groups['group_s_postcard_col1|node|stanford_person|stanford_cap'] = $field_group;
 
   $field_group = new stdClass();
   $field_group->disabled = FALSE; /* Edit this to true to make a default field_group disabled initially */
@@ -703,7 +703,7 @@ function stanford_person_field_group_info() {
       'formatter' => 'open',
     ),
   );
-  $export['group_s_postcard_col1|node|stanford_person|stanford_taxonomy'] = $field_group;
+  $field_groups['group_s_postcard_col1|node|stanford_person|stanford_taxonomy'] = $field_group;
 
   $field_group = new stdClass();
   $field_group->disabled = FALSE; /* Edit this to true to make a default field_group disabled initially */
@@ -739,7 +739,7 @@ function stanford_person_field_group_info() {
       'formatter' => 'open',
     ),
   );
-  $export['group_s_postcard_col2|node|stanford_person|default'] = $field_group;
+  $field_groups['group_s_postcard_col2|node|stanford_person|default'] = $field_group;
 
   $field_group = new stdClass();
   $field_group->disabled = FALSE; /* Edit this to true to make a default field_group disabled initially */
@@ -774,7 +774,7 @@ function stanford_person_field_group_info() {
       'formatter' => 'open',
     ),
   );
-  $export['group_s_postcard_col2|node|stanford_person|full'] = $field_group;
+  $field_groups['group_s_postcard_col2|node|stanford_person|full'] = $field_group;
 
   $field_group = new stdClass();
   $field_group->disabled = FALSE; /* Edit this to true to make a default field_group disabled initially */
@@ -814,7 +814,7 @@ function stanford_person_field_group_info() {
       'formatter' => 'open',
     ),
   );
-  $export['group_s_postcard_col2|node|stanford_person|stanford_cap'] = $field_group;
+  $field_groups['group_s_postcard_col2|node|stanford_person|stanford_cap'] = $field_group;
 
   $field_group = new stdClass();
   $field_group->disabled = FALSE; /* Edit this to true to make a default field_group disabled initially */
@@ -851,7 +851,7 @@ function stanford_person_field_group_info() {
       'formatter' => 'open',
     ),
   );
-  $export['group_s_postcard_col2|node|stanford_person|stanford_taxonomy'] = $field_group;
+  $field_groups['group_s_postcard_col2|node|stanford_person|stanford_taxonomy'] = $field_group;
 
   $field_group = new stdClass();
   $field_group->disabled = FALSE; /* Edit this to true to make a default field_group disabled initially */
@@ -881,7 +881,7 @@ function stanford_person_field_group_info() {
       ),
     ),
   );
-  $export['group_s_postcard_col3|node|stanford_person|stanford_taxonomy'] = $field_group;
+  $field_groups['group_s_postcard_col3|node|stanford_person|stanford_taxonomy'] = $field_group;
 
   $field_group = new stdClass();
   $field_group->disabled = FALSE; /* Edit this to true to make a default field_group disabled initially */
@@ -912,7 +912,7 @@ function stanford_person_field_group_info() {
       'formatter' => 'open',
     ),
   );
-  $export['group_s_postcard_col3|node|stanford_person|taxonomy'] = $field_group;
+  $field_groups['group_s_postcard_col3|node|stanford_person|taxonomy'] = $field_group;
 
   $field_group = new stdClass();
   $field_group->disabled = FALSE; /* Edit this to true to make a default field_group disabled initially */
@@ -949,7 +949,7 @@ function stanford_person_field_group_info() {
       'formatter' => 'open',
     ),
   );
-  $export['group_s_postcard_content|node|stanford_person|taxonomy'] = $field_group;
+  $field_groups['group_s_postcard_content|node|stanford_person|taxonomy'] = $field_group;
 
   $field_group = new stdClass();
   $field_group->disabled = FALSE; /* Edit this to true to make a default field_group disabled initially */
@@ -980,7 +980,7 @@ function stanford_person_field_group_info() {
       'formatter' => 'open',
     ),
   );
-  $export['group_s_postcard_image|node|stanford_person|taxonomy'] = $field_group;
+  $field_groups['group_s_postcard_image|node|stanford_person|taxonomy'] = $field_group;
 
   $field_group = new stdClass();
   $field_group->disabled = FALSE; /* Edit this to true to make a default field_group disabled initially */
@@ -1012,7 +1012,7 @@ function stanford_person_field_group_info() {
       'formatter' => 'open',
     ),
   );
-  $export['group_s_postcard|node|stanford_person|default'] = $field_group;
+  $field_groups['group_s_postcard|node|stanford_person|default'] = $field_group;
 
   $field_group = new stdClass();
   $field_group->disabled = FALSE; /* Edit this to true to make a default field_group disabled initially */
@@ -1044,7 +1044,7 @@ function stanford_person_field_group_info() {
       'formatter' => 'open',
     ),
   );
-  $export['group_s_postcard|node|stanford_person|full'] = $field_group;
+  $field_groups['group_s_postcard|node|stanford_person|full'] = $field_group;
 
   $field_group = new stdClass();
   $field_group->disabled = FALSE; /* Edit this to true to make a default field_group disabled initially */
@@ -1077,7 +1077,7 @@ function stanford_person_field_group_info() {
       'formatter' => 'open',
     ),
   );
-  $export['group_s_postcard|node|stanford_person|stanford_cap'] = $field_group;
+  $field_groups['group_s_postcard|node|stanford_person|stanford_cap'] = $field_group;
 
   $field_group = new stdClass();
   $field_group->disabled = FALSE; /* Edit this to true to make a default field_group disabled initially */
@@ -1110,7 +1110,7 @@ function stanford_person_field_group_info() {
       'formatter' => 'open',
     ),
   );
-  $export['group_s_postcard|node|stanford_person|stanford_taxonomy'] = $field_group;
+  $field_groups['group_s_postcard|node|stanford_person|stanford_taxonomy'] = $field_group;
 
   $field_group = new stdClass();
   $field_group->disabled = FALSE; /* Edit this to true to make a default field_group disabled initially */
@@ -1143,7 +1143,7 @@ function stanford_person_field_group_info() {
       'formatter' => 'open',
     ),
   );
-  $export['group_s_postcard|node|stanford_person|taxonomy'] = $field_group;
+  $field_groups['group_s_postcard|node|stanford_person|taxonomy'] = $field_group;
 
   $field_group = new stdClass();
   $field_group->disabled = FALSE; /* Edit this to true to make a default field_group disabled initially */
@@ -1175,7 +1175,7 @@ function stanford_person_field_group_info() {
       'formatter' => 'open',
     ),
   );
-  $export['group_s_profile_link_style|node|stanford_person|stanford_cap'] = $field_group;
+  $field_groups['group_s_profile_link_style|node|stanford_person|stanford_cap'] = $field_group;
 
   $field_group = new stdClass();
   $field_group->disabled = FALSE; /* Edit this to true to make a default field_group disabled initially */
@@ -1207,7 +1207,7 @@ function stanford_person_field_group_info() {
       'formatter' => 'open',
     ),
   );
-  $export['group_s_research_interests|node|stanford_person|stanford_cap'] = $field_group;
+  $field_groups['group_s_research_interests|node|stanford_person|stanford_cap'] = $field_group;
 
   $field_group = new stdClass();
   $field_group->disabled = FALSE; /* Edit this to true to make a default field_group disabled initially */
@@ -1239,7 +1239,33 @@ function stanford_person_field_group_info() {
       'formatter' => 'open',
     ),
   );
-  $export['group_s_status_style|node|stanford_person|stanford_cap'] = $field_group;
+  $field_groups['group_s_status_style|node|stanford_person|stanford_cap'] = $field_group;
 
-  return $export;
+  // Translatables
+  // Included for use with string extractors like potx.
+  t('About');
+  t('Advanced');
+  t('Basic Info');
+  t('Bio');
+  t('Contact');
+  t('Faculty Info');
+  t('Faculty Status Style');
+  t('Image Border Style');
+  t('Interest Style');
+  t('Interests Style');
+  t('More Link group');
+  t('Personal info Link Style');
+  t('Postcard');
+  t('Postcard Column 1');
+  t('Postcard Column 2');
+  t('Postcard Column 3');
+  t('Postcard Content');
+  t('Postcard Image');
+  t('Profile Link Style');
+  t('Research Interests');
+  t('Staff Info');
+  t('Status Style');
+  t('Student Info');
+
+  return $field_groups;
 }

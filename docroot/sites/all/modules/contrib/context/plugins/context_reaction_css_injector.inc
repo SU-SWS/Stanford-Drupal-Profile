@@ -24,7 +24,7 @@ class context_reaction_css_injector extends context_reaction {
       if (!empty($context->reactions[$this->plugin])) {
         foreach ($context->reactions[$this->plugin] as $crid => $enabled) {
           if ($enabled && $css_rule = _css_injector_load_rule($crid)) {
-            drupal_add_css(_css_injector_rule_uri($crid), 'module', $css_rule['media'], $css_rule['preprocess']);
+            drupal_add_css(_css_injector_rule_uri($crid), array('type' => 'file', 'media' => $css_rule['media'], 'preprocess' => $css_rule['preprocess']));
           }
         }
       }

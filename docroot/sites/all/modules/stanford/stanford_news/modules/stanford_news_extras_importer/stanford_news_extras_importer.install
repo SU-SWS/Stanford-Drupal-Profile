@@ -1,0 +1,45 @@
+<?php
+
+/**
+ * @file
+ * Stanford News Extras Importer INstall.
+ */
+
+/**
+ * Change importer for existing nodes and unpublish them.
+ */
+function stanford_news_extras_importer_update_7101() {
+  $query = db_select('feeds_source', 'f')
+    ->fields('f', array('feed_nid'))
+    ->condition('id', 'stanford_news_extras_feed_importer')
+    ->execute();
+  while ($nid = $query->fetchField()) {
+    $node = node_load($nid);
+    node_unpublish_action($node);
+    node_save($node);
+  }
+
+  db_update('feeds_source')
+    ->condition('id', 'stanford_news_extras_feed_importer')
+    ->fields(array('id' => 'stanford_news_importer_xml'))->execute();
+  db_update('feeds_item')
+    ->condition('id', 'stanford_news_extras_feed_importer')
+    ->fields(array('id' => 'stanford_news_importer_xml'))->execute();
+  db_update('feeds_log')
+    ->condition('id', 'stanford_news_extras_feed_importer')
+    ->fields(array('id' => 'stanford_news_importer_xml'))->execute();
+  db_update('feeds_tamper')
+    ->condition('importer', 'stanford_news_extras_feed_importer')
+    ->fields(array('importer' => 'stanford_news_importer_xml'))->execute();
+
+  /** @var FeedsSource $source */
+  $source = feeds_source('stanford_news_extras_feed_importer');
+  $source->delete();
+}
+
+/**
+ * Disable module.
+ */
+function stanford_news_extras_importer_update_7102() {
+  module_disable(array('stanford_news_extras_importer'));
+}

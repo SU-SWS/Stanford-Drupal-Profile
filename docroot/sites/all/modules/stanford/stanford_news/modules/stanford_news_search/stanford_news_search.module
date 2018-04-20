@@ -1,0 +1,8 @@
+<?php
+
+/**
+ * @file
+ * Code for the Stanford News Search feature.
+ */
+
+include_once 'stanford_news_search.features.inc';

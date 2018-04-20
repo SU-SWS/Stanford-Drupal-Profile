@@ -5,3 +5,8 @@ External Repository Update Status x.x-x.x, xxxx-xx-xx
 ------------------------------------
 - Add check for drush version
 - Fixed incorrect function call
+
+7.x-1.2-alpha1            2017-1-24
+-----------------------------------
+- Aligned with SOD
+- Added Code Climate

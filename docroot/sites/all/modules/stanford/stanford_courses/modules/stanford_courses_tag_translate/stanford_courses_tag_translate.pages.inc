@@ -25,11 +25,11 @@ function stanford_courses_tag_translate_settings() {
   if (!$results) {
 
     $render["ttable"]["#markup"] = "<h3>" . t("No, translations found. Please start by !create or !import.",
-      array(
-        '!create' => l(t("creating one"), "admin/config/stanford/courses/tag-translate/new"),
-        '!import' => l(t("importing some defaults"), "admin/config/stanford/courses/tag-translate/import"),
-      )
-    );
+        array(
+          '!create' => l(t("creating one"), "admin/config/stanford/courses/tag-translate/new"),
+          '!import' => l(t("importing some defaults"), "admin/config/stanford/courses/tag-translate/import"),
+        )
+      );
   }
 
   // Put all of the values in to one big table.
@@ -42,8 +42,10 @@ function stanford_courses_tag_translate_settings() {
 
 /**
  * [stanford_courses_tag_default_value_form description]
+ *
  * @param  [type] $form       [description]
  * @param  [type] $form_state [description]
+ *
  * @return [type]             [description]
  */
 function stanford_courses_tag_default_value_form($form, &$form_state) {
@@ -75,15 +77,17 @@ function stanford_courses_tag_default_value_form($form, &$form_state) {
 
 /**
  * [stanford_courses_tag_default_value_form_submit description]
+ *
  * @param  [type] $form        [description]
  * @param  [type] &$form_state [description]
+ *
  * @return [type]              [description]
  */
 function stanford_courses_tag_default_value_form_submit($form, &$form_state) {
   $values = $form_state["values"];
   $clean = check_plain($values["tag_default"]);
   variable_set("stanford_courses_tag_translation_tag_default", $clean);
-  drupal_set_message("Default values successfully updated");
+  drupal_set_message(t("Default values successfully updated"));
 }
 
 /**
@@ -210,9 +214,9 @@ function stanford_courses_tag_translate_fields_form_validate(&$form, &$form_stat
 
     // Look for what was submitted in the database.
     $result = db_select('stanford_courses_tag', 'sct')
-            ->fields('sct')
-            ->condition("ctag", check_plain($values["ctag"]))
-            ->execute();
+      ->fields('sct')
+      ->condition("ctag", check_plain($values["ctag"]))
+      ->execute();
 
     // If we get a result then throw up an error in that users face!
     if ($result->rowCount()) {
@@ -259,7 +263,7 @@ function stanford_courses_tag_translate_fields_form_submit(&$form, &$form_state)
 
   // That was nice you to let the user know the process worked. Do you want to
   // redirect to another page? No, they probably have more to insert.
-  drupal_set_message("Tag translation was saved successfully", "status");
+  drupal_set_message(t("Tag translation was saved successfully"), "status");
 }
 
 
@@ -276,7 +280,7 @@ function stanford_courses_tag_translate_edit($ctid) {
   // $ctid is passed in through the menu hook and should be numeric but users
   // do funny things and we don't trust them hobbitses.
   if (!is_numeric($ctid)) {
-    drupal_set_message("Invalid course tag translation id.", "error");
+    drupal_set_message(t("Invalid course tag translation id."), "error");
     return drupal_not_found();
   }
 
@@ -284,7 +288,7 @@ function stanford_courses_tag_translate_edit($ctid) {
   $tobj = stanford_courses_tag_translate_get_translation($ctid);
 
   if (!$tobj) {
-    drupal_set_message("Invalid course tag translation id.", "error");
+    drupal_set_message(t("Invalid course tag translation id."), "error");
     return drupal_not_found();
   }
 
@@ -314,7 +318,7 @@ function stanford_courses_tag_translate_delete_form($form, &$form_state, $ctid) 
 
   // If not a valid param then we should stop doing more.
   if (!is_numeric($ctid)) {
-    drupal_set_message("Invalid course tag translation id.", "error");
+    drupal_set_message(t("Invalid course tag translation id."), "error");
     drupal_not_found();
     exit();
   }
@@ -324,7 +328,7 @@ function stanford_courses_tag_translate_delete_form($form, &$form_state, $ctid) 
 
   // If it wasn't there then die.
   if (!$tobj) {
-    drupal_set_message("Invalid course tag translation id.", "error");
+    drupal_set_message(t("Invalid course tag translation id."), "error");
     drupal_not_found();
     exit();
   }
@@ -369,7 +373,7 @@ function stanford_courses_tag_translate_delete_form_submit($form, &$form_state) 
     ->execute();
 
   // Ok, done. Now go back to the main page.
-  drupal_set_message("Tag translation was successfully removed.", "status");
+  drupal_set_message(t("Tag translation was successfully removed."), "status");
   drupal_goto("admin/config/stanford/courses/tag-translate");
 }
 
@@ -384,7 +388,7 @@ function stanford_courses_tag_translate_import() {
   $render = array();
 
   // Caution: Like, for realz.
-  drupal_set_message("WARNING: Importing new values will empty and replace all existing values. This action is not recoverable.", "warning");
+  drupal_set_message(t("WARNING: Importing new values will empty and replace all existing values. This action is not recoverable."), "warning");
 
   // Get basic form block.
   $render["theform"] = drupal_get_form("stanford_courses_tag_translate_export_form");
@@ -416,7 +420,7 @@ function stanford_courses_tag_translate_import_form_validate($form, &$form_state
 
   // If it fails then prompt the user to fix it.
   if (!$decode) {
-    form_set_error("txtxprt", "Invalid input code. Please check the integrity of the export.");
+    form_set_error("txtxprt", t("Invalid input code. Please check the integrity of the export."));
   }
 
 }
@@ -449,7 +453,7 @@ function stanford_courses_tag_translate_import_form_submit($form, &$form_state) 
   }
 
   // Message and redirect.
-  drupal_set_message("Import successful", "status");
+  drupal_set_message(t("Import successful"), "status");
   drupal_goto("admin/config/stanford/courses/tag-translate");
 
 }

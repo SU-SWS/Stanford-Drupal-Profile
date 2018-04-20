@@ -1,0 +1,37 @@
+<?php
+
+/**
+ * @file
+ * Stanford_course_views_views.install.
+ */
+
+/**
+ * Enables given module or throws error.
+ *
+ * @param string $module
+ *   Machine name of module to enable.
+ *
+ * @return bool
+ *   If the module was enabled successfully.
+ */
+function stanford_course_views_enable_module($module) {
+  if (!module_exists($module)) {
+    if (!module_enable(array($module))) {
+      watchdog('stanford_course_views', 'Could not enable %module module', array('%module' => $module));
+      return FALSE;
+    }
+    else {
+      watchdog('stanford_course_views', 'Enabled stanford_field_formatters module.', array('%module' => $module));
+    }
+  }
+  return TRUE;
+}
+
+/**
+ * Enables views_filters_selective module.
+ */
+function stanford_course_views_update_7040() {
+  if (!stanford_course_views_enable_module('views_filters_selective')) {
+    throw new DrupalUpdateException("Could not enable views_filters_selective module. Please check that the module exists.");
+  }
+}

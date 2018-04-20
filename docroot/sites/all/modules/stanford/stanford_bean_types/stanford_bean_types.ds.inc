@@ -12,6 +12,21 @@ function stanford_bean_types_ds_field_settings_info() {
 
   $ds_fieldsetting = new stdClass();
   $ds_fieldsetting->api_version = 1;
+  $ds_fieldsetting->id = 'bean|stanford_fw_image_block|default';
+  $ds_fieldsetting->entity_type = 'bean';
+  $ds_fieldsetting->bundle = 'stanford_fw_image_block';
+  $ds_fieldsetting->view_mode = 'default';
+  $ds_fieldsetting->settings = array(
+    'title' => array(
+      'weight' => '2',
+      'label' => 'hidden',
+      'format' => 'default',
+    ),
+  );
+  $export['bean|stanford_fw_image_block|default'] = $ds_fieldsetting;
+
+  $ds_fieldsetting = new stdClass();
+  $ds_fieldsetting->api_version = 1;
   $ds_fieldsetting->id = 'bean|stanford_icon_block|default';
   $ds_fieldsetting->entity_type = 'bean';
   $ds_fieldsetting->bundle = 'stanford_icon_block';
@@ -39,6 +54,49 @@ function stanford_bean_types_ds_field_settings_info() {
  */
 function stanford_bean_types_ds_layout_settings_info() {
   $export = array();
+
+  $ds_layout = new stdClass();
+  $ds_layout->api_version = 1;
+  $ds_layout->id = 'bean|stanford_fw_image_block|default';
+  $ds_layout->entity_type = 'bean';
+  $ds_layout->bundle = 'stanford_fw_image_block';
+  $ds_layout->view_mode = 'default';
+  $ds_layout->layout = 'ds_1col';
+  $ds_layout->settings = array(
+    'regions' => array(
+      'ds_content' => array(
+        0 => 'group_s_fw_image_image_container',
+        1 => 'group_s_fw_image_content',
+        2 => 'group_header_wrapper',
+        3 => 'field_fw_image_image',
+        4 => 'field_s_fw_image_body',
+        5 => 'field_s_fw_image_header',
+        6 => 'field_s_fw_image_file_insert',
+        7 => 'field_s_fw_image_read_more_link',
+      ),
+    ),
+    'fields' => array(
+      'group_s_fw_image_image_container' => 'ds_content',
+      'group_s_fw_image_content' => 'ds_content',
+      'group_header_wrapper' => 'ds_content',
+      'field_fw_image_image' => 'ds_content',
+      'field_s_fw_image_body' => 'ds_content',
+      'field_s_fw_image_header' => 'ds_content',
+      'field_s_fw_image_file_insert' => 'ds_content',
+      'field_s_fw_image_read_more_link' => 'ds_content',
+    ),
+    'classes' => array(),
+    'wrappers' => array(
+      'ds_content' => 'div',
+    ),
+    'layout_wrapper' => 'div',
+    'layout_attributes' => '',
+    'layout_attributes_merge' => 1,
+    'layout_link_attribute' => '',
+    'layout_link_custom' => '',
+    'layout_disable_css' => FALSE,
+  );
+  $export['bean|stanford_fw_image_block|default'] = $ds_layout;
 
   $ds_layout = new stdClass();
   $ds_layout->api_version = 1;

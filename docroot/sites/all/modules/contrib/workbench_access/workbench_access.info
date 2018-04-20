@@ -12,9 +12,9 @@ files[] = modules/taxonomy.workbench_access.inc
 files[] = modules/menu.workbench_access.inc
 files[] = tests/workbench_access.test
 
-; Information added by Drupal.org packaging script on 2015-10-11
-version = "7.x-1.4"
+; Information added by Drupal.org packaging script on 2017-01-21
+version = "7.x-1.5"
 core = "7.x"
 project = "workbench_access"
-datestamp = "1444584240"
+datestamp = "1485026290"
 

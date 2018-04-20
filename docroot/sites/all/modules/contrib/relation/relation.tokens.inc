@@ -100,7 +100,7 @@ function relation_tokens($type, $tokens, array $data = array(), array $options =
           break;
 
         case 'relation_type':
-          $replacements[$original] = $sanitize ? check_plain($relation->relation_type) : $relation->type;
+          $replacements[$original] = $sanitize ? check_plain($relation->relation_type) : $relation->relation_type;
           break;
 
         case 'type-name':
@@ -135,6 +135,16 @@ function relation_tokens($type, $tokens, array $data = array(), array $options =
         case 'changed':
           $replacements[$original] = format_date($relation->changed, 'medium', '', NULL, $language_code);
           break;
+
+        default:
+          if (substr($name, 0, 10) == 'endpoints-') {
+            // These tokens are created by entity module from the entity properties.
+            // See relation_entity_property_info_alter().
+            list(, $endpoint_type, $entity_type) = explode('-', $name);
+            $endpoints = relation_get_endpoints_by_endpoint_type($relation, $endpoint_type);
+            $endpoint = array_shift($endpoints);
+            $replacements[$original] = isset($endpoint['entity_id']) ? $endpoint['entity_id'] : 0;
+          }
       }
     }
 

@@ -10,7 +10,7 @@
 function stanford_news_extras_field_default_field_bases() {
   $field_bases = array();
 
-  // Exported field_base: 'field_s_news_banner'
+  // Exported field_base: 'field_s_news_banner'.
   $field_bases['field_s_news_banner'] = array(
     'active' => 1,
     'cardinality' => 1,
@@ -32,7 +32,7 @@ function stanford_news_extras_field_default_field_bases() {
     'type' => 'image',
   );
 
-  // Exported field_base: 'field_s_news_byline'
+  // Exported field_base: 'field_s_news_byline'.
   $field_bases['field_s_news_byline'] = array(
     'active' => 1,
     'cardinality' => 1,
@@ -53,7 +53,7 @@ function stanford_news_extras_field_default_field_bases() {
     'type' => 'text',
   );
 
-  // Exported field_base: 'field_s_news_department'
+  // Exported field_base: 'field_s_news_department'.
   $field_bases['field_s_news_department'] = array(
     'active' => 1,
     'cardinality' => -1,
@@ -79,7 +79,7 @@ function stanford_news_extras_field_default_field_bases() {
     'type' => 'taxonomy_term_reference',
   );
 
-  // Exported field_base: 'field_s_news_optional_image'
+  // Exported field_base: 'field_s_news_optional_image'.
   $field_bases['field_s_news_optional_image'] = array(
     'active' => 1,
     'cardinality' => 1,
@@ -101,7 +101,7 @@ function stanford_news_extras_field_default_field_bases() {
     'type' => 'image',
   );
 
-  // Exported field_base: 'field_s_news_organization'
+  // Exported field_base: 'field_s_news_organization'.
   $field_bases['field_s_news_organization'] = array(
     'active' => 1,
     'cardinality' => -1,
@@ -134,7 +134,7 @@ function stanford_news_extras_field_default_field_bases() {
     'type' => 'entityreference',
   );
 
-  // Exported field_base: 'field_s_news_research_theme'
+  // Exported field_base: 'field_s_news_research_theme'.
   $field_bases['field_s_news_research_theme'] = array(
     'active' => 1,
     'cardinality' => -1,
@@ -160,7 +160,7 @@ function stanford_news_extras_field_default_field_bases() {
     'type' => 'taxonomy_term_reference',
   );
 
-  // Exported field_base: 'field_s_news_school_theme'
+  // Exported field_base: 'field_s_news_school_theme'.
   $field_bases['field_s_news_school_theme'] = array(
     'active' => 1,
     'cardinality' => -1,
@@ -186,7 +186,7 @@ function stanford_news_extras_field_default_field_bases() {
     'type' => 'taxonomy_term_reference',
   );
 
-  // Exported field_base: 'field_s_news_slider_feature'
+  // Exported field_base: 'field_s_news_slider_feature'.
   $field_bases['field_s_news_slider_feature'] = array(
     'active' => 1,
     'cardinality' => 1,
@@ -211,7 +211,7 @@ function stanford_news_extras_field_default_field_bases() {
     'type' => 'list_boolean',
   );
 
-  // Exported field_base: 'field_s_news_teaser'
+  // Exported field_base: 'field_s_news_teaser'.
   $field_bases['field_s_news_teaser'] = array(
     'active' => 1,
     'cardinality' => 1,

@@ -35,7 +35,7 @@ function stanford_landing_page_strongarm() {
         'custom_settings' => TRUE,
       ),
       'stanford_6_col_banner' => array(
-        'custom_settings' => FALSE,
+        'custom_settings' => TRUE,
       ),
       'stanford_6_col_banner_short' => array(
         'custom_settings' => FALSE,
@@ -107,6 +107,36 @@ function stanford_landing_page_strongarm() {
         'custom_settings' => FALSE,
       ),
       'caw_banner' => array(
+        'custom_settings' => FALSE,
+      ),
+      'gallery_large' => array(
+        'custom_settings' => FALSE,
+      ),
+      'gallery_medium' => array(
+        'custom_settings' => FALSE,
+      ),
+      'gallery_small' => array(
+        'custom_settings' => FALSE,
+      ),
+      'stanford_banner_850x400' => array(
+        'custom_settings' => FALSE,
+      ),
+      'stanford_banner_fw_short_credits' => array(
+        'custom_settings' => FALSE,
+      ),
+      'stanford_full_width_banner' => array(
+        'custom_settings' => FALSE,
+      ),
+      'stanford_full_width_banner_short' => array(
+        'custom_settings' => FALSE,
+      ),
+      'stanford_icon_scaled' => array(
+        'custom_settings' => FALSE,
+      ),
+      'stanford_sm_landscape_scaled' => array(
+        'custom_settings' => FALSE,
+      ),
+      'stanford_sm_scaled' => array(
         'custom_settings' => FALSE,
       ),
     ),

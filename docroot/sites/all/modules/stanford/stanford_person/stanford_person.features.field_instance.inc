@@ -10,7 +10,7 @@
 function stanford_person_field_default_field_instances() {
   $field_instances = array();
 
-  // Exported field_instance: 'node-stanford_person-body'
+  // Exported field_instance: 'node-stanford_person-body'.
   $field_instances['node-stanford_person-body'] = array(
     'bundle' => 'stanford_person',
     'default_value' => NULL,
@@ -82,7 +82,7 @@ function stanford_person_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-stanford_person-field_s_person_affiliation'
+  // Exported field_instance: 'node-stanford_person-field_s_person_affiliation'.
   $field_instances['node-stanford_person-field_s_person_affiliation'] = array(
     'bundle' => 'stanford_person',
     'default_value' => NULL,
@@ -136,7 +136,7 @@ function stanford_person_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-stanford_person-field_s_person_cohort'
+  // Exported field_instance: 'node-stanford_person-field_s_person_cohort'.
   $field_instances['node-stanford_person-field_s_person_cohort'] = array(
     'bundle' => 'stanford_person',
     'deleted' => 0,
@@ -202,7 +202,7 @@ function stanford_person_field_default_field_instances() {
   );
 
   // Exported field_instance:
-  // 'node-stanford_person-field_s_person_dissertatn_title'
+  // 'node-stanford_person-field_s_person_dissertatn_title'.
   $field_instances['node-stanford_person-field_s_person_dissertatn_title'] = array(
     'bundle' => 'stanford_person',
     'default_value' => NULL,
@@ -295,7 +295,7 @@ function stanford_person_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-stanford_person-field_s_person_education'
+  // Exported field_instance: 'node-stanford_person-field_s_person_education'.
   $field_instances['node-stanford_person-field_s_person_education'] = array(
     'bundle' => 'stanford_person',
     'default_value' => NULL,
@@ -362,7 +362,7 @@ function stanford_person_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-stanford_person-field_s_person_email'
+  // Exported field_instance: 'node-stanford_person-field_s_person_email'.
   $field_instances['node-stanford_person-field_s_person_email'] = array(
     'bundle' => 'stanford_person',
     'default_value' => NULL,
@@ -428,7 +428,7 @@ function stanford_person_field_default_field_instances() {
   );
 
   // Exported field_instance:
-  // 'node-stanford_person-field_s_person_faculty_title'
+  // 'node-stanford_person-field_s_person_faculty_title'.
   $field_instances['node-stanford_person-field_s_person_faculty_title'] = array(
     'bundle' => 'stanford_person',
     'default_value' => NULL,
@@ -529,7 +529,8 @@ function stanford_person_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-stanford_person-field_s_person_faculty_type'
+  // Exported field_instance:
+  // 'node-stanford_person-field_s_person_faculty_type'.
   $field_instances['node-stanford_person-field_s_person_faculty_type'] = array(
     'bundle' => 'stanford_person',
     'default_value' => NULL,
@@ -594,7 +595,7 @@ function stanford_person_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-stanford_person-field_s_person_fax_display'
+  // Exported field_instance: 'node-stanford_person-field_s_person_fax_display'.
   $field_instances['node-stanford_person-field_s_person_fax_display'] = array(
     'bundle' => 'stanford_person',
     'default_value' => NULL,
@@ -657,7 +658,7 @@ function stanford_person_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-stanford_person-field_s_person_file'
+  // Exported field_instance: 'node-stanford_person-field_s_person_file'.
   $field_instances['node-stanford_person-field_s_person_file'] = array(
     'bundle' => 'stanford_person',
     'deleted' => 0,
@@ -763,7 +764,7 @@ function stanford_person_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-stanford_person-field_s_person_first_name'
+  // Exported field_instance: 'node-stanford_person-field_s_person_first_name'.
   $field_instances['node-stanford_person-field_s_person_first_name'] = array(
     'bundle' => 'stanford_person',
     'default_value' => NULL,
@@ -827,7 +828,7 @@ function stanford_person_field_default_field_instances() {
   );
 
   // Exported field_instance:
-  // 'node-stanford_person-field_s_person_graduation_year'
+  // 'node-stanford_person-field_s_person_graduation_year'.
   $field_instances['node-stanford_person-field_s_person_graduation_year'] = array(
     'bundle' => 'stanford_person',
     'deleted' => 0,
@@ -892,7 +893,7 @@ function stanford_person_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-stanford_person-field_s_person_info_links'
+  // Exported field_instance: 'node-stanford_person-field_s_person_info_links'.
   $field_instances['node-stanford_person-field_s_person_info_links'] = array(
     'bundle' => 'stanford_person',
     'default_value' => NULL,
@@ -972,7 +973,7 @@ function stanford_person_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-stanford_person-field_s_person_interests'
+  // Exported field_instance: 'node-stanford_person-field_s_person_interests'.
   $field_instances['node-stanford_person-field_s_person_interests'] = array(
     'bundle' => 'stanford_person',
     'default_value' => NULL,
@@ -1038,7 +1039,7 @@ Contact your site administrator to add or change entries. ',
     ),
   );
 
-  // Exported field_instance: 'node-stanford_person-field_s_person_last_name'
+  // Exported field_instance: 'node-stanford_person-field_s_person_last_name'.
   $field_instances['node-stanford_person-field_s_person_last_name'] = array(
     'bundle' => 'stanford_person',
     'default_value' => NULL,
@@ -1102,7 +1103,7 @@ Contact your site administrator to add or change entries. ',
   );
 
   // Exported field_instance:
-  // 'node-stanford_person-field_s_person_mail_address_dspl'
+  // 'node-stanford_person-field_s_person_mail_address_dspl'.
   $field_instances['node-stanford_person-field_s_person_mail_address_dspl'] = array(
     'bundle' => 'stanford_person',
     'default_value' => NULL,
@@ -1165,7 +1166,7 @@ Contact your site administrator to add or change entries. ',
     ),
   );
 
-  // Exported field_instance: 'node-stanford_person-field_s_person_mail_code'
+  // Exported field_instance: 'node-stanford_person-field_s_person_mail_code'.
   $field_instances['node-stanford_person-field_s_person_mail_code'] = array(
     'bundle' => 'stanford_person',
     'default_value' => NULL,
@@ -1254,7 +1255,7 @@ Contact your site administrator to add or change entries. ',
     ),
   );
 
-  // Exported field_instance: 'node-stanford_person-field_s_person_middle_name'
+  // Exported field_instance: 'node-stanford_person-field_s_person_middle_name'.
   $field_instances['node-stanford_person-field_s_person_middle_name'] = array(
     'bundle' => 'stanford_person',
     'default_value' => NULL,
@@ -1317,7 +1318,8 @@ Contact your site administrator to add or change entries. ',
     ),
   );
 
-  // Exported field_instance: 'node-stanford_person-field_s_person_office_hours'
+  // Exported field_instance:
+  // 'node-stanford_person-field_s_person_office_hours'.
   $field_instances['node-stanford_person-field_s_person_office_hours'] = array(
     'bundle' => 'stanford_person',
     'default_value' => NULL,
@@ -1384,7 +1386,7 @@ Contact your site administrator to add or change entries. ',
   );
 
   // Exported field_instance:
-  // 'node-stanford_person-field_s_person_office_location'
+  // 'node-stanford_person-field_s_person_office_location'.
   $field_instances['node-stanford_person-field_s_person_office_location'] = array(
     'bundle' => 'stanford_person',
     'default_value' => NULL,
@@ -1477,7 +1479,7 @@ Contact your site administrator to add or change entries. ',
   );
 
   // Exported field_instance:
-  // 'node-stanford_person-field_s_person_phone_display'
+  // 'node-stanford_person-field_s_person_phone_display'.
   $field_instances['node-stanford_person-field_s_person_phone_display'] = array(
     'bundle' => 'stanford_person',
     'default_value' => NULL,
@@ -1543,7 +1545,8 @@ Contact your site administrator to add or change entries. ',
     ),
   );
 
-  // Exported field_instance: 'node-stanford_person-field_s_person_profile_link'
+  // Exported field_instance:
+  // 'node-stanford_person-field_s_person_profile_link'.
   $field_instances['node-stanford_person-field_s_person_profile_link'] = array(
     'bundle' => 'stanford_person',
     'default_value' => NULL,
@@ -1620,7 +1623,7 @@ Contact your site administrator to add or change entries. ',
   );
 
   // Exported field_instance:
-  // 'node-stanford_person-field_s_person_profile_picture'
+  // 'node-stanford_person-field_s_person_profile_picture'.
   $field_instances['node-stanford_person-field_s_person_profile_picture'] = array(
     'bundle' => 'stanford_person',
     'deleted' => 0,
@@ -1689,6 +1692,7 @@ Contact your site administrator to add or change entries. ',
     'required' => 0,
     'settings' => array(
       'alt_field' => 1,
+      'default_image' => 0,
       'default_image_ft_source_var' => 'stanford_person_profile_picture',
       'file_directory' => '',
       'file_extensions' => 'png gif jpg jpeg',
@@ -1756,7 +1760,7 @@ Contact your site administrator to add or change entries. ',
     ),
   );
 
-  // Exported field_instance: 'node-stanford_person-field_s_person_staff_type'
+  // Exported field_instance: 'node-stanford_person-field_s_person_staff_type'.
   $field_instances['node-stanford_person-field_s_person_staff_type'] = array(
     'bundle' => 'stanford_person',
     'default_value' => NULL,
@@ -1810,7 +1814,8 @@ Contact your site administrator to add or change entries. ',
     ),
   );
 
-  // Exported field_instance: 'node-stanford_person-field_s_person_student_type'
+  // Exported field_instance:
+  // 'node-stanford_person-field_s_person_student_type'.
   $field_instances['node-stanford_person-field_s_person_student_type'] = array(
     'bundle' => 'stanford_person',
     'default_value' => NULL,
@@ -1873,7 +1878,7 @@ Contact your site administrator to add or change entries. ',
     ),
   );
 
-  // Exported field_instance: 'node-stanford_person-field_s_person_study'
+  // Exported field_instance: 'node-stanford_person-field_s_person_study'.
   $field_instances['node-stanford_person-field_s_person_study'] = array(
     'bundle' => 'stanford_person',
     'default_value' => NULL,
@@ -1936,7 +1941,7 @@ Contact your site administrator to add or change entries. ',
     ),
   );
 
-  // Exported field_instance: 'node-stanford_person-field_s_person_weight'
+  // Exported field_instance: 'node-stanford_person-field_s_person_weight'.
   $field_instances['node-stanford_person-field_s_person_weight'] = array(
     'bundle' => 'stanford_person',
     'default_value' => array(

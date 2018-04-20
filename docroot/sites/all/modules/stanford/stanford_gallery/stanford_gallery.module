@@ -55,11 +55,18 @@ function stanford_gallery_field_formatter_view($entity_type, $entity, $field, $i
 
   foreach ($items as $delta => $item) {
     if ($field_collection = field_collection_field_get_entity($item)) {
+
+      // Patch up empty alt text.
+      if (empty($field_collection->field_s_image_image[LANGUAGE_NONE][0]["alt"]) && isset($field_collection->field_s_image_caption[LANGUAGE_NONE][0]["safe_value"])) {
+        $field_collection->field_s_image_image[LANGUAGE_NONE][0]["alt"] = $field_collection->field_s_image_caption[LANGUAGE_NONE][0]["safe_value"];
+      }
+
       $element[$delta]['entity'] = $field_collection->view($view_mode);
       $element[$delta]['#theme_wrappers'] = array('field_collection_view');
       $element[$delta]['#attributes']['class'][] = 'field-collection-view';
       $element[$delta]['#attributes']['class'][] = 'clearfix';
       $element[$delta]['#attributes']['class'][] = drupal_clean_css_identifier('view-mode-' . $view_mode);
+
     }
   }
 
@@ -97,7 +104,3 @@ function stanford_gallery_field_formatter_view($entity_type, $entity, $field, $i
 
   return $element;
 }
-
-
-
-

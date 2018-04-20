@@ -1,5 +1,5 @@
 #[Display Suite Bean Fields](https://github.com/SU-SWS/stanford_bean_types)
-##### Version: 7.x-3.0
+##### version: 7.x-3.x
 
 Maintainers: [jbickar](https://github.com/jbickar), [sherakama](https://github.com/sherakama)
 [Changelog.txt](CHANGELOG.txt)

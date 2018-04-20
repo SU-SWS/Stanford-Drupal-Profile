@@ -10,7 +10,7 @@
 function stanford_news_extras_importer_field_default_field_instances() {
   $field_instances = array();
 
-  // Exported field_instance: 'node-stanford_news_importer-body'
+  // Exported field_instance: 'node-stanford_news_importer-body'.
   $field_instances['node-stanford_news_importer-body'] = array(
     'bundle' => 'stanford_news_importer',
     'default_value' => NULL,

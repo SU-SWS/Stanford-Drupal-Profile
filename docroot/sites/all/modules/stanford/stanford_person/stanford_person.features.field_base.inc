@@ -10,7 +10,7 @@
 function stanford_person_field_default_field_bases() {
   $field_bases = array();
 
-  // Exported field_base: 'field_s_person_affiliation'
+  // Exported field_base: 'field_s_person_affiliation'.
   $field_bases['field_s_person_affiliation'] = array(
     'active' => 1,
     'cardinality' => -1,
@@ -36,7 +36,7 @@ function stanford_person_field_default_field_bases() {
     'type' => 'taxonomy_term_reference',
   );
 
-  // Exported field_base: 'field_s_person_cohort'
+  // Exported field_base: 'field_s_person_cohort'.
   $field_bases['field_s_person_cohort'] = array(
     'active' => 1,
     'cardinality' => 1,
@@ -65,7 +65,7 @@ function stanford_person_field_default_field_bases() {
     'type' => 'datetime',
   );
 
-  // Exported field_base: 'field_s_person_dissertatn_title'
+  // Exported field_base: 'field_s_person_dissertatn_title'.
   $field_bases['field_s_person_dissertatn_title'] = array(
     'active' => 1,
     'cardinality' => 1,
@@ -86,7 +86,7 @@ function stanford_person_field_default_field_bases() {
     'type' => 'text',
   );
 
-  // Exported field_base: 'field_s_person_education'
+  // Exported field_base: 'field_s_person_education'.
   $field_bases['field_s_person_education'] = array(
     'active' => 1,
     'cardinality' => -1,
@@ -107,7 +107,7 @@ function stanford_person_field_default_field_bases() {
     'type' => 'text',
   );
 
-  // Exported field_base: 'field_s_person_email'
+  // Exported field_base: 'field_s_person_email'.
   $field_bases['field_s_person_email'] = array(
     'active' => 1,
     'cardinality' => 1,
@@ -122,7 +122,7 @@ function stanford_person_field_default_field_bases() {
     'type' => 'email',
   );
 
-  // Exported field_base: 'field_s_person_faculty_title'
+  // Exported field_base: 'field_s_person_faculty_title'.
   $field_bases['field_s_person_faculty_title'] = array(
     'active' => 1,
     'cardinality' => -1,
@@ -143,7 +143,7 @@ function stanford_person_field_default_field_bases() {
     'type' => 'text',
   );
 
-  // Exported field_base: 'field_s_person_faculty_type'
+  // Exported field_base: 'field_s_person_faculty_type'.
   $field_bases['field_s_person_faculty_type'] = array(
     'active' => 1,
     'cardinality' => 1,
@@ -169,7 +169,7 @@ function stanford_person_field_default_field_bases() {
     'type' => 'taxonomy_term_reference',
   );
 
-  // Exported field_base: 'field_s_person_fax_display'
+  // Exported field_base: 'field_s_person_fax_display'.
   $field_bases['field_s_person_fax_display'] = array(
     'active' => 1,
     'cardinality' => 1,
@@ -190,7 +190,7 @@ function stanford_person_field_default_field_bases() {
     'type' => 'text',
   );
 
-  // Exported field_base: 'field_s_person_file'
+  // Exported field_base: 'field_s_person_file'.
   $field_bases['field_s_person_file'] = array(
     'active' => 1,
     'cardinality' => -1,
@@ -213,7 +213,7 @@ function stanford_person_field_default_field_bases() {
     'type' => 'file',
   );
 
-  // Exported field_base: 'field_s_person_first_name'
+  // Exported field_base: 'field_s_person_first_name'.
   $field_bases['field_s_person_first_name'] = array(
     'active' => 1,
     'cardinality' => 1,
@@ -234,7 +234,7 @@ function stanford_person_field_default_field_bases() {
     'type' => 'text',
   );
 
-  // Exported field_base: 'field_s_person_graduation_year'
+  // Exported field_base: 'field_s_person_graduation_year'.
   $field_bases['field_s_person_graduation_year'] = array(
     'active' => 1,
     'cardinality' => 1,
@@ -263,7 +263,7 @@ function stanford_person_field_default_field_bases() {
     'type' => 'datetime',
   );
 
-  // Exported field_base: 'field_s_person_info_links'
+  // Exported field_base: 'field_s_person_info_links'.
   $field_bases['field_s_person_info_links'] = array(
     'active' => 1,
     'cardinality' => -1,
@@ -292,7 +292,7 @@ function stanford_person_field_default_field_bases() {
     'type' => 'link_field',
   );
 
-  // Exported field_base: 'field_s_person_interests'
+  // Exported field_base: 'field_s_person_interests'.
   $field_bases['field_s_person_interests'] = array(
     'active' => 1,
     'cardinality' => -1,
@@ -318,7 +318,7 @@ function stanford_person_field_default_field_bases() {
     'type' => 'taxonomy_term_reference',
   );
 
-  // Exported field_base: 'field_s_person_last_name'
+  // Exported field_base: 'field_s_person_last_name'.
   $field_bases['field_s_person_last_name'] = array(
     'active' => 1,
     'cardinality' => 1,
@@ -339,7 +339,7 @@ function stanford_person_field_default_field_bases() {
     'type' => 'text',
   );
 
-  // Exported field_base: 'field_s_person_mail_address_dspl'
+  // Exported field_base: 'field_s_person_mail_address_dspl'.
   $field_bases['field_s_person_mail_address_dspl'] = array(
     'active' => 1,
     'cardinality' => 1,
@@ -358,7 +358,7 @@ function stanford_person_field_default_field_bases() {
     'type' => 'text_long',
   );
 
-  // Exported field_base: 'field_s_person_mail_code'
+  // Exported field_base: 'field_s_person_mail_code'.
   $field_bases['field_s_person_mail_code'] = array(
     'active' => 1,
     'cardinality' => 1,
@@ -379,7 +379,7 @@ function stanford_person_field_default_field_bases() {
     'type' => 'text',
   );
 
-  // Exported field_base: 'field_s_person_middle_name'
+  // Exported field_base: 'field_s_person_middle_name'.
   $field_bases['field_s_person_middle_name'] = array(
     'active' => 1,
     'cardinality' => 1,
@@ -400,7 +400,7 @@ function stanford_person_field_default_field_bases() {
     'type' => 'text',
   );
 
-  // Exported field_base: 'field_s_person_office_hours'
+  // Exported field_base: 'field_s_person_office_hours'.
   $field_bases['field_s_person_office_hours'] = array(
     'active' => 1,
     'cardinality' => 1,
@@ -421,7 +421,7 @@ function stanford_person_field_default_field_bases() {
     'type' => 'text',
   );
 
-  // Exported field_base: 'field_s_person_office_location'
+  // Exported field_base: 'field_s_person_office_location'.
   $field_bases['field_s_person_office_location'] = array(
     'active' => 1,
     'cardinality' => 1,
@@ -442,7 +442,7 @@ function stanford_person_field_default_field_bases() {
     'type' => 'text',
   );
 
-  // Exported field_base: 'field_s_person_phone_display'
+  // Exported field_base: 'field_s_person_phone_display'.
   $field_bases['field_s_person_phone_display'] = array(
     'active' => 1,
     'cardinality' => 1,
@@ -463,7 +463,7 @@ function stanford_person_field_default_field_bases() {
     'type' => 'text',
   );
 
-  // Exported field_base: 'field_s_person_profile_link'
+  // Exported field_base: 'field_s_person_profile_link'.
   $field_bases['field_s_person_profile_link'] = array(
     'active' => 1,
     'cardinality' => 1,
@@ -492,7 +492,7 @@ function stanford_person_field_default_field_bases() {
     'type' => 'link_field',
   );
 
-  // Exported field_base: 'field_s_person_profile_picture'
+  // Exported field_base: 'field_s_person_profile_picture'.
   $field_bases['field_s_person_profile_picture'] = array(
     'active' => 1,
     'cardinality' => 1,
@@ -507,13 +507,14 @@ function stanford_person_field_default_field_bases() {
     'locked' => 0,
     'module' => 'image',
     'settings' => array(
+      'default_image' => 0,
       'uri_scheme' => 'public',
     ),
     'translatable' => 0,
     'type' => 'image',
   );
 
-  // Exported field_base: 'field_s_person_staff_type'
+  // Exported field_base: 'field_s_person_staff_type'.
   $field_bases['field_s_person_staff_type'] = array(
     'active' => 1,
     'cardinality' => 1,
@@ -539,7 +540,7 @@ function stanford_person_field_default_field_bases() {
     'type' => 'taxonomy_term_reference',
   );
 
-  // Exported field_base: 'field_s_person_student_type'
+  // Exported field_base: 'field_s_person_student_type'.
   $field_bases['field_s_person_student_type'] = array(
     'active' => 1,
     'cardinality' => 1,
@@ -565,7 +566,7 @@ function stanford_person_field_default_field_bases() {
     'type' => 'taxonomy_term_reference',
   );
 
-  // Exported field_base: 'field_s_person_study'
+  // Exported field_base: 'field_s_person_study'.
   $field_bases['field_s_person_study'] = array(
     'active' => 1,
     'cardinality' => -1,
@@ -591,7 +592,7 @@ function stanford_person_field_default_field_bases() {
     'type' => 'taxonomy_term_reference',
   );
 
-  // Exported field_base: 'field_s_person_weight'
+  // Exported field_base: 'field_s_person_weight'.
   $field_bases['field_s_person_weight'] = array(
     'active' => 1,
     'cardinality' => 1,

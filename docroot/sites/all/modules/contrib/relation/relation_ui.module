@@ -752,7 +752,7 @@ function relation_ui_type_import_submit($form, &$form_state) {
  * Relation display page title callback.
  */
 function relation_ui_page_title($relation) {
-  return 'Relation ' . $relation->rid;
+  return entity_label('relation', $relation);
 }
 
 /**

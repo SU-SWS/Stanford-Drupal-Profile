@@ -18,6 +18,32 @@ What it does:
 - Remove the PHP and paranoia modules from the module admin page.
 - Provides a hook to let you remove other modules from the module admin page.
 
+
+Using the feature to scramble the password for stale accounts
+=============================================================
+Paranoia includes a feature to scramble the password of an account that has not
+logged in for a while. This feature uses a queue so that it can scalably handle
+scrambling the password of thousands of accounts. The "scramble" does not set a
+new password. It sets the password to an invalid string which will
+always fail when compared to any user input. To use this feature:
+
+1. Navigate to /admin/config/system/paranoia to configure how many days an
+   account must be inactive before it's password will be scrambled. Also
+   choose whether or not to email users letting them know their password was
+   reset.
+
+2. Use the Drush command to queue up accounts to be marked as stale:
+
+  drush -v paranoia-reset-stale-accounts
+
+3. Run the queue to process the stale expirations:
+
+  drush -v queue-run paranoia_stale_expirations
+
+Using the -v option on drush will show extra information about the operations.
+
+You can also let cron handle processing the queue, though that may take a long time.
+
 NOTE on disabling:
 =====
 The only way to disable paranoia module is by changing its status in the

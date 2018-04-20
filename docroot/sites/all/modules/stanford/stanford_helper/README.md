@@ -1,5 +1,5 @@
 #[Stanford Helper](https://github.com/SU-SWS/stanford)
-##### Version: 7.x-1.0
+##### Version: 7.x-1.0-dev
 
 Maintainers: [jbickar](https://github.com/jbickar), [sherakama](https://github.com/sherakama)
 [Changelog.txt](CHANGELOG.txt)

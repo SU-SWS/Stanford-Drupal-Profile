@@ -1,5 +1,17 @@
 Stanford Person x.x-x.x xxxx-xx-xx
 --------------------------------------
+7.x-5.3-alpha1                2016-12-14
+----------------------------------------
+- Recoverd missing variable
+
+Stanford Person 7.x-5.2+19-dev  2016-12-14
+----------------------------------------
+- Added Code Climate checking
+- SOE-1524: Add grid five and six to person
+- HSDO-608: Added alumni views
+- HSDO-614 #added members page which excludes students
+- HSDO-614 #removed term id filter from members view
+
 
 Stanford Person 7.x-5.2       2016-06-08
 ----------------------------------------

@@ -29,8 +29,8 @@ function stanford_courses_datemath_form($importer, $element_key, $settings) {
   $form['operative']['#title'] = t('Action');
   $form['operative']['#default_value'] = $settings['operative'];
   $form['operative']['#options'] = array(
-    'add' => 'Add Amount of Time',
-    'subtract' => 'Remove Amount of Time',
+    'add' => t('Add Amount of Time'),
+    'subtract' => t('Remove Amount of Time'),
   );
   $form['operative']['#description'] = t('Add or remove an amount of time from a string');
 

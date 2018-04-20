@@ -1,5 +1,37 @@
 Stanford Courses x.x-x.x, xxxx-xx-xx
 ------------------------------------
+7.x-4.3                   2017-07-25
+------------------------------------
+- New Dependency for stanford_news_views & stanford_courses_person_reference_views: views_selective_filters (views_filters_selective)
+- Configured views_select_filters on stanford_course_views & stanford_course_person_reference_views views
+
+7.x-4.2                   2017-07-18
+------------------------------------
+- Behat Tests written
+- HSDO-874 fixed no results display using the token
+- HSDO-919 HSDO-933 Added Academic year computed as date field: populated by rules that parses the academic year select
+  option.
+- Added Travis integration
+- Alot of code climate fixup
+- Track the course matrix view in the info file.
+
+
+7.x-4.1+19-dev            2017-01-20
+------------------------------------
+- Added check for view name on pre_render
+- Re-sort the rows classes
+- styled sticky header to work for all sidebar block placement combinations
+- Created custom date filter for relative filtering
+- Extended existing date filter class.
+- Added more states to options form
+- Added additional validation
+- Updated data alter hook to pick up node columns
+- Added date exception to view for July - August 31
+
+7.x-4.1                   2016-09-16
+------------------------------------
+- 	Added new course matrix module and view with styling
+
 
 7.x-4.0                   2016-08-30
 ------------------------------------

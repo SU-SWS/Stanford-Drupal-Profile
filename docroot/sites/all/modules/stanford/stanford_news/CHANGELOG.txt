@@ -1,5 +1,39 @@
 Stanford News x.x-x.x, xxxx-xx-xx
 ---------------------------------
+7.x-3.7-alpha4               2018-04-16
+---------------------------------------
+- Changed the class on a view to make it more re-useable when a view is cloned
+- Configured the view fields to be absolute links which fixes links on stanford sites.
+- Added composer.json file.
+
+7.x-3.7-alpha2               2017-08-05
+---------------------------------------
+- HSDO-943 HSDO-955 Dynamic Paragraph Views
+
+7.x-3.7-alpha1               2017-05-15
+---------------------------------------
+- Added masonry view
+- RSS & XML importers with upgrade from news_extras
+
+Stanford News 7.x-3.6+23-dev 2017-02-22
+---------------------------------------
+- Added a function to deprecate the use of image credits and
+  transition image caption to become image "caption and credits"
+- For news extras, updated CSS for credits and captions to display on separate lines.
+- Updates code climate and updates code to coding standards
+
+Stanford News 7.x-3.5 2017-01-24
+---------------------------------
+- Removed an extra edit button on news block
+- New stanford_news_search module that allows you to pull in news from
+  news.stanford.edu by a search string.
+
+Stanford News 7.x-3.4 2016-11-29
+---------------------------------
+- Added new view mode so that news items can now display extra fields in just the content region
+- News items can now be displayed in a grid of 2 or 3.
+- Added code climate to enforce coding standards
+- Changed header image style for news extras views blocks to scale_850x400
 
 Stanford News 7.x-3.3+8-dev, 2016-07-19
 ---------------------------------
