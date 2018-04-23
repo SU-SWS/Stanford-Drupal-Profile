@@ -58,12 +58,12 @@ env:
     - PRODUCT_NAME=""
     - ENABLE_MODULES=""
     - DISABLE_MODULES="webauth"
-    - ONLY_TEST="ds"
+    - ONLY_TEST=""
     - BEHAT_TAG=""
     - DEPLOYER_BRANCH=""
     - DRUPAL_PROFILE_BRANCH=""
     - SCRIPTS_BRANCH=""
-    - CLICKY_BRANCH="ds"
+    - CLICKY_BRANCH="5.x"
 
 language: php
 php:
