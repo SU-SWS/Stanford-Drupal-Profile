@@ -64,7 +64,6 @@ env:
     - DRUPAL_PROFILE_BRANCH=""
     - SCRIPTS_BRANCH=""
     - CLICKY_BRANCH="5.x"
-    - SCRIPTS_BRANCH=""
 
 language: php
 php:
