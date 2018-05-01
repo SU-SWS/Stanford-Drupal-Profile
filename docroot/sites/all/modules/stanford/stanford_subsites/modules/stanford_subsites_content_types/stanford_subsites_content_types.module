@@ -1,7 +1,0 @@
-<?php
-/**
- * @file
- * Code for the Stanford Subsites Content Types And Fields feature.
- */
-
-include_once 'stanford_subsites_content_types.features.inc';

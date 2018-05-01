@@ -1,8 +1,0 @@
-<?php
-
-/**
- * @file
- * Code for the Stanford Paragraph Types Textarea Simple feature.
- */
-
-include_once 'stanford_paragraph_types_textarea_simple.features.inc';

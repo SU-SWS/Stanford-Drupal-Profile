@@ -1,7 +1,0 @@
-<?php
-/**
- * @file
- * Code for the Stanford Affiliate Organization Views feature.
- */
-
-include_once 'stanford_affiliate_organization_views.features.inc';

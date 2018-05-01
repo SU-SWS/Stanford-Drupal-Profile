@@ -1,7 +1,0 @@
-<?php
-/**
- * @file
- * Code for the Stanford Fellowship Views feature.
- */
-
-include_once 'stanford_fellowship_views.features.inc';

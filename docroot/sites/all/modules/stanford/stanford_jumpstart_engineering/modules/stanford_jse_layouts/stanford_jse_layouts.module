@@ -1,7 +1,0 @@
-<?php
-/**
- * @file
- * Code for the Stanford Jumpstart Sites Engineering Layouts feature.
- */
-
-include_once 'stanford_jse_layouts.features.inc';

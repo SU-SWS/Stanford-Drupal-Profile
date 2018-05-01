@@ -1,0 +1,251 @@
+<?php
+/**
+* Implement hook_install().
+*
+* Perform actions to set up the site for this profile.
+*/
+function stanford_install() {
+  // Do all the install tasks from the standard install profile
+  // It's easier just to include this and then override the few things that we want to.
+  include_once(DRUPAL_ROOT . '/profiles/standard/standard.install');
+  standard_install();
+
+  // Defaults for the Page content type
+  variable_set('comment_anonymous_page', 0);
+  variable_set('comment_default_mode_page', 1);
+  variable_set('comment_default_per_page_page', '50');
+  variable_set('comment_form_location_page', 1);
+  variable_set('comment_page', '1');
+  variable_set('comment_preview_page', '1');
+  variable_set('comment_subject_field_page', 1);
+  variable_set('node_preview_page', '1');
+  variable_set('node_submitted_page', 0);
+  variable_set('menu_parent_page', 'main-menu:0');
+  $menu_options_page = array('main-menu');
+  variable_set('menu_options_page', $menu_options_page);
+  $node_options_page = array('status', 'promote', 'revision');
+  variable_set('node_options_page', $node_options_page);
+
+  // Defaults for the Article content type
+  variable_set('comment_anonymous_article', 0);
+  variable_set('comment_default_mode_article', 1);
+  variable_set('comment_default_per_article_article', '50');
+  variable_set('comment_form_location_article', 1);
+  variable_set('comment_article', '1');
+  variable_set('comment_preview_article', '1');
+  variable_set('comment_subject_field_article', 1);
+  variable_set('node_preview_article', '1');
+  variable_set('node_submitted_article', 0);
+  variable_set('menu_parent_article', 'main-menu:0');
+  $menu_options_article = array('main-menu');
+  variable_set('menu_options_article', $menu_options_article);
+  $node_options_article = array('status', 'promote', 'revision');
+  variable_set('node_options_article', $node_options_article);
+
+  // Revoke a few stupid default permissions
+  user_role_revoke_permissions(DRUPAL_ANONYMOUS_RID, array('access comments'));
+  user_role_revoke_permissions(DRUPAL_AUTHENTICATED_RID, array('post comments', 'skip comment approval'));
+
+  // User registration - only site administrators can create new user accounts
+  variable_set('user_register', 0);
+
+  // Disable user-configurable timezones by default
+  variable_set('configurable_timezones', 0);
+  // Set the first day of the week to Sunday
+  variable_set('date_first_day', 0);
+
+  // Disable poormanscron functionality, as we are running cron externally
+  variable_set('cron_safe_threshold', 0);
+
+  // Set OpenLayers library to use external https CDN
+  variable_set('openlayers_source_external', 'https://cdnjs.cloudflare.com/ajax/libs/openlayers/2.13.1/OpenLayers.js');
+  variable_set('openlayers_source_type', 'external');
+
+  // Set Pathauto to reduce paths to numbers and letters
+  variable_set('pathauto_reduce_ascii', 1);
+
+  $blocks = array(
+    array(
+      'module' => 'search',
+      'delta' => 'form',
+      'theme' => 'open_framework',
+      'status' => 1,
+      'weight' => -1,
+      'region' => 'search_box',
+      'pages' => '',
+      'cache' => -1,
+    ),
+    array(
+      'module' => 'search',
+      'delta' => 'form',
+      'theme' => 'stanford_framework',
+      'status' => 1,
+      'weight' => -1,
+      'region' => 'search_box',
+      'pages' => '',
+      'cache' => -1,
+    ),
+    array(
+      'module' => 'search',
+      'delta' => 'form',
+      'theme' => 'stanford_jordan',
+      'status' => 1,
+      'weight' => -1,
+      'region' => 'search_box',
+      'pages' => '',
+      'cache' => -1,
+    ),
+    array(
+      'module' => 'search',
+      'delta' => 'form',
+      'theme' => 'stanford_light',
+      'status' => 1,
+      'weight' => -1,
+      'region' => 'search_box',
+      'pages' => '',
+      'cache' => -1,
+    ),
+    array(
+      'module' => 'search',
+      'delta' => 'form',
+      'theme' => 'stanford_wilbur',
+      'status' => 1,
+      'weight' => -1,
+      'region' => 'search_box',
+      'pages' => '',
+      'cache' => -1,
+    ),
+  );
+  $query = db_insert('block')->fields(array('module', 'delta', 'theme', 'status', 'weight', 'region', 'pages', 'cache'));
+  foreach ($blocks as $block) {
+    $query->values($block);
+  }
+  $query->execute();
+}
+
+/**
+ * Implementation of hook_form_FORM_ID_alter().
+ *
+ * Allows the profile to alter the site-configuration form. This is
+ * called through custom invocation, so $form_state is not populated.
+ */
+function stanford_form_install_configure_form_alter(&$form, $form_state) {
+
+  // Hide the fieldset since it'll be empty anyway
+  $form['server_settings']['#type'] = 'markup';
+
+  // Server settings.
+  $form['server_settings']['clean_url']['#type'] = 'hidden';
+  $form['server_settings']['clean_url']['#default_value'] = 1;
+  $form['server_settings']['date_default_timezone']['#type'] = 'hidden';
+  $form['server_settings']['date_default_timezone']['#default_value'] = 'America/Los_Angeles';
+  $form['server_settings']['site_default_country']['#type'] = 'hidden';
+  $form['server_settings']['site_default_country']['#default_value'] = 'US';
+
+  // Hide the automatic updates block.
+  $form['update_notifications']['#type'] = 'hidden';
+  $form['update_notifications']['update_status_module']['#default_value'][0] = 0;
+  $form['update_notifications']['update_status_module']['#default_value'][1] = 0;
+
+  // How do we sign in to Drupal?
+  $auth_options = array('webauth' => t('WebAuth'), 'simplesamlphp' => t('SimpleSAMLphp'));
+  $form['stanford_authentication']['#type'] = 'radios';
+  $form['stanford_authentication']['#title'] = t('Authentication Method');
+  $form['stanford_authentication']['#description'] = t("Choose your authentication method. If you are not sure, leave this as the default.");
+  $form['stanford_authentication']['#options'] = $auth_options;
+  $form['stanford_authentication']['#default_value'] = 'webauth';
+  /**
+   * S3 file system settings.
+   */
+
+  $form['stanford_s3fs']['#type'] = 'fieldset';
+  $form['stanford_s3fs']['#title'] = t('S3 File System Settings');
+  $form['stanford_s3fs']['#collapsible'] = TRUE;
+  $form['stanford_s3fs']['#collapsed'] = FALSE;
+
+  $form['stanford_s3fs']['enable_s3fs']['#type'] = 'checkbox';
+  $form['stanford_s3fs']['enable_s3fs']['#title'] = t('Replace local file system with S3FS');
+  $form['stanford_s3fs']['awssdk2_access_key']['#type'] = 'textfield';
+  $form['stanford_s3fs']['awssdk2_access_key']['#title'] = t('AWS Access Key');
+  $form['stanford_s3fs']['awssdk2_access_key']['#states']['visible'] = array(':input[name="enable_s3fs"]' => array('checked' => TRUE));
+  $form['stanford_s3fs']['awssdk2_secret_key']['#type'] = 'textfield';
+  $form['stanford_s3fs']['awssdk2_secret_key']['#title'] = t('AWS Secret Key');
+  $form['stanford_s3fs']['awssdk2_secret_key']['#states']['visible'] = array(':input[name="enable_s3fs"]' => array('checked' => TRUE));
+  $form['stanford_s3fs']['s3fs_bucket']['#type'] = 'textfield';
+  $form['stanford_s3fs']['s3fs_bucket']['#title'] = t('S3 Bucket Name');
+  $form['stanford_s3fs']['s3fs_bucket']['#states']['visible'] = array(':input[name="enable_s3fs"]' => array('checked' => TRUE));
+  $form['stanford_s3fs']['s3fs_bucket_region']['#type'] = 'textfield';
+  $form['stanford_s3fs']['s3fs_bucket_region']['#title'] = t('S3 Bucket Region');
+  $form['stanford_s3fs']['s3fs_bucket_region']['#default_value'] = 'us-west-2';
+  $form['stanford_s3fs']['s3fs_bucket_region']['#states']['visible'] = array(':input[name="enable_s3fs"]' => array('checked' => TRUE));
+
+  /**
+   * Grab requester's SUNetID.
+   * We will be setting this programatically so we do not want to present it to the user.
+   */
+  $form['stanford_sites_requester_sunetid']['#type'] = 'hidden';
+  $form['stanford_sites_requester_sunetid']['#default_value'] = '';
+
+  /**
+   * Grab requester's preferred name.
+   * We will be setting this programatically so we do not want to present it to the user.
+   */
+  $form['stanford_sites_requester_name']['#type'] = 'hidden';
+  $form['stanford_sites_requester_name']['#default_value'] = '';
+
+  /**
+   * Grab requester's preferred email.
+   * We will be setting this programatically so we do not want to present it to the user.
+   */
+  $form['stanford_sites_requester_email']['#type'] = 'hidden';
+  $form['stanford_sites_requester_email']['#default_value'] = '';
+
+  /**
+   * Set org type: group or dept.
+   * Blank if a personal site.
+   * We will be setting this programatically so we do not want to present it to the user.
+   */
+  $form['stanford_sites_org_type']['#type'] = 'hidden';
+  $form['stanford_sites_org_type']['#default_value'] = '';
+
+  /**
+   * Set temporary file directory.
+   * We will be setting this programatically so we do not want to present it to the user.
+   */
+  $form['stanford_sites_tmpdir']['#type'] = 'hidden';
+  $form['stanford_sites_tmpdir']['#default_value'] = '';
+
+  $form['#submit'][] = 'stanford_sites_install_configure_form_submit';
+
+}
+
+/**
+ * Implements hook_block_info_alter().
+ */
+function stanford_block_info_alter(&$blocks, $theme, $code_blocks) {
+  $blocks['system']['powered-by']['status'] = 0;
+}
+
+/**
+ * Implements hook_filter_info_alter().
+ */
+function stanford_filter_info_alter(&$info) {
+  $info['filter_html']['default settings']['allowed_html'] = '<a> <address> <blockquote> <br> <cite> <code> <em> <h2> <h3> <h4> <h5> <h6> <li> <ol> <p> <pre> <strong> <ul>';
+}
+
+/**
+ * Process the fields we added to install_configure_form.
+ */
+function stanford_sites_install_configure_form_submit($form, &$form_state) {
+  variable_set('enable_s3fs', $form['stanford_s3fs']['enable_s3fs']['#value']);
+  variable_set('s3fs_awssdk2_access_key', $form['stanford_s3fs']['awssdk2_access_key']['#value']);
+  variable_set('s3fs_awssdk2_secret_key', $form['stanford_s3fs']['awssdk2_secret_key']['#value']);
+  variable_set('s3fs_region', $form['stanford_s3fs']['s3fs_bucket_region']['#value']);
+  variable_set('s3fs_bucket', $form['stanford_s3fs']['s3fs_bucket']['#value']);
+  variable_set('stanford_sites_org_type', $form['stanford_sites_org_type']['#value']);
+  variable_set('stanford_sites_tmpdir', $form['stanford_sites_tmpdir']['#value']);
+  variable_set('stanford_sites_requester_sunetid', $form['stanford_sites_requester_sunetid']['#value']);
+  variable_set('stanford_sites_requester_name', $form['stanford_sites_requester_name']['#value']);
+  variable_set('stanford_sites_requester_email', $form['stanford_sites_requester_email']['#value']);
+  variable_set('stanford_sites_auth_method', $form['stanford_authentication']['#value']);
+}

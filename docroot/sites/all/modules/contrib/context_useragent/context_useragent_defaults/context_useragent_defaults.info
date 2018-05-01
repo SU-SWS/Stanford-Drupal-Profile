@@ -1,6 +1,0 @@
-name = Context Useragent Default
-description = Provides a set of default contexts which add body classes depending on the user's browser and OS.
-dependencies[] = context
-dependencies[] = context_useragent
-core = 7.x
-package = Context

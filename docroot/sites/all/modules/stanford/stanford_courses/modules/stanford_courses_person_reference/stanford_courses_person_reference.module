@@ -1,8 +1,0 @@
-<?php
-
-/**
- * @file
- * Code for the Stanford Courses Person Reference feature.
- */
-
-include_once 'stanford_courses_person_reference.features.inc';

@@ -1,7 +1,0 @@
-<?php
-/**
- * @file
- * Code for the Stanford Publication Views feature.
- */
-
-include_once 'stanford_publication_views.features.inc';

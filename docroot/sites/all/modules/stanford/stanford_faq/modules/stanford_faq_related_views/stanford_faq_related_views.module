@@ -1,8 +1,0 @@
-<?php
-
-/**
- * @file
- * Code for the Stanford FAQ related views feature.
- */
-
-include_once 'stanford_faq_related_views.features.inc';

@@ -1,7 +1,0 @@
-name = Stanford Date Formats
-description = Date and time formats used by Stanford modules and Themes
-core = 7.x
-package = Stanford
-version = 7.x-1.1
-project = stanford_date_formats
-project status url = https://github.com/SU-SWS/stanford_date_formats

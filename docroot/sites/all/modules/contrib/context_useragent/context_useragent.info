@@ -1,6 +1,0 @@
-name = Context Useragent
-description = Add conditional contexts based on the current user's useragent.
-dependencies[] = context
-core = 7.x
-package = Context
-files[] = context_condition_useragent.inc

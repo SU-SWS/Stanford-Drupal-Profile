@@ -1,7 +1,0 @@
-core = "7.x"
-name = "Stanford Date Time Picker"
-version = 7.x-1.1
-description = "Adds a new timepicker option for datetime fields, providing a better ui for the timepicker."
-package = "Stanford"
-dependencies[] = libraries
-dependencies[] = date_popup

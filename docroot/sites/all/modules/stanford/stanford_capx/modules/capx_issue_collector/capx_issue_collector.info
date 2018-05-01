@@ -1,6 +1,0 @@
-name = Stanford CAPx Issue Collector
-description = Provides a feedback link to the CAPx Working Group Jira project.
-core = 7.x
-version = 7.x-3.x
-package = Stanford CAPx
-; scripts[] = capx_issue_collector.js
