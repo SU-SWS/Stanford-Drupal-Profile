@@ -1,7 +1,0 @@
-Stanford Publication x.x-x.x, xxxx-xx-xx
-----------------------------------------
-
-Stanford Publication 7.x-2.0-alpha1, 2014-02-09
------------------------------------------------
-Initial commit, chose to make this a 2.x branch since we're using feature 2.0. 
-This way all our features using Features 2.x are 2.0. Hope that works. CJW

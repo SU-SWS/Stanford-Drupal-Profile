@@ -1,43 +1,30 @@
-# [ACSF Cardinal D7 Stack](https://github.com/SU-SWS/acsf-cardinald7)
-##### Version: 7.x-1.x
+#[Stanford Drupal Profile](https://github.com/SU-SWS/Stanford-Drupal-Profile)
+##### Version: 7.x-2.6
+Maintainers: [Marco Wise](https://github.com/mistermarco), [John Bickar](https://github.com/jbickar), [Shea McKinney](https://github.com/sherakama)
 
-Maintainers: [jbickar](https://github.com/jbickar), [kbrownell](https://github.com/kbrownell)  
+URL: [http://sites.stanford.edu](http://sites.stanford.edu)
 
-[Changelog.txt](CHANGELOG.txt)
+A drush make and Drupal install profile for new sites on the Drupal Hosting Service at Stanford ("Stanford Sites").
 
-Cardinal D7 Stack for Acquia Site Factory ...
+Leading-edge development occurs on this branch, 7.x-2.x. This branch may or may not reflect what is installed on sites.stanford.edu.
 
-Installation
----
+The -installed branches (6.x-1.x-installed, 7.x-1.x-installed, 7.x-2.x-installed) track what is installed on sites.stanford.edu. Check out the latest tag on one of those branches to match what is currently installed on sites.stanford.edu.
 
-- git clone git@github.com/SU-SWS/acsf-cardinald7.git
-- cd acsf-cardinald7
-- composer install
-- composer init-lando
-- lando start
-- lando si stanford_sites_jumpstart
+## Drush Make
 
-Configuration
----
+* Run `drush make make/group.make` to create a group or personal site (includes the Stanford Basic theme; `drush make` will fail if you do not have access to that private theme repository. You may want to use the `--force-complete` flag).
+* Run `drush make make/dept.make` to create a department site (includes Stanford-specific themes; `drush make` will fail if you do not have access to the private theme repositories).
+* Run `drush make make/anchorage.make` to create a department site for the Anchorage hosting environment (includes Stanford-specific themes; `drush make` will fail if you do not have access to the private theme repositories).
 
-### Lando
-- TBD
+## Drupal Site Installation
+Install using drush like so:
 
-### Drupal
-- TBD
+`drush si stanford --account-mail="sunetid@stanford.edu" --site-mail="sunetid@stanford.edu" --site-name="Stanford Sites Install" --account-name="admin" --account-pass="admin" install_configure_form.stanford_sites_org_type="group" install_configure_form.stanford_sites_tmpdir="sites/default/files/tmp" install_configure_form.stanford_sites_requester_email="sunetid@stanford.edu" install_configure_form.stanford_sites_requester_name="Leland Stanford, Jr." install_configure_form.stanford_sites_requester_sunetid="sunetid" -y`
 
-Troubleshooting
----
+Additional flags for "drush si":
 
-If you are experiencing issues with this project be sure to update all of your composer packages and try rebuilding the lando environment.
+To use SimpleSAMLphp instead of webauth:
+`install_configure_form.stanford_authentication=simplesamlphp`
 
-Contribution / Collaboration
----
-
-### Git Workflow
-
-You are welcome to contribute functionality, bug fixes, or documentation to this module. If you would like to suggest a fix or new functionality you may add a new issue to the GitHub issue queue or you may fork this repository and submit a pull request. For more help please see [GitHub's article on fork, branch, and pull requests](https://help.github.com/articles/using-pull-requests)
-
-### Git Subtree workflow
-
-- TBD
+To use Amazon S3 as the file system instead of local file system:
+`install_configure_form.enable_s3fs=1 install_configure_form.awssdk2_access_key="INSERT_KEY_HERE" install_configure_form.awssdk2_secret_key="INSERT_SECRET_KEY_HERE" install_configure_form.s3fs_bucket="BUCKET_NAME_HERE"  install_configure_form.s3fs_bucket_region="us-west-2"`

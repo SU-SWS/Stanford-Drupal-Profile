@@ -1,4 +1,0 @@
-name = Paranoia Sanitize
-description = Cleans up db dumps in a decidedly paranoid manner by munging or deleting sensitive data.
-core = 7.x
-files[] = paranoiasanitize.test

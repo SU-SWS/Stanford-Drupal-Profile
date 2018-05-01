@@ -1,8 +1,0 @@
-name = CAPx SSO Integration
-description = Enable to allow user entities to log in with SSO
-core = 7.x
-package = Stanford
-version = 7.x-3.x
-project = capx_ssp
-dependencies[] = stanford_capx
-dependencies[] = stanford_ssp

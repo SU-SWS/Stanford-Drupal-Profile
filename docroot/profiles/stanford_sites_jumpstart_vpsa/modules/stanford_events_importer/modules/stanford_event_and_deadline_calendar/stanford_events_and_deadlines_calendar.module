@@ -1,7 +1,0 @@
-<?php
-/**
- * @file
- * Code for the Stanford Events and Deadlines Calendar feature.
- */
-
-include_once 'stanford_events_and_deadlines_calendar.features.inc';

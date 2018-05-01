@@ -1,8 +1,0 @@
-<?php
-
-/**
- * @file
- * Code for the Stanford Courses Node Display feature.
- */
-
-include_once 'stanford_courses_node_display.features.inc';

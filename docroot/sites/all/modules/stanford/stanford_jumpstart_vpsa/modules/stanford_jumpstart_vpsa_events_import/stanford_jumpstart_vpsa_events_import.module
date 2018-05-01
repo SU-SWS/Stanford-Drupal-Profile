@@ -1,7 +1,0 @@
-<?php
-/**
- * @file
- * Code for the Stanford Jumpstart VPSA Events Import feature.
- */
-
-include_once 'stanford_jumpstart_vpsa_events_import.features.inc';

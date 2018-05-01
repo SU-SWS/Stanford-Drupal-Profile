@@ -1,7 +1,0 @@
-<?php
-/**
- * @file
- * Code for the Stanford Video Layouts feature.
- */
-
-include_once 'stanford_video_layouts.features.inc';

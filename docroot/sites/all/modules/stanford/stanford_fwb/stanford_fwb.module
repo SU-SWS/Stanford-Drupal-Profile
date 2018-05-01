@@ -1,7 +1,0 @@
-<?php
-/**
- * @file
- * Code for the Stanford Full Width Banner feature.
- */
-
-include_once 'stanford_fwb.features.inc';

@@ -1,7 +1,0 @@
-<?php
-/**
- * @file
- * Code for the Stanford Publication Common Views feature.
- */
-
-include_once 'stanford_publication_common_views.features.inc';

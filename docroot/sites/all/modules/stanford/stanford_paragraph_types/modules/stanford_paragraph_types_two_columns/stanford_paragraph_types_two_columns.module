@@ -1,8 +1,0 @@
-<?php
-
-/**
- * @file
- * Code for the Stanford Paragraph Types Two Columns feature.
- */
-
-include_once 'stanford_paragraph_types_two_columns.features.inc';

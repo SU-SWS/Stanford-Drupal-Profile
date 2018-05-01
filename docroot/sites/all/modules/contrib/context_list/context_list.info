@@ -1,6 +1,0 @@
-name = Context List
-description = List contexts & their info
-package = Context
-core = 7.x
-dependencies[] = context
-dependencies[] = context_ui
