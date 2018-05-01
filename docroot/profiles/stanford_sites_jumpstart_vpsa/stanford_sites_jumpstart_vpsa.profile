@@ -5,7 +5,9 @@
  */
 
 // Need this because of the early part of the install process.
-require_once dirname(__FILE__) . "/includes/loader.php";
+if (!function_exists('itasks_install_finished')) {
+  require_once dirname(__FILE__) . "/includes/iTasks.php";
+}
 
 /**
  * Call through to itasks_install module.
@@ -66,5 +68,3 @@ function stanford_sites_jumpstart_vpsa_form_install_configure_form_alter_validat
 function stanford_sites_jumpstart_vpsa_form_install_configure_form_alter_submit(&$form, &$form_state) {
   itasks_form_install_configure_form_alter_submit($form, $form_state);
 }
-
-

@@ -1,5 +1,5 @@
-name = Stanford Department Sites
-description = Select this profile to install a version of Drupal customized for the Stanford Sites platform.
+name = "Stanford Department Sites"
+description = "Select this profile to install a version of Drupal customized for the Stanford Sites platform."
 core = 7.x
 version = 7.x-2.5
 project status url = https://github.com/SU-SWS/Stanford-Drupal-Profile
@@ -53,4 +53,4 @@ dependencies[] = transliteration
 dependencies[] = views
 dependencies[] = views_ui
 dependencies[] = wysiwyg
-files[] = stanford.profile
+files[] = stanford_dept.profile
