@@ -62,16 +62,14 @@ env:
     - BEHAT_TAG=""
     - DEPLOYER_BRANCH=""
     - DRUPAL_PROFILE_BRANCH=""
-    - SCRIPTS_BRANCH="test-chrome-update"
-    - CLICKY_BRANCH="5.x"
     - SCRIPTS_BRANCH=""
+    - CLICKY_BRANCH="5.x"
 
 language: php
 php:
   - '5.6'
 
 sudo: required
-dist: precise
 
 cache:
   directories:
@@ -87,7 +85,7 @@ mysql:
 before_install:
   # download external repository with Stanford Travis CI scripts
   # - if [ ! -z "$SCRIPTS_BRANCH" ]; then SCRIPTS_BRANCH="-b $SCRIPTS_BRANCH"; fi
-  - git clone -b test-chrome-update https://github.com/SU-SWS/stanford_travisci_scripts.git $HOME/stanford_travisci_scripts
+  - git clone $SCRIPTS_BRANCH https://github.com/SU-SWS/stanford_travisci_scripts.git $HOME/stanford_travisci_scripts
   - chmod +x $HOME/stanford_travisci_scripts/bin/*.sh
   # install composer packages
   - $HOME/stanford_travisci_scripts/bin/before_install.sh
