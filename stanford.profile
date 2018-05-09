@@ -206,15 +206,23 @@ function stanford_profile_tasks() {
  */
 function stanford_acsf_tasks() {
 
+  // Enable the environment dependant modules.
   $enable = array(
     'acsf',
+    'acsf_helper',
     'paranoia',
     'newrelic_appname',
     'stanford_ssp',
     'stanford_saml_block'
   );
-
   module_enable($enable);
+
+  // Add an admin user so that stanford_ssp can pick it up.
+  stanford_sites_add_admin_user(
+    variable_get('stanford_sites_requester_sunetid'),
+    variable_get('stanford_sites_requester_name'),
+    variable_get('stanford_sites_requester_email')
+  );
 }
 
 /**
@@ -227,6 +235,12 @@ function stanford_anchorage_tasks() {
   $auth_method = variable_get('stanford_sites_auth_method', 'webauth');
   if ($auth_method == 'simplesamlphp') {
     module_enable(array('simplesamlphp_auth', 'stanford_ssp'));
+    // Add an admin user so that stanford_ssp can pick it up.
+    stanford_sites_add_admin_user(
+      variable_get('stanford_sites_requester_sunetid'),
+      variable_get('stanford_sites_requester_name'),
+      variable_get('stanford_sites_requester_email')
+    );
   }
 
   // S3 config.
@@ -252,7 +266,7 @@ function stanford_sites_tasks() {
   stanford_profile_default_file_dir_settings();
 
   $auth_method = variable_get('stanford_sites_auth_method', 'webauth');
-  if ($auth_method == 'simplesamlphp') {
+  if ($auth_method == 'webauth') {
     module_enable(array('webauth'));
     module_enable(array('stanford_afs_quota'));
 
@@ -302,6 +316,59 @@ function stanford_profile_default_file_dir_settings() {
   $element['#value'] = $tmpdir;
   // Check that the temp directory exists; create it if it does not.
   system_check_directory($element);
+}
+
+/**
+ * Add a admin user.
+ *
+ * Adds an admin user when installing on non-sites platforms.
+ *
+ * @param string $sunet
+ *   Sunet id.
+ * @param string $name
+ *   Person's full name.
+ * @param string $email
+ *   The email address. Usually sunetid + stanford.edu.
+ */
+function stanford_sites_add_admin_user($sunet, $name = '', $email = '') {
+  $sunet = strtolower(trim($sunet));
+
+  if (empty($sunet)) {
+    watchdog('Stanford Profile', 'Could not create user. No SUNetID available.');
+    return;
+  }
+
+  $name = trim($name);
+  if (empty($name)) {
+    $name = $sunet . '@stanford.edu';
+  }
+
+  $email = strtolower(trim($email));
+  if (empty($email)) {
+    $email = $sunet . '@stanford.edu';
+  }
+
+  if (!user_load_by_name($name)) {
+    $account = new stdClass();
+    $account->is_new = TRUE;
+    $account->name = $name;
+    $account->pass = user_password();
+    $account->mail = $email;
+    $account->init = $sunet . '@stanford.edu';
+    $account->status = TRUE;
+
+    $admin_role = user_role_load_by_name('administrator');
+    $account->roles = array(
+      DRUPAL_AUTHENTICATED_RID => TRUE,
+      $admin_role->rid => TRUE
+    );
+    $account->timezone = variable_get('date_default_timezone', '');
+    $account = user_save($account);
+    watchdog('Stanford Profile', 'Created user: %user', array('%user' => $name));
+  }
+  else {
+    watchdog('Stanford Profile', 'Could not create duplicate user: %user', array('%user' => $name));
+  }
 }
 
 /**
