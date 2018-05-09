@@ -1,16 +1,54 @@
 <?php
 
-/*
+/**
  * Implementation of hook_install_tasks().
  */
-
 function stanford_install_tasks($install_state) {
-  $tasks['stanford_sites_tasks'] = array(
+
+  // Detect which environment we are running and add
+  // those specific tasks to the installation.
+  $environment = _stanford_detect_environment();
+
+  // Any and all environment tasks go here.
+  $tasks['stanford_profile_tasks'] = array(
     'display_name' => st('Do configuration tasks for the Stanford Sites hosting environment'),
     'display' => FALSE,
     'type' => 'normal',
     'run' => INSTALL_TASK_RUN_IF_NOT_COMPLETED,
   );
+
+  // ACSF Specific Tasks go here.
+  if ($environment == "acsf") {
+    $tasks['stanford_acsf_tasks'] = array(
+      'display_name' => st('Do configuration tasks for the ACSF hosting environment'),
+      'display' => FALSE,
+      'type' => 'normal',
+      'run' => INSTALL_TASK_RUN_IF_NOT_COMPLETED,
+    );
+  }
+
+  // Anchorage Specific Tasks go here.
+  if ($environment == "anchorage") {
+    $tasks['stanford_anchorage_tasks'] = array(
+      'display_name' => st('Do configuration tasks for the Anchorage hosting environment'),
+      'display' => FALSE,
+      'type' => 'normal',
+      'run' => INSTALL_TASK_RUN_IF_NOT_COMPLETED,
+    );
+  }
+
+  // Sites specific tasks go here.
+  // ACSF Specific Tasks go here.
+  if ($environment == "sites") {
+    $tasks['stanford_sites_tasks'] = array(
+      'display_name' => st('Do configuration tasks for the Stanford Sites hosting environment'),
+      'display' => FALSE,
+      'type' => 'normal',
+      'run' => INSTALL_TASK_RUN_IF_NOT_COMPLETED,
+    );
+  }
+
+  // Clean up functions for all of them.
   $tasks['stanford_install_finished'] = array(
     'display_name' => st('Clean up before finishing'),
     'display' => FALSE,
@@ -21,13 +59,19 @@ function stanford_install_tasks($install_state) {
   return $tasks;
 }
 
-function stanford_sites_tasks() {
-  /**
-   * General stuff.
-   */
-  /**
-   * Configure CKEditor and WYSIWYG.
-   */
+/**
+ * Installation tasks for any environment.
+ */
+function stanford_profile_tasks() {
+
+  // Enable the stanford_sites_helper module
+  // Do this now rather than in .info file because install looking for the
+  // administrator role and errors out otherwise.
+  module_enable(array('stanford_sites_helper'));
+  module_enable(array('stanford_sites_systemtools'));
+  $remove = array('update', 'comment');
+  module_disable($remove);
+  drupal_uninstall_modules($remove);
 
   // Create configuration for CKEditor.
   $ckeditor_configuration = serialize(array(
@@ -56,8 +100,8 @@ function stanford_sites_tasks() {
       'PasteFromWord' => 1,
       'Format' => 1,
       'SelectAll' => 1,
-      ),
     ),
+  ),
   'toolbar_loc' => 'top',
   'toolbar_align' => 'left',
   'path_loc' => 'bottom',
@@ -68,13 +112,22 @@ function stanford_sites_tasks() {
   'remove_linebreaks' => 1,
   'apply_source_formatting' => 1,
   'paste_auto_cleanup_on_paste' => 1,
-  'block_formats' => 'p','address','pre','h2','h3','h4','h5','h6',
+  'block_formats' => [
+    'p',
+    'address',
+    'pre',
+    'h2',
+    'h3',
+    'h4',
+    'h5',
+    'h6'
+  ],
   'css_setting' => 'theme',
   'css_path' => '',
   'css_classes' => ''
   ));
 
-  // Add CKEditor to wysiwyg
+  // Add CKEditor to wysiwyg.
   $query = db_insert('wysiwyg')
     ->fields(array(
       'format' => 'filtered_html',
@@ -86,9 +139,140 @@ function stanford_sites_tasks() {
   // Set errors only to go to the log.
   variable_set('error_level', 0);
 
-  /**
-   * File system settings.
-   */
+  // Make the Seven admin theme use our favicon.
+  $theme_seven_settings = array(
+    'toggle_logo' => 1,
+    'toggle_name' => 1,
+    'toggle_slogan' => 1,
+    'toggle_node_user_picture' => 1,
+    'toggle_comment_user_picture' => 1,
+    'toggle_comment_user_verification' => 1,
+    'toggle_favicon' => 1,
+    'toggle_main_menu' => 1,
+    'toggle_secondary_menu' => 1,
+    'default_logo' => 1,
+    'logo_path' => '',
+    'logo_upload' => '',
+    'default_favicon' => 0,
+    'favicon_path' => 'profiles/stanford/favicon.ico',
+    'favicon_upload' => '',
+    'favicon_mimetype' => 'image/vnd.microsoft.icon',
+  );
+  variable_set('theme_seven_settings', $theme_seven_settings);
+
+  // Make the default pathauto setting be [node:title].
+  $pathauto_node_pattern = '[node:title]';
+  variable_set('pathauto_node_pattern', $pathauto_node_pattern);
+
+  // Departments' preferred theme is Stanford Wilbur.
+  // Groups' and individuals' preferred theme is Open Framework.
+  // Official groups can have the Stanford Wilbur theme enabled by ITS.
+  $org_type = variable_get('stanford_sites_org_type');
+  if ($org_type == 'dept') {
+    $preferred_themes = array(
+      'theme_default' => 'stanford_wilbur',
+      'admin_theme' => 'seven',
+      'node_admin_theme' => 1,
+      'open_framework' => NULL,
+      'stanford_framework' => NULL,
+      'stanford_jordan' => NULL,
+    );
+    theme_enable($preferred_themes);
+    foreach ($preferred_themes as $var => $theme) {
+      if (!is_numeric($var)) {
+        variable_set($var, $theme);
+      }
+    }
+  }
+  else {
+    $preferred_themes = array(
+      'theme_default' => 'stanford_light',
+      'admin_theme' => 'seven',
+      'node_admin_theme' => 1,
+      'open_framework'
+    );
+    theme_enable($preferred_themes);
+    foreach ($preferred_themes as $var => $theme) {
+      if (!is_numeric($var)) {
+        variable_set($var, $theme);
+      }
+    }
+  }
+
+}
+
+/**
+ * Installation tasks for acsf environment.
+ */
+function stanford_acsf_tasks() {
+
+  $enable = array(
+    'acsf',
+    'paranoia',
+    'newrelic_appname',
+    'stanford_ssp',
+    'stanford_saml_block'
+  );
+
+  module_enable($enable);
+}
+
+/**
+ * Installation tasks for anchorage environment.
+ */
+function stanford_anchorage_tasks() {
+  // Set private and public file directory.
+  stanford_profile_default_file_dir_settings();
+
+  $auth_method = variable_get('stanford_sites_auth_method', 'webauth');
+  if ($auth_method == 'simplesamlphp') {
+    module_enable(array('simplesamlphp_auth', 'stanford_ssp'));
+  }
+
+  // S3 config.
+  $enable_s3fs = variable_get('enable_s3fs', 0);
+  if ($enable_s3fs == 1) {
+    module_enable(array('s3fs'));
+    // Leave file_default_scheme as "public", as we are configuring s3fs to take
+    // over the public file system, below.
+    // variable_set('file_default_scheme', 's3');.
+    variable_set('s3fs_use_https', 1);
+    variable_set('s3fs_cache_control_header', 'max-age=1209600');
+    variable_set('s3fs_use_s3_for_public', 1);
+    variable_set('s3fs_use_s3_for_private', 1);
+  }
+
+}
+
+/**
+ * Installation tasks for sites environment.
+ */
+function stanford_sites_tasks() {
+  // Set private and public file directory.
+  stanford_profile_default_file_dir_settings();
+
+  $auth_method = variable_get('stanford_sites_auth_method', 'webauth');
+  if ($auth_method == 'simplesamlphp') {
+    module_enable(array('webauth'));
+    module_enable(array('stanford_afs_quota'));
+
+    stanford_sites_add_webauth_user(
+      variable_get('stanford_sites_requester_sunetid'),
+      variable_get('stanford_sites_requester_name'),
+      variable_get('stanford_sites_requester_email')
+    );
+  }
+
+}
+
+/**
+ * Set public, private, and tmp file directory for default install.
+ *
+ * ACSF does not use these settings and has them hard-coded in to their
+ * environment so they do not need to be set.
+ */
+function stanford_profile_default_file_dir_settings() {
+
   // Set private directory.
   $private_directory = 'sites/default/files/private';
   variable_set('file_private_path', $private_directory);
@@ -110,150 +294,27 @@ function stanford_sites_tasks() {
   // Check that the public directory exists; create it if it does not.
   system_check_directory($element);
 
-  // S3 config.
-  $enable_s3fs = variable_get('enable_s3fs', 0);
-  if ($enable_s3fs == 1) {
-    module_enable(array('s3fs'));
-    // Leave file_default_scheme as "public", as we are configuring s3fs to take over the public file system, below.
-    // variable_set('file_default_scheme', 's3');
-    variable_set('s3fs_use_https', 1);
-    variable_set('s3fs_cache_control_header', 'max-age=1209600');
-    variable_set('s3fs_use_s3_for_public', 1);
-    variable_set('s3fs_use_s3_for_private', 1);
-
-    // run drush s3fs-refresh-cache (or equivalent function)?
-    // From s3fs_update_7000().
-    //$config = _s3fs_get_config();
-    //if (!empty($config['bucket']) && !empty($config['region'])) {
-    //  _s3fs_refresh_cache($config);
-    //}
-  }
-
-  //Enable the stanford_sites_helper module
-  //Do this now rather than in .info file because it's looking for the administrator role and errors out otherwise
-  module_enable(array('stanford_sites_helper'));
-
-  // Enable our chosen authentication scheme.
-  // 'webauth' = WMD, 'simplesamlphp' = SimpleSAML
-  $auth_method = variable_get('stanford_sites_auth_method', 'webauth');
-  if($auth_method == 'simplesamlphp') {
-    module_enable(array('simplesamlphp_auth', 'stanford_ssp'));
-    // do some other stuff?
-  }
-  else {
-    module_enable(array('webauth'));
-    if(stanford_sites_hosted()) {
-      module_enable(array('stanford_afs_quota'));
-      stanford_sites_add_webauth_user(
-        variable_get('stanford_sites_requester_sunetid'),
-        variable_get('stanford_sites_requester_name'),
-        variable_get('stanford_sites_requester_email')
-      );
-    }
-  }
-  //Make the Seven admin theme use our favicon
-  $theme_seven_settings = array(
-    'toggle_logo' => 1,
-    'toggle_name' => 1,
-    'toggle_slogan' => 1,
-    'toggle_node_user_picture' => 1,
-    'toggle_comment_user_picture' => 1,
-    'toggle_comment_user_verification' => 1,
-    'toggle_favicon' => 1,
-    'toggle_main_menu' => 1,
-    'toggle_secondary_menu' => 1,
-    'default_logo' => 1,
-    'logo_path' => '',
-    'logo_upload' => '',
-    'default_favicon' => 0,
-    'favicon_path' => 'profiles/stanford/favicon.ico',
-    'favicon_upload' => '',
-    'favicon_mimetype' => 'image/vnd.microsoft.icon',
-  );
-  variable_set('theme_seven_settings', $theme_seven_settings);
-
-  //Make the default pathauto setting be [node:title]
-  $pathauto_node_pattern = '[node:title]';
-  variable_set('pathauto_node_pattern', $pathauto_node_pattern);
-
-  /**
-   * Tasks for all sites on the service
-   */
-  module_disable(array('update', 'comment'));
-  module_enable(array('stanford_sites_systemtools'));
-
-  /**
-   * Set temp file directory.
-   */
+  // Set temp file directory.
   $tmpdir = variable_get('stanford_sites_tmpdir', file_directory_temp());
   variable_set('file_temporary_path', $tmpdir);
-  // system_check_directory() is expecting a $form_element array
+  // system_check_directory() is expecting a $form_element array.
   $element = array();
   $element['#value'] = $tmpdir;
   // Check that the temp directory exists; create it if it does not.
   system_check_directory($element);
-
-  /**
-   *  Departments' preferred theme is Stanford Wilbur.
-   *  Groups' and individuals' preferred theme is Open Framework.
-   *  Official groups can have the Stanford Wilbur theme enabled by ITS.
-   */
-  $org_type = variable_get('stanford_sites_org_type');
-  if ($org_type == 'dept') {
-    $preferred_themes = array(
-      'theme_default' => 'stanford_wilbur',
-      'admin_theme' => 'seven',
-      'node_admin_theme' => 1,
-      'open_framework',
-      'stanford_framework',
-      'stanford_jordan',
-    );
-    theme_enable($preferred_themes);
-    foreach ($preferred_themes as $var => $theme) {
-      if (!is_numeric($var)) {
-        variable_set($var, $theme);
-      }
-    }
-  } else {
-    $preferred_themes = array(
-      'theme_default' => 'stanford_light',
-      'admin_theme' => 'seven',
-      'node_admin_theme' => 1,
-      'open_framework'
-    );
-    theme_enable($preferred_themes);
-    foreach ($preferred_themes as $var => $theme) {
-      if (!is_numeric($var)) {
-        variable_set($var, $theme);
-      }
-    }
-  }
 }
 
 /**
- * Checks to see if the current Drupal install is on one of the Stanford Sites
- * hosting servers. Note: Arriving at a reliable test for this took some work;
- * do not remove this function.
+ * Add a WebAuth user.
  *
- * @return
- *   TRUE if it is; FALSE if it isn't.
- */
-function stanford_sites_hosted() {
-  // This directory only should exist on the sites-* servers.
-  $dir = "/etc/drupal-service";
-  // Check if it exists and is a directory.
-  if(file_exists($dir) && is_dir($dir)) {
-    return TRUE;
-  }
-  else{
-    return FALSE;
-  }
-}
-
-
-/**
- * Add a WebAuth user
+ * Adds a webauth user when installing on the sites platform.
  *
+ * @param string $sunet
+ *   Sunet id.
+ * @param string $name
+ *   Person's full name.
+ * @param string $email
+ *   The email address. Usually sunetid + stanford.edu.
  */
 function stanford_sites_add_webauth_user($sunet, $name = '', $email = '') {
   $sunet = strtolower(trim($sunet));
@@ -274,7 +335,7 @@ function stanford_sites_add_webauth_user($sunet, $name = '', $email = '') {
   }
 
   if (!user_load_by_name($name)) {
-    $account = new stdClass;
+    $account = new stdClass();
     $account->is_new = TRUE;
     $account->name = $name;
     $account->pass = user_password();
@@ -284,13 +345,17 @@ function stanford_sites_add_webauth_user($sunet, $name = '', $email = '') {
 
     $sunet_role = user_role_load_by_name('SUNet User');
     $admin_role = user_role_load_by_name('administrator');
-    $account->roles = array(DRUPAL_AUTHENTICATED_RID => TRUE, $sunet_role->rid => TRUE, $admin_role->rid => TRUE);
+    $account->roles = array(
+      DRUPAL_AUTHENTICATED_RID => TRUE,
+      $sunet_role->rid => TRUE,
+      $admin_role->rid => TRUE
+    );
     $account->timezone = variable_get('date_default_timezone', '');
     $account = user_save($account);
 
     user_set_authmaps($account, array('authname_webauth' => $sunet . '@stanford.edu'));
 
-    // hide Local Drupal user login block. User 1 can still login from /user
+    // Hide Local Drupal user login block. User 1 can still login from /user.
     variable_set(webauth_allow_local, 0);
 
     watchdog('Stanford Profile', 'Created user: %user', array('%user' => $name));
@@ -308,4 +373,35 @@ function stanford_install_finished() {
   features_revert_module('stanford_page');
   drupal_flush_all_caches();
   watchdog("stanford", "Finished reverting stanford_page and flushing caches.");
+}
+
+/**
+ * Returns a string representing the environment being installed on.
+ *
+ * @return string
+ *   The string name of the environment being installed.
+ */
+function _stanford_detect_environment() {
+
+  // Check for ACQUIA environment var.
+  $is_ah = getenv('AH_SITE_ENVIRONMENT');
+  if (!empty($is_ah)) {
+    return 'acsf';
+  }
+
+  // Check for sites environment
+  // This directory only should exist on the sites-* servers.
+  $dir = "/etc/drupal-service";
+  // Check if it exists and is a directory.
+  if (file_exists($dir) && is_dir($dir)) {
+    return 'sites';
+  }
+
+  // Check for anchorage IDP.
+  if (getenv('ENV_IDP') == "https://idpproxy.anchorage.stanford.edu/idp") {
+    return 'anchorage';
+  }
+
+  // Default to local.
+  return 'local';
 }
