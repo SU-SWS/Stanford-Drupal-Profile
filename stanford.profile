@@ -217,7 +217,19 @@ function stanford_acsf_tasks() {
   );
   module_enable($enable);
 
+  // Remove this dependency because it conflicts with our login.
+  $modules = array('acsf_openid', 'openid');
+  module_disable($modules, FALSE);
+  drupal_uninstall_modules($modules, FALSE);
+
+  // Change some configuration in the saml paths:
+  $ah_stack = getenv('AH_SITE_GROUP') ?? 'cardinald7';
+  $ah_env = getenv('AH_SITE_ENVIRONMENT') ?? '02test';
+  $pathtosimplesaml = "/var/www/html/" . $ah_stack . "." . $ah_env . "/simplesamlphp";
+  variable_set('stanford_simplesamlphp_auth_installdir', $pathtosimplesaml);
+
   // Add an admin user so that stanford_ssp can pick it up.
+  module_load_include('inc', 'stanford_simplesamlphp_auth', 'stanford_simplesamlphp_auth');
   stanford_sites_add_admin_user(
     variable_get('stanford_sites_requester_sunetid'),
     variable_get('stanford_sites_requester_name'),
@@ -470,5 +482,5 @@ function _stanford_detect_environment() {
   }
 
   // Default to local.
-  return 'local';
+  return 'acsf';
 }
