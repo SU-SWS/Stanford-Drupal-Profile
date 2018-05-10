@@ -482,5 +482,5 @@ function _stanford_detect_environment() {
   }
 
   // Default to local.
-  return 'acsf';
+  return 'local';
 }
