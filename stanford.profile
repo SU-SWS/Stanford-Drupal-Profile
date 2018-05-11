@@ -509,6 +509,7 @@ function stanford_system_info_alter(&$info, $file, $type) {
     $info['project'] == 'tao')
   ) {
     $info['hidden'] = TRUE;
+    return;
   }
 
   // Disallow any jumpstart modules.
