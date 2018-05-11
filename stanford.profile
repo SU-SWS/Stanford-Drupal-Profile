@@ -484,3 +484,56 @@ function _stanford_detect_environment() {
   // Default to local.
   return 'local';
 }
+
+/**
+ * Implements hook_system_info_alter().
+ *
+ * @param array $info
+ *   The .info file contents, passed by reference so that it can be altered.
+ * @param array $file
+ *   Full information about the module or theme, including $file->name, and
+ *   $file->filename.
+ * @param string $type
+ *   Either 'module' or 'theme', depending on the type of .info file that was
+ *   passed.
+ */
+function stanford_system_info_alter(&$info, $file, $type) {
+  // Disallow a few themes from being enabled by hiding them from the UI.
+  if (
+    isset($info['project']) &&
+    ($info['project'] == 'stanford_framework' ||
+    $info['project'] == 'stanford_jordan' ||
+    $info['project'] == 'stanford_wilbur' ||
+    $info['project'] == 'cube' ||
+    $info['project'] == 'rubik' ||
+    $info['project'] == 'tao')
+  ) {
+    $info['hidden'] = TRUE;
+  }
+
+  // Disallow any jumpstart modules.
+  if (
+    isset($info['project']) &&
+    (preg_match("/^stanford_jumpstart/", $info['project']) ||
+    preg_match("/^stanford_jsl/", $info['project']) ||
+    preg_match("/^stanford_jse/", $info['project']) ||
+    preg_match("/^stanford_jsplus/", $info['project']) ||
+    preg_match("/^stanford_jsa/", $info['project']))
+  ) {
+    $info['hidden'] = TRUE;
+    return;
+  }
+
+  // Hide some items by name.
+  if (
+    isset($info['name']) &&
+    (preg_match("/Stanford Site/", $info['name']) ||
+    preg_match("/Stanford Jumpstart/", $info['name']) ||
+    preg_match("/VPSA/", $info['name']) ||
+    preg_match("/Stanford JSA/", $info['name']) ||
+    preg_match("/JSE/", $info['name']))
+  ) {
+    $info['hidden'] = TRUE;
+    return;
+  }
+}
