@@ -76,7 +76,7 @@
     {
       "type": "package",
       "package": {
-        "name": "library/feeds_jsonpath_parser",
+        "name": "library/jsonpath",
         "version": "0.8.1",
         "type": "drupal-library",
         "dist": {
@@ -259,10 +259,11 @@
       "kigkonsult/icalcreator": "~2.24",
       "library/jquery_cycle": "2.99",
       "trentrichardson/jquery-timepicker-addon": "1.6.3",
-      "library/feeds_jsonpath_parser": "0.8.1",
+      "library/jsonpath": "0.8.1",
       "library/jw_player": "5.0.0",
       "dompdf/dompdf": "0.6.2",
       "library/proj4js": "1.1.0",
+      "mustangostang/spyc": "~0.6",
 
       "drupal/admin_menu": "~3.0-rc5",
       "drupal/admin_views": "~1.6",
