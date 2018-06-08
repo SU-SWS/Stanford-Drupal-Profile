@@ -63,7 +63,7 @@ env:
     - DEPLOYER_BRANCH=""
     - DRUPAL_PROFILE_BRANCH=""
     - SCRIPTS_BRANCH=""
-    - CLICKY_BRANCH="5.x"
+    - CLICKY_BRANCH="DEVOPS-123"
 
 language: php
 php:
