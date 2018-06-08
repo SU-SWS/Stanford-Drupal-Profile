@@ -119,6 +119,21 @@
       }
     },
     {
+      "type": "package",
+      "package": {
+        "name": "iCalcreator/iCalcreator",
+        "version": "2.20.2",
+        "type": "drupal-library",
+        "dist": {
+          "url": "https://raw.githubusercontent.com/iCalcreator/iCalcreator/e3dbec2cb3bb91a8bde989e467567ae8831a4026/iCalcreator.class.php",
+          "type": "file"
+        },
+        "require": {
+          "composer/installers": "~1.0"
+        }
+      }
+    },
+    {
       "type": "vcs",
       "url": "https://github.com/SU-SWS/erus"
     },
@@ -263,6 +278,7 @@
       "dompdf/dompdf": "0.6.2",
       "library/proj4js": "1.1.0",
       "mustangostang/spyc": "~0.6",
+      "iCalcreator/iCalcreator": "2.20.2",
 
       "drupal/admin_menu": "~3.0-rc5",
       "drupal/admin_views": "~1.6",
