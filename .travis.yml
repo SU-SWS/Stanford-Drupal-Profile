@@ -62,7 +62,7 @@ env:
     - BEHAT_TAG=""
     - DEPLOYER_BRANCH=""
     - DRUPAL_PROFILE_BRANCH=""
-    - SCRIPTS_BRANCH=""
+    - SCRIPTS_BRANCH="DEVOPS-123"
     - CLICKY_BRANCH="DEVOPS-123"
 
 language: php
