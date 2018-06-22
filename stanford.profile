@@ -228,6 +228,17 @@ function stanford_acsf_tasks() {
   $pathtosimplesaml = "/var/www/html/" . $ah_stack . "." . $ah_env . "/simplesamlphp";
   variable_set('stanford_simplesamlphp_auth_installdir', $pathtosimplesaml);
 
+  // Enable workgroup api role mapping.
+  $cert_file = dirname(DRUPAL_ROOT) . "/simplesamlphp/cert/stanford_ssp.cert";
+  $key_file = dirname(DRUPAL_ROOT) . "/simplesamlphp/cert/stanford_ssp.key";
+  variable_set('stanford_ssp_workgroup_api_cert', $cert_file);
+  variable_set('stanford_ssp_workgroup_api_key', $key_file);
+  variable_set('stanford_ssp_role_map_source', 'workgroup');
+
+  // Add webservices role mapping.
+  $admin_role = user_role_load_by_name('administrator');
+  variable_set("stanford_simplesamlphp_auth_rolepopulation", $admin_role->rid . ":eduPersonEntitlement,=,itservices:webservices");
+
   // Add an admin user so that stanford_ssp can pick it up.
   module_load_include('inc', 'stanford_simplesamlphp_auth', 'stanford_simplesamlphp_auth');
   stanford_sites_add_admin_user(
