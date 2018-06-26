@@ -403,7 +403,7 @@
       "su-sws/stanford_field_formatters": "dev-7.x-1.x",
       "su-sws/stanford_gallery": "dev-7.x-2.x",
       "su-sws/stanford_helper": "dev-7.x-1.x",
-      "su-sws/stanford_sites_helper": "dev-7.x-2.x",
+      "su-sws/stanford_sites_helper": "dev-7.x-1.x",
       "su-sws/SU-IT-Services": "dev-7.x-2.x",
       "su-sws/stanford_image": "dev-7.x-3.x-dev",
       "su-sws/stanford_image_styles": "dev-7.x-4.x",
@@ -442,7 +442,7 @@
         "https://drupal.org/files/issues/features-parent_identifier-927566-79.patch"
       },
       "drupal/filefield_paths": {
-        "https://www.drupal.org/project/filefield_paths/issues/2946648": 
+        "https://www.drupal.org/project/filefield_paths/issues/2946648":
         "https://www.drupal.org/files/issues/filefield_paths-support_php_72-2946648-3.patch"
       },
       "drupal/jw_player": {
