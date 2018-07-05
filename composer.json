@@ -260,6 +260,10 @@
     },
     {
       "type": "vcs",
+      "url": "https://github.com/SU-SWS/stanford_video"
+    },
+    {
+      "type": "vcs",
       "url": "https://github.com/SU-SWS/stanford_wysiwyg"
     },
     {
@@ -415,6 +419,7 @@
       "su-sws/stanford_publication": "~7.2",
       "su-sws/stanford_slides": "~7.3",
       "su-sws/stanford_wysiwyg": "~7.2",
+      "su-sws/stanford_video": "~7.2.0",
       "su-sws/stanford_easy_wysiwyg_css": "~7.1",
       "su-sws/stanford_landing_page": "~7.1@beta",
 
