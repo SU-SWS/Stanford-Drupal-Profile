@@ -542,6 +542,8 @@ function stanford_system_info_alter(&$info, $file, $type) {
   if (
     isset($info['project']) &&
     ($info['project'] == 'stanford_framework' ||
+    $info['project'] == 'stanford_help' ||
+    $info['project'] == 'stanford_help_administration' ||
     $info['project'] == 'stanford_jordan' ||
     $info['project'] == 'stanford_wilbur' ||
     $info['project'] == 'cube' ||
@@ -568,7 +570,20 @@ function stanford_system_info_alter(&$info, $file, $type) {
   // Hide some items by name.
   if (
     isset($info['name']) &&
-    (preg_match("/Stanford Site/", $info['name']) ||
+    (preg_match("/Stanford Affiliate/", $info['name']) ||
+    preg_match("/Stanford Alt Check/", $info['name']) ||
+    preg_match("/Stanford Conference/", $info['name']) ||
+    preg_match("/FAQ/", $info['name']) ||
+    preg_match("/Stanford Fellowship/", $info['name']) ||
+    preg_match("/Stanford Full Width Banner/", $info['name']) ||
+    preg_match("/Stanford Icon Grid/", $info['name']) ||
+    preg_match("/Stanford Minimal Filter/", $info['name']) ||
+    preg_match("/Stanford Paragraph/", $info['name']) ||
+    preg_match("/Stanford Private Page/", $info['name']) ||
+    preg_match("/Stanford Related/", $info['name']) ||
+    preg_match("/Stanford Site/", $info['name']) ||
+    preg_match("/Stanford Story Page/", $info['name']) ||
+    preg_match("/Stanford Subsite/", $info['name']) ||
     preg_match("/Stanford Jumpstart/", $info['name']) ||
     preg_match("/VPSA/", $info['name']) ||
     preg_match("/Stanford JSA/", $info['name']) ||
