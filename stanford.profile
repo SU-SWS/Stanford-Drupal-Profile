@@ -571,6 +571,7 @@ function stanford_system_info_alter(&$info, $file, $type) {
   if (
     isset($info['name']) &&
     (preg_match("/Stanford Affiliate/", $info['name']) ||
+    preg_match("/Stanford AFS Quota/", $info['name']) ||
     preg_match("/Stanford Alt Check/", $info['name']) ||
     preg_match("/Stanford Conference/", $info['name']) ||
     preg_match("/FAQ/", $info['name']) ||
@@ -578,6 +579,7 @@ function stanford_system_info_alter(&$info, $file, $type) {
     preg_match("/Stanford Fellowship/", $info['name']) ||
     preg_match("/Stanford Full Width Banner/", $info['name']) ||
     preg_match("/Stanford Icon Grid/", $info['name']) ||
+    preg_match("/Stanford Manage Content/", $info['name']) ||
     preg_match("/Stanford Minimal Filter/", $info['name']) ||
     preg_match("/Stanford Paragraph/", $info['name']) ||
     preg_match("/Stanford Private Page/", $info['name']) ||
