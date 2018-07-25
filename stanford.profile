@@ -570,11 +570,12 @@ function stanford_system_info_alter(&$info, $file, $type) {
   // Hide some items by name.
   if (
     isset($info['name']) &&
-    (preg_match("/Stanford Affiliate/", $info['name']) ||
+    (preg_match("/FAQ/", $info['name']) ||
+    preg_match("/JSE/", $info['name']) ||
+    preg_match("/Stanford Affiliate/", $info['name']) ||
     preg_match("/Stanford AFS Quota/", $info['name']) ||
     preg_match("/Stanford Alt Check/", $info['name']) ||
     preg_match("/Stanford Conference/", $info['name']) ||
-    preg_match("/FAQ/", $info['name']) ||
     preg_match("/Frequently Asked Questions/", $info['name']) ||
     preg_match("/Stanford Fellowship/", $info['name']) ||
     preg_match("/Stanford Full Width Banner/", $info['name']) ||
@@ -588,9 +589,8 @@ function stanford_system_info_alter(&$info, $file, $type) {
     preg_match("/Stanford Story Page/", $info['name']) ||
     preg_match("/Stanford Subsite/", $info['name']) ||
     preg_match("/Stanford Jumpstart/", $info['name']) ||
-    preg_match("/VPSA/", $info['name']) ||
     preg_match("/Stanford JSA/", $info['name']) ||
-    preg_match("/JSE/", $info['name']))
+    preg_match("/VPSA/", $info['name']))
   ) {
     $info['hidden'] = TRUE;
     return;
