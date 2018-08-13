@@ -575,6 +575,7 @@ function stanford_system_info_alter(&$info, $file, $type) {
     preg_match("/Stanford Affiliate/", $info['name']) ||
     preg_match("/Stanford AFS Quota/", $info['name']) ||
     preg_match("/Stanford Alt Check/", $info['name']) ||
+    preg_match("/Stanford Bean Types Hero/", $info['name']) ||
     preg_match("/Stanford Conference/", $info['name']) ||
     preg_match("/Frequently Asked Questions/", $info['name']) ||
     preg_match("/Stanford Fellowship/", $info['name']) ||
