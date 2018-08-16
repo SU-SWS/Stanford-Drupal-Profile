@@ -136,6 +136,14 @@
     },
     {
       "type": "vcs",
+      "url": "https://github.com/su-ddd/stanfordmodern"
+    },
+    {
+      "type": "vcs",
+      "url": "https://github.com/su-ddd/stanford_basic"
+    },
+    {
+      "type": "vcs",
       "url": "https://github.com/SU-SWS/erus"
     },
     {
@@ -422,6 +430,8 @@
       "su-sws/stanford_easy_wysiwyg_css": "~7.1",
       "su-sws/stanford_landing_page": "~7.1@beta",
 
+      "su-ddd/stanfordmodern": "~7.1",
+      "su-ddd/stanford_basic": "~7.1",
       "su-sws/open_framework": "~7.2",
       "su-sws/stanford_seven": "~7.1",
       "su-sws/stanford_light": "7.1.1"
