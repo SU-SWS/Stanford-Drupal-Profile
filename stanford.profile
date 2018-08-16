@@ -546,6 +546,7 @@ function stanford_system_info_alter(&$info, $file, $type) {
     $info['project'] == 'stanford_help_administration' ||
     $info['project'] == 'stanford_jordan' ||
     $info['project'] == 'stanford_wilbur' ||
+    $info['project'] == 'stanfordmodern' ||
     $info['project'] == 'cube' ||
     $info['project'] == 'rubik' ||
     $info['project'] == 'tao')
