@@ -136,6 +136,14 @@
     },
     {
       "type": "vcs",
+      "url": "https://github.com/su-ddd/stanfordmodern"
+    },
+    {
+      "type": "vcs",
+      "url": "https://github.com/su-ddd/stanford_basic"
+    },
+    {
+      "type": "vcs",
       "url": "https://github.com/SU-SWS/erus"
     },
     {
@@ -260,6 +268,10 @@
     },
     {
       "type": "vcs",
+      "url": "https://github.com/SU-SWS/stanford_video"
+    },
+    {
+      "type": "vcs",
       "url": "https://github.com/SU-SWS/stanford_wysiwyg"
     },
     {
@@ -343,7 +355,6 @@
       "drupal/metatag": "~1.21",
       "drupal/module_filter": "~2.0",
       "drupal/mollom": "~2.15",
-      "drupal/newrelic_appname": "~1.0-alpha1",
       "drupal/nobots": "~1.0",
       "drupal/node_clone": "~1.0",
       "drupal/node_convert": "~1.2",
@@ -415,12 +426,15 @@
       "su-sws/stanford_publication": "~7.2",
       "su-sws/stanford_slides": "~7.3",
       "su-sws/stanford_wysiwyg": "~7.2",
+      "su-sws/stanford_video": "~7.2.0",
       "su-sws/stanford_easy_wysiwyg_css": "~7.1",
       "su-sws/stanford_landing_page": "~7.1@beta",
 
+      "su-ddd/stanfordmodern": "~7.1",
+      "su-ddd/stanford_basic": "~7.1",
       "su-sws/open_framework": "~7.2",
       "su-sws/stanford_seven": "~7.1",
-      "su-sws/stanford_light": "~7.1"
+      "su-sws/stanford_light": "7.1.1"
   },
   "extra": {
     "patches": {
