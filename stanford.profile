@@ -25,6 +25,13 @@ function stanford_install_tasks($install_state) {
       'type' => 'normal',
       'run' => INSTALL_TASK_RUN_IF_NOT_COMPLETED,
     );
+
+    $tasks['stanford_acsf_tasks_amdb'] = array(
+      'display_name' => st('Fetch remaining information from AMDB'),
+      'display' => FALSE,
+      'type' => 'normal',
+      'run' => INSTALL_TASK_RUN_IF_NOT_COMPLETED,
+    );
   }
 
   // Anchorage Specific Tasks go here.
@@ -277,6 +284,143 @@ function stanford_acsf_tasks() {
 }
 
 /**
+ * Fetch the remaining information that we need to complete the Installation.
+ *
+ * The remaining information is available in AMDB and has been exposed through
+ * an API. Use the sitename as a key and fetch it from the remote api in order
+ * to complete the site installation.
+ */
+function stanford_acsf_tasks_amdb($install_vars) {
+
+  drupal_flush_all_caches();
+  drupal_static_reset();
+
+  // Fetch the json from the AMDB service now endpoint.
+  $endpoint = "https://stanford.service-now.com/api/v1/example";
+  $site_name = isset($install_vars['forms']['install_configure_form']['site_name']) ? $install_vars['forms']['install_configure_form']['site_name'] : NULL;
+
+  if (empty($site_name)) {
+    throw new \Exception("No site_name available. Please pass --site-name to your drush arguments.");
+  }
+
+  // Items we need from the API
+  // 1. Requester sunet
+  // 2. Requester Full Name
+  // 3. Additional people
+  // 4. Website title
+  // 5. Website purpose.
+
+  $response = stanford_acsf_tasks_amdb_make_api_request($site_name);
+
+  // Need this for UI install.
+  require_once DRUPAL_ROOT . '/includes/password.inc';
+
+  // Pull the primary site owner information out of the response first.
+  $sunet = $response['sunet'];
+  $name = $response['name'];
+  $email = $sunet . "@stanford.edu";
+
+  // Create the primary site owner.
+  $primary = stanford_acsf_tasks_amdb_create_site_owner_user($sunet, $name, $email, TRUE);
+
+  // Create additional site owners.
+  foreach ($response['additional'] as $owner) {
+    stanford_acsf_tasks_amdb_create_site_owner_user($owner->sunet, $owner->name, $owner->email);
+  }
+
+  // Set the site title.
+  variable_set('site_title', check_plain($response['title']));
+
+  // Set the site email.
+  variable_set('site_mail', $sunet);
+}
+
+/**
+ * [createSiteOwnerUser description]
+ * @param  [type] $sunet [description]
+ * @param  [type] $name  [description]
+ * @param  [type] $email [description]
+ * @return [type]        [description]
+ */
+function stanford_acsf_tasks_amdb_create_site_owner_user($sunet, $fullname, $email, $is_admin = FALSE) {
+  $sunetrole = user_role_load_by_name('sso user');
+  $ownerrole = user_role_load_by_name('site owner');
+  $adminrole = user_role_load_by_name('administrator');
+
+  if (!is_numeric($sunetrole->rid) || !is_numeric($ownerrole->rid)) {
+    throw new \Exception("A role or roles were missing when trying to create a sunet user");
+  }
+
+  $account = new \stdClass();
+  $account->is_new = TRUE;
+  $account->name = $fullname;
+  $account->pass = user_hash_password(user_password());
+  $account->mail = $email;
+  $account->init = $email;
+  $account->status = TRUE;
+  $roles = array(
+    DRUPAL_AUTHENTICATED_RID => TRUE,
+    $sunetrole->rid => TRUE,
+    $ownerrole->rid => TRUE,
+  );
+
+  // Add an admin toggle.
+  if ($is_admin) {
+    $roles[$adminrole->rid] = TRUE;
+  }
+
+  $account->roles = $roles;
+  $account->timezone = variable_get('date_default_timezone', '');
+
+  $account = user_save($account);
+  user_set_authmaps($account, array('stanford_simplesamlphp_auth' => $authname));
+
+  return $account;
+}
+
+/**
+ * Fetches json information from the service now api.
+ * @param  [type] $sitename [description]
+ * @return [type]           [description]
+ */
+function stanford_acsf_tasks_amdb_make_api_request($sitename) {
+  // TODO: write this.
+  return json_decode(stanford_acsf_tasks_amdb_fake_API_response());
+}
+
+/**
+ * Returns a string of json representing an api response.
+ *
+ * @return string
+ *   A json representation of the request form values.
+ */
+function stanford_acsf_tasks_amdb_fake_API_response() {
+  return '{
+    "requester": {
+      "name": "Shea McKinney",
+      "sunet": "sheamck",
+      "email": "sheamck@stanford.edu"
+    },
+    "additional": [
+      {
+        "name": "John Bickar",
+        "sunet": "jbickar",
+        "email": "jbickar@stanford.edu"
+      },
+      {
+        "name": "Sara Worrell-Berg",
+        "sunet": "swberg",
+        "email": "swberg@stanford.edu"
+      }
+    ],
+    "title": "Super Duper Website",
+    "purpose": "May I be your slogan?",
+    "sunet": "sheamck",
+    "name": "Shea McKinney"
+  }';
+}
+
+/**
  * Installation tasks for anchorage environment.
  */
 function stanford_anchorage_tasks() {
@@ -500,6 +644,8 @@ function stanford_install_finished() {
  *   The string name of the environment being installed.
  */
 function _stanford_detect_environment() {
+
+  return 'acsf';
 
   // Check for ACQUIA environment var.
   $is_ah = getenv('AH_SITE_ENVIRONMENT');
