@@ -327,18 +327,29 @@ function stanford_acsf_tasks_amdb($install_vars) {
   }
 
   // Set the site title.
-  variable_set('site_title', check_plain($response->title));
+  variable_set('site_name', check_plain($response->title));
+
+  // Set the slogan.
+  variable_set('site_slogan', $response->slogan);
 
   // Set the site email.
-  variable_set('site_mail', $sunet);
+  variable_set('site_mail', $email);
 }
 
 /**
- * [createSiteOwnerUser description]
- * @param  [type] $sunet [description]
- * @param  [type] $name  [description]
- * @param  [type] $email [description]
- * @return [type]        [description]
+ * Create a user with SAML authmaps.
+ *
+ * @param string $sunet
+ *   The sunet id of the owner.
+ * @param string $fullname
+ *   The full name of the owner.
+ * @param string $email
+ *   The email address of the owner.
+ * @param bool $is_admin
+ *   A flag to set the admin role or not.
+ *
+ * @return object
+ *   The user account object.
  */
 function stanford_acsf_tasks_amdb_create_site_owner_user($sunet, $fullname, $email, $is_admin = FALSE) {
   $sunetrole = user_role_load_by_name('sso user');
