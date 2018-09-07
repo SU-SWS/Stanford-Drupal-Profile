@@ -293,9 +293,6 @@ function stanford_acsf_tasks() {
  */
 function stanford_acsf_tasks_amdb($install_vars) {
 
-  drupal_flush_all_caches();
-  drupal_static_reset();
-
   // Fetch the json from the AMDB service now endpoint.
   $endpoint = "https://stanford.service-now.com/api/v1/example";
   $site_name = isset($install_vars['parameters']['site-name']) ? $install_vars['parameters']['site-name'] : NULL;
@@ -325,12 +322,12 @@ function stanford_acsf_tasks_amdb($install_vars) {
   $primary = stanford_acsf_tasks_amdb_create_site_owner_user($sunet, $name, $email, TRUE);
 
   // Create additional site owners.
-  foreach ($response['additional'] as $owner) {
-    stanford_acsf_tasks_amdb_create_site_owner_user($owner->sunet, $owner->name, $owner->email);
+  foreach ($response->additional as $owner) {
+    stanford_acsf_tasks_amdb_create_site_owner_user($owner->sunet, $owner->name, $owner->email, TRUE);
   }
 
   // Set the site title.
-  variable_set('site_title', check_plain($response['title']));
+  variable_set('site_title', check_plain($response->title));
 
   // Set the site email.
   variable_set('site_mail', $sunet);
