@@ -314,23 +314,23 @@ function stanford_acsf_tasks_amdb($install_vars) {
   require_once DRUPAL_ROOT . '/includes/password.inc';
 
   // Pull the primary site owner information out of the response first.
-  $sunet = $response->sunet;
-  $name = $response->name;
+  $sunet = $response->sunetId;
+  $name = $response->fullName;
   $email = $sunet . "@stanford.edu";
 
   // Create the primary site owner.
   $primary = stanford_acsf_tasks_amdb_create_site_owner_user($sunet, $name, $email, TRUE);
 
   // Create additional site owners.
-  foreach ($response->additional as $owner) {
+  foreach ($response->websiteOwners as $owner) {
     stanford_acsf_tasks_amdb_create_site_owner_user($owner->sunet, $owner->name, $owner->email, TRUE);
   }
 
   // Set the site title.
-  variable_set('site_name', check_plain($response->title));
+  variable_set('site_name', check_plain($response->websiteTitle));
 
   // Set the slogan.
-  variable_set('site_slogan', $response->purpose);
+  variable_set('site_slogan', $response->webSiteAddress);
 
   // Set the site email.
   variable_set('site_mail', $email);
@@ -391,8 +391,11 @@ function stanford_acsf_tasks_amdb_create_site_owner_user($sunet, $fullname, $ema
  * @return [type]           [description]
  */
 function stanford_acsf_tasks_amdb_make_api_request($sitename) {
-  // TODO: write this.
-  return json_decode(stanford_acsf_tasks_amdb_fake_API_response());
+  // TODO: Make the request.
+  $response = json_decode(stanford_acsf_tasks_amdb_fake_API_response());
+  $ritm = array_pop($response->result);
+  $data = current((array) $ritm);
+  return $data;
 }
 
 /**
@@ -403,27 +406,29 @@ function stanford_acsf_tasks_amdb_make_api_request($sitename) {
  */
 function stanford_acsf_tasks_amdb_fake_API_response() {
   return '{
-    "requester": {
-      "name": "Shea McKinney",
-      "sunet": "sheamck",
-      "email": "sheamck@stanford.edu"
-    },
-    "additional": [
+    "result": [
       {
-        "name": "John Bickar",
-        "sunet": "jbickar",
-        "email": "jbickar@stanford.edu"
-      },
-      {
-        "name": "Sara Worrell-Berg",
-        "sunet": "swberg",
-        "email": "swberg@stanford.edu"
+        "RITM00051927": {
+           "websiteTitle": "Chic Packing",
+           "webSiteAddress": "chicpacking",
+           "sunetId": "vk",
+           "fullName": "V K",
+           "email": "vk@stanford.edu",
+           "websiteOwners": [
+              {
+                "sunetId": "andycary",
+                "fullName": "Andy Cary",
+                "email": "andycary@stanford.edu"
+              },
+              {
+                "sunetId": "vro",
+                "fullName": "Victoria Rogers",
+                "email": "vro@stanford.edu"
+              }
+            ]
+        }
       }
-    ],
-    "title": "Super Duper Website",
-    "purpose": "May I be your slogan?",
-    "sunet": "sheamck",
-    "name": "Shea McKinney"
+    ]
   }';
 }
 
