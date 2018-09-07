@@ -221,6 +221,7 @@ function stanford_acsf_tasks() {
     'stanford_ssp',
     'stanford_saml_block'
   );
+
   module_enable($enable);
 
   // Remove this dependency because it conflicts with our login.
@@ -297,7 +298,7 @@ function stanford_acsf_tasks_amdb($install_vars) {
 
   // Fetch the json from the AMDB service now endpoint.
   $endpoint = "https://stanford.service-now.com/api/v1/example";
-  $site_name = isset($install_vars['forms']['install_configure_form']['site_name']) ? $install_vars['forms']['install_configure_form']['site_name'] : NULL;
+  $site_name = isset($install_vars['parameters']['site-name']) ? $install_vars['parameters']['site-name'] : NULL;
 
   if (empty($site_name)) {
     throw new \Exception("No site_name available. Please pass --site-name to your drush arguments.");
@@ -316,8 +317,8 @@ function stanford_acsf_tasks_amdb($install_vars) {
   require_once DRUPAL_ROOT . '/includes/password.inc';
 
   // Pull the primary site owner information out of the response first.
-  $sunet = $response['sunet'];
-  $name = $response['name'];
+  $sunet = $response->sunet;
+  $name = $response->name;
   $email = $sunet . "@stanford.edu";
 
   // Create the primary site owner.
@@ -344,10 +345,9 @@ function stanford_acsf_tasks_amdb($install_vars) {
  */
 function stanford_acsf_tasks_amdb_create_site_owner_user($sunet, $fullname, $email, $is_admin = FALSE) {
   $sunetrole = user_role_load_by_name('sso user');
-  $ownerrole = user_role_load_by_name('site owner');
   $adminrole = user_role_load_by_name('administrator');
 
-  if (!is_numeric($sunetrole->rid) || !is_numeric($ownerrole->rid)) {
+  if (!is_numeric($sunetrole->rid) || !is_numeric($adminrole->rid)) {
     throw new \Exception("A role or roles were missing when trying to create a sunet user");
   }
 
@@ -361,7 +361,6 @@ function stanford_acsf_tasks_amdb_create_site_owner_user($sunet, $fullname, $ema
   $roles = array(
     DRUPAL_AUTHENTICATED_RID => TRUE,
     $sunetrole->rid => TRUE,
-    $ownerrole->rid => TRUE,
   );
 
   // Add an admin toggle.
@@ -373,7 +372,7 @@ function stanford_acsf_tasks_amdb_create_site_owner_user($sunet, $fullname, $ema
   $account->timezone = variable_get('date_default_timezone', '');
 
   $account = user_save($account);
-  user_set_authmaps($account, array('stanford_simplesamlphp_auth' => $authname));
+  user_set_authmaps($account, array('stanford_simplesamlphp_auth' => $email));
 
   return $account;
 }
