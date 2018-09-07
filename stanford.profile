@@ -330,7 +330,7 @@ function stanford_acsf_tasks_amdb($install_vars) {
   variable_set('site_name', check_plain($response->title));
 
   // Set the slogan.
-  variable_set('site_slogan', $response->slogan);
+  variable_set('site_slogan', $response->purpose);
 
   // Set the site email.
   variable_set('site_mail', $email);
