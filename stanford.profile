@@ -416,11 +416,11 @@ function stanford_acsf_tasks_amdb_make_api_request($sitename) {
 
   if ($curl_info['http_code'] !== 200) {
     watchdog('stanford', 'Failed to fetch information from SNOW api.', array(), WATCHDOG_ERROR);
-    throw new Exception("Error fetching workgroup api information.");
+    throw new Exception("Failed to fetch information from SNOW api.");
   }
 
   if (empty($response) || ($err == 0 && !empty($errmsg))) {
-    watchdog('stanford', 'Failed to fetch workgroup information from api.', array(), WATCHDOG_ERROR);
+    watchdog('stanford', 'Failed to fetch information from SNOW api.', array(), WATCHDOG_ERROR);
     throw new Exception($errmsg);
   }
 
