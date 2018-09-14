@@ -293,25 +293,18 @@ function stanford_acsf_tasks() {
  */
 function stanford_acsf_tasks_amdb($install_vars) {
 
+  // Need this for UI install.
+  require_once DRUPAL_ROOT . '/includes/password.inc';
+
   // Fetch the json from the AMDB service now endpoint.
-  $endpoint = "https://stanford.service-now.com/api/v1/example";
   $site_name = isset($install_vars['parameters']['site-name']) ? $install_vars['parameters']['site-name'] : NULL;
 
   if (empty($site_name)) {
     throw new \Exception("No site_name available. Please pass --site-name to your drush arguments.");
   }
 
-  // Items we need from the API
-  // 1. Requester sunet
-  // 2. Requester Full Name
-  // 3. Additional people
-  // 4. Website title
-  // 5. Website purpose.
-
+  // Fetch the information we need from the API.
   $response = stanford_acsf_tasks_amdb_make_api_request($site_name);
-
-  // Need this for UI install.
-  require_once DRUPAL_ROOT . '/includes/password.inc';
 
   // Pull the primary site owner information out of the response first.
   $sunet = $response->sunetId;
@@ -328,9 +321,6 @@ function stanford_acsf_tasks_amdb($install_vars) {
 
   // Set the site title.
   variable_set('site_name', check_plain($response->websiteTitle));
-
-  // Set the slogan.
-  variable_set('site_slogan', $response->webSiteAddress);
 
   // Set the site email.
   variable_set('site_mail', $email);
@@ -387,49 +377,51 @@ function stanford_acsf_tasks_amdb_create_site_owner_user($sunet, $fullname, $ema
 
 /**
  * Fetches json information from the service now api.
- * @param  [type] $sitename [description]
- * @return [type]           [description]
+ *
+ * @param string $sitename
+ *   The sitename. Shortname of the ACSF site and what the requester entered.
+ *
+ * @return object
+ *   SNOW API request information wrapped in an object.
  */
 function stanford_acsf_tasks_amdb_make_api_request($sitename) {
-  // TODO: Make the request.
-  $response = json_decode(stanford_acsf_tasks_amdb_fake_API_response());
+
+  $endpoint = variable_get('stanford_snow_api_endpoint', 'https://stanfordtest2.service-now.com/api/stu/su_acsf_site_requester_information/requestor');
+  $params = ['website_address' => $sitename];
+  $endpoint .= '?' . http_build_query($params);
+  $username = variable_get('stanford_snow_api_user', '');
+  $password = variable_get('stanford_snow_api_pass', '');
+
+  $ch = curl_init();
+  curl_setopt($ch, CURLOPT_URL, $endpoint);
+  curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+  curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, TRUE);
+  curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2);
+  curl_setopt($ch, CURLOPT_TIMEOUT, 5);
+  curl_setopt($ch, CURLOPT_MAXREDIRS, 10);
+  curl_setopt($ch, CURLOPT_FOLLOWLOCATION, TRUE);
+  curl_setopt($ch, CURLOPT_USERPWD, $username . ":" . $password);
+
+  $response = curl_exec($ch);
+  $err = curl_errno($ch);
+  $errmsg = curl_error($ch);
+  $curl_info = curl_getinfo($ch);
+  curl_close($ch);
+
+  if ($curl_info['http_code'] !== 200) {
+    watchdog('stanford', 'Failed to fetch information from SNOW api.', array(), WATCHDOG_ERROR);
+    throw new Exception("Error fetching workgroup api information.");
+  }
+
+  if (empty($response) || ($err == 0 && !empty($errmsg))) {
+    watchdog('stanford', 'Failed to fetch workgroup information from api.', array(), WATCHDOG_ERROR);
+    throw new Exception($errmsg);
+  }
+
+  $response = json_decode($response);
   $ritm = array_pop($response->result);
   $data = current((array) $ritm);
   return $data;
-}
-
-/**
- * Returns a string of json representing an api response.
- *
- * @return string
- *   A json representation of the request form values.
- */
-function stanford_acsf_tasks_amdb_fake_API_response() {
-  return '{
-    "result": [
-      {
-        "RITM00051927": {
-           "websiteTitle": "Chic Packing",
-           "webSiteAddress": "chicpacking",
-           "sunetId": "vk",
-           "fullName": "V K",
-           "email": "vk@stanford.edu",
-           "websiteOwners": [
-              {
-                "sunetId": "andycary",
-                "fullName": "Andy Cary",
-                "email": "andycary@stanford.edu"
-              },
-              {
-                "sunetId": "vro",
-                "fullName": "Victoria Rogers",
-                "email": "vro@stanford.edu"
-              }
-            ]
-        }
-      }
-    ]
-  }';
 }
 
 /**
