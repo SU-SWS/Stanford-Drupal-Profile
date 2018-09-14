@@ -292,12 +292,13 @@ function stanford_acsf_tasks() {
  * to complete the site installation.
  */
 function stanford_acsf_tasks_amdb($install_vars) {
+  global $conf;
 
   // Need this for UI install.
   require_once DRUPAL_ROOT . '/includes/password.inc';
 
   // Fetch the json from the AMDB service now endpoint.
-  $site_name = isset($install_vars['parameters']['site-name']) ? $install_vars['parameters']['site-name'] : NULL;
+  $site_name = isset($install_vars['forms']['install_configure_form']['site_name']) ? $install_vars['forms']['install_configure_form']['site_name'] : NULL;
 
   if (empty($site_name)) {
     throw new \Exception("No site_name available. Please pass --site-name to your drush arguments.");
@@ -315,12 +316,17 @@ function stanford_acsf_tasks_amdb($install_vars) {
   $primary = stanford_acsf_tasks_amdb_create_site_owner_user($sunet, $name, $email, TRUE);
 
   // Create additional site owners.
-  foreach ($response->websiteOwners as $owner) {
-    stanford_acsf_tasks_amdb_create_site_owner_user($owner->sunet, $owner->name, $owner->email, TRUE);
+  foreach ($response->webSiteOwners as $owner) {
+    // If someone put their own self as an owner or it is a people site,
+    // skip creation of a duplicate account.
+    if ($owner->sunetId == $sunet) {
+      continue;
+    }
+    stanford_acsf_tasks_amdb_create_site_owner_user($owner->sunetId, $owner->fullName, $owner->email, TRUE);
   }
 
   // Set the site title.
-  variable_set('site_name', check_plain($response->websiteTitle));
+  variable_set('site_name', check_plain($response->webSiteTitle));
 
   // Set the site email.
   variable_set('site_mail', $email);
@@ -391,6 +397,9 @@ function stanford_acsf_tasks_amdb_make_api_request($sitename) {
   $endpoint .= '?' . http_build_query($params);
   $username = variable_get('stanford_snow_api_user', '');
   $password = variable_get('stanford_snow_api_pass', '');
+
+  var_dump($username);
+  var_dump($password);
 
   $ch = curl_init();
   curl_setopt($ch, CURLOPT_URL, $endpoint);
