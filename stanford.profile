@@ -649,8 +649,6 @@ function stanford_install_finished() {
  */
 function _stanford_detect_environment() {
 
-  return 'acsf';
-
   // Check for ACQUIA environment var.
   $is_ah = getenv('AH_SITE_ENVIRONMENT');
   if (!empty($is_ah)) {
