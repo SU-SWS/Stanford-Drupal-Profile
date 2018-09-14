@@ -398,9 +398,6 @@ function stanford_acsf_tasks_amdb_make_api_request($sitename) {
   $username = variable_get('stanford_snow_api_user', '');
   $password = variable_get('stanford_snow_api_pass', '');
 
-  var_dump($username);
-  var_dump($password);
-
   $ch = curl_init();
   curl_setopt($ch, CURLOPT_URL, $endpoint);
   curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
