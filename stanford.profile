@@ -313,7 +313,29 @@ function stanford_acsf_tasks_ritm($install_vars) {
   $email = $sunet . "@stanford.edu";
 
   // Create the primary site owner.
-  $primary = stanford_acsf_tasks_ritm_create_site_owner_user($sunet, $name, $email, TRUE);
+  $sunetrole = user_role_load_by_name('sso user');
+  $adminrole = user_role_load_by_name('administrator');
+  module_load_include('inc', 'stanford_ssp', 'stanford_ssp.admin');
+
+  if (!is_numeric($sunetrole->rid) || !is_numeric($adminrole->rid)) {
+    throw new \Exception("A role or roles were missing when trying to create a sunet user");
+  }
+
+  // User create payload.
+  $form_state = [
+    'values' => [
+      'sunetid' => $sunet,
+      'name' => $name,
+      'email' => $email,
+      'roles' => [
+        DRUPAL_AUTHENTICATED_RID
+        $sunetrole->rid,
+        $adminrole->rid,
+      ],
+    ],
+  ];
+
+  drupal_form_submit('stanford_ssp_add_sso_user', $form_state);
 
   // Create additional site owners.
   foreach ($response->webSiteOwners as $owner) {
@@ -322,7 +344,21 @@ function stanford_acsf_tasks_ritm($install_vars) {
     if ($owner->sunetId == $sunet) {
       continue;
     }
-    stanford_acsf_tasks_ritm_create_site_owner_user($owner->sunetId, $owner->fullName, $owner->email, TRUE);
+
+    // User create payload.
+    $form_state = [
+      'values' => [
+        'sunetid' => $owner->sunetId,
+        'name' => $owner->fullName,
+        'email' => $owner->email,
+        'roles' => [
+          DRUPAL_AUTHENTICATED_RID
+          $sunetrole->rid,
+        ],
+      ],
+    ];
+
+    drupal_form_submit('stanford_ssp_add_sso_user', $form_state);
   }
 
   // Set the site title.
@@ -330,55 +366,6 @@ function stanford_acsf_tasks_ritm($install_vars) {
 
   // Set the site email.
   variable_set('site_mail', $email);
-}
-
-/**
- * Create a user with SAML authmaps.
- *
- * @param string $sunet
- *   The sunet id of the owner.
- * @param string $fullname
- *   The full name of the owner.
- * @param string $email
- *   The email address of the owner.
- * @param bool $is_admin
- *   A flag to set the admin role or not.
- *
- * @return object
- *   The user account object.
- */
-function stanford_acsf_tasks_ritm_create_site_owner_user($sunet, $fullname, $email, $is_admin = FALSE) {
-  $sunetrole = user_role_load_by_name('sso user');
-  $adminrole = user_role_load_by_name('administrator');
-
-  if (!is_numeric($sunetrole->rid) || !is_numeric($adminrole->rid)) {
-    throw new \Exception("A role or roles were missing when trying to create a sunet user");
-  }
-
-  $account = new \stdClass();
-  $account->is_new = TRUE;
-  $account->name = $fullname;
-  $account->pass = user_hash_password(user_password());
-  $account->mail = $email;
-  $account->init = $email;
-  $account->status = TRUE;
-  $roles = array(
-    DRUPAL_AUTHENTICATED_RID => TRUE,
-    $sunetrole->rid => TRUE,
-  );
-
-  // Add an admin toggle.
-  if ($is_admin) {
-    $roles[$adminrole->rid] = TRUE;
-  }
-
-  $account->roles = $roles;
-  $account->timezone = variable_get('date_default_timezone', '');
-
-  $account = user_save($account);
-  user_set_authmaps($account, array('stanford_simplesamlphp_auth' => $email));
-
-  return $account;
 }
 
 /**
