@@ -26,8 +26,8 @@ function stanford_install_tasks($install_state) {
       'run' => INSTALL_TASK_RUN_IF_NOT_COMPLETED,
     );
 
-    $tasks['stanford_acsf_tasks_amdb'] = array(
-      'display_name' => st('Fetch remaining information from AMDB'),
+    $tasks['stanford_acsf_tasks_ritm'] = array(
+      'display_name' => st('Fetch remaining information from ritm'),
       'display' => FALSE,
       'type' => 'normal',
       'run' => INSTALL_TASK_RUN_IF_NOT_COMPLETED,
@@ -287,25 +287,25 @@ function stanford_acsf_tasks() {
 /**
  * Fetch the remaining information that we need to complete the Installation.
  *
- * The remaining information is available in AMDB and has been exposed through
+ * The remaining information is available in ritm and has been exposed through
  * an API. Use the sitename as a key and fetch it from the remote api in order
  * to complete the site installation.
  */
-function stanford_acsf_tasks_amdb($install_vars) {
+function stanford_acsf_tasks_ritm($install_vars) {
   global $conf;
 
   // Need this for UI install.
   require_once DRUPAL_ROOT . '/includes/password.inc';
 
-  // Fetch the json from the AMDB service now endpoint.
-  $site_name = isset($install_vars['forms']['install_configure_form']['site_name']) ? $install_vars['forms']['install_configure_form']['site_name'] : NULL;
+  // Fetch the json from the ritm service now endpoint.
+  $site_name = isset($install_vars['forms']['install_configure_form']['site_name']) ? check_plain($install_vars['forms']['install_configure_form']['site_name']) : NULL;
 
   if (empty($site_name)) {
     throw new \Exception("No site_name available. Please pass --site-name to your drush arguments.");
   }
 
   // Fetch the information we need from the API.
-  $response = stanford_acsf_tasks_amdb_make_api_request($site_name);
+  $response = stanford_acsf_tasks_ritm_make_api_request($site_name);
 
   // Pull the primary site owner information out of the response first.
   $sunet = $response->sunetId;
@@ -313,7 +313,7 @@ function stanford_acsf_tasks_amdb($install_vars) {
   $email = $sunet . "@stanford.edu";
 
   // Create the primary site owner.
-  $primary = stanford_acsf_tasks_amdb_create_site_owner_user($sunet, $name, $email, TRUE);
+  $primary = stanford_acsf_tasks_ritm_create_site_owner_user($sunet, $name, $email, TRUE);
 
   // Create additional site owners.
   foreach ($response->webSiteOwners as $owner) {
@@ -322,7 +322,7 @@ function stanford_acsf_tasks_amdb($install_vars) {
     if ($owner->sunetId == $sunet) {
       continue;
     }
-    stanford_acsf_tasks_amdb_create_site_owner_user($owner->sunetId, $owner->fullName, $owner->email, TRUE);
+    stanford_acsf_tasks_ritm_create_site_owner_user($owner->sunetId, $owner->fullName, $owner->email, TRUE);
   }
 
   // Set the site title.
@@ -347,7 +347,7 @@ function stanford_acsf_tasks_amdb($install_vars) {
  * @return object
  *   The user account object.
  */
-function stanford_acsf_tasks_amdb_create_site_owner_user($sunet, $fullname, $email, $is_admin = FALSE) {
+function stanford_acsf_tasks_ritm_create_site_owner_user($sunet, $fullname, $email, $is_admin = FALSE) {
   $sunetrole = user_role_load_by_name('sso user');
   $adminrole = user_role_load_by_name('administrator');
 
@@ -390,7 +390,7 @@ function stanford_acsf_tasks_amdb_create_site_owner_user($sunet, $fullname, $ema
  * @return object
  *   SNOW API request information wrapped in an object.
  */
-function stanford_acsf_tasks_amdb_make_api_request($sitename) {
+function stanford_acsf_tasks_ritm_make_api_request($sitename) {
 
   $endpoint = variable_get('stanford_snow_api_endpoint', 'https://stanfordtest2.service-now.com/api/stu/su_acsf_site_requester_information/requestor');
   $params = ['website_address' => $sitename];
@@ -425,6 +425,10 @@ function stanford_acsf_tasks_amdb_make_api_request($sitename) {
   }
 
   $response = json_decode($response);
+  if (!is_array($response)) {
+    watchdog('stanford', 'Could not decode JSON from SNOW API.', array(), WATCHDOG_ERROR);
+    throw new Exception("Could not decode JSON from SNOW API.");
+  }
   $ritm = array_pop($response->result);
   $data = current((array) $ritm);
   return $data;
