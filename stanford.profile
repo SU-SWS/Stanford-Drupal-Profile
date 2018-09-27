@@ -213,7 +213,7 @@ function stanford_acsf_tasks() {
     'paranoia',
     'stanford_ssp',
     'stanford_saml_block',
-    'syslog'.
+    'syslog',
   );
   module_enable($enable);
 
