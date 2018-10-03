@@ -396,7 +396,7 @@
       "drupal/context_http_headers": "~1.0",
       "drupal/context_list": "dev-1.x#6d81d058c0fa2aa38f5c86f129b822146991a0fb",
       "drupal/context_useragent": "dev-1.x#3cd2c8c20cf9c075d5ccf8fe0bc2aa139823504c",
-      "drupal/css_injector": "dev-1.x#41bee7e4421ecfc52a6b673eef6fcde875282a2b",
+      "drupal/css_injector": "dev-1.x#708ae4e2c6d2c8683fc27b6f03cfe3237a0fab96",
       "drupal/token_tweaks": "dev-1.x#75818fbfb97bf8882ca106e6af703be7644b11bb",
 
       "drupal/cube": "~1.4",
@@ -443,10 +443,10 @@
         "https://www.drupal.org/files/issues/context_css_injector_1.diff"
       },
       "drupal/css_injector": {
-          "https://www.drupal.org/node/2471911":
-          "https://www.drupal.org/files/issues/css_injector-remove_drupal_realpath-2471911-2.patch",
-          "https://www.drupal.org/node/2160385":
-          "https://www.drupal.org/files/issues/css_injector-bad_crid_protection-2160385-10.patch"
+        "https://www.drupal.org/project/css_injector/issues/3002687":
+        "https://www.drupal.org/files/issues/2018-09-26/css_injector-ace-editor.patch",
+        "https://www.drupal.org/node/2160385":
+        "https://www.drupal.org/files/issues/css_injector-bad_crid_protection-2160385-10.patch"
       },
       "drupal/ds": {
         "https://www.drupal.org/node/2221307":
