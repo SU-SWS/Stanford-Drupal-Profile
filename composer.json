@@ -444,9 +444,7 @@
       },
       "drupal/css_injector": {
         "https://www.drupal.org/project/css_injector/issues/3002687":
-        "https://www.drupal.org/files/issues/2018-09-26/css_injector-ace-editor.patch",
-        "https://www.drupal.org/node/2160385":
-        "https://www.drupal.org/files/issues/css_injector-bad_crid_protection-2160385-10.patch"
+        "https://www.drupal.org/files/issues/2018-10-03/css_injector-ace-editor-3002687-4.patch"
       },
       "drupal/ds": {
         "https://www.drupal.org/node/2221307":
