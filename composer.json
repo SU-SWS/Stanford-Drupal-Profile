@@ -465,6 +465,10 @@
       "drupal/pathauto": {
         "https://drupal.org/node/1267966":
         "https://drupal.org/files/pathauto_admin.patch"
+      },
+      "drupal/video_embed_field": {
+        "Double url encoding - https://www.drupal.org/project/video_embed_field/issues/2580459": 
+        "https://www.drupal.org/files/issues/youtube_autoplay-2580459-25.patch"
       }
     }
   }
