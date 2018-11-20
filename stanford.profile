@@ -598,3 +598,75 @@ function stanford_system_info_alter(&$info, $file, $type) {
     return;
   }
 }
+
+/**
+ * Implements hook_block_view_alter.
+ */
+function stanford_block_view_alter(&$data, $block) {
+
+  // BEAN 1.13 introduced a new variable in to the bean.tpl.php template and it
+  // renders a title when one is put in a bean. Blocks still display the bean
+  // title as the block title and ends up duplicating the titles. Instead of
+  // removing the new field from the template, allow for explict setting of the
+  // block title fields for bean blocks only and don't assume as a block that
+  // the bean title should be the block title.
+
+  // Only act if the bean module is available.
+  if (!module_exists('bean')) {
+    return;
+  }
+
+  // Only act if the block to alter is a bean.
+  if (!isset($block->module) || $block->module !== 'bean') {
+    return;
+  }
+
+  // When the block config has an empty title and the bean display config is
+  // showing a title field then let the block subject get the bean title.
+  if (empty($block->title)) {
+    $data['subject'] = "";
+  }
+
+}
+
+/**
+ * Implements hook_preprocess_entity.
+ */
+function stanford_preprocess_entity(&$variables) {
+
+  // BEAN 1.13 introduced a new variable in to the bean.tpl.php template and it
+  // renders a title when one is put in a bean. Blocks still display the bean
+  // title as the block title and ends up duplicating the titles. Instead of
+  // removing the new field from the template, allow for explict setting of the
+  // block title fields for bean blocks only and don't assume as a block that
+  // the bean title should be the block title.
+
+  // Only run on beans.
+  if ($variables['entity_type'] !== 'bean') {
+    return;
+  }
+
+  // Bean object. Should have already been loaded and stored in static caching.
+  $bean = $variables['elements']['#entity'];
+  $view_mode = $variables['elements']['#view_mode'];
+  $entity_type = $variables['elements']['#entity_type'];
+  $bundle_type = $variables['elements']['#bundle'];
+
+  // Because titles are not fields and they don't have the api functions to
+  // get the display mode information I get what I need to know right from
+  // the UI form itself. This seems like a lot of effort to get this but I am
+  // open to a PR for a better approach.
+  module_load_include("inc", "field_ui", "field_ui.admin");
+  $form = [];
+  $form_state = [];
+  $view_mode_form = field_ui_display_overview_form($form, $form_state, $entity_type, $bundle_type, $view_mode);
+
+  // Get the visibility value of the title "field" from the view mode form by
+  // checking the format select field for it's default value. Anything that is
+  // not 'hidden' is a region.
+  if (isset($view_mode_form['fields']['title']['format']['type']['#default_value'])
+      && $view_mode_form['fields']['title']['format']['type']['#default_value'] == "hidden") {
+    $variables['bean']->title = '';
+  }
+
+}
