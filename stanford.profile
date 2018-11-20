@@ -652,20 +652,11 @@ function stanford_preprocess_entity(&$variables) {
   $entity_type = $variables['elements']['#entity_type'];
   $bundle_type = $variables['elements']['#bundle'];
 
-  // Because titles are not fields and they don't have the api functions to
-  // get the display mode information I get what I need to know right from
-  // the UI form itself. This seems like a lot of effort to get this but I am
-  // open to a PR for a better approach.
-  module_load_include("inc", "field_ui", "field_ui.admin");
-  $form = [];
-  $form_state = [];
-  $view_mode_form = field_ui_display_overview_form($form, $form_state, $entity_type, $bundle_type, $view_mode);
+  // Title fields are special. Get the value from the variables table.
+  $view_mode_settings = variable_get("field_bundle_settings_" . $entity_type . "__" . $bundle_type);
 
-  // Get the visibility value of the title "field" from the view mode form by
-  // checking the format select field for it's default value. Anything that is
-  // not 'hidden' is a region.
-  if (isset($view_mode_form['fields']['title']['format']['type']['#default_value'])
-      && $view_mode_form['fields']['title']['format']['type']['#default_value'] == "hidden") {
+  if (isset($view_mode_settings['extra_fields']['display']['title'][$view_mode]['visible']) &&
+      !$view_mode_settings['extra_fields']['display']['title'][$view_mode]['visible']) {
     $variables['bean']->title = '';
   }
 
