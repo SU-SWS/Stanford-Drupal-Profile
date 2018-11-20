@@ -249,3 +249,22 @@ function stanford_sites_install_configure_form_submit($form, &$form_state) {
   variable_set('stanford_sites_requester_email', $form['stanford_sites_requester_email']['#value']);
   variable_set('stanford_sites_auth_method', $form['stanford_authentication']['#value']);
 }
+
+/**
+ * Update all empty bean block titles with `<none>` because bean added the title
+ * to the template by default.
+ */
+function stanford_update_7300() {
+
+  // Updates all bean elements that had not explicitly set their block title to
+  // something to `<none>` so that an extra title doesn't show up in the
+  // bean module >= 1.13.
+  if (module_exists('bean')) {
+    db_update("block")
+      ->fields(['title' => '<none>'])
+      ->condition('module', 'bean')
+      ->condition('title', '')
+      ->execute();
+  }
+  
+}
