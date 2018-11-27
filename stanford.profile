@@ -600,36 +600,6 @@ function stanford_system_info_alter(&$info, $file, $type) {
 }
 
 /**
- * Implements hook_block_view_alter.
- */
-function stanford_block_view_alter(&$data, $block) {
-
-  // BEAN 1.13 introduced a new variable in to the bean.tpl.php template and it
-  // renders a title when one is put in a bean. Blocks still display the bean
-  // title as the block title and ends up duplicating the titles. Instead of
-  // removing the new field from the template, allow for explict setting of the
-  // block title fields for bean blocks only and don't assume as a block that
-  // the bean title should be the block title.
-
-  // Only act if the bean module is available.
-  if (!module_exists('bean')) {
-    return;
-  }
-
-  // Only act if the block to alter is a bean.
-  if (!isset($block->module) || $block->module !== 'bean') {
-    return;
-  }
-
-  // When the block config has an empty title and the bean display config is
-  // showing a title field then let the block subject get the bean title.
-  if (empty($block->title)) {
-    $data['subject'] = "";
-  }
-
-}
-
-/**
  * Implements hook_preprocess_entity.
  */
 function stanford_preprocess_entity(&$variables) {
@@ -646,18 +616,6 @@ function stanford_preprocess_entity(&$variables) {
     return;
   }
 
-  // Bean object. Should have already been loaded and stored in static caching.
-  $bean = $variables['elements']['#entity'];
-  $view_mode = $variables['elements']['#view_mode'];
-  $entity_type = $variables['elements']['#entity_type'];
-  $bundle_type = $variables['elements']['#bundle'];
-
-  // Title fields are special. Get the value from the variables table.
-  $view_mode_settings = variable_get("field_bundle_settings_" . $entity_type . "__" . $bundle_type);
-
-  if (isset($view_mode_settings['extra_fields']['display']['title'][$view_mode]['visible']) &&
-      !$view_mode_settings['extra_fields']['display']['title'][$view_mode]['visible']) {
-    $variables['bean']->title = '';
-  }
-
+  // No bean template title.
+  $variables['bean']->title = '';
 }
