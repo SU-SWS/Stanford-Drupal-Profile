@@ -411,7 +411,7 @@ function stanford_acsf_tasks_ritm_make_api_request($sitename) {
     throw new Exception($errmsg);
   }
 
-  $response = json_decode($response);
+  $response = drupal_json_decode($response);
   if (!is_array($response)) {
     watchdog('stanford', 'Could not decode JSON from SNOW API.', array(), WATCHDOG_ERROR);
     throw new Exception("Could not decode JSON from SNOW API.");
