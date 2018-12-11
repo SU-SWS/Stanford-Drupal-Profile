@@ -219,7 +219,8 @@ function stanford_acsf_tasks() {
     'acsf_helper',
     'paranoia',
     'stanford_ssp',
-    'stanford_saml_block'
+    'stanford_saml_block',
+    'syslog',
   );
 
   module_enable($enable);
@@ -328,7 +329,7 @@ function stanford_acsf_tasks_ritm($install_vars) {
       'name' => $name,
       'email' => $email,
       'roles' => [
-        DRUPAL_AUTHENTICATED_RID
+        DRUPAL_AUTHENTICATED_RID,
         $sunetrole->rid,
         $adminrole->rid,
       ],
@@ -352,7 +353,7 @@ function stanford_acsf_tasks_ritm($install_vars) {
         'name' => $owner->fullName,
         'email' => $owner->email,
         'roles' => [
-          DRUPAL_AUTHENTICATED_RID
+          DRUPAL_AUTHENTICATED_RID,
           $sunetrole->rid,
         ],
       ],
@@ -379,7 +380,7 @@ function stanford_acsf_tasks_ritm($install_vars) {
  */
 function stanford_acsf_tasks_ritm_make_api_request($sitename) {
 
-  $endpoint = variable_get('stanford_snow_api_endpoint', 'https://stanfordtest2.service-now.com/api/stu/su_acsf_site_requester_information/requestor');
+  $endpoint = variable_get('stanford_snow_api_endpoint', 'https://stanford.service-now.com/api/stu/su_acsf_site_requester_information/requestor');
   $params = ['website_address' => $sitename];
   $endpoint .= '?' . http_build_query($params);
   $username = variable_get('stanford_snow_api_user', '');
@@ -412,11 +413,18 @@ function stanford_acsf_tasks_ritm_make_api_request($sitename) {
   }
 
   $response = drupal_json_decode($response);
+
   if (!is_array($response)) {
     watchdog('stanford', 'Could not decode JSON from SNOW API.', array(), WATCHDOG_ERROR);
     throw new Exception("Could not decode JSON from SNOW API.");
   }
-  $ritm = array_pop($response->result);
+
+  // Validate that we got a record back.
+  if (isset($response['result'][0]['message']) && preg_match('/no records found/i', $response['result'][0]['message'])) {
+    throw new Exception($response['result'][0]['message']);
+  }
+
+  $ritm = array_pop($response['result']);
   $data = current((array) $ritm);
   return $data;
 }
