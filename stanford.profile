@@ -1,752 +1,911 @@
 <?php
 
 /**
- * Implementation of hook_install_tasks().
+ * @file
+ * Config forms.
  */
-function stanford_install_tasks($install_state) {
-
-  // Detect which environment we are running and add
-  // those specific tasks to the installation.
-  $environment = _stanford_detect_environment();
-
-  // Any and all environment tasks go here.
-  $tasks['stanford_profile_tasks'] = array(
-    'display_name' => st('Do configuration tasks for the Stanford Sites hosting environment'),
-    'display' => FALSE,
-    'type' => 'normal',
-    'run' => INSTALL_TASK_RUN_IF_NOT_COMPLETED,
-  );
-
-  // ACSF Specific Tasks go here.
-  if ($environment == "acsf") {
-    $tasks['stanford_acsf_tasks'] = array(
-      'display_name' => st('Do configuration tasks for the ACSF hosting environment'),
-      'display' => FALSE,
-      'type' => 'normal',
-      'run' => INSTALL_TASK_RUN_IF_NOT_COMPLETED,
-    );
-
-    $tasks['stanford_acsf_tasks_ritm'] = array(
-      'display_name' => st('Fetch remaining information from ritm'),
-      'display' => FALSE,
-      'type' => 'normal',
-      'run' => INSTALL_TASK_RUN_IF_NOT_COMPLETED,
-    );
-  }
-
-  // Anchorage Specific Tasks go here.
-  if ($environment == "anchorage") {
-    $tasks['stanford_anchorage_tasks'] = array(
-      'display_name' => st('Do configuration tasks for the Anchorage hosting environment'),
-      'display' => FALSE,
-      'type' => 'normal',
-      'run' => INSTALL_TASK_RUN_IF_NOT_COMPLETED,
-    );
-  }
-
-  // Sites specific tasks go here.
-  // ACSF Specific Tasks go here.
-  if ($environment == "sites") {
-    $tasks['stanford_sites_tasks'] = array(
-      'display_name' => st('Do configuration tasks for the Stanford Sites hosting environment'),
-      'display' => FALSE,
-      'type' => 'normal',
-      'run' => INSTALL_TASK_RUN_IF_NOT_COMPLETED,
-    );
-  }
-
-  // Clean up functions for all of them.
-  $tasks['stanford_install_finished'] = array(
-    'display_name' => st('Clean up before finishing'),
-    'display' => FALSE,
-    'type' => 'normal',
-    'run' => INSTALL_TASK_RUN_IF_NOT_COMPLETED,
-  );
-
-  return $tasks;
-}
 
 /**
- * Installation tasks for any environment.
+ * The main landing page for the configuration form.
+ *
+ * @param array $form
+ *   Form array.
+ * @param array &$form_state
+ *   Form state array.
+ *
+ * @return array
+ *   The form array.
  */
-function stanford_profile_tasks() {
+function stanford_ssp_configuration_form(array $form, array &$form_state) {
 
-  // Enable the stanford_sites_helper module
-  // Do this now rather than in .info file because install looking for the
-  // administrator role and errors out otherwise.
-  module_enable(array('stanford_sites_helper'));
-  module_enable(array('stanford_sites_systemtools'));
-  $remove = array('update', 'comment');
-  module_disable($remove);
-  drupal_uninstall_modules($remove);
+  // Vertical Tab container.
+  $form['togglers'] = array(
+    '#type' => 'vertical_tabs',
+    '#default_tab' => 'edit-general-config',
+  );
 
-  // Create configuration for CKEditor.
-  $ckeditor_configuration = serialize(array(
-  'default' => 1,
-  'user_choose' => 0,
-  'show_toggle' => 1,
-  'theme' => 'advanced',
-  'language' => 'en',
-  'buttons' => array(
-    'default' => array(
-      'Bold' => 1,
-      'Italic' => 1,
-      'BulletedList' => 1,
-      'NumberedList' => 1,
-      'Outdent' => 1,
-      'Indent' => 1,
-      'Undo' => 1,
-      'Redo' => 1,
-      'Link' => 1,
-      'Unlink' => 1,
-      'Blockquote' => 1,
-      'Cut' => 1,
-      'Copy' => 1,
-      'Paste' => 1,
-      'PasteText' => 1,
-      'PasteFromWord' => 1,
-      'Format' => 1,
-      'SelectAll' => 1,
+  // Tab Groups.
+  // ----------------------------------------------------------------.
+
+  // Tab for the general options.
+  $form['general-config'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('General Configuration'),
+    '#collapsible' => TRUE,
+    '#description' => "<h4>" . t('Here you can configure the general settings for the use of this module. Please read the descriptions of each option carefully as it is possible to lock yourself out of this website if improperly configured.') . "</h4>",
+    '#group' => 'togglers',
+  );
+
+  // Tab for the user options.
+  $form['user-config'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('User Account Configuration'),
+    '#collapsible' => TRUE,
+    '#description' => t('Here you can configure the general settings for how global interactions happen with users.'),
+    '#group' => 'togglers',
+  );
+
+  // Tab for the user options.
+  $form['saml-config'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('SAML Configuration'),
+    '#collapsible' => TRUE,
+    '#description' => t('SimpleSAMLPHP configuration options are set here.'),
+    '#group' => 'togglers',
+  );
+
+  // General Config
+  // ---------------------------------------------------------------.
+
+  // Enables / Disables user authentication by simplesamlphp.
+  $form['general-config']['stanford_simplesamlphp_auth_activate'] = array(
+    '#type' => 'switch',
+    '#title' => t('Enable authentication by SSO'),
+    '#description' => t("Turn on to allow users to sign in to this website using single sign on. <br />Warning: Enabling before configuring this module could lock you out of your website."),
+    '#default_value' => variable_get('stanford_simplesamlphp_auth_activate', FALSE),
+  );
+
+  // Enables / Disables user authentication by Drupal.
+  $form['general-config']['stanford_simplesamlphp_auth_allowdefaultlogin'] = array(
+    '#type' => 'switch',
+    '#title' => t('Allow authentication with local Drupal accounts'),
+    '#default_value' => variable_get('stanford_simplesamlphp_auth_allowdefaultlogin', TRUE),
+    '#description' => t('Turn on if you want to let people log in with local Drupal accounts (Not SSO).'),
+  );
+
+  // Enables automatic login when hitting a 403.
+  $form['general-config']['stanford_ssp_automagic_login'] = array(
+    '#type' => 'switch',
+    '#title' => t('Enable automatic login'),
+    '#description' => t("Try to automatically authenticate the user if they are presented with a (403) access denied page."),
+    '#default_value' => variable_get('stanford_ssp_automagic_login', TRUE),
+  );
+
+  // Force users to log in over HTTPS.
+  $form['general-config']['stanford_ssp_force_https'] = array(
+    '#type' => 'switch',
+    '#title' => t('Force users to log in with HTTPS.'),
+    '#default_value' => variable_get('stanford_ssp_force_https', FALSE),
+    '#description' => t("Enforce that authentication and authenticated transactions happen over HTTPS. This should be enabled on production websites."),
+  );
+
+  // Reformat entitlements, replacing : with _.
+  $form['general-config']['stanford_ssp_format_entitlements'] = array(
+    '#type' => 'switch',
+    '#title' => t('Reformat entitlements.'),
+    '#default_value' => variable_get('stanford_ssp_format_entitlements', FALSE),
+    '#description' => t("If your SP configuration reformats entitlements (e.g. stanford:stanford to stanford_stanford), enable this option."),
+  );
+
+  $form['general-config']['stanford_ssp_redirect_on_login'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Redirect all users on successful login to this url.'),
+    '#default_value' => variable_get('stanford_ssp_redirect_on_login', FALSE),
+    '#description' => t("Force the redirect of all users to a specific url no matter where they logged in from. This should be entered as a relative url. eg: admin/config/stanford"),
+  );
+
+  // User Config
+  // ------------------------------------------------------------------.
+
+  // Auto create an account for users on auth.
+  $form['user-config']['stanford_simplesamlphp_auth_registerusers'] = array(
+    '#type' => 'switch',
+    '#title' => t('Register users (i.e., auto-provisioning)'),
+    '#default_value' => variable_get('stanford_simplesamlphp_auth_registerusers', TRUE),
+    '#description' => t("Automatically create an account for a new user on successful log in. Without this enabled only those with user accounts already created in this website can log in."),
+  );
+
+  // Connect existing user accounts.
+  $form['user-config']['stanford_simplesamlphp_auth_autoenablesaml'] = array(
+    '#type' => 'switch',
+    '#title' => t('Automatically enable SSO authentication for existing users upon successful login. This will update existing accounts to be able to authenticate with SSO.'),
+    '#default_value' => variable_get('stanford_simplesamlphp_auth_autoenablesaml', FALSE),
+  );
+
+  // Prevent the default cache for auth users.
+  $form['user-config']['stanford_ssp_prevent_cache'] = array(
+    '#type' => 'switch',
+    '#title' => t('Prevent the browser from caching pages for authenticated users.'),
+    '#default_value' => variable_get('stanford_ssp_prevent_cache', FALSE),
+    '#description' => t("Pages for logged in users can be dynamic and if the browser caches them, there could be stale information displayed."),
+  );
+
+  // Allow for both local passwords and SAML based auth.
+  $form['user-config']['stanford_simplesamlphp_auth_allowsetdrupalpwd'] = array(
+    '#type' => 'switch',
+    '#title' => t('Allow SSO users to set Drupal passwords.'),
+    '#default_value' => variable_get('stanford_simplesamlphp_auth_allowsetdrupalpwd', FALSE),
+    '#description' => t('Set this to ON if you want to let users set passwords for their local Drupal accounts. This will allow users to log in using either SSO or a local Drupal account password. Disabling this removes the password change fields from the user profile form.'),
+    '#states' => array(
+      'enabled' => array(
+        ':input[name="stanford_simplesamlphp_auth_allowdefaultlogin"]' => array('checked' => TRUE),
+      ),
     ),
-  ),
-  'toolbar_loc' => 'top',
-  'toolbar_align' => 'left',
-  'path_loc' => 'bottom',
-  'resizing' => 1,
-  'verify_html' => 1,
-  'preformatted' => 0,
-  'convert_fonts_to_spans' => 1,
-  'remove_linebreaks' => 1,
-  'apply_source_formatting' => 1,
-  'paste_auto_cleanup_on_paste' => 1,
-  'block_formats' => [
-    'p',
-    'address',
-    'pre',
-    'h2',
-    'h3',
-    'h4',
-    'h5',
-    'h6'
-  ],
-  'css_setting' => 'theme',
-  'css_path' => '',
-  'css_classes' => ''
-  ));
-
-  // Add CKEditor to wysiwyg.
-  $query = db_insert('wysiwyg')
-    ->fields(array(
-      'format' => 'filtered_html',
-      'editor' => 'ckeditor',
-      'settings' => $ckeditor_configuration,
-    ));
-  $query->execute();
-
-  // Set errors only to go to the log.
-  variable_set('error_level', 0);
-
-  // Make the Seven admin theme use our favicon.
-  $theme_seven_settings = array(
-    'toggle_logo' => 1,
-    'toggle_name' => 1,
-    'toggle_slogan' => 1,
-    'toggle_node_user_picture' => 1,
-    'toggle_comment_user_picture' => 1,
-    'toggle_comment_user_verification' => 1,
-    'toggle_favicon' => 1,
-    'toggle_main_menu' => 1,
-    'toggle_secondary_menu' => 1,
-    'default_logo' => 1,
-    'logo_path' => '',
-    'logo_upload' => '',
-    'default_favicon' => 0,
-    'favicon_path' => 'profiles/stanford/favicon.ico',
-    'favicon_upload' => '',
-    'favicon_mimetype' => 'image/vnd.microsoft.icon',
   );
-  variable_set('theme_seven_settings', $theme_seven_settings);
 
-  // Make the default pathauto setting be [node:title].
-  $pathauto_node_pattern = '[node:title]';
-  variable_set('pathauto_node_pattern', $pathauto_node_pattern);
+  // SAML Config
+  // ------------------------------------------------------------------.
 
-  // Departments' preferred theme is Stanford Wilbur.
-  // Groups' and individuals' preferred theme is Open Framework.
-  // Official groups can have the Stanford Wilbur theme enabled by ITS.
-  $org_type = variable_get('stanford_sites_org_type');
-  if ($org_type == 'dept') {
-    $preferred_themes = array(
-      'theme_default' => 'stanford_wilbur',
-      'admin_theme' => 'seven',
-      'node_admin_theme' => 1,
-      'open_framework' => NULL,
-      'stanford_framework' => NULL,
-      'stanford_jordan' => NULL,
+  $form['saml-config']['stanford_simplesamlphp_auth_installdir'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Installation directory'),
+    '#default_value' => variable_get('stanford_simplesamlphp_auth_installdir', '/opt/simplesamlphp'),
+    '#description' => t('The base directory of simpleSAMLphp. Absolute path with no trailing slash. default: /opt/simplesamlphp'),
+  );
+
+  $form['saml-config']['stanford_simplesamlphp_auth_authsource'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Authenticaton source for this service provider'),
+    '#default_value' => variable_get('stanford_simplesamlphp_auth_authsource', 'default-sp'),
+    '#description' => t('The name of the source to use from //config/authsources.php. default: default-sp'),
+  );
+
+  $form['saml-config']['stanford_simplesamlphp_auth_user_name'] = array(
+    '#type' => 'textfield',
+    '#title' => t("Which attribute should be used as user's name"),
+    '#default_value' => variable_get('stanford_simplesamlphp_auth_user_name', 'displayName'),
+    '#description' => t('Example: <i>eduPersonPrincipalName</i> or <i>displayName</i><br />If the attribute is multivalued, the first value will be used.'),
+    '#required' => TRUE,
+  );
+
+  $form['saml-config']['stanford_simplesamlphp_auth_unique_id'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Which attribute should be used as unique identifier for the user'),
+    '#default_value' => variable_get('stanford_simplesamlphp_auth_unique_id', 'eduPersonPrincipalName'),
+    '#description' => t('Example: <i>eduPersonPrincipalName</i> or <i>eduPersonTargetedID</i><br />If the attribute is multivalued, the first value will be used.'),
+    '#required' => TRUE,
+  );
+
+  $form['saml-config']['stanford_simplesamlphp_auth_mailattr'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Which attribute from simpleSAMLphp should be used as user mail address'),
+    '#default_value' => variable_get('stanford_simplesamlphp_auth_mailattr', 'mail'),
+    '#description' => t('Example: <i>mail</i><br />If the user attribute is multivalued, the first value will be used.'),
+  );
+
+  return system_settings_form($form);
+}
+
+/**
+ * Authorization and authentication settings form.
+ *
+ * @param array $form
+ *   Form array.
+ * @param array $form_state
+ *   Form state array.
+ *
+ * @return array
+ *   The form array.
+ */
+function stanford_ssp_authorizations_form(array $form, array &$form_state) {
+
+  // Vertical Tab container.
+  $form['togglers'] = array(
+    '#type' => 'vertical_tabs',
+    '#default_tab' => 'edit-general-config',
+  );
+
+  // Tab Groups
+  // ----------------------------------------------------------------.
+
+  // Tab for the general options.
+  $form['saml-config'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('SSO Accounts'),
+    '#collapsible' => TRUE,
+    '#group' => 'togglers',
+  );
+
+  // Tab for the user options.
+  $form['local-config'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Local Drupal Accounts'),
+    '#collapsible' => TRUE,
+    '#group' => 'togglers',
+  );
+
+  // SSO AUTH CONFIG
+  // -------------------------------------------------------------------.
+
+  $options = array(
+    'any' => t("Allow any valid SSO (SUNet) user."),
+    'restrict' => t("Restrict access to specific users and groups."),
+  );
+
+  $form['saml-config']['stanford_ssp_auth_restrictions'] = array(
+    '#type' => 'radios',
+    '#title' => t('SSO Authorization Restrictions.'),
+    '#default_value' => variable_get('stanford_ssp_auth_restrictions', 'any'),
+    '#options' => $options,
+  );
+
+  $form['saml-config']['stanford_ssp_auth_restriction_sunet'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Allowed SUNet IDs'),
+    '#default_value' => variable_get('stanford_ssp_auth_restriction_sunet', ''),
+    '#description' => t('A comma-separated list of SUNet IDs that should be allowed to login with simpleSAMLphp. If left blank, any valid SUNet ID user can login.'),
+    '#states' => array(
+      'visible' => array(
+        ':input[name="stanford_ssp_auth_restrictions"]' => array('value' => 'restrict'),
+      ),
+    ),
+  );
+
+  $form['saml-config']['stanford_ssp_auth_restriction_group'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Allowed Workgroups'),
+    '#default_value' => variable_get('stanford_ssp_auth_restriction_group', ''),
+    '#description' => t('A comma-separated list of Workgroups that should be allowed to login with simpleSAMLphp. If left blank, any workgroup can login.'),
+    '#states' => array(
+      'visible' => array(
+        ':input[name="stanford_ssp_auth_restrictions"]' => array('value' => 'restrict'),
+      ),
+    ),
+  );
+
+  // LOCAL AUTH CONFIG
+  // -------------------------------------------------------------------.
+
+  $roles = user_roles(TRUE);
+  $form['local-config']['stanford_simplesamlphp_auth_allowdefaultloginroles'] = array(
+    '#type' => 'select',
+    '#size' => 7,
+    '#options' => $roles,
+    '#multiple' => TRUE,
+    '#title' => t('Which roles should be allowed to login with local accounts?'),
+    '#default_value' => variable_get('stanford_simplesamlphp_auth_allowdefaultloginroles', array()),
+    '#description' => t('Roles that should be allowed to login without SSO. Examples are dev/admin roles.'),
+  );
+
+  $form['local-config']['stanford_simplesamlphp_auth_allowdefaultloginusers'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Which users should be allowed to login with local accounts?'),
+    '#default_value' => variable_get('stanford_simplesamlphp_auth_allowdefaultloginusers', ''),
+    '#description' => t('Example: <i>1,2,3</i><br />A comma-separated list of user IDs that should be allowed to login without SSO. If left blank, all local accounts can login.'),
+  );
+
+  return system_settings_form($form);
+}
+
+/**
+ * Role mapping form for mapping a role to an authenticated user.
+ *
+ * @param array $form
+ *   The form array.
+ * @param array &$form_state
+ *   The form state array.
+ *
+ * @return array
+ *   The form array.
+ */
+function stanford_ssp_role_mappings_form(array $form, array &$form_state) {
+
+  $options = array(
+    'none' => t("Do not adjust roles. Allow local administration of roles only."),
+    'grant' => t("Grant new roles only. Will only add roles based on role assignments."),
+    'reassign' => t("Re-evaluate roles on every log in. This will grant and remove roles."),
+  );
+
+  $form['stanford_ssp_auth_role_map'] = array(
+    '#type' => 'radios',
+    '#title' => 'Action to perform on successful authentication with SUNet ID',
+    '#options' => $options,
+    '#default_value' => variable_get("stanford_ssp_auth_role_map", 'none'),
+  );
+
+  $form['stanford_ssp_role_map_source'] = array(
+    '#type' => 'radios',
+    '#title' => 'Source to validate role mapping groups against.',
+    '#options' => array(
+      'workgroup' => t('Workgroup API'),
+      'entitlement' => t('SAML attribute'),
+    ),
+    '#default_value' => variable_get("stanford_ssp_role_map_source", 'entitlement'),
+  );
+
+  // In order to make this request openssl has to be available to php.
+  if (function_exists('openssl_get_cert_locations')) {
+    // Add the SSL certificate paths.
+    $openssl_defaults = openssl_get_cert_locations();
+    $default_path = $openssl_defaults['default_cert_dir'];;
+    $cert_filename = variable_get('stanford_ssp_workgroup_api_cert', $default_path . "/stanford-ssp.cert");
+    $key_filename = variable_get('stanford_ssp_workgroup_api_key', $default_path . "/stanford-ssp.key");
+
+    $form['stanford_ssp_workgroup_api_cert'] = array(
+      '#type' => 'textfield',
+      '#title' => 'Path to Workgroup API SSL Certificate.',
+      '#default_value' => !empty($cert_filename) ? $cert_filename : $default_path . "/stanford-ssp.cert",
+      '#description' => t('For more information on how to get a certificate please see: https://uit.stanford.edu/service/registry/certificates'),
+      '#states' => array(
+        'visible' => array(
+          ':input[name="stanford_ssp_role_map_source"]' => array('value' => 'workgroup'),
+        ),
+      ),
     );
-    theme_enable($preferred_themes);
-    foreach ($preferred_themes as $var => $theme) {
-      if (!is_numeric($var)) {
-        variable_set($var, $theme);
+
+    $form['stanford_ssp_workgroup_api_key'] = array(
+      '#type' => 'textfield',
+      '#title' => 'Path to Workgroup API SSL Key.',
+      '#default_value' => !empty($key_filename) ? $key_filename : $default_path . "/stanford-ssp.key",
+      '#description' => t('For more information on how to get a key please see: https://uit.stanford.edu/service/registry/certificates'),
+      '#states' => array(
+        'visible' => array(
+          ':input[name="stanford_ssp_role_map_source"]' => array('value' => 'workgroup'),
+        ),
+      ),
+    );
+
+  }
+  // If OpenSSL is not available then we should inform the end user.
+  else {
+    $form['no_open_ssl'] = array(
+      '#type' => 'container',
+      '#states' => array(
+        'visible' => array(
+          ':input[name="stanford_ssp_role_map_source"]' => array('value' => 'workgroup'),
+        ),
+      ),
+    );
+    $form['no_open_ssl']['no_open_ssl_message'] = array(
+      '#markup' => '<div class="messages message error"><h2>OpenSSL is not available. Please compile PHP with OpenSSL to use workgroup api validation.</h2></div>',
+    );
+  }
+
+  // ROLE MAPPING FORM.
+  $table = array();
+  $submitted = !empty($form_state['post']);
+
+  // Remove authenticated user has this will be defaulted to true.
+  $roles = user_roles(TRUE);
+  unset($roles[2]);
+
+  $form['role_id'] = array(
+    '#name' => 'role_id',
+    '#type' => 'select',
+    '#options' => $roles,
+  );
+
+  $form['entitlement'] = array(
+    '#name' => 'entitlement',
+    '#type' => 'textfield',
+  );
+
+  $form['new_submit'] = array(
+    '#name' => 'new_submit',
+    '#type' => 'submit',
+    '#value' => t('Add Mapping'),
+  );
+
+  $table[] = array(
+    drupal_render($form['role_id']),
+    drupal_render($form['entitlement']),
+    drupal_render($form['new_submit']),
+  );
+
+  $header = array(
+    t('Drupal Role'),
+    t('Workgroup (e.g. helpdesk:consultants)'),
+    t('Action'),
+  );
+
+  $rolemaps = variable_get("stanford_simplesamlphp_auth_rolepopulation", "");
+  if (!empty($rolemaps)) {
+    $xp = explode("|", $rolemaps);
+    foreach ($xp as $index => $rule) {
+      $button_id = 'remove_warid_' . $index;
+      $form[$button_id] = array(
+        '#name' => $button_id,
+        '#type' => 'submit',
+        '#value' => t('Remove Mapping'),
+        '#submit' => array('stanford_ssp_remove_waird'),
+      );
+
+      // Special hidden element.
+      $form[$button_id . "_value"] = array(
+        '#type' => 'value',
+        '#value' => $index,
+      );
+
+      // Something went wrong.
+      if (empty($rule)) {
+        drupal_set_message(t('Empty rule string. Please remove it below.'), 'error');
+        watchdog('stanford_ssp', 'Empty rule string. Please navigate to !link and delete it.', array('!link' => l(t('role mappings'), 'admin/config/stanford/stanford_ssp/role-mappings')), WATCHDOG_ERROR);
+        $row = [
+          "<span style=\"color:red\">Broken or missing rule.</span>",
+          "<span style=\"color:red\">Broken Rule. Remove me.</span>",
+          drupal_render($form[$button_id]),
+        ];
+        $table[] = $row;
+        continue;
       }
+
+      // $rule = rid:expression.
+      $bits = explode(':', $rule, 2);
+      $role = user_role_load($bits[0]);
+      $eval = str_getcsv($bits[1]);
+
+      $row = array($role->name, $eval[2], drupal_render($form[$button_id]));
+      $table[] = $row;
     }
   }
-  else {
-    $preferred_themes = array(
-      'theme_default' => 'stanford_light',
-      'admin_theme' => 'seven',
-      'node_admin_theme' => 1,
-      'open_framework'
+
+  $form['add_roles'] = array(
+    '#markup' => theme('table', array(
+      'header' => $header,
+      'rows' => $table,
+      'attributes' => array(
+        "class" => array(
+          'add-roles-table',
+        ),
+      ),
+    )),
+    // Unfortunately states don't work here so we added a bit of JS to account
+    // for the loss.
+    '#attached' => array(
+      'js' => array(
+        drupal_get_path('module', 'stanford_ssp') . '/js/stanford_ssp.js',
+      ),
+    ),
+  );
+
+  // END ROLE MAPPING FORM.
+  $form["#submit"][] = "stanford_ssp_role_mappings_form_submit";
+  $form["#validate"][] = "stanford_ssp_role_mappings_form_validate";
+  return system_settings_form($form);
+}
+
+/**
+ * The login block and forms form form.
+ *
+ * @param array $form
+ *   Form array.
+ * @param array $form_state
+ *   Form state array.
+ *
+ * @return array
+ *   The form array.
+ */
+function stanford_ssp_login_block_forms_form(array $form, array &$form_state) {
+
+  $form['stanford_ssp_show_local_login'] = array(
+    '#type' => 'switch',
+    '#title' => t('Show the local login form on the user page'),
+    '#default_value' => variable_get('stanford_ssp_show_local_login', TRUE),
+    '#description' => t("Turn on to show the local Drupal account login option on the !link.", array("!link" => l(t("user page"), "user"))),
+  );
+
+  $form['stanford_ssp_show_sso_login'] = array(
+    '#type' => 'switch',
+    '#title' => t('Show the SSO login link on user page'),
+    '#default_value' => variable_get('stanford_ssp_show_sso_login', TRUE),
+    '#description' => t("Turn on to show the SSO login link on the !link.", array("!link" => l(t("user page"), "user"))),
+  );
+
+  $form['stanford_ssp_sso_link_text'] = array(
+    '#type' => 'textfield',
+    '#title' => t('SSO login link text'),
+    '#default_value' => variable_get('stanford_ssp_sso_link_text', t("Log in with your SUNet ID »")),
+    '#description' => t("Override the link text for the SSO login link on the !link.", array("!link" => l(t("user page"), "user"))),
+  );
+
+  return system_settings_form($form);
+}
+
+/**
+ * Add a new SSO user account.
+ *
+ * @param array $form
+ *   Form array.
+ * @param array $form_state
+ *   Form state array.
+ *
+ * @return array
+ *   The form array.
+ */
+function stanford_ssp_add_sso_user(array $form, array &$form_state) {
+
+  $form['sunetid'] = array(
+    '#type' => 'textfield',
+    '#title' => t('SUNetID'),
+    '#description' => t('Enter the SUNetID of the user you wish to add.'),
+    '#required' => TRUE,
+  );
+
+  $form['name'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Name'),
+    '#description' => t("If you wish to specify the user's preferred name (instead of sunetid@stanford.edu), enter it here."),
+  );
+
+  $form['email'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Email Address'),
+    '#description' => t('If you wish to specify an alternate email address (instead of sunetid@stanford.edu), enter it here.'),
+  );
+
+  // Remove authenticated user has this will be defaulted to true.
+  $roles = user_roles(TRUE);
+  unset($roles[2]);
+
+  // Only show the option if there is an option.
+  if (!empty($roles)) {
+    $form["roles"] = array(
+      '#title' => "Roles",
+      '#description' => t("Add roles to the new user account."),
+      '#type' => 'select',
+      '#options' => $roles,
+      '#default_value' => array(1),
+      '#multiple' => TRUE,
+      '#size' => 7,
     );
-    theme_enable($preferred_themes);
-    foreach ($preferred_themes as $var => $theme) {
-      if (!is_numeric($var)) {
-        variable_set($var, $theme);
-      }
-    }
+  }
+
+  if (variable_get("stanford_simplesamlphp_auth_allowsetdrupalpwd", FALSE)) {
+    $form['pass'] = array(
+      '#type' => 'password_confirm',
+      '#size' => 25,
+    );
+  }
+
+  $form['notify'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Notify user of new account'),
+  );
+
+  $form['submit'] = array(
+    '#type' => 'submit',
+    '#value' => t('Add SSO User'),
+  );
+
+  return $form;
+}
+
+/**
+ * ***************************************************************
+ * VALIDATE FUNCTIONS
+ * ***************************************************************
+ */
+
+/**
+ * Validation function for stanford_ssp_configuration_form().
+ *
+ * @param array $form
+ *   Form array.
+ * @param array $form_state
+ *   Form state array.
+ */
+function stanford_ssp_configuration_form_validate(array $form, array &$form_state) {
+  $values = $form_state['values'];
+
+  // Prevent both ssp and local login options from being disabled.
+  if ($values["stanford_simplesamlphp_auth_activate"] === 0 && $values["stanford_simplesamlphp_auth_allowdefaultlogin"] === 0) {
+    form_set_error('stanford_simplesamlphp_auth_allowdefaultlogin');
+    form_set_error('stanford_simplesamlphp_auth_activate', "Both SSO and Local log in cannot be disabled or you will lock yourself out of your site. Please enable one.");
   }
 
 }
 
 /**
- * Installation tasks for acsf environment.
+ * Validation function for Add WebAuth User form.
+ *
+ * @param array $form
+ *   Form array.
+ * @param array $form_state
+ *   Form state array.
  */
-function stanford_acsf_tasks() {
+function stanford_ssp_add_sso_user_validate(array $form, array &$form_state) {
 
-  // Enable the environment dependant modules.
-  $enable = array(
-    'acsf',
-    'acsf_helper',
-    'paranoia',
-    'stanford_ssp',
-    'stanford_saml_block',
-    'syslog',
+  $sunet = strtolower(trim(check_plain($form_state['values']['sunetid'])));
+
+  // Make sure there isn't an entry in the authmap table.
+  $authname = $sunet;
+
+  // user_get_authmaps returns 0 if there are no authmaps,
+  // or a keyed array if there are authmap entries.
+  $authmaps = user_get_authmaps($authname);
+
+  if ((($authmaps) !== 0) && isset($authmaps['authname_stanford_simplesamlphp_auth']) && ($authmaps['authname_stanford_simplesamlphp_auth'] == $authname)) {
+    form_set_error('sunetid', 'Could not create user. Authname ' . $authname . ' already exists. Has the user already been created with a different username but the same SUNetID?');
+  }
+
+  // If no name is specified, use the default name (sunetid + @stanford.edu).
+  $name = trim(check_plain($form_state['values']['name']));
+  if (empty($name)) {
+    $name = $authname;
+  }
+
+  // Check that there is no user with the same name.
+  if (user_load_by_name($name)) {
+    form_set_error('name', 'Could not create user. Username ' . $name . ' already exists.');
+  }
+
+  // If no email was specified, we'll use the default (sunetid + @stanford.edu).
+  $default_email = $sunet . '@stanford.edu';
+  $email = strtolower(trim($form_state['values']['email']));
+
+  if (!empty($email) && !valid_email_address($email)) {
+    form_set_error('email', t('The e-mail address %email is not valid.', array('%email' => $email)));
+  }
+
+  if (empty($email)) {
+    $email = $default_email;
+  }
+
+  // Check that there is no user with the same email
+  // Drupal will let us create the user with a duplicate email, but
+  // the user will run into issues when making changes to their profile.
+  if (user_load_by_mail($email)) {
+    form_set_error('email', 'Could not create user. Email ' . $email . ' already in use.');
+  }
+
+  // Check that the sunet doesn't already exist.
+  $suuser = stanford_ssp_user_load_by_sunetid($sunet);
+  if ($suuser) {
+    form_set_error("sunetid", "A user with that sunetid already exists.");
+  }
+
+}
+
+/**
+ * Validation hook for stanford_ssp_authorizations_form.
+ */
+function stanford_ssp_authorizations_form_validate(&$form, &$form_state) {
+  $values = $form_state["values"];
+  $workgroups = stanford_ssp_format_entitlement($values['stanford_ssp_auth_restriction_group']);
+  form_set_value($form['saml-config']['stanford_ssp_auth_restriction_group'], $workgroups, $form_state);
+}
+
+/**
+ * ***************************************************************
+ * SUBMIT FUNCTIONS
+ * ***************************************************************
+ */
+
+/**
+ * Submit handler for stanford_ssp_add_sso_user form.
+ *
+ * @param array $form
+ *   Form array.
+ * @param array $form_state
+ *   Form state array.
+ */
+function stanford_ssp_add_sso_user_submit(array &$form, array &$form_state) {
+  // Sunet.
+  $sunet = strtolower(trim(check_plain($form_state['values']['sunetid'])));
+  $authname = $sunet;
+
+  // If no name is specified, use the default name (sunetid + @stanford.edu).
+  $name = trim(check_plain($form_state['values']['name']));
+  if (empty($name)) {
+    $name = $authname;
+  }
+
+  // Email and default.
+  $default_email = $sunet . '@stanford.edu';
+  $email = strtolower(trim($form_state['values']['email']));
+  if (empty($email)) {
+    $email = $default_email;
+  }
+
+  $account = new stdClass();
+  $account->is_new = TRUE;
+  $account->name = $name;
+  $account->pass = user_password();
+  $account->mail = $email;
+  $account->init = $sunet . '@stanford.edu';
+  $account->status = TRUE;
+  $roles = array(
+    DRUPAL_AUTHENTICATED_RID => TRUE,
   );
 
-  module_enable($enable);
+  // Add in roles from config form.
+  $config_roles = array_keys($form_state["values"]["roles"]);
+  foreach ($config_roles as $rid) {
+    $roles[$rid] = TRUE;
+  }
 
-  // Remove this dependency because it conflicts with our login.
-  $modules = array('acsf_openid', 'openid');
-  module_disable($modules, FALSE);
-  drupal_uninstall_modules($modules, FALSE);
+  $account->roles = $roles;
+  $account->timezone = variable_get('date_default_timezone', date_default_timezone_get());
 
-  // Change some configuration in the saml paths:
-  $ah_stack = getenv('AH_SITE_GROUP') ?? 'cardinald7';
-  $ah_env = getenv('AH_SITE_ENVIRONMENT') ?? '02test';
-  $pathtosimplesaml = "/var/www/html/" . $ah_stack . "." . $ah_env . "/simplesamlphp";
-  variable_set('stanford_simplesamlphp_auth_installdir', $pathtosimplesaml);
+  $account = user_save($account);
 
-  // Enable workgroup api role mapping.
-  $cert_file = dirname(DRUPAL_ROOT) . "/simplesamlphp/cert/stanford_ssp.cert";
-  $key_file = dirname(DRUPAL_ROOT) . "/simplesamlphp/cert/stanford_ssp.key";
-  variable_set('stanford_ssp_workgroup_api_cert', $cert_file);
-  variable_set('stanford_ssp_workgroup_api_key', $key_file);
-  variable_set('stanford_ssp_role_map_source', 'workgroup');
+  // Account was not created.
+  if (!isset($account->uid)) {
+    drupal_set_message(t("User account creation went wrong. Please try again."), "error");
+    return;
+  }
 
-  // Add webservices role mapping.
-  $admin_role = user_role_load_by_name('administrator');
-  variable_set("stanford_simplesamlphp_auth_rolepopulation", $admin_role->rid . ":eduPersonEntitlement,=,itservices:webservices");
+  // Add an authmap to the authmap table.
+  user_set_authmaps($account, array('authname_stanford_simplesamlphp_auth' => $authname));
+  watchdog('Stanford SSP', 'Created user: %user', array('%user' => $name));
+  $message = t('Successfully created SSO account for %user', array('%user' => $name));
+  drupal_set_message($message);
 
-  // Add an admin user so that stanford_ssp can pick it up.
-  module_load_include('inc', 'stanford_simplesamlphp_auth', 'stanford_simplesamlphp_auth');
-  stanford_sites_add_admin_user(
-    variable_get('stanford_sites_requester_sunetid'),
-    variable_get('stanford_sites_requester_name'),
-    variable_get('stanford_sites_requester_email')
+  // Was the notify checkbox checked?
+  if ($form_state["values"]["notify"] && $account) {
+    global $language;
+    drupal_mail('stanford_ssp', 'new_account', $account->mail, $language, ['account' => $account, 'user' => $account]);
+    drupal_set_message(t("Email sent to user"), "status");
+  }
+
+  // Save the sunetid to the db.
+  $record = array(
+    'sunet' => $sunet,
+    'uid' => $account->uid,
   );
 
-  // Add saml block to sidebar.
-  $blocks = array(
+  drupal_write_record("stanford_ssp_sunetid", $record);
+}
+
+/**
+ * Implements hook_mail().
+ */
+function stanford_ssp_mail($key, &$message, $params) {
+
+  if ($key !== "new_account") {
+    return;
+  }
+
+  $language = $message['language'];
+  $langcode = isset($language->language) ? $language->language : NULL;
+  $subject = t('An administrator created an account for you on the [site:name] website', array(), array('langcode' => $langcode));
+  $body = t("[user:name],
+
+An account has been created for you on the [site:name] website. You may now log in with your SUNetID by clicking this link or copying and pasting it to your browser:
+
+[site:url]sso/login?goto=user
+
+Sincerely,
+
+[site:name] web team", array(), array('langcode' => $langcode));
+
+  $subject = token_replace($subject, $params,
     array(
-      'module' => 'stanford_saml_block',
-      'delta' => 'stanford_saml_block_login_block',
-      'theme' => 'stanford_light',
-      'status' => 1,
-      'weight' => -1,
-      'region' => 'sidebar_first',
-      'pages' => '',
-      'cache' => -1,
-    ),
+      'language' => $language,
+      'callback' => 'user_mail_tokens',
+      'sanitize' => FALSE,
+      'clear' => TRUE,
+    )
   );
-  $query = db_insert('block')->fields([
-    'module',
-    'delta',
-    'theme',
-    'status',
-    'weight',
-    'region',
-    'pages',
-    'cache'
-  ]);
-  foreach ($blocks as $block) {
-    $query->values($block);
-  }
+  $body = token_replace($body, $params,
+    array(
+      'language' => $language,
+      'callback' => 'user_mail_tokens',
+      'sanitize' => FALSE,
+      'clear' => TRUE,
+    )
+  );
 
-  $query->execute();
+  $message['subject'] = $subject;
+  $message['body'][] = $body;
+
 }
 
 /**
- * Fetch the remaining information that we need to complete the Installation.
- *
- * The remaining information is available in ritm and has been exposed through
- * an API. Use the sitename as a key and fetch it from the remote api in order
- * to complete the site installation.
+ * Implements hook_form_submit().
  */
-function stanford_acsf_tasks_ritm($install_vars) {
-  global $conf;
+function stanford_ssp_role_mappings_form_submit(array $form, array &$form_state) {
 
-  // Need this for UI install.
-  require_once DRUPAL_ROOT . '/includes/password.inc';
+  $entitlement = $form_state['values']['entitlement'];
+  $role = $form_state['values']['role_id'];
 
-  // Fetch the json from the ritm service now endpoint.
-  $site_name = isset($install_vars['forms']['install_configure_form']['site_name']) ? check_plain($install_vars['forms']['install_configure_form']['site_name']) : NULL;
+  $entitlement = stanford_ssp_format_entitlement($entitlement);
 
-  if (empty($site_name)) {
-    throw new \Exception("No site_name available. Please pass --site-name to your drush arguments.");
+  // The silly save button could trigger this if there is not a value.
+  if (!empty($entitlement) && !empty($role)) {
+    stanford_ssp_map_entitlement_to_role($entitlement, $role);
   }
 
-  // Fetch the information we need from the API.
-  $response = stanford_acsf_tasks_ritm_make_api_request($site_name);
+}
 
-  // Pull the primary site owner information out of the response first.
-  $sunet = $response->sunetId;
-  $name = $response->fullName;
-  $email = $sunet . "@stanford.edu";
+/**
+ * Validate the workgroup against the api if that mapping is available.
+ *
+ * @param array $form
+ *   Form array.
+ * @param array $form_state
+ *   Form state array.
+ */
+function stanford_ssp_role_mappings_form_validate(array $form, array $form_state) {
 
-  // Create the primary site owner.
-  $sunetrole = user_role_load_by_name('sso user');
-  $adminrole = user_role_load_by_name('administrator');
-  module_load_include('inc', 'stanford_ssp', 'stanford_ssp.admin');
-
-  if (!is_numeric($sunetrole->rid) || !is_numeric($adminrole->rid)) {
-    throw new \Exception("A role or roles were missing when trying to create a sunet user");
+  // Only validate if the api setting is set.
+  $values = $form_state['values'];
+  if ($values['stanford_ssp_role_map_source'] !== "workgroup") {
+    return;
   }
 
-  // User create payload.
-  $form_state = [
-    'values' => [
-      'sunetid' => $sunet,
-      'name' => $name,
-      'email' => $email,
-      'roles' => [
-        DRUPAL_AUTHENTICATED_RID,
-        $sunetrole->rid,
-        $adminrole->rid,
-      ],
-    ],
-  ];
+  // If we were sent a new entitlement validate it.
+  if (empty($values['entitlement'])) {
+    return;
+  }
 
-  drupal_form_submit('stanford_ssp_add_sso_user', $form_state);
+  $group = $values['entitlement'];
+  try {
+    stanford_ssp_fetch_from_workgroup_api($group);
+  }
+  catch (Exception $e) {
+    form_set_error('entitlement', t('Invalid workgroup.'));
+  }
+}
 
-  // Create additional site owners.
-  foreach ($response->webSiteOwners as $owner) {
-    // If someone put their own self as an owner or it is a people site,
-    // skip creation of a duplicate account.
-    if ($owner->sunetId == $sunet) {
-      continue;
+/**
+ * Maps an entitlement to a role.
+ *
+ * @param string $entitlement
+ *   A value in eduPersonEntitlement, e.g., helpdesk:consultants.
+ * @param mixed $role
+ *   Either the role id or a name.
+ */
+function stanford_ssp_map_entitlement_to_role($entitlement, $role) {
+  $entitlement = check_plain($entitlement);
+
+  // Look up rid.
+  $role_object = FALSE;
+  if (is_numeric($role)) {
+    $role_object = user_role_load($role);
+  }
+  elseif (is_scalar($role)) {
+    $role_object = user_role_load_by_name($role);
+  }
+
+  if (!$role_object) {
+    drupal_set_message(t('No role exists with the name "@role"', array('@role' => $role)), 'error');
+  }
+  else {
+    $rid = $role_object->rid;
+    // Look up current role mapping, if any.
+    $role_mapping = variable_get('stanford_simplesamlphp_auth_rolepopulation');
+    if (!empty($role_mapping)) {
+      $role_mapping .= "|";
     }
+    // Add our mapping.
+    $role_mapping .= $rid . ":eduPersonEntitlement,=," . $entitlement;
 
-    // User create payload.
-    $form_state = [
-      'values' => [
-        'sunetid' => $owner->sunetId,
-        'name' => $owner->fullName,
-        'email' => $owner->email,
-        'roles' => [
-          DRUPAL_AUTHENTICATED_RID,
-          $sunetrole->rid,
-        ],
-      ],
-    ];
-
-    drupal_form_submit('stanford_ssp_add_sso_user', $form_state);
-  }
-
-  // Set the site title.
-  variable_set('site_name', check_plain($response->webSiteTitle));
-
-  // Set the site email.
-  variable_set('site_mail', $email);
-}
-
-/**
- * Fetches json information from the service now api.
- *
- * @param string $sitename
- *   The sitename. Shortname of the ACSF site and what the requester entered.
- *
- * @return object
- *   SNOW API request information wrapped in an object.
- */
-function stanford_acsf_tasks_ritm_make_api_request($sitename) {
-
-  $endpoint = variable_get('stanford_snow_api_endpoint', 'https://stanford.service-now.com/api/stu/su_acsf_site_requester_information/requestor');
-  $params = ['website_address' => $sitename];
-  $endpoint .= '?' . http_build_query($params);
-  $username = variable_get('stanford_snow_api_user', '');
-  $password = variable_get('stanford_snow_api_pass', '');
-
-  $ch = curl_init();
-  curl_setopt($ch, CURLOPT_URL, $endpoint);
-  curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
-  curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, TRUE);
-  curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2);
-  curl_setopt($ch, CURLOPT_TIMEOUT, 5);
-  curl_setopt($ch, CURLOPT_MAXREDIRS, 10);
-  curl_setopt($ch, CURLOPT_FOLLOWLOCATION, TRUE);
-  curl_setopt($ch, CURLOPT_USERPWD, $username . ":" . $password);
-
-  $response = curl_exec($ch);
-  $err = curl_errno($ch);
-  $errmsg = curl_error($ch);
-  $curl_info = curl_getinfo($ch);
-  curl_close($ch);
-
-  if ($curl_info['http_code'] !== 200) {
-    watchdog('stanford', 'Failed to fetch information from SNOW api.', array(), WATCHDOG_ERROR);
-    throw new Exception("Failed to fetch information from SNOW api.");
-  }
-
-  if (empty($response) || ($err == 0 && !empty($errmsg))) {
-    watchdog('stanford', 'Failed to fetch information from SNOW api.', array(), WATCHDOG_ERROR);
-    throw new Exception($errmsg);
-  }
-
-  $response = drupal_json_decode($response);
-
-  if (!is_array($response)) {
-    watchdog('stanford', 'Could not decode JSON from SNOW API.', array(), WATCHDOG_ERROR);
-    throw new Exception("Could not decode JSON from SNOW API.");
-  }
-
-  // Validate that we got a record back.
-  if (isset($response['result'][0]['message']) && preg_match('/no records found/i', $response['result'][0]['message'])) {
-    throw new Exception($response['result'][0]['message']);
-  }
-
-  $ritm = array_pop($response['result']);
-  $data = current((array) $ritm);
-  return $data;
-}
-
-/**
- * Installation tasks for anchorage environment.
- */
-function stanford_anchorage_tasks() {
-  // Set private and public file directory.
-  stanford_profile_default_file_dir_settings();
-
-  $auth_method = variable_get('stanford_sites_auth_method', 'webauth');
-  if ($auth_method == 'simplesamlphp') {
-    module_enable(array('simplesamlphp_auth', 'stanford_ssp'));
-    // Add an admin user so that stanford_ssp can pick it up.
-    stanford_sites_add_admin_user(
-      variable_get('stanford_sites_requester_sunetid'),
-      variable_get('stanford_sites_requester_name'),
-      variable_get('stanford_sites_requester_email')
-    );
-  }
-
-  // S3 config.
-  $enable_s3fs = variable_get('enable_s3fs', 0);
-  if ($enable_s3fs == 1) {
-    module_enable(array('s3fs'));
-    // Leave file_default_scheme as "public", as we are configuring s3fs to take
-    // over the public file system, below.
-    // variable_set('file_default_scheme', 's3');.
-    variable_set('s3fs_use_https', 1);
-    variable_set('s3fs_cache_control_header', 'max-age=1209600');
-    variable_set('s3fs_use_s3_for_public', 1);
-    variable_set('s3fs_use_s3_for_private', 1);
-  }
-
-}
-
-/**
- * Installation tasks for sites environment.
- */
-function stanford_sites_tasks() {
-  // Set private and public file directory.
-  stanford_profile_default_file_dir_settings();
-
-  $auth_method = variable_get('stanford_sites_auth_method', 'webauth');
-  if ($auth_method == 'webauth') {
-    module_enable(array('webauth'));
-    module_enable(array('stanford_afs_quota'));
-
-    stanford_sites_add_webauth_user(
-      variable_get('stanford_sites_requester_sunetid'),
-      variable_get('stanford_sites_requester_name'),
-      variable_get('stanford_sites_requester_email')
-    );
-  }
-
-}
-
-/**
- * Set public, private, and tmp file directory for default install.
- *
- * ACSF does not use these settings and has them hard-coded in to their
- * environment so they do not need to be set.
- */
-function stanford_profile_default_file_dir_settings() {
-
-  // Set private directory.
-  $private_directory = 'sites/default/files/private';
-  variable_set('file_private_path', $private_directory);
-  // system_check_directory() is expecting a $form_element array.
-  $element = array();
-  $element['#value'] = $private_directory;
-  // Check that the public directory exists; create it if it does not.
-  system_check_directory($element);
-
-  // Set public directory.
-  $public_directory = 'sites/default/files';
-  variable_set('file_public_path', $public_directory);
-  // Set default scheme to public file handling.
-  variable_set('file_default_scheme', 'public');
-  // system_check_directory() is expecting a $form_element array.
-  $element = array();
-  $element['#value'] = $public_directory;
-  $element['#name'] = 'file_public_path';
-  // Check that the public directory exists; create it if it does not.
-  system_check_directory($element);
-
-  // Set temp file directory.
-  $tmpdir = variable_get('stanford_sites_tmpdir', file_directory_temp());
-  variable_set('file_temporary_path', $tmpdir);
-  // system_check_directory() is expecting a $form_element array.
-  $element = array();
-  $element['#value'] = $tmpdir;
-  // Check that the temp directory exists; create it if it does not.
-  system_check_directory($element);
-}
-
-/**
- * Add a admin user.
- *
- * Adds an admin user when installing on non-sites platforms.
- *
- * @param string $sunet
- *   Sunet id.
- * @param string $name
- *   Person's full name.
- * @param string $email
- *   The email address. Usually sunetid + stanford.edu.
- */
-function stanford_sites_add_admin_user($sunet, $name = '', $email = '') {
-  $sunet = strtolower(trim($sunet));
-
-  if (empty($sunet)) {
-    watchdog('Stanford Profile', 'Could not create user. No SUNetID available.');
-    return;
-  }
-
-  $name = trim($name);
-  if (empty($name)) {
-    $name = $sunet . '@stanford.edu';
-  }
-
-  $email = strtolower(trim($email));
-  if (empty($email)) {
-    $email = $sunet . '@stanford.edu';
-  }
-
-  if (!user_load_by_name($name)) {
-    $account = new stdClass();
-    $account->is_new = TRUE;
-    $account->name = $name;
-    $account->pass = user_password();
-    $account->mail = $email;
-    $account->init = $sunet . '@stanford.edu';
-    $account->status = TRUE;
-
-    $admin_role = user_role_load_by_name('administrator');
-    $account->roles = array(
-      DRUPAL_AUTHENTICATED_RID => TRUE,
-      $admin_role->rid => TRUE
-    );
-    $account->timezone = variable_get('date_default_timezone', '');
-    $account = user_save($account);
-    watchdog('Stanford Profile', 'Created user: %user', array('%user' => $name));
-  }
-  else {
-    watchdog('Stanford Profile', 'Could not create duplicate user: %user', array('%user' => $name));
+    // Save our mapping.
+    variable_set('stanford_simplesamlphp_auth_rolepopulation', $role_mapping);
+    $message = t('Mapped the "@entitlement" entitlement to the "@role" role.', array('@entitlement' => $entitlement, '@role' => $role_object->name));
+    drupal_set_message($message);
+    watchdog('stanford_ssp', $message);
   }
 }
 
 /**
- * Add a WebAuth user.
+ * Remove waird formatting.
  *
- * Adds a webauth user when installing on the sites platform.
- *
- * @param string $sunet
- *   Sunet id.
- * @param string $name
- *   Person's full name.
- * @param string $email
- *   The email address. Usually sunetid + stanford.edu.
+ * @param array $form
+ *   Form array.
+ * @param array $form_state
+ *   Form state array.
  */
-function stanford_sites_add_webauth_user($sunet, $name = '', $email = '') {
-  $sunet = strtolower(trim($sunet));
-
-  if (empty($sunet)) {
-    watchdog('Stanford Profile', 'Could not create user. No SUNetID available.');
-    return;
+function stanford_ssp_remove_waird(array $form, array &$form_state) {
+  $trigger = $form_state["triggering_element"]['#name'];
+  $index = $form_state['values'][$trigger . "_value"];
+  $rolemaps = variable_get("stanford_simplesamlphp_auth_rolepopulation", array());
+  $xp = explode("|", $rolemaps);
+  if (isset($xp[$index])) {
+    unset($xp[$index]);
   }
-
-  $name = trim($name);
-  if (empty($name)) {
-    $name = $sunet . '@stanford.edu';
-  }
-
-  $email = strtolower(trim($email));
-  if (empty($email)) {
-    $email = $sunet . '@stanford.edu';
-  }
-
-  if (!user_load_by_name($name)) {
-    $account = new stdClass();
-    $account->is_new = TRUE;
-    $account->name = $name;
-    $account->pass = user_password();
-    $account->mail = $email;
-    $account->init = $sunet . '@stanford.edu';
-    $account->status = TRUE;
-
-    $sunet_role = user_role_load_by_name('SUNet User');
-    $admin_role = user_role_load_by_name('administrator');
-    $account->roles = array(
-      DRUPAL_AUTHENTICATED_RID => TRUE,
-      $sunet_role->rid => TRUE,
-      $admin_role->rid => TRUE
-    );
-    $account->timezone = variable_get('date_default_timezone', '');
-    $account = user_save($account);
-
-    user_set_authmaps($account, array('authname_webauth' => $sunet . '@stanford.edu'));
-
-    // Hide Local Drupal user login block. User 1 can still login from /user.
-    variable_set(webauth_allow_local, 0);
-
-    watchdog('Stanford Profile', 'Created user: %user', array('%user' => $name));
-  }
-  else {
-    watchdog('Stanford Profile', 'Could not create duplicate user: %user', array('%user' => $name));
-  }
-}
-
-/**
- * Final installation task.
- */
-function stanford_install_finished() {
-  module_enable(array('stanford_page'));
-  features_revert_module('stanford_page');
-  drupal_flush_all_caches();
-  watchdog("stanford", "Finished reverting stanford_page and flushing caches.");
-}
-
-/**
- * Returns a string representing the environment being installed on.
- *
- * @return string
- *   The string name of the environment being installed.
- */
-function _stanford_detect_environment() {
-
-  // Check for ACQUIA environment var.
-  $is_ah = getenv('AH_SITE_ENVIRONMENT');
-  if (!empty($is_ah)) {
-    return 'acsf';
-  }
-
-  // Check for sites environment
-  // This directory only should exist on the sites-* servers.
-  $dir = "/etc/drupal-service";
-  // Check if it exists and is a directory.
-  if (file_exists($dir) && is_dir($dir)) {
-    return 'sites';
-  }
-
-  // Check for anchorage IDP.
-  if (getenv('ENV_IDP') == "https://idpproxy.anchorage.stanford.edu/idp") {
-    return 'anchorage';
-  }
-
-  // Default to local.
-  return 'local';
-}
-
-/**
- * Implements hook_system_info_alter().
- *
- * @param array $info
- *   The .info file contents, passed by reference so that it can be altered.
- * @param array $file
- *   Full information about the module or theme, including $file->name, and
- *   $file->filename.
- * @param string $type
- *   Either 'module' or 'theme', depending on the type of .info file that was
- *   passed.
- */
-function stanford_system_info_alter(&$info, $file, $type) {
-  // Disallow a few themes from being enabled by hiding them from the UI.
-  if (
-    isset($info['project']) &&
-    ($info['project'] == 'stanford_framework' ||
-    $info['project'] == 'stanford_help' ||
-    $info['project'] == 'stanford_help_administration' ||
-    $info['project'] == 'stanford_jordan' ||
-    $info['project'] == 'stanford_wilbur' ||
-    $info['project'] == 'stanfordmodern' ||
-    $info['project'] == 'cube' ||
-    $info['project'] == 'rubik' ||
-    $info['project'] == 'tao')
-  ) {
-    $info['hidden'] = TRUE;
-    return;
-  }
-
-  // Disallow any jumpstart modules.
-  if (
-    isset($info['project']) &&
-    (preg_match("/^stanford_jumpstart/", $info['project']) ||
-    preg_match("/^stanford_jsl/", $info['project']) ||
-    preg_match("/^stanford_jse/", $info['project']) ||
-    preg_match("/^stanford_jsplus/", $info['project']) ||
-    preg_match("/^stanford_jsa/", $info['project']))
-  ) {
-    $info['hidden'] = TRUE;
-    return;
-  }
-
-  // Hide some items by name.
-  if (
-    isset($info['name']) &&
-    (preg_match("/FAQ/", $info['name']) ||
-    preg_match("/JSE/", $info['name']) ||
-    preg_match("/Stanford Affiliate/", $info['name']) ||
-    preg_match("/Stanford AFS Quota/", $info['name']) ||
-    preg_match("/Stanford Alt Check/", $info['name']) ||
-    preg_match("/Stanford Bean Types Hero/", $info['name']) ||
-    preg_match("/Stanford Conference/", $info['name']) ||
-    preg_match("/Frequently Asked Questions/", $info['name']) ||
-    preg_match("/Stanford Fellowship/", $info['name']) ||
-    preg_match("/Stanford Full Width Banner/", $info['name']) ||
-    preg_match("/Stanford Icon Grid/", $info['name']) ||
-    preg_match("/Stanford Manage Content/", $info['name']) ||
-    preg_match("/Stanford Minimal Filter/", $info['name']) ||
-    preg_match("/Stanford Paragraph/", $info['name']) ||
-    preg_match("/Stanford Private Page/", $info['name']) ||
-    preg_match("/Stanford Related/", $info['name']) ||
-    preg_match("/Stanford Site/", $info['name']) ||
-    preg_match("/Stanford Story Page/", $info['name']) ||
-    preg_match("/Stanford Subsite/", $info['name']) ||
-    preg_match("/Stanford Jumpstart/", $info['name']) ||
-    preg_match("/Stanford JSA/", $info['name']) ||
-    preg_match("/VPSA/", $info['name']))
-  ) {
-    $info['hidden'] = TRUE;
-    return;
-  }
+  $imp = implode("|", $xp);
+  variable_set("stanford_simplesamlphp_auth_rolepopulation", $imp);
+  drupal_set_message(t("Role mapping was removed"));
 }
