@@ -288,7 +288,7 @@ function stanford_acsf_tasks() {
 /**
  * Fetch the remaining information that we need to complete the Installation.
  *
- * The remaining information is available in ritm and has been exposed through
+ * The remaining information is available in the RITM ("Request Item" in ServiceNow) and has been exposed through
  * an API. Use the sitename as a key and fetch it from the remote api in order
  * to complete the site installation.
  */
