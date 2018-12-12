@@ -1,6 +1,13 @@
 Stanford Profile 7.x-x.x xxxx-xx-xx
 -----------------------------------
 
+Stanford Profile 7.x-3.0-alpha1 2018-12-12
+------------------------------------------
+- Initial release on the 7.x-3.x branch
+- Add function to request information from the ServiceNow API to populate the site information at install time
+- Add composer.json
+- Add install tasks for Acquia Cloud Site Factory (ACSF)
+
 Stanford Profile 7.x-2.6 2017-09-26
 -----------------------------------
 - Various module updates in .make files
