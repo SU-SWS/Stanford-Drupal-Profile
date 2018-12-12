@@ -374,7 +374,7 @@ function stanford_acsf_tasks_ritm($install_vars) {
 }
 
 /**
- * Fetches json information from the service now api.
+ * Fetches JSON information from the ServiceNow (SNOW) API.
  *
  * @param string $sitename
  *   The sitename. Shortname of the ACSF site and what the requester entered.
