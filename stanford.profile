@@ -230,8 +230,6 @@ function stanford_acsf_tasks() {
   module_disable($modules, FALSE);
   drupal_uninstall_modules($modules, FALSE);
 
-  drupal_static_reset();
-
   // Change some configuration in the saml paths:
   $ah_stack = getenv('AH_SITE_GROUP') ?? 'cardinald7';
   $ah_env = getenv('AH_SITE_ENVIRONMENT') ?? '02test';
