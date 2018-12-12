@@ -25,6 +25,13 @@ function stanford_install_tasks($install_state) {
       'type' => 'normal',
       'run' => INSTALL_TASK_RUN_IF_NOT_COMPLETED,
     );
+
+    $tasks['stanford_acsf_tasks_ritm'] = array(
+      'display_name' => st('Fetch remaining information from ritm'),
+      'display' => FALSE,
+      'type' => 'normal',
+      'run' => INSTALL_TASK_RUN_IF_NOT_COMPLETED,
+    );
   }
 
   // Anchorage Specific Tasks go here.
@@ -215,12 +222,15 @@ function stanford_acsf_tasks() {
     'stanford_saml_block',
     'syslog',
   );
+
   module_enable($enable);
 
   // Remove this dependency because it conflicts with our login.
   $modules = array('acsf_openid', 'openid');
   module_disable($modules, FALSE);
   drupal_uninstall_modules($modules, FALSE);
+
+  drupal_static_reset();
 
   // Change some configuration in the saml paths:
   $ah_stack = getenv('AH_SITE_GROUP') ?? 'cardinald7';
@@ -275,6 +285,154 @@ function stanford_acsf_tasks() {
   }
 
   $query->execute();
+}
+
+/**
+ * Fetch the remaining information that we need to complete the Installation.
+ *
+ * The remaining information is available in ritm and has been exposed through
+ * an API. Use the sitename as a key and fetch it from the remote api in order
+ * to complete the site installation.
+ */
+function stanford_acsf_tasks_ritm($install_vars) {
+  global $conf;
+
+  // Need this for UI install.
+  require_once DRUPAL_ROOT . '/includes/password.inc';
+
+  // Fetch the json from the ritm service now endpoint.
+  $site_name = isset($install_vars['forms']['install_configure_form']['site_name']) ? check_plain($install_vars['forms']['install_configure_form']['site_name']) : NULL;
+
+  if (empty($site_name)) {
+    throw new \Exception("No site_name available. Please pass --site-name to your drush arguments.");
+  }
+
+  // Fetch the information we need from the API.
+  $response = stanford_acsf_tasks_ritm_make_api_request($site_name);
+
+  if (!isset($response['sunetId'])) {
+    throw new \Exception("No sunetId in response body from SNOW");
+  }
+
+  // Pull the primary site owner information out of the response first.
+  $sunet = $response['sunetId'];
+  $name = $response['fullName'];
+  $email = $sunet . "@stanford.edu";
+
+  // Create the primary site owner.
+  $sunetrole = user_role_load_by_name('sso user');
+  $adminrole = user_role_load_by_name('administrator');
+  module_load_include('inc', 'stanford_ssp', 'stanford_ssp.admin');
+
+  if (!is_numeric($sunetrole->rid) || !is_numeric($adminrole->rid)) {
+    throw new \Exception("A role or roles were missing when trying to create a sunet user");
+  }
+
+  // User create payload.
+  $form_state = [
+    'values' => [
+      'sunetid' => $sunet,
+      'name' => $name,
+      'email' => $email,
+      'roles' => [
+        $sunetrole->rid,
+        $adminrole->rid,
+      ],
+    ],
+  ];
+
+  drupal_form_submit('stanford_ssp_add_sso_user', $form_state);
+
+  // Create additional site owners.
+  if (isset($response['webSiteOwners'])) {
+    foreach ($response['webSiteOwners'] as $owner) {
+      // If someone put their own self as an owner or it is a people site,
+      // skip creation of a duplicate account.
+      if ($owner['sunetId'] == $sunet) {
+        continue;
+      }
+
+      // User create payload.
+      $form_state = [
+        'values' => [
+          'sunetid' => $owner['sunetId'],
+          'name' => $owner['fullName'],
+          'email' => $owner['email'],
+          'roles' => [
+            $sunetrole->rid,
+          ],
+        ],
+      ];
+
+      drupal_form_submit('stanford_ssp_add_sso_user', $form_state);
+    }
+  }
+
+  // Set the site title.
+  variable_set('site_name', check_plain($response['webSiteTitle']));
+
+  // Set the site email.
+  variable_set('site_mail', $email);
+}
+
+/**
+ * Fetches json information from the service now api.
+ *
+ * @param string $sitename
+ *   The sitename. Shortname of the ACSF site and what the requester entered.
+ *
+ * @return object
+ *   SNOW API request information wrapped in an object.
+ */
+function stanford_acsf_tasks_ritm_make_api_request($sitename) {
+
+  $endpoint = variable_get('stanford_snow_api_endpoint', 'https://stanford.service-now.com/api/stu/su_acsf_site_requester_information/requestor');
+  $params = ['website_address' => $sitename];
+  $endpoint .= '?' . http_build_query($params);
+  $username = variable_get('stanford_snow_api_user', '');
+  $password = variable_get('stanford_snow_api_pass', '');
+
+  $ch = curl_init();
+  curl_setopt($ch, CURLOPT_URL, $endpoint);
+  curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+  curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, TRUE);
+  curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2);
+  curl_setopt($ch, CURLOPT_TIMEOUT, 5);
+  curl_setopt($ch, CURLOPT_MAXREDIRS, 10);
+  curl_setopt($ch, CURLOPT_FOLLOWLOCATION, TRUE);
+  curl_setopt($ch, CURLOPT_USERPWD, $username . ":" . $password);
+
+  $response = curl_exec($ch);
+  $err = curl_errno($ch);
+  $errmsg = curl_error($ch);
+  $curl_info = curl_getinfo($ch);
+  curl_close($ch);
+
+  if ($curl_info['http_code'] !== 200) {
+    watchdog('stanford', 'Failed to fetch information from SNOW api.', array(), WATCHDOG_ERROR);
+    throw new Exception("Failed to fetch information from SNOW api.");
+  }
+
+  if (empty($response) || ($err == 0 && !empty($errmsg))) {
+    watchdog('stanford', 'Failed to fetch information from SNOW api.', array(), WATCHDOG_ERROR);
+    throw new Exception($errmsg);
+  }
+
+  $response = drupal_json_decode($response);
+
+  if (!is_array($response)) {
+    watchdog('stanford', 'Could not decode JSON from SNOW API.', array(), WATCHDOG_ERROR);
+    throw new Exception("Could not decode JSON from SNOW API.");
+  }
+
+  // Validate that we got a record back.
+  if (isset($response['result'][0]['message']) && preg_match('/no records found/i', $response['result'][0]['message'])) {
+    throw new Exception($response['result'][0]['message']);
+  }
+
+  $ritm = array_pop($response['result']);
+  $data = current((array) $ritm);
+  return $data;
 }
 
 /**
@@ -412,7 +570,7 @@ function stanford_sites_add_admin_user($sunet, $name = '', $email = '') {
     $admin_role = user_role_load_by_name('administrator');
     $account->roles = array(
       DRUPAL_AUTHENTICATED_RID => TRUE,
-      $admin_role->rid => TRUE
+      $admin_role->rid => TRUE,
     );
     $account->timezone = variable_get('date_default_timezone', '');
     $account = user_save($account);
