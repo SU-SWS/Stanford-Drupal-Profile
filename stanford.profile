@@ -298,7 +298,7 @@ function stanford_acsf_tasks_ritm($install_vars) {
   // Need this for UI install.
   require_once DRUPAL_ROOT . '/includes/password.inc';
 
-  // Fetch the json from the ritm service now endpoint.
+  // Fetch the json from the ServiceNow (SNOW) API endpoint that exposes the RITM information.
   $site_name = isset($install_vars['forms']['install_configure_form']['site_name']) ? check_plain($install_vars['forms']['install_configure_form']['site_name']) : NULL;
 
   if (empty($site_name)) {
