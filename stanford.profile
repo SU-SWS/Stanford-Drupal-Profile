@@ -376,16 +376,37 @@ function stanford_acsf_tasks_ritm($install_vars) {
 /**
  * Fetches JSON information from the ServiceNow (SNOW) API.
  *
- * @param string $sitename
+ * Returns an array that looks something like the following:
+ *  [
+ *    "webSiteTitle": "Meddle",
+ *    "webSiteAddress": "meddle",
+ *    "sunetId": "jbickar",
+ *    "fullName": "John Bickar",
+ *    "email": "jbickar@stanford.edu",
+ *    "webSiteOwners": [
+ *      [
+ *        "sunetId": "linnea",
+ *        "fullName": "Linnea Williams",
+ *        "email": "linnea@stanford.edu"
+ *      ],
+ *      [
+ *        "sunetId": "meganem",
+ *        "fullName": "Megan Miller",
+ *        "email": "meganem@stanford.edu"
+ *      ]
+ *    ]
+ *  ];
+ *
+ * @param string $site_name
  *   The sitename. Shortname of the ACSF site and what the requester entered.
  *
  * @return object
  *   SNOW API request information wrapped in an object.
  */
-function stanford_acsf_tasks_ritm_make_api_request($sitename) {
+function stanford_acsf_tasks_ritm_make_api_request($site_name) {
 
   $endpoint = variable_get('stanford_snow_api_endpoint', 'https://stanford.service-now.com/api/stu/su_acsf_site_requester_information/requestor');
-  $params = ['website_address' => $sitename];
+  $params = ['website_address' => $site_name];
   $endpoint .= '?' . http_build_query($params);
   $username = variable_get('stanford_snow_api_user', '');
   $password = variable_get('stanford_snow_api_pass', '');
