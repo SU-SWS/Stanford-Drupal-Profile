@@ -378,8 +378,8 @@ function stanford_acsf_tasks_ritm($install_vars) {
  *
  * Returns an array that looks something like the following:
  *  [
- *    "webSiteTitle": "Meddle",
- *    "webSiteAddress": "meddle",
+ *    "webSiteTitle": "Piper at the Gates of Dawn",
+ *    "webSiteAddress": "piperatthegatesofdawn",
  *    "sunetId": "jbickar",
  *    "fullName": "John Bickar",
  *    "email": "jbickar@stanford.edu",
@@ -405,6 +405,8 @@ function stanford_acsf_tasks_ritm($install_vars) {
  */
 function stanford_acsf_tasks_ritm_make_api_request($site_name) {
 
+  // Database variables are not yet available or reliable at this point. This will have to be hard-coded in settings.php
+  // or the like if you wish to override the default.
   $endpoint = variable_get('stanford_snow_api_endpoint', 'https://stanford.service-now.com/api/stu/su_acsf_site_requester_information/requestor');
   $params = ['website_address' => $site_name];
   $endpoint .= '?' . http_build_query($params);
