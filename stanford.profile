@@ -377,12 +377,9 @@ function stanford_acsf_tasks_ritm($install_vars) {
   }
   
   // Set the site title.
-  if ($site_name == "default") {
-    variable_set('site_name', 'Default');
-  }
-  else {
+  if ($site_name !== "default") {
     variable_set('site_name', check_plain($response['webSiteTitle']));
-  };
+  }
 
   // Set the site email.
   variable_set('site_mail', $email);
