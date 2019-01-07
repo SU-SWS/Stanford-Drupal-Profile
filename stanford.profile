@@ -308,6 +308,15 @@ function stanford_acsf_tasks_ritm($install_vars) {
   // Fetch the information we need from the API.
   $response = stanford_acsf_tasks_ritm_make_api_request($site_name);
 
+  // If the request fails because the site that is being installed does not
+  // exist in the API fetch the default information. This is useful when
+  // installing a site directly through the ACSF dashboard.
+  if (!isset($response['sunetId'])) {
+    $site_name = "default";
+    stanford_acsf_tasks_ritm_make_api_request($site_name);
+  }
+
+  // If still no result die.
   if (!isset($response['sunetId'])) {
     throw new \Exception("No sunetId in response body from SNOW");
   }
