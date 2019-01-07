@@ -375,7 +375,7 @@ function stanford_acsf_tasks_ritm($install_vars) {
       drupal_form_submit('stanford_ssp_add_sso_user', $form_state);
     }
   }
-  
+
   // Set the site title.
   if ($site_name !== "default") {
     variable_set('site_name', check_plain($response['webSiteTitle']));
