@@ -306,8 +306,18 @@ function stanford_acsf_tasks_ritm($install_vars) {
   }
 
   // Fetch the information we need from the API.
-  $response = stanford_acsf_tasks_ritm_make_api_request($site_name);
+  try {
+    $response = stanford_acsf_tasks_ritm_make_api_request($site_name);
+  }
+  catch (\Exception $e) {
+    // If the request fails because the site that is being installed does not
+    // exist in the API fetch the default information. This is useful when
+    // installing a site directly through the ACSF dashboard.
+    $site_name = "default";
+    $response = stanford_acsf_tasks_ritm_make_api_request($site_name);
+  }
 
+  // If still no result die.
   if (!isset($response['sunetId'])) {
     throw new \Exception("No sunetId in response body from SNOW");
   }
@@ -367,7 +377,9 @@ function stanford_acsf_tasks_ritm($install_vars) {
   }
 
   // Set the site title.
-  variable_set('site_name', check_plain($response['webSiteTitle']));
+  if ($site_name !== "default") {
+    variable_set('site_name', check_plain($response['webSiteTitle']));
+  }
 
   // Set the site email.
   variable_set('site_mail', $email);
@@ -431,7 +443,7 @@ function stanford_acsf_tasks_ritm_make_api_request($site_name) {
 
   if ($curl_info['http_code'] !== 200) {
     watchdog('stanford', 'Failed to fetch information from SNOW api.', array(), WATCHDOG_ERROR);
-    throw new Exception("Failed to fetch information from SNOW api.");
+    throw new Exception("Failed to fetch information from SNOW api. NON 200 Response.");
   }
 
   if (empty($response) || ($err == 0 && !empty($errmsg))) {
