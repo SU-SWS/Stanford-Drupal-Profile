@@ -386,23 +386,24 @@ function stanford_acsf_tasks_ritm($install_vars) {
     if (!empty($ah_env) && is_string($ah_env)) {
       // Should return "02" or "03"
       $stack = substr($ah_env, 0, 2);
+      switch($stack) {
+        case "02":
+          variable_set('site_name', check_plain($response['webSiteTitle']));
+          break;
+
+        case "03":
+          variable_set('site_name', check_plain($response['fullName']));
+          break;
+
+        default:
+          variable_set('site_name', "default");
+
+      }
+    }
+    else {
+      variable_set('site_name', "default");
     }
 
-    switch($stack) {
-      case "02":
-        // Users request a Website Title for group/dept sites on the cardinald7 stack. Set the site_name to that value.
-        variable_set('site_name', check_plain($response['webSiteTitle']));
-        break;
-
-      case "03":
-        // Users do not have the option to request a website title on the leland stack. Set it to the user's full name.
-        variable_set('site_name', check_plain($response['fullName']));
-        break;
-
-      default:
-        variable_set('site_name', "default");
-
-    }
   }
 
   // Set the site email.
