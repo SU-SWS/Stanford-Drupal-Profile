@@ -378,7 +378,32 @@ function stanford_acsf_tasks_ritm($install_vars) {
 
   // Set the site title.
   if ($site_name !== "default") {
-    variable_set('site_name', check_plain($response['webSiteTitle']));
+
+    // Check for ACSF environment variable.
+    // Returns "02live", "02test", or "02dev" for cardinald7 stack.
+    // Returns "03live", "03test", or "03dev" for leland stack.
+    $ah_env = getenv('AH_SITE_ENVIRONMENT');
+    if (!empty($ah_env) && is_string($ah_env)) {
+      // Should return "02" or "03"
+      $stack = substr($ah_env, 0, 2);
+      switch($stack) {
+        case "02":
+          variable_set('site_name', check_plain($response['webSiteTitle']));
+          break;
+
+        case "03":
+          variable_set('site_name', check_plain($response['fullName']));
+          break;
+
+        default:
+          variable_set('site_name', "default");
+
+      }
+    }
+    else {
+      variable_set('site_name', "default");
+    }
+
   }
 
   // Set the site email.
