@@ -800,6 +800,7 @@ function stanford_system_info_alter(&$info, $file, $type) {
     preg_match("/Stanford Icon Grid/", $info['name']) ||
     preg_match("/Stanford Manage Content/", $info['name']) ||
     preg_match("/Stanford Minimal Filter/", $info['name']) ||
+    preg_match("/Stanford Opportunity/", $info['name']) ||
     preg_match("/Stanford Paragraph/", $info['name']) ||
     preg_match("/Stanford Private Page/", $info['name']) ||
     preg_match("/Stanford Related/", $info['name']) ||
