@@ -807,6 +807,8 @@ function stanford_system_info_alter(&$info, $file, $type) {
     preg_match("/Stanford Story Page/", $info['name']) ||
     preg_match("/Stanford Subsite/", $info['name']) ||
     preg_match("/Stanford Jumpstart/", $info['name']) ||
+    preg_match("/Stanford Sites Jumpstart/", $info['name']) ||
+    preg_match("/Stanford Site Actions/", $info['name']) ||
     preg_match("/Stanford JSA/", $info['name']) ||
     preg_match("/VPSA/", $info['name']))
   ) {
