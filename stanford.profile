@@ -814,3 +814,24 @@ function stanford_system_info_alter(&$info, $file, $type) {
     return;
   }
 }
+
+/**
+ * Implements hook_preprocess_entity.
+ */
+function stanford_preprocess_entity(&$variables) {
+
+  // BEAN 1.13 introduced a new variable in to the bean.tpl.php template and it
+  // renders a title when one is put in a bean. Blocks still display the bean
+  // title as the block title and ends up duplicating the titles. Instead of
+  // removing the new field from the template, allow for explict setting of the
+  // block title fields for bean blocks only and don't assume as a block that
+  // the bean title should be the block title.
+
+  // Only run on beans.
+  if ($variables['entity_type'] !== 'bean') {
+    return;
+  }
+
+  // No bean template title.
+  $variables['bean']->title = '';
+}
