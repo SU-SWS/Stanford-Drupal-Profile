@@ -388,7 +388,7 @@
       "drupal/workbench": "~1.2",
       "drupal/workbench_access": "~1.4",
       "drupal/workbench_moderation": "~3.0",
-      "drupal/wysiwyg": "~2.2",
+      "drupal/wysiwyg": "2.5",
       "drupal/wysiwyg_filter": "~1.6-rc3",
       "drupal/xmlsitemap": "~2.3",
       "drupal/auto_nodetitle": "dev-1.x#98d66fb24d54113bbdfba0d1797239493473cd78",
