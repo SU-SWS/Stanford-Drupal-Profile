@@ -384,7 +384,7 @@
       "drupal/views_datasource": "~1.0-alpha2",
       "drupal/views_field_view": "~1.2",
       "drupal/views_slideshow": "~3.1",
-      "drupal/webform": "~4.14",
+      "drupal/webform": "4.19",
       "drupal/workbench": "~1.2",
       "drupal/workbench_access": "~1.4",
       "drupal/workbench_moderation": "~3.0",
