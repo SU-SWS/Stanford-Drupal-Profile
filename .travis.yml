@@ -62,8 +62,8 @@ env:
     - BEHAT_TAG=""
     - DEPLOYER_BRANCH=""
     - DRUPAL_PROFILE_BRANCH=""
-    - SCRIPTS_BRANCH=""
-    - CLICKY_BRANCH="5.x"
+    - SCRIPTS_BRANCH="DEVOPS-123"
+    - CLICKY_BRANCH="DEVOPS-123"
 
 language: php
 php:
@@ -84,7 +84,7 @@ mysql:
 
 before_install:
   # download external repository with Stanford Travis CI scripts
-  # - if [ ! -z "$SCRIPTS_BRANCH" ]; then SCRIPTS_BRANCH="-b $SCRIPTS_BRANCH"; fi
+  - if [ ! -z "$SCRIPTS_BRANCH" ]; then SCRIPTS_BRANCH="-b $SCRIPTS_BRANCH"; fi
   - git clone $SCRIPTS_BRANCH https://github.com/SU-SWS/stanford_travisci_scripts.git $HOME/stanford_travisci_scripts
   - chmod +x $HOME/stanford_travisci_scripts/bin/*.sh
   # install composer packages
