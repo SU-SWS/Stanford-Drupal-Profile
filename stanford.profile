@@ -25,6 +25,13 @@ function stanford_install_tasks($install_state) {
       'type' => 'normal',
       'run' => INSTALL_TASK_RUN_IF_NOT_COMPLETED,
     );
+
+    $tasks['stanford_acsf_tasks_ritm'] = array(
+      'display_name' => st('Fetch remaining information from ritm'),
+      'display' => FALSE,
+      'type' => 'normal',
+      'run' => INSTALL_TASK_RUN_IF_NOT_COMPLETED,
+    );
   }
 
   // Anchorage Specific Tasks go here.
@@ -215,6 +222,7 @@ function stanford_acsf_tasks() {
     'stanford_saml_block',
     'syslog',
   );
+
   module_enable($enable);
 
   // Remove this dependency because it conflicts with our login.
@@ -275,6 +283,214 @@ function stanford_acsf_tasks() {
   }
 
   $query->execute();
+}
+
+/**
+ * Fetch the remaining information that we need to complete the Installation.
+ *
+ * The remaining information is available in the RITM ("Request Item" in ServiceNow) and has been exposed through
+ * an API. Use the sitename as a key and fetch it from the remote api in order
+ * to complete the site installation.
+ */
+function stanford_acsf_tasks_ritm($install_vars) {
+  global $conf;
+
+  // Need this for UI install.
+  require_once DRUPAL_ROOT . '/includes/password.inc';
+
+  // Fetch the json from the ServiceNow (SNOW) API endpoint that exposes the RITM information.
+  $site_name = isset($install_vars['forms']['install_configure_form']['site_name']) ? check_plain($install_vars['forms']['install_configure_form']['site_name']) : NULL;
+
+  if (empty($site_name)) {
+    throw new \Exception("No site_name available. Please pass --site-name to your drush arguments.");
+  }
+
+  // Fetch the information we need from the API.
+  try {
+    $response = stanford_acsf_tasks_ritm_make_api_request($site_name);
+  }
+  catch (\Exception $e) {
+    // If the request fails because the site that is being installed does not
+    // exist in the API fetch the default information. This is useful when
+    // installing a site directly through the ACSF dashboard.
+    $site_name = "default";
+    $response = stanford_acsf_tasks_ritm_make_api_request($site_name);
+  }
+
+  // If still no result die.
+  if (!isset($response['sunetId'])) {
+    throw new \Exception("No sunetId in response body from SNOW");
+  }
+
+  // Pull the primary site owner information out of the response first.
+  $sunet = $response['sunetId'];
+  $name = $response['fullName'];
+  $email = $sunet . "@stanford.edu";
+
+  // Create the primary site owner.
+  $sunetrole = user_role_load_by_name('sso user');
+  $adminrole = user_role_load_by_name('administrator');
+  module_load_include('inc', 'stanford_ssp', 'stanford_ssp.admin');
+
+  if (!is_numeric($sunetrole->rid) || !is_numeric($adminrole->rid)) {
+    throw new \Exception("A role or roles were missing when trying to create a sunet user");
+  }
+
+  // User create payload.
+  $form_state = [
+    'values' => [
+      'sunetid' => $sunet,
+      'name' => $name,
+      'email' => $email,
+      'roles' => [
+        $sunetrole->rid,
+        $adminrole->rid,
+      ],
+    ],
+  ];
+
+  drupal_form_submit('stanford_ssp_add_sso_user', $form_state);
+
+  // Create additional site owners.
+  if (isset($response['webSiteOwners'])) {
+    foreach ($response['webSiteOwners'] as $owner) {
+      // If someone put their own self as an owner or it is a people site,
+      // skip creation of a duplicate account.
+      if ($owner['sunetId'] == $sunet) {
+        continue;
+      }
+
+      // User create payload.
+      $form_state = [
+        'values' => [
+          'sunetid' => $owner['sunetId'],
+          'name' => $owner['fullName'],
+          'email' => $owner['email'],
+          'roles' => [
+            $sunetrole->rid,
+          ],
+        ],
+      ];
+
+      drupal_form_submit('stanford_ssp_add_sso_user', $form_state);
+    }
+  }
+
+  // Set the site title.
+  if ($site_name !== "default") {
+
+    // Check for ACSF environment variable.
+    // Returns "02live", "02test", or "02dev" for cardinald7 stack.
+    // Returns "03live", "03test", or "03dev" for leland stack.
+    $ah_env = getenv('AH_SITE_ENVIRONMENT');
+    if (!empty($ah_env) && is_string($ah_env)) {
+      // Should return "02" or "03"
+      $stack = substr($ah_env, 0, 2);
+      switch($stack) {
+        case "02":
+          variable_set('site_name', check_plain($response['webSiteTitle']));
+          break;
+
+        case "03":
+          variable_set('site_name', check_plain($response['fullName']));
+          break;
+
+        default:
+          variable_set('site_name', "default");
+
+      }
+    }
+    else {
+      variable_set('site_name', "default");
+    }
+
+  }
+
+  // Set the site email.
+  variable_set('site_mail', $email);
+}
+
+/**
+ * Fetches JSON information from the ServiceNow (SNOW) API.
+ *
+ * Returns an array that looks something like the following:
+ *  [
+ *    "webSiteTitle": "Piper at the Gates of Dawn",
+ *    "webSiteAddress": "piperatthegatesofdawn",
+ *    "sunetId": "jbickar",
+ *    "fullName": "John Bickar",
+ *    "email": "jbickar@stanford.edu",
+ *    "webSiteOwners": [
+ *      [
+ *        "sunetId": "linnea",
+ *        "fullName": "Linnea Williams",
+ *        "email": "linnea@stanford.edu"
+ *      ],
+ *      [
+ *        "sunetId": "meganem",
+ *        "fullName": "Megan Miller",
+ *        "email": "meganem@stanford.edu"
+ *      ]
+ *    ]
+ *  ];
+ *
+ * @param string $site_name
+ *   The sitename. Shortname of the ACSF site and what the requester entered.
+ *
+ * @return object
+ *   SNOW API request information wrapped in an object.
+ */
+function stanford_acsf_tasks_ritm_make_api_request($site_name) {
+
+  // Database variables are not yet available or reliable at this point. This will have to be hard-coded in settings.php
+  // or the like if you wish to override the default.
+  $endpoint = variable_get('stanford_snow_api_endpoint', 'https://stanford.service-now.com/api/stu/su_acsf_site_requester_information/requestor');
+  $params = ['website_address' => $site_name];
+  $endpoint .= '?' . http_build_query($params);
+  $username = variable_get('stanford_snow_api_user', '');
+  $password = variable_get('stanford_snow_api_pass', '');
+
+  $ch = curl_init();
+  curl_setopt($ch, CURLOPT_URL, $endpoint);
+  curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+  curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, TRUE);
+  curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2);
+  curl_setopt($ch, CURLOPT_TIMEOUT, 5);
+  curl_setopt($ch, CURLOPT_MAXREDIRS, 10);
+  curl_setopt($ch, CURLOPT_FOLLOWLOCATION, TRUE);
+  curl_setopt($ch, CURLOPT_USERPWD, $username . ":" . $password);
+
+  $response = curl_exec($ch);
+  $err = curl_errno($ch);
+  $errmsg = curl_error($ch);
+  $curl_info = curl_getinfo($ch);
+  curl_close($ch);
+
+  if ($curl_info['http_code'] !== 200) {
+    watchdog('stanford', 'Failed to fetch information from SNOW api.', array(), WATCHDOG_ERROR);
+    throw new Exception("Failed to fetch information from SNOW api. NON 200 Response.");
+  }
+
+  if (empty($response) || ($err == 0 && !empty($errmsg))) {
+    watchdog('stanford', 'Failed to fetch information from SNOW api.', array(), WATCHDOG_ERROR);
+    throw new Exception($errmsg);
+  }
+
+  $response = drupal_json_decode($response);
+
+  if (!is_array($response)) {
+    watchdog('stanford', 'Could not decode JSON from SNOW API.', array(), WATCHDOG_ERROR);
+    throw new Exception("Could not decode JSON from SNOW API.");
+  }
+
+  // Validate that we got a record back.
+  if (isset($response['result'][0]['message']) && preg_match('/no records found/i', $response['result'][0]['message'])) {
+    throw new Exception($response['result'][0]['message']);
+  }
+
+  $ritm = array_pop($response['result']);
+  $data = current((array) $ritm);
+  return $data;
 }
 
 /**
@@ -412,7 +628,7 @@ function stanford_sites_add_admin_user($sunet, $name = '', $email = '') {
     $admin_role = user_role_load_by_name('administrator');
     $account->roles = array(
       DRUPAL_AUTHENTICATED_RID => TRUE,
-      $admin_role->rid => TRUE
+      $admin_role->rid => TRUE,
     );
     $account->timezone = variable_get('date_default_timezone', '');
     $account = user_save($account);
@@ -584,10 +800,10 @@ function stanford_system_info_alter(&$info, $file, $type) {
     preg_match("/Stanford Icon Grid/", $info['name']) ||
     preg_match("/Stanford Manage Content/", $info['name']) ||
     preg_match("/Stanford Minimal Filter/", $info['name']) ||
+    preg_match("/Stanford Opportunity/", $info['name']) ||
     preg_match("/Stanford Paragraph/", $info['name']) ||
     preg_match("/Stanford Private Page/", $info['name']) ||
     preg_match("/Stanford Related/", $info['name']) ||
-    preg_match("/Stanford Site/", $info['name']) ||
     preg_match("/Stanford Story Page/", $info['name']) ||
     preg_match("/Stanford Subsite/", $info['name']) ||
     preg_match("/Stanford Jumpstart/", $info['name']) ||
